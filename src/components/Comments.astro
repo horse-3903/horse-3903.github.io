@@ -5,10 +5,12 @@ const { pageTitle, pageUrl, pageId } = Astro.props;
 <section id="comments" class="mt-12 mb-12">
   <div
     id="comments-card"
-    class="card-base card-shadow overflow-hidden transition-all duration-500 relative max-h-[600px]"
+    class="card-base card-shadow overflow-hidden transition-all duration-500 relative"
   >
     <div class="p-6">
-      <h2 class="text-2xl font-semibold mb-5 text-90 tracking-tight">Comments</h2>
+      <h2 class="text-2xl font-semibold mb-5 text-90 tracking-tight">
+        Comments
+      </h2>
 
       <div
         id="cusdis_thread"
@@ -20,63 +22,38 @@ const { pageTitle, pageUrl, pageId } = Astro.props;
         data-theme="auto"
       ></div>
     </div>
-
-    <!-- Expand/Collapse Button -->
-    <button
-      id="expand-comments"
-      class="absolute bottom-0 left-0 w-full h-12 bg-gradient-to-t from-[var(--card-bg)] to-transparent flex items-center justify-center text-[var(--primary)] font-medium backdrop-blur-sm transition hover:opacity-90"
-      aria-expanded="false"
-    >
-      <svg xmlns="http://www.w3.org/2000/svg" class="text-3xl" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
-      </svg>
-    </button>
   </div>
 
+  <!-- Load Cusdis -->
   <script async defer src="https://cusdis.com/js/cusdis.es.js"></script>
 
+  <!-- Initialize and sync theme -->
   <script is:inline>
     if (typeof window !== "undefined") {
-      const card = document.getElementById("comments-card");
-      const button = document.getElementById("expand-comments");
-
-      function updateButtonVisibility() {
-        // hide arrow if content already fits within preview height
-        if (card.scrollHeight <= 600) {
-          button.style.display = "none";
-        } else {
-          button.style.display = "flex";
-        }
+      // Initialize Cusdis widget after script loads
+      const init = () => window.CUSDIS?.initial?.();
+      if (document.readyState === "loading") {
+        window.addEventListener("DOMContentLoaded", init);
+      } else {
+        init();
       }
 
-      function adjustHeight() {
-        if (button.getAttribute("aria-expanded") === "true") {
-          card.style.maxHeight = card.scrollHeight + "px";
-        }
-      }
+      // Automatically sync with Fuwari's dark/light toggle
+      const updateCusdisTheme = () => {
+        const theme = document.documentElement.classList.contains("dark")
+          ? "dark"
+          : "light";
+        window.CUSDIS?.setTheme?.(theme);
+      };
 
-      button.addEventListener("click", () => {
-        const expanded = button.getAttribute("aria-expanded") === "true";
-        button.setAttribute("aria-expanded", String(!expanded));
-
-        if (expanded) {
-          // collapse
-          card.style.maxHeight = "600px";
-        } else {
-          // expand to content height
-          const fullHeight = card.scrollHeight;
-          card.style.maxHeight = fullHeight + "px";
-        }
+      const mo = new MutationObserver(updateCusdisTheme);
+      mo.observe(document.documentElement, {
+        attributes: true,
+        attributeFilter: ["class"],
       });
 
-      const observer = new ResizeObserver(() => {
-        updateButtonVisibility();
-        adjustHeight();
-      });
-      observer.observe(card);
-
-      // initial check after Cusdis loads
-      setTimeout(updateButtonVisibility, 1500);
+      // Apply once on load
+      setTimeout(updateCusdisTheme, 1000);
     }
   </script>
 </section>

@@ -149,13 +149,13 @@
     overflow: hidden !important;
   }
 
-  /* Typography inside Cusdis (applies to its outer text) */
+  /* Typography inside Cusdis (outer scope) */
   #cusdis_thread * {
     font-family: var(--font-sans, 'Inter', system-ui, sans-serif);
     @apply text-[1.05rem] text-75 leading-relaxed transition;
   }
 
-  /* Inputs and text areas */
+  /* Inputs & textareas */
   #cusdis_thread input,
   #cusdis_thread textarea {
     @apply w-full rounded-md border border-[var(--line-color)] bg-transparent px-3 py-2 text-[1rem] text-90 transition;
@@ -180,23 +180,7 @@
     display: none !important;
   }
 
-  /* Expand Button */
-  #expand-comments {
-    @apply absolute bottom-0 left-0 w-full h-12 flex items-center justify-center text-[var(--primary)] font-medium cursor-pointer;
-    background: linear-gradient(to top, var(--card-bg) 70%, transparent);
-    backdrop-filter: blur(4px);
-    transition: opacity 0.3s ease;
-  }
-
-  #expand-comments svg {
-    transition: transform 0.3s ease;
-  }
-
-  #expand-comments[aria-expanded="true"] svg {
-    transform: rotate(180deg);
-  }
-
-  /* Smooth entry animation */
+  /* Fade-up entry animation */
   @keyframes fadeUp {
     from {
       opacity: 0;
