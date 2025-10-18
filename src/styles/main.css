@@ -151,25 +151,30 @@
   }
 }
 
-
 /* ───────────────────────────────
    Cusdis Integration (Fuwari Style)
 ──────────────────────────────── */
 @layer components {
-  /* Container styling — same as Fuwari cards */
+  /* Container styling — identical to Fuwari cards */
   #cusdis_thread {
     @apply card-base card-shadow mt-8 p-6;
     background: var(--card-bg) !important;
     color: var(--text-75) !important;
     border-radius: var(--radius-large);
     box-shadow: var(--shadow-md);
-    transition: background 0.3s ease, color 0.3s ease;
+    transition: background 0.3s ease, color 0.3s ease, opacity 0.6s ease, transform 0.6s ease;
     opacity: 0;
-    transform: translateY(0.75rem);
-    animation: fadeUp 0.4s ease-out 0.1s forwards;
+    transform: translateY(1.25rem);
+    will-change: opacity, transform;
   }
 
-  /* Iframe adjustments */
+  /* When visible in viewport */
+  #cusdis_thread.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* Iframe fixes */
   #cusdis_thread iframe {
     width: 100% !important;
     min-height: 550px !important;
@@ -178,13 +183,13 @@
     background-color: var(--card-bg) !important;
   }
 
-  /* Internal typography + layout */
+  /* Typography and color harmonization */
   #cusdis_thread * {
     font-family: var(--font-sans, 'Inter', system-ui, sans-serif);
     @apply text-75 transition;
   }
 
-  /* Inputs and textarea fields */
+  /* Input fields */
   #cusdis_thread input,
   #cusdis_thread textarea {
     @apply w-full rounded-md border border-[var(--line-color)] bg-transparent px-3 py-2 text-sm text-90 transition;
@@ -195,29 +200,29 @@
     @apply border-[var(--primary)] outline-none;
   }
 
-  /* Submit buttons */
+  /* Buttons */
   #cusdis_thread button {
     @apply btn-regular-dark text-sm px-4 py-2 rounded-md transition;
   }
 
-  /* Links (author, license, etc.) */
+  /* Links and metadata */
   #cusdis_thread a {
     @apply link-underline text-[var(--primary)];
   }
 
-  /* Hide Cusdis footer branding (optional) */
+  /* Optional: hide Cusdis footer branding */
   #cusdis_thread .powered-by {
     display: none !important;
   }
 }
 
 /* ───────────────────────────────
-   Fade-in animation
+   Fade-up Animation Keyframes
 ──────────────────────────────── */
 @keyframes fadeUp {
   from {
     opacity: 0;
-    transform: translateY(0.75rem);
+    transform: translateY(1rem);
   }
   to {
     opacity: 1;
