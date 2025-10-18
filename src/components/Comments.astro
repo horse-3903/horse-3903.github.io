@@ -1,38 +1,47 @@
 ---
-const { pageTitle, pageUrl, pageId, appId } = Astro.props;
+const { pageTitle, pageUrl, pageId } = Astro.props;
 ---
 
-<section id="comments" class="mt-12">
-  <h2>Comments</h2>
+<section id="comments" class="mt-12 mb-12">
+  <div class="card-base card-shadow p-6">
+    <h2 class="text-xl font-semibold mb-4 text-90">Comments</h2>
 
-  <div
-    id="cusdis_thread"
-    data-host="https://cusdis.com"
-    data-app-id={appId}
-    data-page-id={pageId}
-    data-page-url={pageUrl}
-    data-page-title={pageTitle}
-    data-theme="auto">
+    <div
+      id="cusdis_thread"
+      data-host="https://cusdis.com"
+      data-app-id="a3ed583a-9ea0-4074-9249-f44ef13e6d9b"
+      data-page-id={pageId}
+      data-page-url={pageUrl}
+      data-page-title={pageTitle}
+      data-theme="auto"
+    ></div>
+
+    <script async defer src="https://cusdis.com/js/cusdis.es.js"></script>
   </div>
-  <script async defer src="https://cusdis.com/js/cusdis.es.js"></script>
-</section>
 
-<script is:inline>
-  if (typeof window !== 'undefined') {
-    const cusdis = document.getElementById('cusdis_thread');
-    if (cusdis) {
-      const observer = new IntersectionObserver(
-        (entries) => {
-          for (const entry of entries) {
-            if (entry.isIntersecting) {
-              cusdis.classList.add('visible');
-              observer.unobserve(cusdis);
-            }
-          }
-        },
-        { threshold: 0.15 }
-      );
-      observer.observe(cusdis);
+  <script is:inline>
+    if (typeof window !== "undefined") {
+      function updateCusdisTheme() {
+        const iframe = document.querySelector("#cusdis_thread iframe");
+        if (!iframe || !iframe.contentWindow) return;
+        const theme = document.documentElement.classList.contains("dark") ? "dark" : "light";
+        iframe.contentWindow.postMessage(
+          { from: "cusdis", event: "setTheme", theme },
+          "*"
+        );
+      }
+
+      window.addEventListener("message", (e) => {
+        if (e.data?.from === "cusdis" && e.data.event === "onReady") {
+          updateCusdisTheme();
+        }
+      });
+
+      const mo = new MutationObserver(updateCusdisTheme);
+      mo.observe(document.documentElement, {
+        attributes: true,
+        attributeFilter: ["class"],
+      });
     }
-  }
-</script>
+  </script>
+</section>

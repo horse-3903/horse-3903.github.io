@@ -165,6 +165,9 @@
     opacity: 0;
     transform: translateY(1.25rem);
     will-change: opacity, transform;
+    width: 100%;
+    border: none;
+    overflow: hidden;
   }
 
   #cusdis_thread.visible {
@@ -175,8 +178,7 @@
   #cusdis_thread iframe {
     width: 100% !important;
     border: none !important;
-    overflow: visible !important;
-    background-color: var(--card-bg) !important;
+    height: auto !important;
   }
 
   #cusdis_thread * {
