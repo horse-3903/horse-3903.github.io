@@ -10,22 +10,22 @@ draft: false
 # 🧠 Overview
 
 Linear Regression is one of the simplest and most fundamental algorithms in Machine Learning.  
-It models the relationship between an **input variable** \( x \) and an **output variable** \( y \) by fitting a straight line that best represents the data.
+It models the relationship between an **input variable** $x$ and an **output variable** $y$ by fitting a straight line that best represents the data.
 
 ---
 
 # 🔢 Mathematical Formulation
 
-The linear model predicts the target value \( \hat{y} \) as:
+The linear model predicts the target value $\hat{y}$ as:
 
 $$
 \hat{y}_i = w x_i + b
 $$
 
 where:
-- \( w \): weight (slope)  
-- \( b \): bias (intercept)  
-- \( \hat{y}_i \): predicted value for input \( x_i \)
+- $w$: weight (slope)  
+- $b$: bias (intercept)  
+- $\hat{y}_i$: predicted value for input $x_i$
 
 ---
 
@@ -47,7 +47,7 @@ $$
 
 # 🔁 Gradient Descent Optimisation
 
-We update parameters \( w \) and \( b \) iteratively to minimise the cost function:
+We update parameters $w$ and $b$ iteratively to minimise the cost function:
 
 $$
 w = w - \alpha \frac{\partial C}{\partial w}
@@ -57,7 +57,7 @@ $$
 b = b - \alpha \frac{\partial C}{\partial b}
 $$
 
-where \( \alpha \) is the **learning rate**.
+where $\alpha$ is the **learning rate**.
 
 ---
 
@@ -74,11 +74,11 @@ where \( \alpha \) is the **learning rate**.
    $$
 
 3. **Applying chain rule:**
-   - Gradient wrt \( w \):
+   - Gradient wrt $w$:
      $$
      \frac{\partial C}{\partial w} = \frac{1}{m} \sum_{i=1}^{m} (\hat{y}_i - y_i) x_i
      $$
-   - Gradient wrt \( b \):
+   - Gradient wrt $b$:
      $$
      \frac{\partial C}{\partial b} = \frac{1}{m} \sum_{i=1}^{m} (\hat{y}_i - y_i)
      $$
@@ -101,7 +101,7 @@ where \( \alpha \) is the **learning rate**.
 
 # 💡 Intuition & Insights
 
-- The model adjusts \( w \) and \( b \) in the **opposite direction** of the gradient to reduce error.  
+- The model adjusts $w$ and $b$ in the **opposite direction** of the gradient to reduce error.  
 - Each iteration brings the line closer to the “best fit” that minimises the squared differences between predicted and true values.  
 - Over time, the gradient becomes smaller as the model converges to the optimal parameters.
 
@@ -116,6 +116,6 @@ TBC
 
 - Linear Regression models data using a linear relationship.  
 - The cost function is the **mean squared error**.  
-- **Gradient Descent** is used to iteratively minimise the cost function by updating \( w \) and \( b \).  
+- **Gradient Descent** is used to iteratively minimise the cost function by updating $w$ and $b$.  
 - The final model approximates the best-fitting line through the data.
 
