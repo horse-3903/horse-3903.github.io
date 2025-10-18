@@ -106,48 +106,60 @@ const jsonLd = {
                 <Content />
             </Markdown>
 
+            <!-- Cusdis Comment Section -->
+            <section id="comments" class="mt-12">
+            <div id="cusdis_thread"
+                data-host="https://cusdis.com"
+                data-app-id="a3ed583a-9ea0-4074-9249-f44ef13e6d9b"
+                data-page-id={Astro.url.pathname}
+                data-page-url={Astro.url}
+                data-page-title={entry.data.title}>
+            </div>
+            <script async defer src="https://cusdis.com/js/cusdis.es.js"></script>
+            </section>
+
+            <!-- Auto-sync with Fuwari dark/light mode -->
+            <script>
+            // Sync Cusdis with Fuwari dark/light mode
+            const observer = new MutationObserver(() => {
+                const iframe = document.querySelector<HTMLIFrameElement>('#cusdis_thread iframe');
+                if (!iframe || !iframe.contentWindow) return;
+
+                const theme = document.documentElement.classList.contains('dark') ? 'dark' : 'light';
+                iframe.contentWindow.postMessage({ from: 'cusdis', event: 'setTheme', theme }, '*');
+            });
+
+            observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
+            </script>
+
             {licenseConfig.enable && <License title={entry.data.title} slug={entry.slug} pubDate={entry.data.published} class="mb-6 rounded-xl license-container onload-animation"></License>}
 
         </div>
     </div>
 
-    <div class="flex flex-col md:flex-row justify-between mb-4 gap-4 overflow-hidden w-full">
+    <div class="flex flex-col md:flex-row justify-between mb-4 gap-4">
         <a href={entry.data.nextSlug ? getPostUrlBySlug(entry.data.nextSlug) : "#"}
-           class:list={["w-full font-bold overflow-hidden active:scale-95", {"pointer-events-none": !entry.data.nextSlug}]}>
-            {entry.data.nextSlug && <div class="btn-card rounded-2xl w-full h-[3.75rem] max-w-full px-4 flex items-center !justify-start gap-4" >
+            class:list={["font-bold overflow-hidden active:scale-95", {"pointer-events-none": !entry.data.nextSlug}]}>
+            {entry.data.nextSlug && (
+            <div class="btn-card rounded-2xl h-[3.75rem] px-6 flex items-center justify-start gap-3 w-auto max-w-full">
                 <Icon name="material-symbols:chevron-left-rounded" class="text-[2rem] text-[var(--primary)]" />
-                <div class="overflow-hidden transition overflow-ellipsis whitespace-nowrap max-w-[calc(100%_-_3rem)] text-black/75 dark:text-white/75">
-                    {entry.data.nextTitle}
+                <div class="overflow-hidden text-ellipsis whitespace-nowrap text-black/75 dark:text-white/75">
+                {entry.data.nextTitle}
                 </div>
-            </div>}
+            </div>
+            )}
         </a>
 
         <a href={entry.data.prevSlug ? getPostUrlBySlug(entry.data.prevSlug) : "#"}
-           class:list={["w-full font-bold overflow-hidden active:scale-95", {"pointer-events-none": !entry.data.prevSlug}]}>
-            {entry.data.prevSlug && <div class="btn-card rounded-2xl w-full h-[3.75rem] max-w-full px-4 flex items-center !justify-end gap-4">
-                <div class="overflow-hidden transition overflow-ellipsis whitespace-nowrap max-w-[calc(100%_-_3rem)] text-black/75 dark:text-white/75">
-                    {entry.data.prevTitle}
+            class:list={["font-bold overflow-hidden active:scale-95", {"pointer-events-none": !entry.data.prevSlug}]}>
+            {entry.data.prevSlug && (
+            <div class="btn-card rounded-2xl h-[3.75rem] px-6 flex items-center justify-end gap-3 w-auto max-w-full">
+                <div class="overflow-hidden text-ellipsis whitespace-nowrap text-black/75 dark:text-white/75">
+                {entry.data.prevTitle}
                 </div>
                 <Icon name="material-symbols:chevron-right-rounded" class="text-[2rem] text-[var(--primary)]" />
-            </div>}
+            </div>
+            )}
         </a>
     </div>
-
-    <script src="https://giscus.app/client.js"
-        data-repo="horse-3903/horse-3903.github.io"
-        data-repo-id="R_kgDOQEL-pA"
-        data-category="Announcements"
-        data-category-id="DIC_kwDOQEL-pM4Cwy0C"
-        data-mapping="pathname"
-        data-strict="0"
-        data-reactions-enabled="1"
-        data-emit-metadata="0"
-        data-input-position="top"
-        data-theme="preferred_color_scheme"
-        data-lang="en"
-        data-loading="lazy"
-        crossorigin="anonymous"
-        async>
-    </script>
-
 </MainGridLayout>
