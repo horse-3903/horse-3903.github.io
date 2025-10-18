@@ -3,40 +3,38 @@ const { pageTitle, pageUrl, pageId } = Astro.props;
 ---
 
 <section id="comments" class="mt-12 mb-12">
-  <div
-    id="comments-card"
-    class="card-base card-shadow overflow-hidden transition-all duration-500 relative"
-  >
-    <div class="p-6">
-      <h2 class="text-2xl font-semibold mb-5 text-90 tracking-tight">
-        Comments
-      </h2>
+  <div class="card-base card-shadow p-6">
+    <h2 class="text-2xl font-semibold mb-5 text-90 tracking-tight">Comments</h2>
 
-      <div
-        id="cusdis_thread"
-        data-host="https://cusdis.com"
-        data-app-id="a3ed583a-9ea0-4074-9249-f44ef13e6d9b"
-        data-page-id={pageId}
-        data-page-url={pageUrl}
-        data-page-title={pageTitle}
-        data-theme="auto"
-      ></div>
-    </div>
+    <div
+      id="cusdis_thread"
+      data-host="https://cusdis.com"
+      data-app-id="a3ed583a-9ea0-4074-9249-f44ef13e6d9b"
+      data-page-id={pageId}
+      data-page-url={pageUrl}
+      data-page-title={pageTitle}
+      data-theme="light"  <!-- manually force light theme -->
+    ></div>
   </div>
 
-  <!-- Load Cusdis -->
   <script async defer src="https://cusdis.com/js/cusdis.es.js"></script>
 
-  <!-- Initialize and sync theme -->
   <script is:inline>
     if (typeof window !== "undefined") {
-      const init = () => {
+      // initialize widget
+      const initCusdis = () => {
         window.CUSDIS?.initial?.();
 
-        // Wait for iframe and inject transparency override
-        const tryFix = () => {
+        // Force light theme (remove dark background)
+        window.CUSDIS?.setTheme?.("light");
+
+        // Inject CSS into iframe when it appears
+        const fixIframe = () => {
           const iframe = document.querySelector("#cusdis_thread iframe");
-          if (!iframe) return setTimeout(tryFix, 500);
+          if (!iframe) {
+            setTimeout(fixIframe, 300);
+            return;
+          }
           iframe.addEventListener("load", () => {
             try {
               const doc = iframe.contentDocument || iframe.contentWindow.document;
@@ -44,27 +42,26 @@ const { pageTitle, pageUrl, pageId } = Astro.props;
               style.textContent = `
                 body, html {
                   background: transparent !important;
-                }
-                .cusdis-comment,
-                .cusdis-input,
-                .cusdis-textarea,
-                .cusdis-thread {
-                  background: transparent !important;
                   color: var(--text-90, #222) !important;
+                }
+                .cusdis-thread, .cusdis-comment, .cusdis-input, .cusdis-textarea {
+                  background: transparent !important;
                 }
               `;
               doc.head.appendChild(style);
             } catch (e) {
-              console.warn("Cusdis transparency fix blocked by CORS (expected on production)");
+              console.warn("Unable to inject CSS into Cusdis iframe (CORS probable).");
             }
           });
         };
-        tryFix();
+        fixIframe();
       };
 
-      if (document.readyState === "loading")
-        window.addEventListener("DOMContentLoaded", init);
-      else init();
+      if (document.readyState === "loading") {
+        window.addEventListener("DOMContentLoaded", initCusdis);
+      } else {
+        initCusdis();
+      }
     }
   </script>
 </section>
