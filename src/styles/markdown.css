@@ -137,27 +137,21 @@
     width: 100% !important;
     border: none !important;
     height: auto !important;
-    min-height: 450px !important;
-    overflow: hidden !important;
-    background: transparent !important;  /* ensures transparent background */
+    background: transparent !important;
+  }
+
+  #comment-card {
+    @apply card-base card-shadow p-6 transition-colors duration-300;
+    background: var(--card-bg);
+  }
+
+  .dark #comment-card {
+    background: #111; /* Cusdis dark background color */
   }
 
   #cusdis_thread * {
     font-family: var(--font-sans, 'Inter', system-ui, sans-serif);
     @apply text-[1.05rem] text-75 leading-relaxed transition;
-  }
-
-  #cusdis_thread input,
-  #cusdis_thread textarea {
-    @apply w-full rounded-md border border-[var(--line-color)] bg-transparent px-3 py-2 text-[1rem] text-90 transition;
-  }
-
-  #cusdis_thread button {
-    @apply btn-regular-dark text-[0.95rem] px-4 py-2 rounded-md transition;
-  }
-
-  #cusdis_thread a {
-    @apply link-underline text-[var(--primary)];
   }
 
   #cusdis_thread .powered-by {
