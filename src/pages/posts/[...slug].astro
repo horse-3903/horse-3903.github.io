@@ -13,6 +13,7 @@ import ImageWrapper from "../../components/misc/ImageWrapper.astro";
 import PostMetadata from "../../components/PostMeta.astro";
 import { profileConfig, siteConfig } from "../../config";
 import { formatDateToYYYYMMDD } from "../../utils/date-utils";
+import CusdisComments from '../../components/CusdisComments.astro';
 
 export async function getStaticPaths() {
 	const blogEntries = await getSortedPosts();
@@ -111,62 +112,12 @@ const jsonLd = {
         </div>
     </div>
 
-    <section id="comments" class="mt-12">
-    <div id="cusdis_thread"
-        data-host="https://cusdis.com"
-        data-app-id="a3ed583a-9ea0-4074-9249-f44ef13e6d9b"
-        data-page-id={Astro.url.pathname}
-        data-page-url={Astro.url}
-        data-page-title={entry.data.title},
-        data-theme={document?.documentElement?.classList.contains('dark') ? 'dark' : 'light'}>
-    </div>
-    <script async defer src="https://cusdis.com/js/cusdis.es.js"></script>
-    </section>
-
-    <script>
-    // Fade-in on scroll
-    const cusdis = document.getElementById('cusdis_thread');
-    if (cusdis) {
-        const observer = new IntersectionObserver(
-        (entries) => {
-            for (const entry of entries) {
-            if (entry.isIntersecting) {
-                cusdis.classList.add('visible');
-                observer.unobserve(cusdis);
-            }
-            }
-        },
-        { threshold: 0.15 }
-        );
-        observer.observe(cusdis);
-    }
-
-    // Theme sync (TypeScript-safe)
-    function updateCusdisTheme(): void {
-        const iframe = document.querySelector('#cusdis_thread iframe') as HTMLIFrameElement | null;
-        if (!iframe || !iframe.contentWindow) return;
-
-        const theme = document.documentElement.classList.contains('dark') ? 'dark' : 'light';
-        iframe.contentWindow.postMessage(
-        { from: 'cusdis', event: 'setTheme', theme },
-        '*'
-        );
-    }
-
-    // Observe theme changes
-    const themeObserver = new MutationObserver(updateCusdisTheme);
-    themeObserver.observe(document.documentElement, {
-        attributes: true,
-        attributeFilter: ['class'],
-    });
-
-    // Sync when Cusdis is ready
-    window.addEventListener('message', (event: MessageEvent) => {
-        if (event.data?.from === 'cusdis' && event.data.event === 'onReady') {
-        updateCusdisTheme();
-        }
-    });
-    </script>
+    <CusdisComments
+        appId="a3ed583a-9ea0-4074-9249-f44ef13e6d9b"
+        pageId={Astro.url.pathname}
+        pageUrl={Astro.url}
+        pageTitle={entry.data.title}
+    />
 
     <div class="flex flex-col md:flex-row justify-between mb-4 gap-4">
         <a href={entry.data.nextSlug ? getPostUrlBySlug(entry.data.nextSlug) : "#"}
