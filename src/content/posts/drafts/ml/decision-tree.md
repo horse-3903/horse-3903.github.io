@@ -14,7 +14,6 @@ draft: true
 - Recursively split dataset until pure leaf node obtained
 - Means that there is only one class in each node
 
-![image.png](Decision%20Tree%2025de401a9d0a802c85eaf8421b0288a6/image.png)
 
 # Types of Nodes
 
