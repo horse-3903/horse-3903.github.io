@@ -52,8 +52,6 @@ draft: true
 
 ## Entropy
 
-![image.png](Decision%20Tree%2025de401a9d0a802c85eaf8421b0288a6/73d97bb4-fbb4-4cb1-bac8-efcb371262c3.png)
-
 - The entropy of a random variable quantifies the average level of uncertainty or information associated with the variable's potential states or possible outcomes
 - Essentially, it is the **measurement of the impurity or randomness in the data points**
 
