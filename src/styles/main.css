@@ -150,3 +150,77 @@
     }
   }
 }
+
+
+/* ───────────────────────────────
+   Cusdis Integration (Fuwari Style)
+──────────────────────────────── */
+@layer components {
+  /* Container styling — same as Fuwari cards */
+  #cusdis_thread {
+    @apply card-base card-shadow mt-8 p-6;
+    background: var(--card-bg) !important;
+    color: var(--text-75) !important;
+    border-radius: var(--radius-large);
+    box-shadow: var(--shadow-md);
+    transition: background 0.3s ease, color 0.3s ease;
+    opacity: 0;
+    transform: translateY(0.75rem);
+    animation: fadeUp 0.4s ease-out 0.1s forwards;
+  }
+
+  /* Iframe adjustments */
+  #cusdis_thread iframe {
+    width: 100% !important;
+    min-height: 550px !important;
+    border: none !important;
+    overflow: visible !important;
+    background-color: var(--card-bg) !important;
+  }
+
+  /* Internal typography + layout */
+  #cusdis_thread * {
+    font-family: var(--font-sans, 'Inter', system-ui, sans-serif);
+    @apply text-75 transition;
+  }
+
+  /* Inputs and textarea fields */
+  #cusdis_thread input,
+  #cusdis_thread textarea {
+    @apply w-full rounded-md border border-[var(--line-color)] bg-transparent px-3 py-2 text-sm text-90 transition;
+  }
+
+  #cusdis_thread input:focus,
+  #cusdis_thread textarea:focus {
+    @apply border-[var(--primary)] outline-none;
+  }
+
+  /* Submit buttons */
+  #cusdis_thread button {
+    @apply btn-regular-dark text-sm px-4 py-2 rounded-md transition;
+  }
+
+  /* Links (author, license, etc.) */
+  #cusdis_thread a {
+    @apply link-underline text-[var(--primary)];
+  }
+
+  /* Hide Cusdis footer branding (optional) */
+  #cusdis_thread .powered-by {
+    display: none !important;
+  }
+}
+
+/* ───────────────────────────────
+   Fade-in animation
+──────────────────────────────── */
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(0.75rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

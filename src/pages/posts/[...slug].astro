@@ -106,7 +106,7 @@ const jsonLd = {
                 <Content />
             </Markdown>
 
-            <!-- Cusdis Comment Section -->
+
             <section id="comments" class="mt-12">
             <div id="cusdis_thread"
                 data-host="https://cusdis.com"
@@ -118,18 +118,22 @@ const jsonLd = {
             <script async defer src="https://cusdis.com/js/cusdis.es.js"></script>
             </section>
 
-            <!-- Auto-sync with Fuwari dark/light mode -->
             <script>
-            // Sync Cusdis with Fuwari dark/light mode
-            const observer = new MutationObserver(() => {
+            function updateCusdisTheme() {
                 const iframe = document.querySelector<HTMLIFrameElement>('#cusdis_thread iframe');
                 if (!iframe || !iframe.contentWindow) return;
-
                 const theme = document.documentElement.classList.contains('dark') ? 'dark' : 'light';
                 iframe.contentWindow.postMessage({ from: 'cusdis', event: 'setTheme', theme }, '*');
-            });
+            }
 
+            const observer = new MutationObserver(updateCusdisTheme);
             observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
+
+            window.addEventListener('message', (event) => {
+                if (event.data?.from === 'cusdis' && event.data.event === 'onReady') {
+                updateCusdisTheme();
+                }
+            });
             </script>
 
             {licenseConfig.enable && <License title={entry.data.title} slug={entry.slug} pubDate={entry.data.published} class="mb-6 rounded-xl license-container onload-animation"></License>}
