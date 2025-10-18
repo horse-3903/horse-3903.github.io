@@ -5,7 +5,7 @@ const { pageTitle, pageUrl, pageId } = Astro.props;
 <section id="comments" class="mt-12 mb-12">
   <div
     id="comments-card"
-    class="card-base card-shadow overflow-hidden transition-all duration-500 relative"
+    class="rounded-[var(--radius-large)] overflow-hidden border border-[var(--line-color)] shadow-sm transition-all duration-500 relative"
   >
     <div class="p-6">
       <h2 class="text-2xl font-semibold mb-5 text-90 tracking-tight">
@@ -19,41 +19,50 @@ const { pageTitle, pageUrl, pageId } = Astro.props;
         data-page-id={pageId}
         data-page-url={pageUrl}
         data-page-title={pageTitle}
-        data-theme="auto"
+        data-theme="light"
       ></div>
     </div>
   </div>
 
-  <!-- Load Cusdis -->
   <script async defer src="https://cusdis.com/js/cusdis.es.js"></script>
 
-  <!-- Initialize and sync theme -->
   <script is:inline>
     if (typeof window !== "undefined") {
-      // Initialize Cusdis widget after script loads
-      const init = () => window.CUSDIS?.initial?.();
+      const init = () => {
+        window.CUSDIS?.initial?.();
+
+        // Force Cusdis to render without dark backgrounds
+        const fixCusdis = () => {
+          const iframe = document.querySelector("#cusdis_thread iframe");
+          if (!iframe) return;
+          iframe.addEventListener("load", () => {
+            try {
+              const doc = iframe.contentDocument || iframe.contentWindow.document;
+              const style = doc.createElement("style");
+              style.textContent = `
+                body, html {
+                  background: transparent !important;
+                  color: var(--text-90, #222) !important;
+                }
+                .cusdis-comment, .cusdis-input, .cusdis-textarea {
+                  background: transparent !important;
+                }
+              `;
+              doc.head.appendChild(style);
+            } catch (err) {
+              console.warn("Cusdis styling blocked by CORS (expected in prod).");
+            }
+          });
+        };
+
+        setTimeout(fixCusdis, 1000);
+      };
+
       if (document.readyState === "loading") {
         window.addEventListener("DOMContentLoaded", init);
       } else {
         init();
       }
-
-      // Automatically sync with Fuwari's dark/light toggle
-      const updateCusdisTheme = () => {
-        const theme = document.documentElement.classList.contains("dark")
-          ? "dark"
-          : "light";
-        window.CUSDIS?.setTheme?.(theme);
-      };
-
-      const mo = new MutationObserver(updateCusdisTheme);
-      mo.observe(document.documentElement, {
-        attributes: true,
-        attributeFilter: ["class"],
-      });
-
-      // Apply once on load
-      setTimeout(updateCusdisTheme, 1000);
     }
   </script>
 </section>
