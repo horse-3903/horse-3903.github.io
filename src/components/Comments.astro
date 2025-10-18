@@ -3,52 +3,80 @@ const { pageTitle, pageUrl, pageId } = Astro.props;
 ---
 
 <section id="comments" class="mt-12 mb-12">
-  <div class="card-base card-shadow p-6">
-    <h2 class="text-2xl font-semibold mb-5 text-90">Comments</h2>
+  <div
+    id="comments-card"
+    class="card-base card-shadow overflow-hidden transition-all duration-500 relative max-h-[600px]"
+  >
+    <div class="p-6">
+      <h2 class="text-2xl font-semibold mb-5 text-90 tracking-tight">Comments</h2>
 
-    <div
-      id="cusdis_thread"
-      data-host="https://cusdis.com"
-      data-app-id="a3ed583a-9ea0-4074-9249-f44ef13e6d9b"
-      data-page-id={Astro.url.pathname}
-      data-page-url={`https://horse-3903.github.io${Astro.url.pathname}`}
-      data-page-title={pageTitle}
-      data-theme="auto"
-    ></div>
+      <div
+        id="cusdis_thread"
+        data-host="https://cusdis.com"
+        data-app-id="a3ed583a-9ea0-4074-9249-f44ef13e6d9b"
+        data-page-id={pageId}
+        data-page-url={pageUrl}
+        data-page-title={pageTitle}
+        data-theme="auto"
+      ></div>
+    </div>
+
+    <!-- Expand/Collapse Button -->
+    <button
+      id="expand-comments"
+      class="absolute bottom-0 left-0 w-full h-12 bg-gradient-to-t from-[var(--card-bg)] to-transparent flex items-center justify-center text-[var(--primary)] font-medium backdrop-blur-sm transition hover:opacity-90"
+      aria-expanded="false"
+    >
+      <svg xmlns="http://www.w3.org/2000/svg" class="text-3xl" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+      </svg>
+    </button>
   </div>
+
+  <script async defer src="https://cusdis.com/js/cusdis.es.js"></script>
 
   <script is:inline>
     if (typeof window !== "undefined") {
-      // Dynamically load Cusdis script after DOM is ready
-      function loadCusdis() {
-        if (document.querySelector("#cusdis_thread iframe")) return;
-        const script = document.createElement("script");
-        script.src = "https://cusdis.com/js/cusdis.es.js";
-        script.async = true;
-        script.defer = true;
-        document.body.appendChild(script);
-      }
-      window.addEventListener("DOMContentLoaded", loadCusdis);
+      const card = document.getElementById("comments-card");
+      const button = document.getElementById("expand-comments");
 
-      // Theme sync
-      function updateCusdisTheme() {
-        const iframe = document.querySelector("#cusdis_thread iframe");
-        if (!iframe || !iframe.contentWindow) {
-          setTimeout(updateCusdisTheme, 500);
-          return;
+      function updateButtonVisibility() {
+        // hide arrow if content already fits within preview height
+        if (card.scrollHeight <= 600) {
+          button.style.display = "none";
+        } else {
+          button.style.display = "flex";
         }
-        const theme = document.documentElement.classList.contains("dark") ? "dark" : "light";
-        iframe.contentWindow.postMessage({ from: "cusdis", event: "setTheme", theme }, "*");
       }
 
-      window.addEventListener("message", (e) => {
-        if (e.data?.from === "cusdis" && e.data.event === "onReady") {
-          updateCusdisTheme();
+      function adjustHeight() {
+        if (button.getAttribute("aria-expanded") === "true") {
+          card.style.maxHeight = card.scrollHeight + "px";
+        }
+      }
+
+      button.addEventListener("click", () => {
+        const expanded = button.getAttribute("aria-expanded") === "true";
+        button.setAttribute("aria-expanded", String(!expanded));
+
+        if (expanded) {
+          // collapse
+          card.style.maxHeight = "600px";
+        } else {
+          // expand to content height
+          const fullHeight = card.scrollHeight;
+          card.style.maxHeight = fullHeight + "px";
         }
       });
 
-      const mo = new MutationObserver(updateCusdisTheme);
-      mo.observe(document.documentElement, { attributes: true, attributeFilter: ["class"] });
+      const observer = new ResizeObserver(() => {
+        updateButtonVisibility();
+        adjustHeight();
+      });
+      observer.observe(card);
+
+      // initial check after Cusdis loads
+      setTimeout(updateButtonVisibility, 1500);
     }
   </script>
 </section>
