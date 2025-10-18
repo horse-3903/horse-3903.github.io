@@ -7,13 +7,13 @@ category: Notes
 draft: true
 ---
 
-# 🧠 Overview
+# Overview
 
 <Give a short, high-level introduction to the topic — what it is and why it matters.>
 
 ---
 
-# 🔢 Mathematical Formulation
+# Mathematical Formulation
 
 <Define the key equations or the main function (e.g., hypothesis function).>
 
@@ -23,7 +23,7 @@ $$
 
 ---
 
-# 📉 Cost / Loss Function
+# Cost / Loss Function
 
 <Explain what the loss measures and why it’s used.>
 
@@ -33,7 +33,7 @@ $$
 
 ---
 
-# 🔁 Gradient Descent / Optimization
+# Gradient Descent / Optimization
 
 <Show how parameters are updated, including partial derivatives and intuition.>
 
@@ -43,7 +43,7 @@ $$
 
 ---
 
-# 🧩 Derivation Steps (Optional)
+# Derivation Steps (Optional)
 
 1. **Partial derivative of cost wrt prediction**
    $$
@@ -62,7 +62,7 @@ $$
 
 ---
 
-# ✅ Final Update Rules
+# Final Update Rules
 
 - **Weight Update:**
   $$
@@ -76,19 +76,19 @@ $$
 
 ---
 
-# 💡 Intuition & Insights
+# Intuition & Insights
 
 <Explain what the math means — e.g., how the gradients push the parameters, what convergence looks like, etc.>
 
 ---
 
-# 🧮 Example (Optional)
+# Example (Optional)
 
 <Provide a simple numerical or visual example.>
 
 ---
 
-# 🧭 Summary
+# Summary
 
 - <Key takeaway 1>
 - <Key takeaway 2>

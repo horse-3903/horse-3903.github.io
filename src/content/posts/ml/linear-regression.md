@@ -7,14 +7,15 @@ category: Notes
 draft: false
 ---
 
-# 🧠 Overview
+# Overview
 
-Linear Regression is one of the simplest and most fundamental algorithms in Machine Learning.  
+Linear Regression is the simplest and most fundamental algorithms in Machine Learning for regression.
+
 It models the relationship between an **input variable** $x$ and an **output variable** $y$ by fitting a straight line that best represents the data.
 
 ---
 
-# 🔢 Mathematical Formulation
+# Mathematical Formulation
 
 The linear model predicts the target value $\hat{y}$ as:
 
@@ -29,7 +30,7 @@ where:
 
 ---
 
-# 📉 Cost Function
+# Cost Function
 
 To measure how well our model fits the data, we use the **Mean Squared Error (MSE)** cost function:
 
@@ -45,7 +46,7 @@ $$
 
 ---
 
-# 🔁 Gradient Descent Optimisation
+# Gradient Descent Optimisation
 
 We update parameters $w$ and $b$ iteratively to minimise the cost function:
 
@@ -61,7 +62,7 @@ where $\alpha$ is the **learning rate**.
 
 ---
 
-# 🧩 Derivation of Gradients
+# Derivation of Gradients
 
 1. **Derivative of cost wrt prediction:**
    $$
@@ -85,7 +86,7 @@ where $\alpha$ is the **learning rate**.
 
 ---
 
-# ✅ Final Update Rules
+# Final Update Rules
 
 - **Weight update:**
   $$
@@ -99,7 +100,7 @@ where $\alpha$ is the **learning rate**.
 
 ---
 
-# 💡 Intuition & Insights
+# Intuition & Insights
 
 - The model adjusts $w$ and $b$ in the **opposite direction** of the gradient to reduce error.  
 - Each iteration brings the line closer to the “best fit” that minimises the squared differences between predicted and true values.  
@@ -107,12 +108,12 @@ where $\alpha$ is the **learning rate**.
 
 ---
 
-# 📈 Visualisation
+# Visualisation
 
 TBC
 
 
-# 🧭 Summary
+# Summary
 
 - Linear Regression models data using a linear relationship.  
 - The cost function is the **mean squared error**.  
