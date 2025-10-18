@@ -45,9 +45,9 @@ $$
 
 ---
 
-# 🔁 Gradient Descent Optimization
+# 🔁 Gradient Descent Optimisation
 
-We update parameters \( w \) and \( b \) iteratively to minimize the cost function:
+We update parameters \( w \) and \( b \) iteratively to minimise the cost function:
 
 $$
 w = w - \alpha \frac{\partial C}{\partial w}
@@ -102,15 +102,20 @@ where \( \alpha \) is the **learning rate**.
 # 💡 Intuition & Insights
 
 - The model adjusts \( w \) and \( b \) in the **opposite direction** of the gradient to reduce error.  
-- Each iteration brings the line closer to the “best fit” that minimizes the squared differences between predictions and true values.  
+- Each iteration brings the line closer to the “best fit” that minimises the squared differences between predicted and true values.  
 - Over time, the gradient becomes smaller as the model converges to the optimal parameters.
 
 ---
+
+# 📈 Visualisation
+
+TBC
+
 
 # 🧭 Summary
 
 - Linear Regression models data using a linear relationship.  
 - The cost function is the **mean squared error**.  
-- **Gradient Descent** is used to iteratively minimize the cost function by updating \( w \) and \( b \).  
+- **Gradient Descent** is used to iteratively minimise the cost function by updating \( w \) and \( b \).  
 - The final model approximates the best-fitting line through the data.
 
