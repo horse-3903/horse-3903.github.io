@@ -5,7 +5,7 @@ const { pageTitle, pageUrl, pageId } = Astro.props;
 <section id="comments" class="mt-12 mb-12">
   <div
     id="comments-card"
-    class="rounded-[var(--radius-large)] overflow-hidden border border-[var(--line-color)] shadow-sm transition-all duration-500 relative"
+    class="card-base card-shadow overflow-hidden transition-all duration-500 relative"
   >
     <div class="p-6">
       <h2 class="text-2xl font-semibold mb-5 text-90 tracking-tight">
@@ -19,22 +19,24 @@ const { pageTitle, pageUrl, pageId } = Astro.props;
         data-page-id={pageId}
         data-page-url={pageUrl}
         data-page-title={pageTitle}
-        data-theme="light"
+        data-theme="auto"
       ></div>
     </div>
   </div>
 
+  <!-- Load Cusdis -->
   <script async defer src="https://cusdis.com/js/cusdis.es.js"></script>
 
+  <!-- Initialize and sync theme -->
   <script is:inline>
     if (typeof window !== "undefined") {
       const init = () => {
         window.CUSDIS?.initial?.();
 
-        // Force Cusdis to render without dark backgrounds
-        const fixCusdis = () => {
+        // Wait for iframe and inject transparency override
+        const tryFix = () => {
           const iframe = document.querySelector("#cusdis_thread iframe");
-          if (!iframe) return;
+          if (!iframe) return setTimeout(tryFix, 500);
           iframe.addEventListener("load", () => {
             try {
               const doc = iframe.contentDocument || iframe.contentWindow.document;
@@ -42,27 +44,27 @@ const { pageTitle, pageUrl, pageId } = Astro.props;
               style.textContent = `
                 body, html {
                   background: transparent !important;
-                  color: var(--text-90, #222) !important;
                 }
-                .cusdis-comment, .cusdis-input, .cusdis-textarea {
+                .cusdis-comment,
+                .cusdis-input,
+                .cusdis-textarea,
+                .cusdis-thread {
                   background: transparent !important;
+                  color: var(--text-90, #222) !important;
                 }
               `;
               doc.head.appendChild(style);
-            } catch (err) {
-              console.warn("Cusdis styling blocked by CORS (expected in prod).");
+            } catch (e) {
+              console.warn("Cusdis transparency fix blocked by CORS (expected on production)");
             }
           });
         };
-
-        setTimeout(fixCusdis, 1000);
+        tryFix();
       };
 
-      if (document.readyState === "loading") {
+      if (document.readyState === "loading")
         window.addEventListener("DOMContentLoaded", init);
-      } else {
-        init();
-      }
+      else init();
     }
   </script>
 </section>
