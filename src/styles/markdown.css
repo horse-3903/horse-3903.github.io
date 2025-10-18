@@ -141,6 +141,7 @@
     display: block !important;
     height: auto !important;
     overflow: visible !important;
+    min-height: 350px;
   }
 
   #comment-card {
