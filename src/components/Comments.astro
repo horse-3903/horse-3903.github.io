@@ -5,7 +5,7 @@ const { pageTitle, pageUrl, pageId } = Astro.props;
 <section id="comments" class="mt-12 mb-12 transition-colors duration-300">
   <div
     id="comment-card"
-    class="card-base card-shadow p-6 border border-white/20 dark:border-white/30"
+    class="card-base card-shadow p-6 border border-white/20 dark:border-white/30 transition-all duration-300"
   >
     <h2 class="text-2xl font-semibold mb-5 text-90 tracking-tight">Comments</h2>
 
@@ -24,43 +24,60 @@ const { pageTitle, pageUrl, pageId } = Astro.props;
 
   <script is:inline>
     if (typeof window !== "undefined") {
-      const applyTheme = () => {
+      let currentTheme = "light";
+
+      function renderCusdis(theme = "light") {
+        const thread = document.getElementById("cusdis_thread");
+        if (!thread) return;
+
+        // Clear old iframe before re-rendering
+        thread.innerHTML = "";
+        thread.setAttribute("data-theme", theme);
+
+        window.CUSDIS?.renderTo(thread);
+      }
+
+      function initCusdis() {
+        window.CUSDIS?.initial?.();
+
         const isDark = document.documentElement.classList.contains("dark");
-        window.CUSDIS?.setTheme?.(isDark ? "dark" : "light");
+        currentTheme = isDark ? "dark" : "light";
+        renderCusdis(currentTheme);
 
-        const card = document.getElementById("comment-card");
-        if (card) {
-          card.style.backgroundColor = isDark ? "#111" : "var(--card-bg)";
-        }
-      };
-
-      const autoResizeIframe = () => {
-        const iframe = document.querySelector("#cusdis_thread iframe");
-        if (!iframe) return;
+        // Resize iframe dynamically to fit card height
         window.addEventListener("message", (event) => {
-          if (event.data?.from === "cusdis" && event.data?.event === "resize") {
-            iframe.style.height = event.data.data + "px";
+          if (event.data?.from === "cusdis" && event.data.event === "resize") {
+            const iframe = document.querySelector("#cusdis_thread iframe");
+            if (iframe) {
+              iframe.style.height = event.data.data + "px";
+              iframe.style.display = "block";
+            }
           }
         });
-      };
 
-      const init = () => {
-        window.CUSDIS?.initial?.();
-        applyTheme();
-        autoResizeIframe();
-
-        // Watch for theme changes
-        const observer = new MutationObserver(applyTheme);
+        // Watch theme changes
+        const observer = new MutationObserver(() => {
+          const isDark = document.documentElement.classList.contains("dark");
+          const newTheme = isDark ? "dark" : "light";
+          if (newTheme !== currentTheme) {
+            currentTheme = newTheme;
+            renderCusdis(newTheme); // instant re-render
+            const card = document.getElementById("comment-card");
+            if (card) {
+              card.style.backgroundColor = isDark ? "#111" : "var(--card-bg)";
+            }
+          }
+        });
         observer.observe(document.documentElement, {
           attributes: true,
           attributeFilter: ["class"],
         });
-      };
+      }
 
       if (document.readyState === "loading") {
-        window.addEventListener("DOMContentLoaded", init);
+        window.addEventListener("DOMContentLoaded", initCusdis);
       } else {
-        init();
+        initCusdis();
       }
     }
   </script>
