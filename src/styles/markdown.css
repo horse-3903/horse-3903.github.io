@@ -121,7 +121,6 @@
     }
     
 }
-
 /* ───────────────────────────────
    Cusdis Integration (Fuwari Style)
 ──────────────────────────────── */
@@ -138,27 +137,33 @@
     border: none !important;
     height: auto !important;
     background: transparent !important;
+    overflow: hidden !important;
   }
 
+  /* Comment card (outer container) */
   #comment-card {
-    @apply card-base card-shadow p-6 transition-colors duration-300;
+    @apply card-base card-shadow p-6 transition-colors duration-300 border border-white/20 dark:border-white/30;
     background: var(--card-bg);
   }
 
   .dark #comment-card {
-    background: #111; /* Cusdis dark background color */
+    background: #111; /* Match Cusdis dark theme */
   }
 
+  /* Typography + transition smoothing */
   #cusdis_thread * {
     font-family: var(--font-sans, 'Inter', system-ui, sans-serif);
     @apply text-[1.05rem] text-75 leading-relaxed transition;
   }
 
+  /* Hide "Powered by Cusdis" footer */
   #cusdis_thread .powered-by {
     display: none !important;
   }
 
-  /* Fade-up entry animation */
+  /* ────────────────
+     Fade-up animation
+     ──────────────── */
   @keyframes fadeUp {
     from {
       opacity: 0;
@@ -170,6 +175,7 @@
     }
   }
 
+  /* Optional fade-in only when iframe loads successfully */
   #cusdis_thread.visible {
     animation: fadeUp 0.6s ease forwards;
   }

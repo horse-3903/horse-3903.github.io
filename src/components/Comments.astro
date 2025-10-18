@@ -3,7 +3,10 @@ const { pageTitle, pageUrl, pageId } = Astro.props;
 ---
 
 <section id="comments" class="mt-12 mb-12 transition-colors duration-300">
-  <div id="comment-card" class="card-base card-shadow p-6">
+  <div
+    id="comment-card"
+    class="card-base card-shadow p-6 border border-white/20 dark:border-white/30"
+  >
     <h2 class="text-2xl font-semibold mb-5 text-90 tracking-tight">Comments</h2>
 
     <div
@@ -27,17 +30,26 @@ const { pageTitle, pageUrl, pageId } = Astro.props;
 
         const card = document.getElementById("comment-card");
         if (card) {
-          card.style.backgroundColor = isDark
-            ? "#111" // Cusdis dark background
-            : "var(--card-bg)";
+          card.style.backgroundColor = isDark ? "#111" : "var(--card-bg)";
         }
+      };
+
+      const autoResizeIframe = () => {
+        const iframe = document.querySelector("#cusdis_thread iframe");
+        if (!iframe) return;
+        window.addEventListener("message", (event) => {
+          if (event.data?.from === "cusdis" && event.data?.event === "resize") {
+            iframe.style.height = event.data.data + "px";
+          }
+        });
       };
 
       const init = () => {
         window.CUSDIS?.initial?.();
         applyTheme();
+        autoResizeIframe();
 
-        // Observe theme changes
+        // Watch for theme changes
         const observer = new MutationObserver(applyTheme);
         observer.observe(document.documentElement, {
           attributes: true,
