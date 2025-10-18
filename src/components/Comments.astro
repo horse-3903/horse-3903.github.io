@@ -4,31 +4,41 @@ const { pageTitle, pageUrl, pageId } = Astro.props;
 
 <section id="comments" class="mt-12 mb-12">
   <div class="card-base card-shadow p-6">
-    <h2 class="text-xl font-semibold mb-4 text-90">Comments</h2>
+    <h2 class="text-2xl font-semibold mb-5 text-90">Comments</h2>
 
     <div
       id="cusdis_thread"
       data-host="https://cusdis.com"
       data-app-id="a3ed583a-9ea0-4074-9249-f44ef13e6d9b"
-      data-page-id={pageId}
-      data-page-url={pageUrl}
+      data-page-id={Astro.url.pathname}
+      data-page-url={`https://horse-3903.github.io${Astro.url.pathname}`}
       data-page-title={pageTitle}
       data-theme="auto"
     ></div>
-
-    <script async defer src="https://cusdis.com/js/cusdis.es.js"></script>
   </div>
 
   <script is:inline>
     if (typeof window !== "undefined") {
+      // Dynamically load Cusdis script after DOM is ready
+      function loadCusdis() {
+        if (document.querySelector("#cusdis_thread iframe")) return;
+        const script = document.createElement("script");
+        script.src = "https://cusdis.com/js/cusdis.es.js";
+        script.async = true;
+        script.defer = true;
+        document.body.appendChild(script);
+      }
+      window.addEventListener("DOMContentLoaded", loadCusdis);
+
+      // Theme sync
       function updateCusdisTheme() {
         const iframe = document.querySelector("#cusdis_thread iframe");
-        if (!iframe || !iframe.contentWindow) return;
+        if (!iframe || !iframe.contentWindow) {
+          setTimeout(updateCusdisTheme, 500);
+          return;
+        }
         const theme = document.documentElement.classList.contains("dark") ? "dark" : "light";
-        iframe.contentWindow.postMessage(
-          { from: "cusdis", event: "setTheme", theme },
-          "*"
-        );
+        iframe.contentWindow.postMessage({ from: "cusdis", event: "setTheme", theme }, "*");
       }
 
       window.addEventListener("message", (e) => {
@@ -38,10 +48,7 @@ const { pageTitle, pageUrl, pageId } = Astro.props;
       });
 
       const mo = new MutationObserver(updateCusdisTheme);
-      mo.observe(document.documentElement, {
-        attributes: true,
-        attributeFilter: ["class"],
-      });
+      mo.observe(document.documentElement, { attributes: true, attributeFilter: ["class"] });
     }
   </script>
 </section>
