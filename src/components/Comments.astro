@@ -3,13 +3,16 @@ const { pageTitle, pageUrl, pageId, appId } = Astro.props;
 ---
 
 <section id="comments" class="mt-12">
+  <h2>Comments</h2>
+
   <div
     id="cusdis_thread"
     data-host="https://cusdis.com"
     data-app-id={appId}
     data-page-id={pageId}
     data-page-url={pageUrl}
-    data-page-title={pageTitle}>
+    data-page-title={pageTitle}
+    data-theme="auto">
   </div>
   <script async defer src="https://cusdis.com/js/cusdis.es.js"></script>
 </section>
@@ -31,21 +34,5 @@ const { pageTitle, pageUrl, pageId, appId } = Astro.props;
       );
       observer.observe(cusdis);
     }
-
-    function updateCusdisTheme() {
-      const iframe = document.querySelector('#cusdis_thread iframe');
-      if (!iframe || !iframe.contentWindow) return;
-      const theme = document.documentElement.classList.contains('dark') ? 'dark' : 'light';
-      iframe.contentWindow.postMessage({ from: 'cusdis', event: 'setTheme', theme }, '*');
-    }
-
-    const themeObserver = new MutationObserver(updateCusdisTheme);
-    themeObserver.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
-
-    window.addEventListener('message', (event) => {
-      if (event.data?.from === 'cusdis' && event.data.event === 'onReady') {
-        updateCusdisTheme();
-      }
-    });
   }
 </script>
