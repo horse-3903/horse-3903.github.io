@@ -16,7 +16,7 @@ export const siteConfig: SiteConfig = {
 		fixed: false, // Hide the theme color picker for visitors
 	},
 	banner: {
-		enable: false,
+		enable: true,
 		src: "assets/images/demo-banner.png", // Relative to the /src directory. Relative to the /public directory if it starts with '/'
 		position: "center", // Equivalent to object-position, only supports 'top', 'center', 'bottom'. 'center' by default
 		credit: {
@@ -42,11 +42,12 @@ export const siteConfig: SiteConfig = {
 export const navBarConfig: NavBarConfig = {
 	links: [
 		LinkPreset.Home,
+		LinkPreset.Blogs,
 		LinkPreset.Archive,
 		LinkPreset.About,
 		{
 			name: "GitHub",
-			url: "https://github.com/saicaca/fuwari", // Internal links should not include the base path, as it is automatically added
+			url: "https://github.com/horse-3903", // Internal links should not include the base path, as it is automatically added
 			external: true, // Show an external link icon and will open in a new tab
 		},
 	],
@@ -55,7 +56,7 @@ export const navBarConfig: NavBarConfig = {
 export const profileConfig: ProfileConfig = {
 	avatar: "assets/images/avatar.jpeg", // Relative to the /src directory. Relative to the /public directory if it starts with '/'
 	name: "horse3903",
-	bio: "Student, avid programmer, machine learning and entrepreneurship enthusiast",
+	bio: "Student, programmer, AI and business enthusiast",
 	links: [
 		{
 			name: "Instagram",
@@ -65,9 +66,9 @@ export const profileConfig: ProfileConfig = {
 			url: "https://instagram.com/horse.3903",
 		},
 		{
-			name: "Reddit",
-			icon: "fa6-brands:reddit",
-			url: "https://reddit.com/u/horse_3903",
+			name: "Gmail",
+			icon: "fa6-solid:envelope",
+			url: "mailto:horse3903410@gmail.com",
 		},
 		{
 			name: "GitHub",
@@ -78,7 +79,7 @@ export const profileConfig: ProfileConfig = {
 };
 
 export const licenseConfig: LicenseConfig = {
-	enable: true,
+	enable: false,
 	name: "CC BY-NC-SA 4.0",
 	url: "https://creativecommons.org/licenses/by-nc-sa/4.0/",
 };
