@@ -42,9 +42,9 @@ export const siteConfig: SiteConfig = {
 export const navBarConfig: NavBarConfig = {
 	links: [
 		LinkPreset.Home,
+		LinkPreset.About,
 		LinkPreset.Blogs,
 		LinkPreset.Archive,
-		LinkPreset.About,
 		{
 			name: "GitHub",
 			url: "https://github.com/horse-3903", // Internal links should not include the base path, as it is automatically added
