@@ -2,96 +2,115 @@
 import MainGridLayout from "@layouts/MainGridLayout.astro";
 import { Icon } from "astro-icon/components";
 
-const heroTitle = "Hey, I'm Rafael 👋";
+const heroTitle = "Hey, I'm Rafael";
 const heroSubtitle =
-	"A student, avid programmer, and an enthusiast in machine learning and entrepreneurship";
+  "A student, avid programmer, and an enthusiast in machine learning and entrepreneurship";
 const introText =
-	"I write about machine learning, cybersecurity, my personal projects and my life.";
+  "I write about machine learning, cybersecurity, my personal projects and my life.";
 ---
 
 <MainGridLayout title="Home" description="Rafael's personal site and tech blog">
-    <div class="flex w-full rounded-[var(--radius-large)] overflow-hidden relative min-h-32">
-        <div class="card-base z-10 px-9 py-6 relative w-full">
-            <!-- Hero Section -->
-            <section class="px-6 md:px-10 py-10 text-center">
-                <h1 class="text-5xl md:text-6xl font-bold text-90 mb-4 tracking-tight">
-                {heroTitle}
-                </h1>
-                <p class="text-lg md:text-xl text-75 mb-6 max-w-2xl mx-auto">
-                {heroSubtitle}
-                </p>
-                <p class="text-base text-50 mb-10 max-w-2xl mx-auto">{introText}</p>
-                <div class="flex justify-center gap-4 flex-wrap">
-                <a
-                    href="/blogs/"
-                    class="btn-regular rounded-2xl px-6 py-3 text-lg flex items-center gap-2"
-                >
-                    <Icon name="material-symbols:article-outline" size="1.5em" />
-                    Read My Blog
-                </a>
-                <a
-                    href="/about/"
-                    class="btn-plain rounded-2xl px-6 py-3 text-lg flex items-center gap-2"
-                >
-                    <Icon name="mdi:information-outline" size="1.5em" />
-                    About Me
-                </a>
-                </div>
-            </section>
-            <!-- Featured Projects -->
-            <section class="px-6 md:px-10 mt-12 text-center">
-                <h2 class="text-3xl font-semibold mb-8 text-90">Featured Projects</h2>
-                <div class="grid gap-8 md:grid-cols-3 justify-center items-stretch">
-                <div class="card-base card-shadow p-6 rounded-2xl transition hover:scale-[1.02]">
-                    <Icon
-                    name="mdi:robot-excited-outline"
-                    class="text-[var(--primary)] mb-3 text-4xl"
-                    />
-                    <h3 class="text-xl font-semibold mb-2 text-90">LabAssist</h3>
-                    <p class="text-75 text-sm">
-                    A vision-based AI system for detecting procedural errors in chemistry
-                    experiments using motion transfer and synthetic video data.
-                    </p>
-                </div>
-                <div class="card-base card-shadow p-6 rounded-2xl transition hover:scale-[1.02]">
-                    <Icon
-                    name="mdi:shield-check-outline"
-                    class="text-[var(--primary)] mb-3 text-4xl"
-                    />
-                    <h3 class="text-xl font-semibold mb-2 text-90">PhishHook</h3>
-                    <p class="text-75 text-sm">
-                    A Chrome extension that detects scam and phishing attempts using
-                    ONNX-based ML models and real-time comment scraping.
-                    </p>
-                </div>
-                <div class="card-base card-shadow p-6 rounded-2xl transition hover:scale-[1.02]">
-                    <Icon
-                    name="mdi:robot-outline"
-                    class="text-[var(--primary)] mb-3 text-4xl"
-                    />
-                    <h3 class="text-xl font-semibold mb-2 text-90">
-                    ML Implementations
-                    </h3>
-                    <p class="text-75 text-sm">
-                    A series of explanations and implementations of ML models from scratch.
-                    </p>
-                </div>
-                </div>
-            </section>
-            <!-- Latest Blog Posts -->
-            <section class="px-6 md:px-10 mt-16 text-center">
-                <h2 class="text-3xl font-semibold mb-6 text-90">Latest Blog Posts</h2>
-                <p class="text-75 text-base mb-10">
-                Check out my latest writing on AI, computing, and student projects.
-                </p>
-                <a
-                href="/blogs/"
-                class="btn-regular rounded-2xl px-6 py-3 text-lg inline-flex items-center gap-2"
-                >
-                <Icon name="mdi:book-open-page-variant" size="1.5em" />
-                View All Posts →
-                </a>
-            </section>
+  <div class="flex w-full rounded-[var(--radius-large)] overflow-hidden relative min-h-32">
+    <div class="card-base z-10 px-9 py-6 relative w-full">
+      <!-- Hero Section -->
+      <section class="px-6 md:px-10 py-10 text-center">
+        <h1 class="text-5xl md:text-6xl font-bold text-90 mb-4 tracking-tight">
+          {heroTitle}
+        </h1>
+        <p class="text-lg md:text-xl text-75 mb-6 max-w-2xl mx-auto">
+          {heroSubtitle}
+        </p>
+        <p class="text-base text-50 mb-10 max-w-2xl mx-auto">{introText}</p>
+        <div class="flex justify-center gap-4 flex-wrap">
+          <a
+            href="/blogs/"
+            class="btn-regular rounded-2xl px-6 py-3 text-lg flex items-center gap-2 w-auto max-w-fit"
+          >
+            <Icon name="material-symbols:article-outline" size="1.5em" />
+            Read My Blog
+          </a>
+          <a
+            href="/about/"
+            class="btn-plain rounded-2xl px-6 py-3 text-lg flex items-center gap-2 w-auto max-w-fit"
+          >
+            <Icon name="mdi:information-outline" size="1.5em" />
+            About Me
+          </a>
         </div>
+      </section>
+
+      <!-- Featured Projects -->
+      <section class="px-6 md:px-10 mt-12 text-center">
+        <h2 class="text-3xl font-semibold mb-8 text-90">Featured Projects</h2>
+        <div class="grid gap-8 md:grid-cols-3 justify-center items-stretch">
+          <!-- Project 1 -->
+          <div
+            class="card-base card-shadow bg-[var(--card-bg)] p-6 rounded-2xl transition hover:scale-[1.02] flex flex-col items-center text-center"
+          >
+            <div class="flex justify-center items-center mb-3">
+              <Icon
+                name="mdi:robot-excited-outline"
+                class="text-[var(--primary)] text-4xl"
+              />
+            </div>
+            <h3 class="text-xl font-semibold mb-2 text-90">LabAssist</h3>
+            <p class="text-75 text-sm leading-relaxed">
+              A vision-based AI system for detecting procedural errors in chemistry
+              experiments using motion transfer and synthetic video data.
+            </p>
+          </div>
+
+          <!-- Project 2 -->
+          <div
+            class="card-base card-shadow bg-[var(--card-bg)] p-6 rounded-2xl transition hover:scale-[1.02] flex flex-col items-center text-center"
+          >
+            <div class="flex justify-center items-center mb-3">
+              <Icon
+                name="mdi:shield-check-outline"
+                class="text-[var(--primary)] text-4xl"
+              />
+            </div>
+            <h3 class="text-xl font-semibold mb-2 text-90">PhishHook</h3>
+            <p class="text-75 text-sm leading-relaxed">
+              A Chrome extension that detects scam and phishing attempts using
+              ONNX-based ML models and real-time comment scraping.
+            </p>
+          </div>
+
+          <!-- Project 3 -->
+          <div
+            class="card-base card-shadow bg-[var(--card-bg)] p-6 rounded-2xl transition hover:scale-[1.02] flex flex-col items-center text-center"
+          >
+            <div class="flex justify-center items-center mb-3">
+              <Icon
+                name="mdi:robot-outline"
+                class="text-[var(--primary)] text-4xl"
+              />
+            </div>
+            <h3 class="text-xl font-semibold mb-2 text-90">
+              ML Implementations
+            </h3>
+            <p class="text-75 text-sm leading-relaxed">
+              A series of explanations and implementations of ML models from scratch.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Latest Blog Posts -->
+      <section class="px-6 md:px-10 mt-16 text-center">
+        <h2 class="text-3xl font-semibold mb-6 text-90">Latest Blog Posts</h2>
+        <p class="text-75 text-base mb-10">
+          Check out my latest writing on AI, computing, and student projects.
+        </p>
+        <a
+          href="/archive/"
+          class="btn-regular rounded-2xl px-6 py-3 text-lg inline-flex items-center gap-2 w-auto max-w-fit"
+        >
+          <Icon name="mdi:book-open-page-variant" size="1.5em" />
+          View All Posts →
+        </a>
+      </section>
     </div>
+  </div>
 </MainGridLayout>
