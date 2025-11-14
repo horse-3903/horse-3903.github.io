@@ -1,10 +1,10 @@
 ---
-title: <Topic Name>
-published: 2025-01-01
-description: "<One-line summary of the note>"
-tags: ["Machine Learning", "<Subtopic>"]
+title: K-Nearest Neighbours
+published: 2025-11-14
+description: "A comprehensive guide to K-Nearest Neighbours — exploring how local similarity drives instance-based learning."
+tags: ["Machine Learning", "Supervised Learning"]
 category: Notes
-draft: true
+draft: false
 ---
 
 # k-Nearest Neighbours
