@@ -2,18 +2,16 @@
 title: Decision Tree
 published: 2025-10-22
 description: "A comprehensive guide to Decision Trees — exploring how they recursively split data to model complex decision boundaries for classification and regression tasks."
-tags: ["Machine Learning", "<Subtopic>"]
+tags: ["Machine Learning", "Supervised Learning"]
 category: Notes
 draft: false
 ---
 
 # Introduction
 
-## Overview
-
 ## Overall Goals
-* Recursively split dataset until pure leaf node obtained
-* Means that there is only one class in each node
+* Recursively split the dataset to improve purity
+* Done until no further meaningful split is possible
 
 ---
 
@@ -52,11 +50,11 @@ draft: false
 ### 1. Start with the full training dataset at the root node
 * All samples and their labels are considered together.
 
-### 2. Check if the node should stop splitting:
+### 2. Check if the node should stop splitting
 * All samples belong to one class, or
 * The stopping condition is met.
 
-#### For each feature:
+#### For each feature
 * Evaluate all possible split points.
 
 #### For numeric features:
@@ -67,25 +65,25 @@ draft: false
 #### For categorical features:
 * Consider subsets of categories or one-hot encodings.
 
-### 3. Compute the impurity or loss for each possible split:
+### 3. Compute the impurity or loss for each possible split
 
 * Use Entropy / Information Gain or Gini Index (for classification).
 
 * Use Mean Squared Error (for regression).
 
-### 4. Select the split with the best score:
+### 4. Select the split with the best score
 
 * Highest information gain or lowest impurity.
 
 * Record the chosen feature and threshold.
 
-### 5. Partition the dataset into child nodes:
+### 5. Partition the dataset into child nodes
 
 * Left node → samples satisfying the condition
 
 * Right node → samples not satisfying it
 
-### 7. Repeat recursively for each child node:
+### 7. Repeat recursively for each child node
 
 * Treat each child as a new dataset.
 
@@ -109,52 +107,60 @@ draft: false
 * Information Gain is applied to quantify which feature provides maximal information about classification based on **entropy**
 * The intention is decreasing the **entropy** initiating from the root node to the leaf nodes.
 
-Given the set of values in a parent node $ S $ which is split into child nodes $ S_L $ and $ S_R  $ :
+* The information gain $ IG $ from splitting the set of values in a parent node $ S $ is
 
 $$
 IG(S, t) = H(S) - \frac{|S_L|}{|S|}H(S_L) - \frac{|S_R|}{|S|}H(S_R)
 $$
 
-Where:
-* $ H(S) $ = entropy before split
-* $ H(S_L), H(S_R) $ = entropy of left/right subsets
-* $ |S|, |S_L|, |S_R| $ = number of samples in the parent and child nodes
+* Where:
+  * $ H(S) $ is entropy before splitting,
+  * $ H(S_L), H(S_R) $ are the entropy of left and right subsets respectively,
+  * $ |S|, |S_L|, |S_R| $ are the number of samples in the parent and child nodes respectively.
 
 ## Entropy
 
 * The entropy of a random variable quantifies the **average level of uncertainty** with the variable's potential states
 * Essentially, it is the **measurement of the impurity or randomness in the data points**
 
-Given a variable $ y $ having the discrete states $ \mathcal{y} \in [0, 1] $ contained in the set $ S $ : 
+* The entropy of a set $ S $ is defined as 
 
 $$
-H(S) = - \sum_{y \space \in \space \mathcal{S}} p(y) \space \log p(y)
+H(S) = - \sum_{y \space \in \space \mathcal{S}} p(y) \space \log_2 p(y)
 $$
+
+* Where:
+  * $ y $ has the discrete states $ y \in \mathcal{Y} $
 
 ## GINI impurity
 
 * Calculates the **probability of a feature classified incorrectly when selected randomly**
 * If all the elements are linked with a single class then it can be called pure
 
-Given a variable  $ y $  having the discrete states $ \mathcal{y} \in [0, 1] $  contained in the set $ S $ :
+* The GINI impurity of a set $ S $ is defined as
 
 $$
-H(S) = 1 - \sum_{y \space \in \space \mathcal{S}} (p(y))^2
+H(S) = 1 - \sum_{y \space \in \space \mathcal{S}} p(y)^2
 $$
+
+* Where:
+  * $ y $ has the discrete states $ y \in \mathcal{Y} $
 
 ## Mean Squared Loss (MSE)
 
-* Regular regression-based MSE over a set $ S $
+* Regression-based MSE over a set $ S $
 
-Given the set of values in a parent node $ S $
+* The Mean Squared Error of a set $ S $ is defined as
 
 $$
 \text{MSE}(S) = \frac{1}{|S|} \sum_{(x, y_S) \in S} (y - \bar y_S)^2
 $$
 
 Where: 
-$$
-\text{(average) } \bar y_S = \frac{1}{|S|} \sum_{(x, y_S) \in S} y
+* $ \bar y_s $ is the average value of $ y $ in set $ S $
+
+$$ 
+\bar y_S = \frac{1}{|S|} \sum_{(x, y_s) \in S} y 
 $$
 
 ---
@@ -163,11 +169,11 @@ $$
 
 | **Feature Type** | **Split Condition** | **Split Decision** | **Example Condition** |
 | --- | --- | --- | --- |
-| **Numeric / Continuous** | x < t  or  x > t  | - Sort all unique values of (x) <br>- Compute midpoints between consecutive values <br>- Each midpoint = possible threshold (t) | `Age < 32.5` |
-| **Ordered Categories** | rank(x) < t  | - Map categories to ranks <br>- Treat as numeric thresholds | `EducationLevel ≤ 2` |
-| **Binary Categorical** |  x = v  | - Single split into {v} vs. {not v} | `IsStudent = Yes` |
-| **Multi-Categorical** | x ∈ S  or  x ∉ S | - Enumerate all possible subsets S of categories <br>- Often one-hot encode and treat as binary features | `Color ∈ {Red, Blue}` |
-| **Boolean** | x < 0.5  or  x ≥ 0.5 | - Treated as numeric with only one possible threshold | `IsWeekend < 0.5` |
+| **Numeric / Continuous** | x < t  or  x > t  | $ \cdot $ Sort all unique values of (x) <br>$ \cdot $ Compute midpoints between consecutive values <br>$ \cdot $ Each midpoint = possible threshold (t) | `Age < 32.5` |
+| **Ordered Categories** | rank(x) < t  | $ \cdot $ Map categories to ranks <br>$ \cdot $ Treat as numeric thresholds | `EducationLevel ≤ 2` |
+| **Binary Categorical** |  x = v  | $ \cdot $ Single split into {v} vs. {not v} | `IsStudent = Yes` |
+| **Multi-Categorical** | x ∈ S  or  x ∉ S | $ \cdot $ Enumerate all possible subsets S of categories <br>$ \cdot $ Often one-hot encode and treat as binary features | `Color ∈ {Red, Blue}` |
+| **Boolean** | x < 0.5  or  x ≥ 0.5 | $ \cdot $ Treated as numeric with only one possible threshold | `IsWeekend < 0.5` |
 
 ---
 
@@ -206,21 +212,25 @@ $$
 # Variants of Decision Tree Algorithms
 
 ## Iterative Dichotomiser 3 (ID3)
-* **Splitting Criterion**: Information Gain / Entropy.
-* **Output**: Classification ($ \bar y $).
 
-* **Feature Handling**:
+**Splitting Criterion**: Information Gain / Entropy.
+
+**Output**: Classification ($ \bar y $).
+
+**Feature Handling**:
     * Works primarily with categorical features.
     * Does not handle continuous variables directly.
 
-* **Pruning**: None.
+**Pruning**: None.
 
-* **Limitation**: Biased toward features with many unique values.
+**Limitation**: Biased toward features with many unique values.
 
-## Base Cases
-Applicable when deciding whether to stop the algorithm
 
-Given the set of values in a parent node $ S $ and unique class label $ \bar y $ to the node, 
+### Base Cases
+* Applicable when deciding whether to stop the algorithm
+
+* Given the set of values in a parent node $ S $ and unique class label $ \bar y $ to the node, 
+
 $$
 \text{ID3}(S) =
 \begin{cases}
@@ -240,17 +250,18 @@ $$
 $$
 
 
-### Case 1: All values of $ y $ in $ S $ is equal to $ \bar y $
+#### Case 1: All values of $ y $ in $ S $ is equal to $ \bar y $
 
 * Node should be represented by $ \bar y $
 
-### Case 2: No more attributes $ x $ to split the set $ S $
+#### Case 2: No more attributes $ x $ to split the set $ S $
 
 * Node should be represented by the most common occurence of $ y $, or
 * Node should be represented by the mean of $ y $
 
-## Recursive Case
-Given feature $ f $ and threshold $ t $,
+### Recursive Case
+* Given feature $ f $ and threshold $ t $,
+
 $$
 S_L = \{ (x, y) \in S: x_f \le t \}
 $$
@@ -259,44 +270,198 @@ $$
 S_R = \{ (x, y) \in S: x_f \gt t \}
 $$
 
-## Key Limitation
-Notice that ID3 picks a feature $ A $ in feature space $ \mathcal F $ which provides the maximum information gain of the set $ S $.
+### Key Limitation
+* Notice that ID3 picks a feature $ A $ in feature space $ \mathcal F $ which provides the maximum information gain of the set $ S $.
 
 $$
 A^* = \underset{A \in \mathcal F}{\arg \max} \space IG(S, A)
 $$
 
-However, if a feature has **many distinct values** splitting by that feature will produce **very many small subsets**.
+* However, if a feature has **many distinct values** splitting by that feature will produce **very many small subsets**.
 
-Since information gain is calculated using the reduction in entropy of the set, for a **very small subset** $ S_v $ : 
+* Since information gain is calculated using the reduction in entropy of the set, for a **very small subset** $ S_v $ : 
 
 $$
 H(S_v) \approx 0
 $$
 
-Since the subset is **very pure**, meaning that the likelihood of predicting the classes is **very high**.
+* Since the subset is **very pure**, meaning that the likelihood of predicting the classes is **very high**.
 
 $$
 IG(S, A) = H(S) - H(S_v) \approx H(S)
 $$
 
-The model sees feature $ A^* $ which is used to split the node is seen as *amazing* since it achieves maximum information gain.
+* The model sees feature $ A^* $ which is used to split the node is seen as *amazing* since it achieves maximum information gain.
 
-However, the model is actually **overfitting** since it is *memorising* the individual examples in the training dataset.
+* However, the model is actually **overfitting** since it is *memorising* the individual examples in the training dataset.
 
 ## C4.5
+**Splitting Criterion**: Gain Ratio.
+
+**Output**: Classification ($ \bar y $).
+
+**Feature Handling**:
+  * Works with both categorical and continuous features.
+
+**Pruning**: Pessimistic pruning: Replaces subtrees with leaves when the error estimate shows no significant improvement.
+
+**Limitation**: Gain Ratio can over-penalize attributes with many branches, sometimes ignoring good splits.
+
+### Gain Ratio
+* Recall the definition of entropy from above and notice how it is biased to attributes with many unique values (as mentioned in the section above)
+
+* C4.5 introduces **Gain Ratio** (GR) to normalise Information Gain by the “intrinsic information” of the split, which penalises attributes that create too many branches.
+
+* The "intrinsic information" of the split is calculated by the **Information Split** (IS), which measures how broadly the data is split by feature $ A $. 
+
+* Given that $ \mathcal{V}_A $ is the distinct (for classification) or continuous (for regression) outcomes from splitting a set $ S $ into subsets $ S_v $,
+
+$$
+
+\text{GR}(A) = \frac{\text{IG(A)}}{\text{IS}(A)}
+
+$$
+
+Such that: 
+$$
+
+\text{IS}(A) = \sum_{v \in \mathcal{V}_A} \frac{|S_v|}{|S|} \log_2 \frac{|S_v|}{|S|}
+
+$$
+
+### Pessimistic Pruning
+
+#### Step 1: Grow the Full Tree
+* Decision tree is grown until its maximum depth 
+
+#### Step 2: Estimate the True Error Rate of a Node
+* The observed error rate $ E_t $ at a node $ t $ is defined as
+
+$$
+
+E(t) = \frac{e_t}{N_t}
+
+$$
+
+* Where: 
+  * $ N_t $ is the number of training samples at that node
+  * $ e_t $ is the number of misclassified samples 
+
+* However, since this is measured on the training data, it likely underestimates the true error.
+
+* C4.5 adjusts it upward using a pessimistic correction factor, derived from the normal approximation to the binomial distribution:
+
+$$
+
+E(t) = \frac{e_t + 0.5}{N_t}
+
+$$
+
+#### Step 3: Estimate the True Error Rate of a Sub-tree
+* For any internal node $ t $ in subtree $ T $, sum up the adjusted errors of its nodes:
+$$
+
+E'(T) = \sum_{t \in T} E'(t) = \sum_{t \in T} \frac{e_t + 0.5}{N_t}
+
+$$
 
 ## CART
+
+* **Splitting Criterion**: Gini Impurity (for classification) or Mean Squared Error (for regression).
+
+* **Output**: Classification ($ \bar y $) and Regression ($ \hat y $).
+
+* **Feature Handling**:
+    * Handles both **categorical** and **continuous** features.
+    * All splits are **binary** (i.e., each node produces exactly two child nodes).
+
+* **Pruning**: Cost-Complexity Pruning (CCP): Removes subtrees whose accuracy gain is outweighed by their complexity penalty.
+
+* **Advantages**:
+    * Supports both classification and regression tasks.
+    * Robust to noisy data.
+    * Naturally handles numeric thresholds.
+
+* **Limitation**:
+    * Always produces binary splits (even for categorical attributes with multiple levels), which may increase tree depth.
+
+### Cost-Complexity Pruning
+
+#### Step 1: Grow the Full Tree
+* Decision tree is grown until its maximum depth 
+
+#### Step 2: Calculate Cost Complexity Criterion of Tree and Subtree
+* Cost complexity $ R(t) $ is the error from collapsing the subtree at node $ t $
+* The total cost complexity of a tree $R_\alpha(T)$ is defined as :
+
+$$
+R_\alpha(T) = R(T) + \alpha{|L(T)|}
+$$
+
+$$
+R(t) = N_t \cdot r(t)
+$$
+
+$$
+R(T) = \sum_{t \in L(T)}{r(t) \cdot p(t)} = \sum_{t \in L(T)} R(t)
+$$
+
+* Where: 
+  * $ L(T) $ is the set of leaves in the entire tree,
+  * $ R(T) $ is the training error of the entire tree,
+  * $ R(t) $ is the training error of a single node,
+  * $ | T | $ is the number of leaves in the tree
+  * $ \alpha $ is a tuning parameter, where a higher $ \alpha $ means more pruning and vice versa, 
+  * $ r(t) $ is the impurity of the leaf, 
+  * $ p(t) = \frac{n_t}{N_T} $ is the proportion of number of samples in node $ t $ to complete tree $ T $.
+
+#### Step 3: Calculate Weakest Link Pruning
+* The effective cost of pruning $ g(t) $ is defined as: 
+
+$$
+g(t) = \frac{R(t) - R(T_t)}{|L(T_t) - 1|}
+$$
+
+* Where: 
+  * $ R(t) - R(T_t) $ is the increase in error if the subtree $ T_t $ is replaced by a leaf $ t $
+  * $ |L(T_t) - 1| $ is the number of leaves removed (excluding the new leaf)
+
+#### Step 4: Generate Pruning Path
+* Compute $ g(t) $ for all internal nodes
+* Prune node $ t = \argmin_{t}{g(t)} $
+* Collapse the subtree into a leaf node
+* Repeat until only root node is left
+
+* This produces a sequence of nodes in order of priority: 
+
+$$
+T_0 \supset T_1 \supset T_2 \dots T_K \subset T_R
+$$
+
+#### Step 5: Select the best subtree
+* Use cross-validation, validation error, 1-standard-error rule, etc.
+* Find the optimal subtree
 
 ---
 
 # Bias-Variance Trade Off
 
+## Overview
+* Bias causes errors due to assumptions made by the model
+* Variance causes errors due to over-sensitivity to data
+* Increasing variance decreases bias, and vice versa
+
 ## Effect of Tree Depth
 
-## Overfitting vs. Underfitting
+### Shallow Trees
+* Model cannot capture complex boundaries
+* Underfitting of data
+* High number of systemic errors (bias)
 
-## Role of Pruning
+### Deep Trees
+* Model is very flexible
+* Overfitting of data
+* High noise sensitivity (variance)
 
 --- 
 
@@ -304,8 +469,17 @@ However, the model is actually **overfitting** since it is *memorising* the indi
 
 ## Classification Trees
 
+* Given a new sample $ x $, 
+1. Start at the root node 
+2. At each node, evaluate the condition
+3. Move to the respective branch
+4. Continue until a leaf node is reached
+5. Output the class label and probability
+
 ## Regression Trees
-
----
-
-# Summary
+* Given a new sample $ x $, 
+1. Start at the root node 
+2. At each node, evaluate the condition
+3. Move to the respective branch
+4. Continue until a leaf node is reached
+5. Output the numeric value

@@ -2,7 +2,7 @@
 title: Linear Regression
 published: 2025-10-18
 description: "A comprehensive guide to Linear Regression — exploring how it models relationships between variables to make accurate continuous predictions."
-tags: ["Machine Learning", "Regression"]
+tags: ["Machine Learning", "Supervised Learning"]
 category: Notes
 draft: false
 ---
@@ -97,26 +97,4 @@ where $\alpha$ is the **learning rate**.
   $$
   b = b - \alpha \cdot \frac{1}{m} \sum_{i=1}^{m} (\hat{y}_i - y_i)
   $$
-
----
-
-# Intuition & Insights
-
-- The model adjusts $w$ and $b$ in the **opposite direction** of the gradient to reduce error.  
-- Each iteration brings the line closer to the “best fit” that minimises the squared differences between predicted and true values.  
-- Over time, the gradient becomes smaller as the model converges to the optimal parameters.
-
----
-
-# Visualisation
-
-TBC
-
-
-# Summary
-
-- Linear Regression models data using a linear relationship.  
-- The cost function is the **mean squared error**.  
-- **Gradient Descent** is used to iteratively minimise the cost function by updating $w$ and $b$.  
-- The final model approximates the best-fitting line through the data.
 
