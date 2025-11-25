@@ -1,7 +1,7 @@
 ---
 title: L1 and L2 Regularisation
 published: 2025-11-15
-description: "L1 and L2 Regularisation — all you need to know about programming concepts and packages"
+description: "L1 and L2 Regularisation — exploring how LASSO and Ridge improve generalisation."
 tags: ["Machine Learning", "Supervised Learning"]
 category: Notes
 draft: false
