@@ -22,47 +22,203 @@ draft: false
 * This leads to a new minimisation objective - the Regularised Loss Minimisation (RLM) - which outputs a hypothesis where: 
 
 $$
-\argmin_\bold{w}(L(\bold{w}) + R(\bold{w}))
+\argmin_w(L(w) + R(w))
 $$
 
 * Where: 
-  * $ \bold w $ is the weight matrix,
-  * $ L(\bold w) $ is the empirical loss from the weight matrix,
-  * $ R(\bold w) $ is the regularised loss from the regularisation function.
+  * $ w $ is the weight matrix,
+  * $ L(w) $ is the empirical loss from the weight matrix,
+  * $ R(w) $ is the regularised loss from the regularisation function.
+
 
 # Stability
-* A learning algorithm is stable if a small change of the input to the algorithm does not change the output of the algorithm by much.
+* A learning algorithm is **stable** if a **small change in the input training set** does not **change the output hypothesis by much**.
 
-## Example
-* Let $ A $ be a training algorithm, and $ S = {z_1, z_2, z_3, ... z_m} $ be the training set of $ m $ values.
+## Uniform Stability
 
-* $ A(S) $ is the output of $ A $ after being trained.
+* A formal way to measure stability is through **uniform stability**.
 
-* Given the training set $ S $ and additional datapoint $ z' $, let $ S^(i) $ be the training set after replacing the $ i\text{-th} $ element in $ S $ with  $ z' $.
+* Let:
+  * $A$ be a learning algorithm  
+  * $S = \{z_1, z_2, ..., z_m\}$ be the dataset  
+  * $S^{(i)}$ be the dataset with the $i$-th sample replaced by some new sample $z'$  
+  * $A(S)$ and $A(S^{(i)})$ be the hypotheses produced by training on the two datasets  
+  * $\ell(h, z)$ be the loss of hypothesis $h$ on sample $z$
 
-* Linking to the example above, a "small change of the input" would correspond to using $ S^(i) $ instead of $ S^i $ in training $ A $.
+### Definition (Uniform Stability)
 
-* The effect of the change in one training sample would be comparing the loss of $ A(S) $ and $ A(S^(i)) $
-
-
-
-# L1 Regularisation
-
-
-# L2 Regularisation (Ridge Regression)
-## Overview
-* Ridge regression makes use of one of the simplest regularisation rules, which is defined as 
+* Algorithm $A$ is **$\beta$-uniformly stable** if *for all $S$, all $i$, and all samples $z$*:
 
 $$
-R(\bold w) = \lambda ||\bold w||^2
+\big| \ell(A(S), z) - \ell(A(S^{(i)}), z) \big| \le \beta
+$$
+
+* In words:
+  * Changing one training example can change the loss by at most $\beta$.  
+  * A smaller $\beta$ means the algorithm is more stable.
+
+
+## Why Stability Matters
+
+* Stability is directly tied to **generalisation**.
+
+### Generalisation Bound
+
+* If a learning algorithm is $\beta$-stable, then:
+
+$$
+|L_{\text{train}} - L_{\text{true}}| \le \beta + O\!\left(\frac{1}{m}\right)
+$$
+
+* Meaning:
+  * Stable algorithms generalise better  
+  * Unstable algorithms overfit by being too sensitive to small perturbations
+
+## Why Regularisation Improves Stability
+
+* Without regularisation, the learned weights are:
+
+$$
+w = (X^\top X)^{-1} X^\top y
+$$
+
+* If $X^\top X$ is nearly singular (e.g., highly collinear features), then:
+
+  * A small change in one training point 
+  → A large change in $X^\top X$
+  → A large change in $w$
+
+* This is **instability**.
+
+# L1 Regularisation (LASSO)
+
+## Overview
+
+* **LASSO (Least Absolute Shrinkage and Selection Operator)** regression uses a regularisation rule which is defined as 
+
+$$
+R(w) = \lambda ||w||
 $$
 
 * Where:
   * $ \lambda $ is a scalar where $ \lambda > 0 $,
-  * $ ||\bold w|| = \sqrt{\sum_{d}^{i=1} w_i^2}$ is the $ l_2 $ norm.
+  * $ ||w|| = \sum^{d}_{i=1} |w_i| $ is the $ l_1 $ norm.
 
 * Applying the learning rule with linear regression and mean-squared error (MSE) loss:
+
 $$
-\argmin_{\bold{w}} \bigg( \lambda||\bold w||^2 \space + \space \frac{1}{m} \sum_{i=1}^{N}\frac{1}{2}(\bold{w}_i x_i - y_i)^2 \bigg)
+J(w) = \lambda||w||^2 \space + \space \frac{1}{m} \sum_{i=1}^{N}\frac{1}{2}(w_i x_i - y_i)^2
 $$
 
+## Features of L1 Regression
+### Produces Sparse Weights
+* L1 regularisation pushes some weights exactly to zero.
+
+* This creates a model that selects features automatically.
+
+### Leads to Simpler Models
+* Unimportant features are removed, meaning that models are more efficient and interpretable.
+
+## Gradient Calculation
+## Gradient Calculation
+
+* The L1 regulariser is not differentiable at $w_j = 0$.
+* Therefore, we use the **subgradient** instead of the gradient.
+
+* Subgradient of the L1 term:
+
+$$
+\frac{\partial}{\partial w_j} \left( \lambda |w_j| \right)
+= 
+\begin{cases}
+\lambda & \text{if } w_j > 0 \\
+-\lambda & \text{if } w_j < 0 \\
+[-\lambda, \lambda] & \text{if } w_j = 0
+\end{cases}
+$$
+
+* Since the L1 norm cannot be differentiated at 0:
+  * L1 minimisation has **no closed-form solution**
+  * It must use iterative algorithms
+
+---
+
+# L2 Regularisation (Ridge Regression)
+## Overview
+* **Ridge regression** makes use of one of the simplest regularisation rules, which is defined as 
+
+$$
+R(w) = \lambda ||w||^2
+$$
+
+* Where:
+  * $ \lambda $ is a scalar where $ \lambda > 0 $,
+  * $ ||w|| = \sqrt{\sum^{d}_{i=1} w_i^2}$ is the $ l_2 $ norm.
+
+* Applying the learning rule with linear regression and mean-squared error (MSE) loss:
+
+$$
+J(w) = \lambda||w||^2 \space + \space \frac{1}{m} \sum_{i=1}^{N}\frac{1}{2}(w_i x_i - y_i)^2
+$$
+
+## Features of L2 Regression
+### Improves numerical stability:
+* Adding $ \lambda I $ ensures $X^\top X + \lambda I$ is invertible.
+* Prevents the model from blowing up when features are highly correlated.
+
+### Reduces model variance:
+* Shrinks weights smoothly toward zero.
+* Makes the model less sensitive to noise, improving generalisation performance.
+
+
+## Gradient Calculation
+* Calculating the gradient of the cost function $ J \space w.r.t. \space w $.
+
+$$
+J(w) = \lambda||w||^2 \space + \space \frac{1}{m} \sum_{i=1}^{N}\frac{1}{2}(w_i x_i - y_i)^2
+$$
+
+* Where:
+  * $ R(w) = \lambda||w||^2 $ is the regulariser, 
+  * $ L(w) = \frac{1}{m} \sum_{i=1}^{N}\frac{1}{2}(w_i x_i - y_i)^2 $ is the MSE loss function.
+
+### Gradient of L2 Norm
+
+* The L2 norm is:
+
+$$
+||w|| = \sqrt{\sum_{i=1}^d w_i^2}
+$$
+
+* Let $ r = \sum_i w_i^2 $. Then:
+
+$$
+\frac{\partial ||w||}{\partial w_j} 
+= \frac{w_j}{\sqrt{r}}
+$$
+
+* Vector form:
+
+$$
+\nabla_w ||w|| = \frac{w}{||w||}
+$$
+
+### Gradient of Ridge Regulariser
+
+* Ridge regression uses the squared L2 norm:
+
+$$
+R(w) = \lambda ||w||^2 = \lambda \sum_i w_i^2
+$$
+
+* Its gradient is much simpler:
+
+$$
+\frac{\partial R}{\partial w_j} = 2\lambda w_j
+$$
+
+* Vector form:
+
+$$
+\nabla_w R(w) = 2\lambda w
+$$

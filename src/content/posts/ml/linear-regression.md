@@ -64,22 +64,22 @@ where $\alpha$ is the **learning rate**.
 
 # Derivation of Gradients
 
-1. **Derivative of cost wrt prediction:**
+1. **Derivative of cost $ w.r.t. $ prediction:**
    $$
    \frac{\partial C}{\partial \hat{y}_i} = \frac{1}{m} (\hat{y}_i - y_i)
    $$
 
-2. **Derivative of prediction wrt parameters:**
+2. **Derivative of prediction $ w.r.t. $ parameters:**
    $$
    \frac{\partial \hat{y}_i}{\partial w} = x_i, \quad \frac{\partial \hat{y}_i}{\partial b} = 1
    $$
 
 3. **Applying chain rule:**
-   - Gradient wrt $w$:
+   - Gradient $ w.r.t. $ $w$:
      $$
      \frac{\partial C}{\partial w} = \frac{1}{m} \sum_{i=1}^{m} (\hat{y}_i - y_i) x_i
      $$
-   - Gradient wrt $b$:
+   - Gradient $ w.r.t. $ $b$:
      $$
      \frac{\partial C}{\partial b} = \frac{1}{m} \sum_{i=1}^{m} (\hat{y}_i - y_i)
      $$
@@ -88,12 +88,12 @@ where $\alpha$ is the **learning rate**.
 
 # Final Update Rules
 
-- **Weight update:**
+## Weight update:
   $$
   w = w - \alpha \cdot \frac{1}{m} \sum_{i=1}^{m} (\hat{y}_i - y_i) x_i
   $$
 
-- **Bias update:**
+## Bias update:
   $$
   b = b - \alpha \cdot \frac{1}{m} \sum_{i=1}^{m} (\hat{y}_i - y_i)
   $$
