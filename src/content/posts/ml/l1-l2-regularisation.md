@@ -30,6 +30,7 @@ $$
   * $ L(w) $ is the empirical loss from the weight matrix,
   * $ R(w) $ is the regularised loss from the regularisation function.
 
+---
 
 # Stability
 * A learning algorithm is **stable** if a **small change in the input training set** does not **change the output hypothesis by much**.
@@ -89,6 +90,8 @@ $$
   → A large change in $w$
 
 * This is **instability**.
+
+---
 
 # L1 Regularisation (LASSO)
 
