@@ -17,6 +17,7 @@ draft: false
 * The margin refers to the minimum distance between two data points of two different classes perpendicular to the direction of the hyperplane.
 
 # What is a Hyperplane?
+![](../assets/svm/image.jpg)
 * For a hyperplane in $ p $ dimensions, it is defined as a flat affine subspace with $ p - 1 $ dimensions.
 
 * In other words, a hyperplane can be thought of as a decision boundary. 
@@ -27,38 +28,168 @@ draft: false
 * The hyperplane $ H_0 $ can be defined as the set of points $ x $ which satisfy the equation: 
 
 $$
-wx + b = 0
+w_1 x_1 + w_2 x_2 + \cdots + w_p x_p + b = 0
 $$
 
 * If we select two hyperplanes $ H_1 $ and $ H_2 $ with the same distance from $ H_0 $, and ensuring that each data point lies on the correct side with no data in between, they can be defined as:
 
 $$
-(H_1) \space w x_i + b \ge 1 \space \text{ if } y_i = 1
+(H_1)\space w_1 x_{i1} + w_2 x_{i2} + \cdots + w_p x_{ip} + b \ge 1 \quad \text{if } y_i = 1
 $$
 
 $$
-(H_2) \space w x_i + b \le 1 \space \text{ if } y_i = -1
+(H_2)\space w_1 x_{i1} + w_2 x_{i2} + \cdots + w_p x_{ip} + b \le -1 \quad \text{if } y_i = -1
 $$
 
 * Where:
-  * $ x_i \in \mathbb{R} $
+  * $ x_i = (x_{i1}, x_{i2}, \dots, x_{ip}) \in \mathbb{R}^p $
   * $ y_i \in \{-1, 1\} $
-
 
 # Finding the optimal separating hyperplane
 * Since our dataset can be perfectly separated using a hyperplane and any hyperplane can be shifted and rotated, there are an infinite number of possible solutions in choosing a hyperplane.
 
-* The **optimal separating hyperplane** is the solution that is farthest away from the closest data point, or maximises the margin
+* The **optimal separating hyperplane** is the solution that is farthest away from the closest data point, or maximises the margin.
 
 ## Defining the margin
 * In order to maximize the distance between the two hyperplanes, we need to find a way to calculate the margin.
 
-* The margin can also be interpreted as a vector that is perpendicular to any hyperplane with a magnitude that is equal to the margin.
+* The margin can also be interpreted as a direction perpendicular to the hyperplane with a magnitude equal to the margin.
 
-1. For any point $ x $, the distance to the hyperplane $ w^\top x + b = 0 $ is:
+### 1. Distance from a point to a hyperplane
+
+* For any point $ x = (x_1, x_2, \dots, x_p) $, the distance to the hyperplane  
+$ w_1 x_1 + w_2 x_2 + \cdots + w_p x_p + b = 0 $ is:
 
 $$
-d = \frac{| w^\top x + b |}{|| w ||}
+d = \frac{| w_1 x_1 + w_2 x_2 + \cdots + w_p x_p + b |}
+{\sqrt{w_1^2 + w_2^2 + \cdots + w_p^2}}
 $$
 
-2. The distance between two margin hyperplanes would be
+### 2. Distance between the two margin hyperplanes
+
+* The margin hyperplanes are:
+
+$$
+\text{(H1) } w_1 x_1 + w_2 x_2 + \cdots + w_p x_p + b = 1
+$$
+$$
+\text{(H2) } w_1 x_1 + w_2 x_2 + \cdots + w_p x_p + b = -1
+$$
+
+* Thus, the distance between two parallel hyperplanes is:
+
+$$
+\gamma \space \text{(margin)} = \frac{2}{\sqrt{w_1^2 + w_2^2 + \cdots + w_p^2}}
+$$
+
+### 3. Optimiser Function
+
+* Note that we want to maximise the margin hyperplane to form an optimised classification boundary, i.e.:
+
+$$
+\max \gamma \text{ s.t. } \forall i \space y_i(w_1 x_1 + \cdots + w_p x_p + b) \ge 0
+$$
+
+* Plugging in the definition of the margin:
+
+$$
+\max (\frac{2}{\sqrt{w_1^2 + \cdots + w_p^2}}) \text{ s.t. } \forall i \space y_i(w_1 x_1 + \cdots + w_p x_p + b) \ge 1
+$$
+
+* Minimising the margin $ \gamma $ is equivalent to: 
+  * Maximising the denominator $ \sqrt{w_1^2 + w_2^2 + \cdots + w_p^2} $
+  * Maximising the squared norm $ w_1^2 + w_2^2 + \cdots + w_p^2 $
+
+### 4. Primal Optimisation Problem
+
+* Maximising the margin is equivalent to minimising the squared norm of the weight vector.
+
+$$
+\min_{w_1, \dots, w_p, b} \frac{1}{2}(w_1^2 + \cdots + w_p^2)
+$$
+
+### 5. Lagrangian Formulation
+* We introduce the Lagrangian multipliers $\lambda_i \ge 0$ for each constraint.
+
+* In general, for the equality constraint of $ g(x) \ge 0$, the Lagrangian is:
+$$
+\mathcal L (x, \lambda) = f(x) - \lambda \cdot g(x)
+$$
+
+* Where
+  * $ \mathcal L $ is the Lagrangian,
+  * $ \lambda $ is the Lagrangian Multiplier,
+  * $ f(x) $ is the function, 
+  * $ g(x) $ is the equality constraint
+
+* In this case, the Lagrangian is:
+
+$$
+\mathcal{L}(w_1, \dots, w_p, b, \lambda) =
+\frac{1}{2}(w_1^2 + \cdots + w_p^2)
+- \sum_{i=1}^n \lambda_i \left[ y_i(w_1 x_{i,1} + \cdots + w_p x_{i,p} + b) - 1 \right]
+$$
+
+### 6. Finding Partial Derivatives
+
+* Now, we optimise this Langrangian by differentiating with respect to $ w_1, \dots, w_p, b, \lambda $
+
+* Finding the partial derivative of $ \mathcal L $ with respect to $ w_i $ : 
+$$
+\frac{\partial \mathcal{L}}{\partial w_i} = w_i - \sum^{n}_{j=1} \lambda_j \space y_j \space x_{j, i}
+$$
+
+* Finding the partial derivative of $ \mathcal L $ with respect to $ b $ : 
+$$
+\frac{\partial \mathcal{L}}{\partial b} = - \sum^{n}_{j=1} \lambda_j \space y_j
+$$
+
+* Finding the partial derivative of $ \mathcal L $ with respect to $ \lambda $ : 
+$$
+\frac{\partial \mathcal{L}}{\partial \lambda_i} = - \big[ y_j (w_1 x_{j,1} + \cdots + w_p x_{j,p} + b) - 1 \big ]
+$$
+
+
+### 7. Support Vectors
+
+* Setting the partial derivative of $ \mathcal L $ with respect to $ \lambda_i $ to $ 0 $ :
+
+$$
+\frac{\partial \mathcal{L}}{\partial \lambda_i} = \big[ y_j (w_1 x_{j,1} + \cdots + w_p x_{j,p} + b) - 1 \big ] = 0
+$$
+
+$$
+- \big[ y_j (w_1 x_{j,1} + \cdots + w_p x_{j,p} + b) - 1 \big ] = 0
+$$
+
+$$
+y_j (w_1 x_{j,1} + \cdots + w_p x_{j,p} + b) - 1 = 0
+$$
+
+* Thus, only points that lie exactly on the margin satisfy:
+
+$$
+y_i(w_1 x_{i,1} + \cdots + w_p x_{i,p} + b) = 1
+$$
+
+* These points are called **support vectors**.
+
+* All other points lie strictly outside the margin and do not affect the position of the decision boundary.
+
+## Soft Constraints
+* If the data is low dimensional, it is often the case that there is no separating hyperplane between the two classes.
+
+* By introducing two terms, we can allow more "slack" in determining a (mostly) optimal margin hyperplane.
+
+* The new terms are:
+  * $ \xi_i $ : *Slack variable* which gives an acceptable margin of error, allowing input $ x_i $ to be closer (or even the wrong side) of the hyperplane.
+  * $ C $ : *Slack penalty* which controls how much slack is allowed.
+
+* Thus, the constrained optimisation problem becomes:
+
+$$
+\min_{w_1, \dots, w_p, b} \frac{1}{2}(w_1^2 + \cdots + w_p^2) + C \sum^{n}_{i=1} \xi_i \space \\
+\text{ s.t. } \space \forall y_i(w_1 x_{i,1} + \cdots + w_p x_{i,p} + b) \ge 1 - \xi_i \\
+\text{ s.t. } \xi_i \ge 0
+$$
+
