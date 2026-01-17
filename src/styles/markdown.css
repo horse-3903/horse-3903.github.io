@@ -99,6 +99,28 @@
         }
     }
 
+    table {
+        @apply mx-auto;
+        width: max-content;
+        max-width: 100%;
+        table-layout: auto;
+        border-collapse: collapse;
+
+        th,
+        td {
+            @apply text-center px-5 py-2;
+        }
+
+        th {
+            @apply text-[1.05em];
+        }
+
+        th + th,
+        td + td {
+            border-left: 1px solid var(--line-divider);
+        }
+    }
+
     blockquote {
         @apply not-italic border-transparent relative;
         font-weight: inherit;
