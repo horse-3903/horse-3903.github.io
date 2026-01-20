@@ -9,36 +9,36 @@ draft: false
 
 # Overview
 
-Linear Regression is the simplest and most fundamental algorithms in Machine Learning for regression.
+* Linear Regression is the simplest and most fundamental algorithms in Machine Learning for regression.
 
-It models the relationship between an **input variable** $x$ and an **output variable** $y$ by fitting a straight line that best represents the data.
+* It models the relationship between an **input variable** $x$ and an **output variable** $y$ by fitting a straight line that best represents the data.
 
 ---
 
 # Mathematical Formulation
 
-The linear model predicts the target value $\hat{y}$ as:
+* The linear model predicts the target value $\hat{y}$ as:
 
 $$
 \hat{y}_i = w x_i + b
 $$
 
-where:
-- $w$: weight (slope)  
-- $b$: bias (intercept)  
-- $\hat{y}_i$: predicted value for input $x_i$
+* Where:
+  - $w$: weight (slope)  
+  - $b$: bias (intercept)  
+  - $\hat{y}_i$: predicted value for input $x_i$
 
 ---
 
 # Cost Function
 
-To measure how well our model fits the data, we use the **Mean Squared Error (MSE)** cost function:
+* To measure how well our model fits the data, we use the **Mean Squared Error (MSE)** cost function:
 
 $$
 C = \frac{1}{2m} \sum_{i=1}^{m} (\hat{y}_i - y_i)^2
 $$
 
-Substituting the prediction term:
+* Substituting the prediction term:
 
 $$
 C = \frac{1}{2m} \sum_{i=1}^{m} (w x_i + b - y_i)^2
@@ -48,7 +48,7 @@ $$
 
 # Gradient Descent Optimisation
 
-We update parameters $w$ and $b$ iteratively to minimise the cost function:
+* We update parameters $w$ and $b$ iteratively to minimise the cost function:
 
 $$
 w = w - \alpha \frac{\partial C}{\partial w}
@@ -58,7 +58,7 @@ $$
 b = b - \alpha \frac{\partial C}{\partial b}
 $$
 
-where $\alpha$ is the **learning rate**.
+* where $\alpha$ is the **learning rate**.
 
 ---
 
