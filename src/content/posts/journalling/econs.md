@@ -66,7 +66,7 @@ I had always imagined finance as nothing more than a stable career for a lucrati
 
 In order to protect the vulnerable groups in our societies, we must be aware of the question: How can these instances of financial death and ruin be avoided? 
 
-The cascading effect observed in financial crises is often the result of the buildup of excessive risk, resulting in a specific trigger to cause a meltdown of the economy. The economist Hyman Minsky, in his paper of The Financial Instability Hypothesis, theorises that “stability is destabilising”. It suggests that periods of prolonged economic prosperity naturally breed instability, making financial crises endemic to capitalism rather than accidental. 
+The cascading effect observed in financial crises is often the result of the buildup of excessive risk, resulting in a specific trigger to cause a meltdown of the economy. The economist Hyman Minsky, in his paper of *The Financial Instability Hypothesis*, theorises that “stability is destabilising”. It suggests that periods of prolonged economic prosperity naturally breed instability, making financial crises endemic to capitalism rather than accidental. 
 
 Tying this to our idea of behavioural economics, during stable times, both investors and borrowers tend to underestimate the risks they face, assuming that the market will continue to perform well indefinitely. This often leads to increased leverage: individuals and companies start to take on more debt while financial institutions offer riskier loans. 
 

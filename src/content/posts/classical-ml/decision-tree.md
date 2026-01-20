@@ -483,3 +483,28 @@ $$
 3. Move to the respective branch
 4. Continue until a leaf node is reached
 5. Output the numeric value
+
+--- 
+
+# Decision Trees In Practice
+
+## When to Use Decision Trees
+
+* When you need rule-based decisions that are easy to audit or deploy.
+* When feature interactions are important and hard to encode manually.
+* When you want a fast, non-parametric baseline without heavy preprocessing.
+* When you need quick feature importance from split statistics.
+
+## When Not to Use Decision Trees
+
+* When you need smooth, continuous predictions for regression tasks.
+* When data is high-dimensional and sparse with many rare categories.
+* When probability calibration is critical without post-processing.
+* When strict monotonic or constrained relationships are required.
+
+## Practical Notes
+
+* Control depth and minimum leaf sizes to manage variance.
+* Use cross-validation to pick pruning or depth settings.
+* Handle class imbalance with class weights or balanced sampling.
+* Prune for generalisation, not just training accuracy.

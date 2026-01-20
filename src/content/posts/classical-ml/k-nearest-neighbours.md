@@ -52,3 +52,28 @@ For the subset of points with class $c$
 $$
 \mathcal{X}_c = \{x_i \in \mathbb{R}^m \mid y_i=c \}, \space c \in \{0, 1\}
 $$
+
+---
+
+# K-Nearest Neighbours In Practice
+
+## When to Use K-Nearest Neighbours
+
+* When the training data changes often and retraining cost should be minimal.
+* When example-based explanations are useful for stakeholders.
+* When local neighbourhoods reflect meaningful similarity.
+* When you can trade slower inference for simple modeling.
+
+## When Not to Use K-Nearest Neighbours
+
+* When features have incompatible scales that cannot be normalised.
+* When class imbalance makes local voting unreliable.
+* When memory constraints prevent storing the full dataset.
+* When privacy constraints disallow retaining raw examples.
+
+## Practical Notes
+
+* Use KD-tree or ball-tree search for speed in low dimensions.
+* Weight neighbours by distance to reduce boundary noise.
+* Tune $k$ and the metric with cross-validation.
+* Consider dimensionality reduction before KNN in high dimensions.

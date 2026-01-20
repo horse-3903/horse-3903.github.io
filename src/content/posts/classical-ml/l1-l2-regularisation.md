@@ -225,3 +225,26 @@ $$
 $$
 \nabla_w R(w) = 2\lambda w
 $$
+
+# L1 and L2 Regularisation In Practice
+
+## When to Use L1 and L2 Regularisation
+
+* When you need to reduce overfitting in linear models.
+* When features are correlated and coefficients are unstable (L2).
+* When you want automatic feature selection and sparsity (L1).
+* When training data is limited relative to feature count.
+
+## When Not to Use L1 and L2 Regularisation
+
+* When unshrunk coefficients are required for unbiased estimates.
+* When features are not standardised and penalties would be uneven.
+* When the true relationship is strongly nonlinear.
+* When constraints or priors already enforce complexity control.
+
+## Practical Notes
+
+* Standardise all features before applying L1 or L2 penalties.
+* Tune $\lambda$ via cross-validation, not by training loss.
+* Use Elastic Net when you want sparsity with grouped features.
+* Track coefficient paths to understand shrinkage effects.

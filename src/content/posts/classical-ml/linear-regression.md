@@ -98,3 +98,26 @@ where $\alpha$ is the **learning rate**.
   b = b - \alpha \cdot \frac{1}{m} \sum_{i=1}^{m} (\hat{y}_i - y_i)
   $$
 
+# Linear Regression In Practice
+
+## When to Use Linear Regression
+
+* When relationships are approximately linear and additive.
+* When you need fast training and a strong baseline.
+* When coefficient interpretability matters for decisions.
+* When data is large and noise is moderate.
+
+## When Not to Use Linear Regression
+
+* When relationships are highly nonlinear without feature engineering.
+* When outliers dominate the fit and robust methods are needed.
+* When multicollinearity makes coefficients unstable without regularisation.
+* When the target is bounded, categorical, or count-based.
+
+## Practical Notes
+
+* Standardise features before applying regularisation.
+* Inspect residuals for heteroscedasticity and bias.
+* Use Ridge or LASSO when there are many correlated features.
+* Add interaction terms only when they are justified by domain knowledge.
+

@@ -229,3 +229,26 @@ $$
 b = b - \alpha \cdot \frac{1}{m} \sum_{i=1}^{n} (\hat{y}_i - y_i)
 $$
 
+# Logistic Regression In Practice
+
+## When to Use Logistic Regression
+
+* When the decision boundary is roughly linear in feature space.
+* When you need well-calibrated class probabilities.
+* When interpretability of feature weights is important.
+* When you have high-dimensional sparse features (e.g., text).
+
+## When Not to Use Logistic Regression
+
+* When class separation is highly nonlinear without feature engineering.
+* When severe class imbalance is not handled by weighting or resampling.
+* When label noise is high and margins are weak.
+* When you need structured or sequence outputs.
+
+## Practical Notes
+
+* Standardise features and tune regularisation strength.
+* Use class weights or decision thresholds to control precision and recall.
+* Prefer multinomial loss for multi-class problems when available.
+* Check calibration and use Platt scaling if needed.
+

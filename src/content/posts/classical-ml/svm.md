@@ -1,6 +1,6 @@
 ---
 title: Support Vector Machines
-published: 2025-11-25
+published: 2026-01-17
 description: "A comprehensive guide to support vector machines — exploring how margin maximisation and regularisation create powerful and flexible classifiers."
 tags: ["Machine Learning", "Supervised Learning"]
 category: Notes
@@ -96,9 +96,9 @@ $$
 \max (\frac{2}{\sqrt{w_1^2 + \cdots + w_p^2}}) \text{ s.t. } \forall i \space y_i(w_1 x_1 + \cdots + w_p x_p + b) \ge 1
 $$
 
-* Minimising the margin $ \gamma $ is equivalent to: 
-  * Maximising the denominator $ \sqrt{w_1^2 + w_2^2 + \cdots + w_p^2} $
-  * Maximising the squared norm $ w_1^2 + w_2^2 + \cdots + w_p^2 $
+* Maximising the margin $ \gamma $ is equivalent to: 
+  * Minimising the denominator $ \sqrt{w_1^2 + w_2^2 + \cdots + w_p^2} $
+  * Minimising the squared norm $ w_1^2 + w_2^2 + \cdots + w_p^2 $
 
 ### 4. Primal Optimisation Problem
 
@@ -108,7 +108,7 @@ $$
 \min_{w_1, \dots, w_p, b} \frac{1}{2}(w_1^2 + \cdots + w_p^2)
 $$
 
-### 5. Lagrangian Formulation
+### 5. Lagrangian Optimisation
 * We introduce the Lagrangian multipliers $\lambda_i \ge 0$ for each constraint.
 
 * In general, for the equality constraint of $ g(x) \ge 0$, the Lagrangian is:
@@ -176,6 +176,17 @@ $$
 
 * All other points lie strictly outside the margin and do not affect the position of the decision boundary.
 
+### 8. Decision Rule
+
+- Once $w$ and $b$ are learned, predictions are made using:
+$$
+\hat y = \text{sign}(w^Tx+b)
+$$
+
+  - If $w^Tx + b > 0$, predict class $+1$.
+  - If $w^Tx + b < 0$, predict class $-1$.
+- Where the distance from boundary measures confidence.
+
 ## Soft Constraints
 * If the data is low dimensional, it is often the case that there is no separating hyperplane between the two classes.
 
@@ -192,4 +203,44 @@ $$
 \text{ s.t. } \space \forall y_i(w_1 x_{i,1} + \cdots + w_p x_{i,p} + b) \ge 1 - \xi_i \\
 \text{ s.t. } \xi_i \ge 0
 $$
+
+## Bias–Variance Tradeoff via $C$
+- $C$ controls penalty for misclassification.
+  - Large $C$: Low bias, High variance (**Overfitting risk**) 
+  - Small $C$: High bias, Low variance (**Underfitting risk**)
+
+Acts as a regularisation parameter.
+
+# Geometric Interpretation of the SVM
+- In vector form, 
+  - $w$ is perpendicular (normal) to the hyperplane.
+  - $b$ controls the offset of the hyperplane from the origin.
+- $|w|$ controls the margin width.
+  - Larger $|w|$ → smaller margin.
+  - Smaller $|w|$ → larger margin.
+- Classification is based on the sign of $w^Tx + b$.
+- Thus, SVM chooses the boundary that is most robust to perturbations.
+
+# Support Vector Machines In Practice
+
+## When to Use SVMs
+
+* When you need a strong baseline for medium-sized datasets.
+* When data is high-dimensional and sparse (linear SVM).
+* When margin-based robustness is valuable.
+* When nonlinear boundaries can be captured with kernels.
+
+## When Not to Use SVMs
+
+* When the dataset is extremely large and training time is critical.
+* When noise or outliers dominate and $C$ is hard to tune.
+* When feature scaling is not feasible.
+* When you need native probabilistic outputs.
+
+## Practical Notes
+
+* Standardise features before training.
+* Tune $C$ and kernel parameters with cross-validation.
+* Prefer linear SVMs for large, sparse feature spaces.
+* Calibrate probabilities with Platt scaling if required.
 
