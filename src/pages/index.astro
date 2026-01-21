@@ -1,120 +1,287 @@
 ---
+import PostCard from "@components/PostCard.astro";
 import MainGridLayout from "@layouts/MainGridLayout.astro";
+import { getSortedPosts, getTagList } from "@utils/content-utils";
+import { getPostUrlBySlug, getTagUrl } from "@utils/url-utils";
 import { Icon } from "astro-icon/components";
 
 const heroTitle = "Hi, I'm Rafael";
 const heroSubtitle =
-	"A student, avid programmer, and an enthusiast in machine learning and entrepreneurship";
+	"A student, avid programmer, and an enthusiast in machine learning and entrepreneurship.";
 const introText =
-	"I write about machine learning, cybersecurity, my personal projects and my life.";
+	"I write about machine learning, cybersecurity, my personal projects, and my life.";
+
+const sortedPosts = await getSortedPosts();
+const latestPosts = sortedPosts.slice(0, 2);
+const tagList = await getTagList();
+const topTags = [...tagList].sort((a, b) => b.count - a.count).slice(0, 5);
+const stats = [
+	{ label: "Posts", value: sortedPosts.length },
+	{ label: "Topics", value: tagList.length },
+	{ label: "Projects", value: "3+" },
+];
 ---
 
 <MainGridLayout title="Home" description="Rafael's personal site and tech blog">
   <div class="flex w-full rounded-[var(--radius-large)] overflow-hidden relative min-h-32">
-    <div class="card-base z-10 px-9 py-6 relative w-full">
+    <div class="card-base home-shell z-10 px-9 py-6 relative w-full pb-16">
       <!-- Hero Section -->
-      <section class="px-6 md:px-10 py-10 text-center">
-        <h1 class="text-5xl md:text-6xl font-bold text-90 mb-4 tracking-tight">
-          {heroTitle}
-        </h1>
-        <p class="text-lg md:text-xl text-75 mb-6 max-w-2xl mx-auto">
-          {heroSubtitle}
-        </p>
-        <p class="text-base text-50 mb-10 max-w-2xl mx-auto">{introText}</p>
-        <div class="flex justify-center gap-4 flex-wrap">
-          <a
-            href="/blogs/"
-            class="btn-regular rounded-2xl px-6 py-3 text-lg flex items-center gap-2 w-auto max-w-fit"
-          >
-            <Icon name="material-symbols:article-outline" size="1.5em" />
-            Read My Blog
-          </a>
-          <a
-            href="/about/"
-            class="btn-plain rounded-2xl px-6 py-3 text-lg flex items-center gap-2 w-auto max-w-fit"
-          >
-            <Icon name="mdi:information-outline" size="1.5em" />
-            About Me
-          </a>
+      <section class="px-0 pt-0 pb-10 -mx-9 -mt-6">
+        <div class="hero-shell rounded-none md:rounded-t-[var(--radius-large)] md:rounded-b-none px-6 py-8 md:px-10 md:py-12 relative overflow-hidden">
+          <div class="hero-content grid gap-10 items-start">
+            <div class="space-y-6">
+              <p class="hero-eyebrow text-xs uppercase tracking-[0.35em] text-50">
+                student developer and builder
+              </p>
+              <h1 class="text-5xl md:text-6xl font-bold text-90 tracking-tight">
+                {heroTitle}
+              </h1>
+              <p class="text-lg md:text-xl text-75 max-w-2xl">
+                {heroSubtitle}
+              </p>
+              <p class="text-base text-50 max-w-2xl">{introText}</p>
+
+              <div class="flex gap-4 flex-wrap justify-center">
+                <a
+                  href="/blogs/"
+                  class="btn-regular hero-primary-btn rounded-2xl px-6 py-3 text-lg flex items-center gap-2 w-auto max-w-fit"
+                >
+                  <Icon name="material-symbols:article-outline" size="1.5em" />
+                  Read My Blog
+                </a>
+                <a
+                  href="/about/"
+                  class="btn-plain rounded-2xl px-6 py-3 text-lg flex items-center gap-2 w-auto max-w-fit"
+                >
+                  <Icon name="mdi:information-outline" size="1.5em" />
+                  About Me
+                </a>
+              </div>
+
+              <div class="grid grid-cols-3 gap-3 md:gap-4 max-w-md mx-auto">
+                {stats.map((stat) => (
+                  <div class="stat-card rounded-2xl px-4 py-3 text-center">
+                    <div class="text-2xl font-semibold text-90">{stat.value}</div>
+                    <div class="text-xs uppercase tracking-[0.25em] text-50 mt-1">
+                      {stat.label}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
       <!-- Featured Projects -->
-      <section class="px-6 md:px-10 mt-12 text-center">
-        <h2 class="text-3xl font-semibold mb-8 text-90">Featured Projects</h2>
-        <div class="grid gap-8 md:grid-cols-3 justify-center items-stretch">
+      <section class="px-3 md:px-6 mt-12">
+        <div class="flex items-end justify-between flex-wrap gap-4 mb-8">
+          <div>
+            <h2 class="text-3xl font-semibold text-90">Featured Projects</h2>
+            <p class="text-75 text-sm mt-2">
+              Hands-on builds that blend ML research, security, and real users.
+            </p>
+          </div>
+          <a class="btn-plain rounded-2xl px-4 py-2 text-sm flex items-center gap-2" href="/about/">
+            See project notes
+            <Icon name="material-symbols:arrow-forward-rounded" size="1.2em" />
+          </a>
+        </div>
+        <div class="grid gap-6 md:grid-cols-3 justify-center items-stretch">
           <!-- Project 1 -->
           <div
-            class="card-base card-shadow bg-[var(--card-bg)] p-6 rounded-2xl transition hover:scale-[1.02] flex flex-col items-center text-center"
+            class="project-card card-base card-shadow p-6 rounded-2xl transition hover:scale-[1.02] flex flex-col text-left"
           >
-            <div class="flex justify-center items-center mb-3">
+            <div class="flex items-center justify-between mb-5">
               <Icon
                 name="mdi:robot-excited-outline"
                 class="text-[var(--primary)] text-4xl"
               />
+              <span class="project-chip text-xs uppercase tracking-[0.2em] text-50">AI Lab</span>
             </div>
             <h3 class="text-xl font-semibold mb-2 text-90">LabAssist</h3>
-            <p class="text-75 text-sm leading-relaxed">
+            <p class="text-75 text-sm leading-relaxed mb-4">
               A vision-based AI system for detecting procedural errors in chemistry
               experiments using motion transfer and synthetic video data.
             </p>
+            <div class="text-xs text-50 uppercase tracking-[0.2em]">Vision + Safety</div>
           </div>
 
           <!-- Project 2 -->
           <div
-            class="card-base card-shadow bg-[var(--card-bg)] p-6 rounded-2xl transition hover:scale-[1.02] flex flex-col items-center text-center"
+            class="project-card card-base card-shadow p-6 rounded-2xl transition hover:scale-[1.02] flex flex-col text-left"
           >
-            <div class="flex justify-center items-center mb-3">
+            <div class="flex items-center justify-between mb-5">
               <Icon
                 name="mdi:shield-check-outline"
                 class="text-[var(--primary)] text-4xl"
               />
+              <span class="project-chip text-xs uppercase tracking-[0.2em] text-50">Security</span>
             </div>
             <h3 class="text-xl font-semibold mb-2 text-90">PhishHook</h3>
-            <p class="text-75 text-sm leading-relaxed">
+            <p class="text-75 text-sm leading-relaxed mb-4">
               A Chrome extension that detects scam and phishing attempts using
               ONNX-based ML models and real-time comment scraping.
             </p>
+            <div class="text-xs text-50 uppercase tracking-[0.2em]">Browser Defense</div>
           </div>
 
           <!-- Project 3 -->
           <div
-            class="card-base card-shadow bg-[var(--card-bg)] p-6 rounded-2xl transition hover:scale-[1.02] flex flex-col items-center text-center"
+            class="project-card card-base card-shadow p-6 rounded-2xl transition hover:scale-[1.02] flex flex-col text-left"
           >
-            <div class="flex justify-center items-center mb-3">
+            <div class="flex items-center justify-between mb-5">
               <Icon
                 name="mdi:robot-outline"
                 class="text-[var(--primary)] text-4xl"
               />
+              <span class="project-chip text-xs uppercase tracking-[0.2em] text-50">Open Lab</span>
             </div>
             <h3 class="text-xl font-semibold mb-2 text-90">
               ML Implementations
             </h3>
-            <p class="text-75 text-sm leading-relaxed">
+            <p class="text-75 text-sm leading-relaxed mb-4">
               A series of explanations and implementations of ML models from scratch.
             </p>
+            <div class="text-xs text-50 uppercase tracking-[0.2em]">Learning Library</div>
           </div>
         </div>
       </section>
 
       <!-- Latest Blog Posts -->
-      <section class="px-6 md:px-10 mt-16 text-center">
-        <h2 class="text-3xl font-semibold mb-6 text-90">Latest Blog Posts</h2>
-        <p class="text-75 text-base mb-10">
-          Check out my latest writing on AI, computing, and student projects.
-        </p>
-
-        <!-- Centered Button -->
-        <div class="flex justify-center">
+      <section class="px-3 md:px-6 mt-16">
+        <div class="flex items-end justify-between flex-wrap gap-4">
+          <div>
+            <h2 class="text-3xl font-semibold text-90">Latest Writing</h2>
+            <p class="text-75 text-base mt-2">
+              Fresh notes on AI, security, and experiments in the lab.
+            </p>
+          </div>
           <a
             href="/archive/"
-            class="btn-regular rounded-2xl px-6 py-3 text-lg inline-flex items-center gap-2 w-auto max-w-fit"
+            class="btn-regular rounded-2xl px-5 py-2 text-sm inline-flex items-center gap-2 w-auto max-w-fit"
           >
-            <Icon name="mdi:book-open-page-variant" size="1.5em" />
-            View All Posts →
+            <Icon name="mdi:book-open-page-variant" size="1.2em" />
+            View all posts
+          </a>
+        </div>
+
+        <div class="mt-8 flex flex-col gap-6">
+          {latestPosts.length > 0 ? (
+            latestPosts.map((entry, index) => (
+              <PostCard
+                entry={entry}
+                title={entry.data.title}
+                tags={entry.data.tags}
+                category={entry.data.category}
+                published={entry.data.published}
+                updated={entry.data.updated}
+                url={getPostUrlBySlug(entry.slug)}
+                image={entry.data.image}
+                description={entry.data.description}
+                draft={entry.data.draft}
+                class:list="onload-animation"
+                style={`animation-delay: calc(var(--content-delay) + ${index * 80}ms);`}
+              />
+            ))
+          ) : (
+            <div class="card-base card-shadow bg-[var(--card-bg)] p-6 rounded-2xl text-75">
+              New posts are on the way. Check back soon or explore the archive.
+            </div>
+          )}
+        </div>
+
+        <div class="mt-10">
+          <h3 class="text-sm uppercase tracking-[0.3em] text-50 mb-4">
+            Popular Topics
+          </h3>
+          <div class="flex flex-wrap gap-2">
+            {topTags.map((tag) => (
+              <a
+                href={getTagUrl(tag.name)}
+                class="topic-pill text-xs uppercase tracking-[0.2em] px-4 py-2 rounded-full text-75"
+              >
+                {tag.name}
+              </a>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <!-- CTA -->
+      <section class="px-3 md:px-6 mt-16">
+        <div class="cta-panel card-base card-shadow rounded-[var(--radius-large)] p-8 md:p-10 flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+          <div>
+            <h2 class="text-2xl md:text-3xl font-semibold text-90">
+              Want to collaborate or share an idea?
+            </h2>
+            <p class="text-75 mt-3 max-w-2xl">
+              I am always open to research discussions, project feedback, or startup
+              brainstorming.
+            </p>
+          </div>
+          <a
+            href="/about/"
+            class="btn-regular rounded-2xl px-6 py-3 text-base inline-flex items-center gap-2 w-auto max-w-fit"
+          >
+            <Icon name="mdi:chat-outline" size="1.3em" />
+            Start a conversation
           </a>
         </div>
       </section>
     </div>
   </div>
 </MainGridLayout>
+
+<style>
+  .home-shell {
+    background-color: var(--card-bg);
+    background-image:
+      radial-gradient(circle at 50% 0%, oklch(0.7 0.12 var(--hue) / 0.18), transparent 55%),
+      linear-gradient(
+        to bottom,
+        oklch(0.22 0.05 var(--hue) / 0.95) 0%,
+        oklch(0.16 0.03 var(--hue) / 0.98) 20%,
+        oklch(0.16 0.03 var(--hue) / 0.98) 100%
+      );
+    background-repeat: no-repeat;
+    border: 1px solid oklch(0.85 0.02 var(--hue) / 0.12);
+  }
+  .hero-shell {
+    background: none;
+  }
+  .hero-content {
+    position: relative;
+    z-index: 1;
+  }
+  .focus-pill,
+  .topic-pill,
+  .project-chip {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+  }
+  .stat-card {
+    background: oklch(0.2 0.02 var(--hue) / 0.6);
+    border: 1px solid oklch(0.85 0.02 var(--hue) / 0.12);
+  }
+  .hero-primary-btn {
+    background: oklch(0.35 0.08 var(--hue) / 0.6);
+    border: 1px solid oklch(0.8 0.12 var(--hue) / 0.6);
+    color: oklch(0.96 0.01 var(--hue));
+  }
+  .hero-primary-btn:hover {
+    background: oklch(0.4 0.1 var(--hue) / 0.65);
+    border-color: oklch(0.88 0.14 var(--hue) / 0.8);
+  }
+  .hero-primary-btn:active {
+    background: oklch(0.45 0.12 var(--hue) / 0.7);
+  }
+  .project-card {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.02));
+    border: 1px solid rgba(255, 255, 255, 0.12);
+  }
+  .cta-panel {
+    background: var(--card-bg);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+  }
+</style>

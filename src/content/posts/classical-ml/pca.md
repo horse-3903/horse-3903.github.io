@@ -1,5 +1,5 @@
 ---
-title: Ensemble Methods
+title: Principal Component Analysis
 published: 2026-01-21
 description: "A comprehensive guide to principal component analysis — exploring how dimension reducibility allows for feature enginneering."
 tags: ["Machine Learning", "Unsupervised Learning"]
