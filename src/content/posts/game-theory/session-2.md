@@ -22,20 +22,20 @@ A negotiation where one player makes a **“take it or leave it”** offer to an
 
 - Given the game tree below, we can conduct **backward induction** to identify the **rollback equilibrium**
 
-![](../assets/h3-s2/image1.png)
+![](../assets/h3/image1.png)
 
 ## Rollback Equilibrium of Player 2
 - Starting from the left subtree, the best outcome for this subtree is (0, 2)
 
-![](../assets/h3-s2/image2.png)
+![](../assets/h3/image2.png)
 
 - For the right subtree, the best outcome for this subtree is (1, 4)
 
-![](../assets/h3-s2/image3.png)
+![](../assets/h3/image3.png)
 
 ## Strategies for a Player
 
-![](../assets/h3-s2/image4.png)
+![](../assets/h3/image4.png)
 
 - P2's strategies are a choice at each node
 - Thus, the table below represents all the strategies for P2
@@ -46,7 +46,7 @@ A negotiation where one player makes a **“take it or leave it”** offer to an
 
 ---
 
-# Example Game
+#  Game
 
 ## Rules
 - The proposer chooses how many coins to give the recipient.
@@ -204,7 +204,7 @@ Both **yes** and **no** are equally optimal answers.
 - Challenger prefers entry *only under collusion*
 
 ## Game Tree
-![](../assets/h3-s2/image5.png)
+![](../assets/h3/image5.png)
 
 ## Rollback Equilibrium
 - Challenger should enter the market, and cooperate to maximise payoff

@@ -184,7 +184,7 @@ draft: false
 * The weighted error rate $ r_j $ is computed on the training set for model $ j $.
 
 $$
-r_j = \frac{\sum^{m}_{i=1, \space \hat{y}_{i,j} \ne y_{i,j}} w_i}{\sum^{m}_{i=1} w_i}
+r_j = \frac{\sum^{m}_{i=1} w_i \space \text{ s.t. } \hat{y}_{i,j} \ne y_i}{\sum^{m}_{i=1} w_i}
 $$
 
 #### Step 3: Calculate the Predictor's Weight
@@ -197,7 +197,7 @@ $$
 \alpha_j = \frac{1}{2} \eta \log \frac{1 - r_j}{r_j}
 $$
 
-#### Step 4: Update the Weights of the Predictor
+#### Step 4: Update the Weights of the Samples
 * The instance weights of the the misclassified instances
 are boosted for predictor $ j $.
 
