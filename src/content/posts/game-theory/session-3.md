@@ -310,33 +310,122 @@ $$
 # Take-Home Problems
 
 ## Take-Home Problem 1
-* Is the following claim true: 
 
-<p style="text-align: center;"><i>"For the beauty contest, is the choice of 100 dominated by 99, 99 dominated by 98, 98 dominated by 97, 97 dominated by 96 and so on?"</i></p>
+### <p style="text-align: center;"><i>"For the beauty contest, is the choice of 100 dominated by 99, 99 dominated by 98, 98 dominated by 97, 97 dominated by 96 and so on?"</i></p>
+
+### Guess and Verify
+$$ \text{for simplicity, let there be 2 players in the game} $$
+
+$$ \text{let } c_1 \text{ and } c_2 \text{ be the numbers chosen by P1 and P2 respectively} $$
+
+$$ \text{let } m \text{ be the mean of } c_1 \text{ and } c_2 $$
+
+$$
+m = \frac{c_1 + c_2}{2}
+$$
+
+$$ \text{let } d_1 \text{ and } d_2 \text{ be the difference between } m \text{ and } c_1 \text{ and } c_2 \text{ respectively} $$
+
+$$
+d_1 = \bigg| c_1 - \frac{m}{2} \bigg| \\
+d_2 = \bigg| c_2 - \frac{m}{2} \bigg|
+$$
+
+* Winning conditions are as follows:
+$$
+\text{winner}
+\begin{cases}
+\text{tie} \quad \text{if } c_1 = c_2 \text{ or } d_1 = d_2 \\
+P1 \quad \text{if } d_1 < d_2 \\
+P2 \quad \text{otherwise}
+\end{cases}
+$$
+
+| P1 \ P2 | $ c_2 = 100 $ | $ c_2 = 99 $ | $ c_2 = 98 $ | ... | $ c_2 = 33 $ |
+| :-: | :-: | :-: | :-: | :-: | :-: | 
+| $ c_1 = 100 $ | $ d_1 = d_2 = 0 $| $ d_1 = 50.25 \\ > \\ d_2 = 49.25 $| $ d_1 = 50.5 \\ > \\ d_2 = 48.5 $ | $ ... $ | $ d_1 = 66.75 \\ > \\ d_2 = 0.25 $ |
+
+* $ c_1 = 100 $ is dominated by $ c_1 \in \{0, 1, 2, ..., 99\}$ 
+* Since you are comparing $ c_1 $ and $ c_2 $ with $ \frac{m}{2} $, any $ c \text{ s.t. } c = max(c_1, c_2) $ is a dominated strategy
+* Choosing a lower number where $ c > \frac{m}{2} $ will decrease the distance of $ c $ from $ \frac{m}{2} $
+
+### Macroscopic Perspective
+* If players in the beauty contest chose numbers at random, the mean $ m = \frac{1}{n} \sum^{n}_{i=0} c_i = 50 $, with the target $ \frac{m}{2} = 50 $
+* This means all strategies where $ c > 50 $ are strictly dominated
+* Repeating this process:
+  * Means will be $ m = 25, 12.5, 7.25, 3.625, 1.8125, ... $
+  * Targets will be $ 12.5, 7.25, 3.625, 1.8125, 0.90625, ... $
+* At every step, $ c > m $ are strictly dominated
+* Since the sequence of $ m $ converges at $ 0 $, all strategies where $ c > 0 $ are dominated
+* Thus, the strategy $ c = 0 $ is weakly dominant and is a Nash equilibrium
 
 ## Take-Home Problem 2
-### Show that bidding at $ b \ge V $ is a dominated strategy
+### For the First-Price Sealed Problem, show that bidding at $ b \ge V $ is a dominated strategy
+$$ \text{let } V_1 = 100, V_2 = 250 $$
+$$
+\text{suppose } b_1 = 100.1: 
+$$
 
-### Show that any bid $ (b, b + 0.1) $ where $ \pi_2 > 0, b \ge 100 $ is also a Nash Equilibrium
+$$ b_1 = 100.1
+\begin{cases}
+b_2 < 100.1: \pi_1 = -0.1 < 0 \\
+b_2 = 100.1: \pi_1 = -0.05 < 0 \\
+b_2 > 100.1: \pi_1 = 0
+\end{cases}
+$$
 
-### What if the winner is the highest bidder but pays the lower bid? (Second-Price Sealed Problem)
-* There is a weakly dominant strategy: Bidders bid their $ V $
+* It can be concluded that $ \pi \le 0 $ for $ b >  $
+* This holds true for $ b \ge V $
 
-#### Using $ V_2 = 250 $, show that $ b_2 = 250 $ is weakly dominant
+### For the First-Price Sealed Problem, show that any bid $ (b, b + 0.1) $ where $ 100 \le b < 250 $ is also a Nash Equilibrium
 
+$$ \text{let } V_1 = 100, V_2 = 250 $$
+
+$$
+\pi_2 = 250 - (b + 0.1) \\
+\therefore \pi_2 \in [0, 149.9]
+$$
+
+| $ b_1 \le 100 $ | $ 100 < b_1 < b $ | $ b_1 = b + 0.1 $ | $ b_1 > b + 0.1 $ |
+| :---: | :---: | :---: | :---: |
+| $ \pi_1 = 0 $ | $ \pi_1 = 0 $ | $ \pi_1 = \frac{-0.1}{2} = -0.05  $ | $ \pi_1 = 100 - b_1 < 0 $ | 
+
+* P1 has **no incentive to change his strategy** as the $ \pi_1 = 0 $, and all other choices result in either the same or worse payoffs
+* P2 has **no incentive to change his strategy** as $ \pi_2 = 250 - b $ is the maximum payoff given the bid of $ (b, b + 0.1) $
+
+### For the Second-Price Sealed Problem, using $ V_2 = 250 $, show that $ b_2 = 250 $ is weakly dominant
+
+$$ \text{let } V_1 = 100, V_2 = 250 $$
+
+
+* Player 2's payoff can be represented as:
+
+$$
+\pi_2 
+\begin{cases}
+250 - b_1 \quad \text{if } b_2 > b_1 \\
+0 \quad \text{if } b_2 < b_1 \\
+\frac{250 - b_1}{2} \quad \text{if } b_2 = b_1
+\end{cases}
+$$
+
+* To guess and verify, we do the following:
 
 $$
 \text{let } x \text{ be a value s.t. } x > 250
 $$
 
-| P2 \ P1 | $ b_1 < 250 $ | $ b_1 = 250 $ | $ 250 < b_1 < x $ | $ b_1 > x $ | $ b_1 = x $ |
+| P2 \ P1 | $ b_1 < 250 $ | $ b_1 = 250 $ | $ 250 < b_1 < x $ | $ b_1 = x $ | $ b_1 > x $ |
 | :---: | :---: | :---: | :---: | :---: | :---: |
-| $ b_2 = 250 $ | $ \pi_2 = 250 - b_1 $ | $ \pi_2 = 0 $ | $ \pi_2 = - $ | $ \pi_2 = 0 $ |
-| $ b_2 = x $ | $ \pi_2 = $ | $ \pi_2 = $ | $ \pi_2 = $ |  $ \pi_2 = $ |
+| $ b_2 = 250 $ | $ \pi_2 = 250 - b_1 > 0 $ | $ \pi_2 = \frac{250}{2} = 125 $ | $ \pi_2 = 0 $ | $ \pi_2 = 0 $ | $ \pi_2 = 0 $ |
+| $ b_2 = x $ | $ \pi_2 = 250 - b_1 $ | $ \pi_2 = 0 $ | $ \pi_2 = 250 - b_1 < 0 $ |  $ \pi_2 = \frac{250 - x}{2} < 0 $ | $ \pi_2 = 0 $ | 
 
-* Therefore, $ b_2 = V_2 $ is never worse but sometimmes better than $ b_2 = x $
+* Therefore, $ b_2 = V_2 $ is never worse but sometimes better than $ b_2 = x $
 
 
 ### Notice how much the seller earns in both cases
-* First-Price Auction:
-  * Nash Equilbrium Strategy: $(100, 250)$
+$$ \text{let } V_1 = 100, V_2 = 250 $$
+
+* **First-Price Sealed Auction**: Nash Equilbrium Strategy is $(99.9, 100)$
+* **Second-Price Sealed Auction**: Nash Equilibrium Strategy is $ (100, 250) $
+* In both cases, the seller receives $ 100 $
