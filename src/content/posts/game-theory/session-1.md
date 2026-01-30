@@ -2,7 +2,7 @@
 title: H3 Game Theory Session 1
 published: 2026-01-09
 description: "SMU H3 Game Theory Session 1 Notes"
-tags: ["Game Theory", "Economics"]
+tags: ["Game Theory", "Economics", "SMU H3"]
 category: Notes
 draft: false
 ---
