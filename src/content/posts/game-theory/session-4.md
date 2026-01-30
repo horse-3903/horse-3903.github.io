@@ -262,3 +262,52 @@ $$
 10 \quad \quad \text{if } x = y = 0
 \end{cases}
 $$
+
+---
+
+# Assurance Game
+## Payoff Matrix
+| P2 \ P1 | Red | Black |
+|:-:|:-:|:-:|
+| **Red** | 2, 2 | 0, 0 |
+| **Black** | 0, 0 | 5, 5 |
+
+* Nash Equilibria occur at $(Red, Red)$ and $(Black, Black)$
+* In this case, choosing $(Black, Black)$ might seem more logical since the payoff is higher than $(Red, Red)$
+* $(Black, Black)$ Pareto dominates $(Red, Red)$, meaning that both players will be better off by doing so
+* **Pareto Efficiency**: We say that $ (a, b) $ is Pareto efficient if it is to not possible to find another outcome in the game where at least 1 player is better off and no other player is worse off
+
+---
+
+# Stag Hunt Game
+## Payoff Matrix
+| P2 \ P1 | Stag | Hare |
+|:-:|:-:|:-:|
+| **Stag** | 5, 5 | 0, 3 |
+| **Hare** | 3, 0 | 4, 4 |
+
+* Nash equilibria at $ (Stag, Stag) $ and $ (Hare, Hare) $
+* $ (Stag, Stag) $ gives the Pareto efficient outcome 
+* $ (Hare, Hare) $ is the risk-dominant Nash equilibrium
+* Assuming that the other player will choose $ Stag $ or $ Hare $ with the same frequency:
+  * Choosing $ Stag $: Expected payoff is $ \frac{5 + 0}{2} = 2.5 $
+  * Choosing $ Hare $: Expected payoff is $ \frac{3 + 4}{2} = 3.5 $
+
+---
+
+# Chicken Game
+## Payoff Matrix
+| P2 \ P1 | Swerve | Straight |
+|:-:|:-:|:-:|
+|  **Swerve**  | 1, 1 |  0,  2 |
+| **Straight** | 2, 0 | -1, -1 |
+
+* Nash equilibria at $ (Straight, Swerve) $ and $ (Straight, Swerve) $
+* Both combinations of strategies are Pareto efficient
+
+## Evolutionary Biology
+* Payoffs indicate expected off-springs 
+* Animals from same species (e.g. birds) meet at random
+* Birds are genetically programmed to choose one strategy 
+* The strategy that gets more off-springs survives evolutionary pressures
+* This represents a form of a mixed strategy
