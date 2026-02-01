@@ -1,4 +1,10 @@
+# SMU H3 Map
+
+* Content map: [SMU H3 Game Theory Map](/posts/game-theory/smu-h3/)
+
 ---
+
+﻿---
 title: Ensemble Methods
 published: 2026-01-21
 description: "A comprehensive guide to ensemble learning — exploring how combining multiple models improves accuracy, robustness, and generalisation."
@@ -7,6 +13,12 @@ category: Notes
 draft: false
 --- 
 
+
+# Syllabus Map
+
+* Study map: [Syllabus Study Map](/posts/syllabus/study-map/)
+
+---
 # Overview
 
 * **Ensemble methods** in machine learning combine multiple individual models (weak learners) to create a single more accurate predictive model.
@@ -370,3 +382,4 @@ $$
 * Keep base models diverse to avoid correlated errors.
 * Monitor calibration; averaging can still be miscalibrated.
 * Apply early stopping for boosting to control overfitting.
+

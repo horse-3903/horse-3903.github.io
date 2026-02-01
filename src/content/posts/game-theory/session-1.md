@@ -6,6 +6,13 @@ tags: ["Game Theory", "Economics", "SMU H3"]
 category: Notes
 draft: false
 ---
+
+# SMU H3 Map
+
+* Content map: [SMU H3 Game Theory Map](/posts/game-theory/smu-h3/)
+
+---
+
 # What is Game Theory?
 
 ## Definition

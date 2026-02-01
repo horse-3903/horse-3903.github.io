@@ -1,0 +1,45 @@
+# SMU H3 Map
+
+* Content map: [SMU H3 Game Theory Map](/posts/game-theory/smu-h3/)
+
+---
+
+﻿---
+title: Self-Supervised Learning for Vision
+published: 2026-02-01
+description: "Pretext tasks and representation learning without labels."
+tags: ["Computer Vision", "Self-Supervised Learning"]
+category: Notes
+draft: false
+---
+
+# Syllabus Map
+
+* Study map: [Syllabus Study Map](/posts/syllabus/study-map/)
+
+---
+# Overview
+
+* Self-supervised learning builds visual features without manual labels.
+
+---
+
+# Core Ideas
+
+## Pretext Tasks
+
+* Predict masked patches.
+* Solve contrastive objectives.
+
+## Representation Learning
+
+* Learn embeddings that transfer to downstream tasks.
+
+---
+
+# Practical Notes
+
+* Requires large, diverse datasets.
+* Often used before supervised fine-tuning.
+
+

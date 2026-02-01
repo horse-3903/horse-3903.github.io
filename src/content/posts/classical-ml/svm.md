@@ -1,4 +1,10 @@
+# SMU H3 Map
+
+* Content map: [SMU H3 Game Theory Map](/posts/game-theory/smu-h3/)
+
 ---
+
+﻿---
 title: Support Vector Machines
 published: 2026-01-17
 description: "A comprehensive guide to support vector machines — exploring how margin maximisation and regularisation create powerful and flexible classifiers."
@@ -7,6 +13,12 @@ category: Notes
 draft: false
 ---
 
+
+# Syllabus Map
+
+* Study map: [Syllabus Study Map](/posts/syllabus/study-map/)
+
+---
 # Overview
 * Support Vector Machines (SVMs) are effective out-of-the-box classifiers.
 
@@ -243,4 +255,5 @@ Acts as a regularisation parameter.
 * Tune $C$ and kernel parameters with cross-validation.
 * Prefer linear SVMs for large, sparse feature spaces.
 * Calibrate probabilities with Platt scaling if required.
+
 

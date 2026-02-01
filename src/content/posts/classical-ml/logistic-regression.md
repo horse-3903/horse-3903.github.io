@@ -1,4 +1,10 @@
+# SMU H3 Map
+
+* Content map: [SMU H3 Game Theory Map](/posts/game-theory/smu-h3/)
+
 ---
+
+﻿---
 title: Logistic Regression
 published: 2025-10-18
 description: "A comprehensive guide to Logistic Regression — exploring how it transforms Linear Regression into a powerful tool for binary and multi-class classification."
@@ -7,6 +13,12 @@ category: Notes
 draft: false
 ---
 
+
+# Syllabus Map
+
+* Study map: [Syllabus Study Map](/posts/syllabus/study-map/)
+
+---
 # Overview
 
 * Logistic Regression builds upon the foundation of **Linear Regression**.  
@@ -247,4 +259,5 @@ $$
 * Use class weights or decision thresholds to control precision and recall.
 * Prefer multinomial loss for multi-class problems when available.
 * Check calibration and use Platt scaling if needed.
+
 

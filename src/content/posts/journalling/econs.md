@@ -7,6 +7,13 @@ category: Journals
 draft: false
 ---
 
+# SMU H3 Map
+
+* Content map: [SMU H3 Game Theory Map](/posts/game-theory/smu-h3/)
+
+---
+
+
 # Introduction
 
 This essay aims to explore how the variety of seminars, tutorials, challenges and experiences have influenced my understanding of key disciplines including the studies of Economics, Business and Management, Finance and Government Intervention, Game Theory, Artificial Intelligence and more.

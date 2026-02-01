@@ -1,4 +1,10 @@
+# SMU H3 Map
+
+* Content map: [SMU H3 Game Theory Map](/posts/game-theory/smu-h3/)
+
 ---
+
+﻿---
 title: Decision Tree
 published: 2025-10-22
 description: "A comprehensive guide to Decision Trees — exploring how they recursively split data to model complex decision boundaries for classification and regression tasks."
@@ -7,6 +13,12 @@ category: Notes
 draft: false
 ---
 
+
+# Syllabus Map
+
+* Study map: [Syllabus Study Map](/posts/syllabus/study-map/)
+
+---
 # Introduction
 
 ## Overall Goals
@@ -508,3 +520,4 @@ $$
 * Use cross-validation to pick pruning or depth settings.
 * Handle class imbalance with class weights or balanced sampling.
 * Prune for generalisation, not just training accuracy.
+

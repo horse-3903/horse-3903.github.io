@@ -26,7 +26,7 @@ const stats = [
   <div class="flex w-full rounded-[var(--radius-large)] overflow-hidden relative min-h-32">
     <div class="card-base home-shell z-10 px-9 py-6 relative w-full pb-16">
       <!-- Hero Section -->
-      <section class="px-0 pt-0 pb-10 -mx-9 -mt-6">
+      <section class="px-0 pt-0 pb-0 -mx-9 -mt-6">
         <div class="hero-shell rounded-none md:rounded-t-[var(--radius-large)] md:rounded-b-none px-6 py-8 md:px-10 md:py-12 relative overflow-hidden">
           <div class="hero-content grid gap-10 items-start">
             <div class="space-y-6">
@@ -74,7 +74,7 @@ const stats = [
       </section>
 
       <!-- Featured Projects -->
-      <section class="px-3 md:px-6 mt-12">
+      <section class="px-3 md:px-6 section-divider">
         <div class="flex items-end justify-between flex-wrap gap-4 mb-8">
           <div>
             <h2 class="text-3xl font-semibold text-90">Featured Projects</h2>
@@ -210,9 +210,12 @@ const stats = [
 
       <!-- CTA -->
       <section class="px-3 md:px-6 mt-16">
-        <div class="cta-panel card-base card-shadow rounded-[var(--radius-large)] p-8 md:p-10 flex flex-col md:flex-row md:items-center md:justify-between gap-6">
-          <div>
-            <h2 class="text-2xl md:text-3xl font-semibold text-90">
+        <div class="cta-panel card-base card-shadow rounded-[var(--radius-large)] p-8 md:p-10 grid gap-6 md:gap-8 md:grid-cols-[1fr_auto] md:items-center">
+          <div class="cta-copy">
+            <p class="cta-kicker text-xs uppercase tracking-[0.35em] text-50">
+              Let’s build together
+            </p>
+            <h2 class="text-2xl md:text-3xl font-semibold text-90 mt-3">
               Want to collaborate or share an idea?
             </h2>
             <p class="text-75 mt-3 max-w-2xl">
@@ -222,7 +225,7 @@ const stats = [
           </div>
           <a
             href="/about/"
-            class="btn-regular rounded-2xl px-6 py-3 text-base inline-flex items-center gap-2 w-auto max-w-fit"
+            class="cta-btn btn-regular rounded-2xl px-6 py-3 text-base inline-flex items-center gap-2 w-auto max-w-fit"
           >
             <Icon name="mdi:chat-outline" size="1.3em" />
             Start a conversation
@@ -236,14 +239,6 @@ const stats = [
 <style>
   .home-shell {
     background-color: var(--card-bg);
-    background-image:
-      radial-gradient(circle at 50% 0%, oklch(0.7 0.12 var(--hue) / 0.18), transparent 55%),
-      linear-gradient(
-        to bottom,
-        oklch(0.22 0.05 var(--hue) / 0.95) 0%,
-        oklch(0.16 0.03 var(--hue) / 0.98) 20%,
-        oklch(0.16 0.03 var(--hue) / 0.98) 100%
-      );
     background-repeat: no-repeat;
     border: 1px solid oklch(0.85 0.02 var(--hue) / 0.12);
   }
@@ -281,7 +276,36 @@ const stats = [
     border: 1px solid rgba(255, 255, 255, 0.12);
   }
   .cta-panel {
-    background: var(--card-bg);
-    border: 1px solid rgba(255, 255, 255, 0.12);
+    background: linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.08),
+      rgba(255, 255, 255, 0.02)
+    );
+    border: 1px solid rgba(255, 255, 255, 0.14);
+  }
+  .cta-copy {
+    display: grid;
+    gap: 0.25rem;
+  }
+  .cta-btn {
+    justify-self: start;
+  }
+  .section-divider {
+    position: relative;
+    padding-top: 1.75rem;
+  }
+  .section-divider::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: clamp(1.25rem, 4vw, 2rem);
+    right: clamp(1.25rem, 4vw, 2rem);
+    height: 1px;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(255, 255, 255, 0.2),
+      transparent
+    );
   }
 </style>

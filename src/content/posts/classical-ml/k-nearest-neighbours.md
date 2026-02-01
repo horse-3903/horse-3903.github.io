@@ -1,4 +1,10 @@
+# SMU H3 Map
+
+* Content map: [SMU H3 Game Theory Map](/posts/game-theory/smu-h3/)
+
 ---
+
+﻿---
 title: K-Nearest Neighbours
 published: 2025-11-14
 description: "A comprehensive guide to K-Nearest Neighbours — exploring how local similarity drives instance-based learning."
@@ -7,6 +13,12 @@ category: Notes
 draft: false
 ---
 
+
+# Syllabus Map
+
+* Study map: [Syllabus Study Map](/posts/syllabus/study-map/)
+
+---
 # k-Nearest Neighbours
 
 # Definition
@@ -79,3 +91,4 @@ $$
 * Weight neighbours by distance to reduce boundary noise.
 * Tune $k$ and the metric with cross-validation.
 * Consider dimensionality reduction before KNN in high dimensions.
+

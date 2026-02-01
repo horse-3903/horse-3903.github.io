@@ -1,0 +1,52 @@
+# SMU H3 Map
+
+* Content map: [SMU H3 Game Theory Map](/posts/game-theory/smu-h3/)
+
+---
+
+﻿---
+title: Image Generation
+published: 2026-02-01
+description: "GANs and diffusion models for generating images."
+tags: ["Computer Vision", "Generative Models"]
+category: Notes
+draft: false
+---
+
+# Syllabus Map
+
+* Study map: [Syllabus Study Map](/posts/syllabus/study-map/)
+
+---
+# Overview
+
+* Generative models synthesize realistic images.
+
+---
+
+# Generating Images with GANs
+
+## Core Idea
+
+* Generator creates samples.
+* Discriminator judges real vs fake.
+
+## Practical Notes
+
+* Training can be unstable.
+* Requires careful balance of G and D.
+
+---
+
+# Diffusion Models
+
+## Core Idea
+
+* Learn to denoise from random noise to a data sample.
+
+## Practical Notes
+
+* Produces high-quality results.
+* Often slower at inference.
+
+

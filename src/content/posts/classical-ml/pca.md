@@ -1,126 +1,133 @@
----
-title: Principal Component Analysis
-published: 2026-01-21
-description: "A comprehensive guide to principal component analysis — exploring how dimension reducibility allows for feature enginneering."
-tags: ["Machine Learning", "Unsupervised Learning"]
-category: Notes
-draft: false
---- 
+# SMU H3 Map
+
+* Content map: [SMU H3 Game Theory Map](/posts/game-theory/smu-h3/)
 
 ---
+
+﻿---
 title: Principal Component Analysis (PCA)
-published: 2026-01-21
-description: "A concise guide to principal component analysis — understanding dimensionality reduction through variance maximisation and orthogonal projections."
+published: 2026-02-01
+description: "A comprehensive guide to PCA — reducing dimensionality by projecting data onto directions of maximum variance."
 tags: ["Machine Learning", "Unsupervised Learning"]
 category: Notes
 draft: false
----  
+---
 
-# The Problem of Dimensionality
 
-## Curse of Dimensionality
+# Syllabus Map
 
-## Redundancy in Features
+* Study map: [Syllabus Study Map](/posts/syllabus/study-map/)
 
-## Noise Accumulation
+---
+# Overview
+
+* Principal Component Analysis (PCA) is an unsupervised, linear dimensionality reduction technique.
+
+* It finds new axes (principal components) that capture the maximum variance in the data while remaining orthogonal.
 
 ---
 
-# Motivation for Dimensionality Reduction
+# Why Dimensionality Reduction Matters
 
-## Why Fewer Dimensions Help
+* High-dimensional spaces make distance metrics less meaningful and models harder to generalise.
 
-## Information vs Compression
-
----
-
-# What Is PCA?
-
-## Core Idea
-
-## Unsupervised Nature
-
-## Linear Transformation
-
----
-
-# Intuition Behind PCA
-
-## Directions of Maximum Variance
-
-## Orthogonal Axes
-
-## Rotating the Coordinate System
-
----
-
-# Geometric Interpretation
-
-## Projection onto a Subspace
-
-## Best Low-Dimensional Approximation
+* Many features are redundant or noisy, so compressing them can improve efficiency without losing much signal.
 
 ---
 
 # Mathematical Formulation
 
-## Mean Centering
+* Start with a data matrix $X \in \mathbb{R}^{m \times n}$ where rows are samples and columns are features.
 
-## Covariance Matrix
+* Mean-center each feature:
+  $$
+  X_c = X - \mu
+  $$
+  where $\mu$ is the feature-wise mean vector.
 
-## Why Covariance Matters
+* Compute the covariance matrix:
+  $$
+  \Sigma = \frac{1}{m} X_c^\top X_c
+  $$
 
 ---
 
 # Eigen Decomposition
 
-## Eigenvectors as Directions
+* Solve the eigenvalue problem:
+  $$
+  \Sigma v_i = \lambda_i v_i
+  $$
 
-## Eigenvalues as Variance
+* Each eigenvector $v_i$ is a principal component direction.
 
-## Ranking Principal Components
+* Each eigenvalue $\lambda_i$ is the variance captured along that direction.
 
 ---
 
 # Principal Components
 
-## Definition
+* Sort eigenvalues in descending order: $\lambda_1 \ge \lambda_2 \ge \dots \ge \lambda_n$.
 
-## Orthogonality
+* The top $k$ eigenvectors form the projection matrix:
+  $$
+  W_k = [v_1, v_2, \dots, v_k]
+  $$
 
-## Ordering by Importance
+---
+
+# Projection to Lower Dimensions
+
+* Project the centered data into the new feature space:
+  $$
+  Z = X_c W_k
+  $$
+
+* $Z \in \mathbb{R}^{m \times k}$ is the reduced representation.
 
 ---
 
 # Explained Variance
 
-## Variance Ratio
+* The explained variance ratio for component $i$ is:
+  $$
+  r_i = \frac{\lambda_i}{\sum_{j=1}^{n} \lambda_j}
+  $$
 
-## Cumulative Explained Variance
+* Cumulative variance for the top $k$ components:
+  $$
+  R_k = \sum_{i=1}^{k} r_i
+  $$
 
 ---
 
 # Choosing the Number of Components
 
-## Variance Threshold
+* Pick the smallest $k$ such that $R_k$ exceeds a target threshold (e.g. 0.90 or 0.95).
 
-## Elbow Method
-
----
-
-# Dimensionality Reduction via PCA
-
-## Projection
-
-## New Feature Space
+* Alternatively, use the elbow method on the scree plot of eigenvalues.
 
 ---
 
-# Reconstruction and Information Loss
+# Reconstruction and Error
 
-## Approximate Reconstruction
+* Approximate reconstruction back to the original space:
+  $$
+  \hat{X} = Z W_k^\top + \mu
+  $$
 
-## Reconstruction Error
+* Reconstruction error decreases as $k$ increases, but so does compression.
+
+---
+
+# PCA via SVD (Practical Computation)
+
+* Instead of eigendecomposition, compute:
+  $$
+  X_c = U S V^\top
+  $$
+
+* The principal components are the columns of $V$, and variances are proportional to $S^2$.
 
 ---
 
@@ -146,3 +153,4 @@ draft: false
 * Standardise features before computing components.
 * Choose component count via explained variance or cross-validation.
 * Inspect loadings to understand what each component captures.
+
