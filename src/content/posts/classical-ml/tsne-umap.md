@@ -1,10 +1,4 @@
-# SMU H3 Map
-
-* Content map: [SMU H3 Game Theory Map](/posts/game-theory/smu-h3/)
-
 ---
-
-﻿---
 title: t-SNE & UMAP
 published: 2026-02-01
 description: "A concise guide to t-SNE and UMAP for nonlinear dimensionality reduction."
@@ -25,12 +19,14 @@ draft: false
 
 ---
 
-# t-SNE
+# t-SNE (T-distributed Stochastic Neighbor Embedding)
 
 ## Core Idea
 
-* Converts pairwise distances into probabilities.
-* Minimizes divergence between high- and low-dimensional distributions.
+* Given a set of high-dimensional objects, t-SNE computes the probabilities which is proportional to the similarity of the two objects
+* This is the conditional probability that $ x_i $ would pick $ x_j $ as its neighbour if neighbors were picked in proportion to their probability density under a Gaussian centered at $ x_i $
+* Essentially, it converts pairwise distances into probabilities
+* This minimises divergence between high- and low-dimensional distributions.
 
 ## How It Works (High Level)
 

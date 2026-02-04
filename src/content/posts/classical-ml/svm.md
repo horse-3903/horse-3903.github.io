@@ -1,9 +1,3 @@
-# SMU H3 Map
-
-* Content map: [SMU H3 Game Theory Map](/posts/game-theory/smu-h3/)
-
----
-
 ﻿---
 title: Support Vector Machines
 published: 2026-01-17

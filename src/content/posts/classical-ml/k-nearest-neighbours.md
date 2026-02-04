@@ -1,9 +1,3 @@
-# SMU H3 Map
-
-* Content map: [SMU H3 Game Theory Map](/posts/game-theory/smu-h3/)
-
----
-
 ﻿---
 title: K-Nearest Neighbours
 published: 2025-11-14

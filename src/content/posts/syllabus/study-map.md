@@ -7,10 +7,6 @@ category: Notes
 draft: false
 ---
 
-# SMU H3 Map
-
-* Content map: [SMU H3 Game Theory Map](/posts/game-theory/smu-h3/)
-
 ---
 
 # Overview

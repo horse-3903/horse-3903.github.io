@@ -1,10 +1,4 @@
-# SMU H3 Map
-
-* Content map: [SMU H3 Game Theory Map](/posts/game-theory/smu-h3/)
-
 ---
-
-﻿---
 title: Convolutional Layers
 published: 2026-02-01
 description: "Convolution basics and pretrained vision encoders."

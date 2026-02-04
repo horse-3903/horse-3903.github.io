@@ -1,10 +1,4 @@
-# SMU H3 Map
-
-* Content map: [SMU H3 Game Theory Map](/posts/game-theory/smu-h3/)
-
 ---
-
-﻿---
 title: Ensemble Methods
 published: 2026-01-21
 description: "A comprehensive guide to ensemble learning — exploring how combining multiple models improves accuracy, robustness, and generalisation."
