@@ -54,7 +54,7 @@ draft: false
 
 # Neural Networks
 
-* [Neural Networks: Perceptron Basics](/posts/neural-networks/perceptron-basics/)
+* [Neural Networks](/posts/neural-networks/neural-network-basics/)
 * [Deep Learning](/posts/neural-networks/deep-learning/)
 
 ---

@@ -1,4 +1,4 @@
-﻿---
+---
 title: Deep Learning
 published: 2026-02-01
 description: "Multi-layer networks and representations for modern deep learning."

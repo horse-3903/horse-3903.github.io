@@ -1,4 +1,4 @@
-﻿---
+---
 title: L1 and L2 Regularisation
 published: 2025-11-15
 description: "A comprehensive guide to L1 and L2 Regularisation — exploring how LASSO and Ridge improve generalisation."
@@ -128,7 +128,6 @@ $$
 ### Leads to Simpler Models
 * Unimportant features are removed, meaning that models are more efficient and interpretable.
 
-## Gradient Calculation
 ## Gradient Calculation
 
 * The L1 regulariser is not differentiable at $w_j = 0$.
