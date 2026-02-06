@@ -5,6 +5,7 @@ description: "A content map for the SMU H3 game theory notes."
 tags: ["Game Theory", "SMU H3", "Study Guide"]
 category: Notes
 draft: false
+pinned: true
 ---
 
 # SMU H3 Map
