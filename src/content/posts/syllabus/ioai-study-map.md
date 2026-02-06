@@ -1,5 +1,5 @@
 ---
-title: Syllabus Study Map
+title: IOAI Syllabus Study Map
 published: 2026-02-01
 description: "A table of contents for studying the IOAI syllabus across the notes."
 tags: ["Syllabus", "Study Guide"]
