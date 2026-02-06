@@ -1,4 +1,4 @@
-﻿---
+---
 title: Linear Regression
 published: 2025-10-18
 description: "A comprehensive guide to Linear Regression — exploring how it models relationships between variables to make accurate continuous predictions."
@@ -10,7 +10,7 @@ draft: false
 
 # Syllabus Map
 
-* Study map: [Syllabus Study Map](/posts/syllabus/study-map/)
+* Study map: [Syllabus Study Map](/posts/syllabus/ioai-study-map/)
 
 ---
 # Overview
@@ -126,5 +126,6 @@ $$
 * Inspect residuals for heteroscedasticity and bias.
 * Use Ridge or LASSO when there are many correlated features.
 * Add interaction terms only when they are justified by domain knowledge.
+
 
 

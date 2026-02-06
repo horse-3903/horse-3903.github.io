@@ -10,7 +10,7 @@ pinned: true
 
 # SMU H3 Map
 
-* Content map: [SMU H3 Game Theory Map](/posts/game-theory/smu-h3/)
+* Content map: [SMU H3 Game Theory Map](/posts/syllabus/smu-h3-study-map/)
 
 ---
 
@@ -28,3 +28,4 @@ pinned: true
 * [Session 2](/posts/game-theory/session-2/)
 * [Session 3](/posts/game-theory/session-3/)
 * [Session 4](/posts/game-theory/session-4/)
+

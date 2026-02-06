@@ -1,4 +1,4 @@
-﻿---
+---
 title: CNN Tasks
 published: 2026-02-01
 description: "Core CNN-based vision tasks and common model families."
@@ -9,7 +9,7 @@ draft: false
 
 # Syllabus Map
 
-* Study map: [Syllabus Study Map](/posts/syllabus/study-map/)
+* Study map: [Syllabus Study Map](/posts/syllabus/ioai-study-map/)
 
 ---
 # Overview
@@ -50,5 +50,6 @@ draft: false
 ## Common Models
 
 * U-Net.
+
 
 

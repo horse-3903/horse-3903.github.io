@@ -1,4 +1,4 @@
-﻿---
+---
 title: Principal Component Analysis (PCA)
 published: 2026-02-01
 description: "A comprehensive guide to PCA — reducing dimensionality by projecting data onto directions of maximum variance."
@@ -10,7 +10,7 @@ draft: false
 
 # Syllabus Map
 
-* Study map: [Syllabus Study Map](/posts/syllabus/study-map/)
+* Study map: [Syllabus Study Map](/posts/syllabus/ioai-study-map/)
 
 ---
 # Overview
@@ -147,4 +147,5 @@ draft: false
 * Standardise features before computing components.
 * Choose component count via explained variance or cross-validation.
 * Inspect loadings to understand what each component captures.
+
 

@@ -10,7 +10,7 @@ draft: false
 
 # Syllabus Map
 
-* Study map: [Syllabus Study Map](/posts/syllabus/study-map/)
+* Study map: [Syllabus Study Map](/posts/syllabus/ioai-study-map/)
 
 ---
 # Overview
@@ -376,4 +376,5 @@ $$
 * Keep base models diverse to avoid correlated errors.
 * Monitor calibration; averaging can still be miscalibrated.
 * Apply early stopping for boosting to control overfitting.
+
 

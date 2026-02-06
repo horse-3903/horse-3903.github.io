@@ -1,4 +1,4 @@
-﻿---
+---
 title: Pre-trained Text Encoders
 published: 2026-02-01
 description: "Transformer-based text encoders and their use cases."
@@ -9,7 +9,7 @@ draft: false
 
 # Syllabus Map
 
-* Study map: [Syllabus Study Map](/posts/syllabus/study-map/)
+* Study map: [Syllabus Study Map](/posts/syllabus/ioai-study-map/)
 
 ---
 # Overview
@@ -35,5 +35,6 @@ draft: false
 ## Fine-Tuning
 
 * Update all weights for task-specific performance.
+
 
 

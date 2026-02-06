@@ -10,7 +10,7 @@ draft: false
 
 # Syllabus Map
 
-* Study map: [Syllabus Study Map](/posts/syllabus/study-map/)
+* Study map: [Syllabus Study Map](/posts/syllabus/ioai-study-map/)
 
 ---
 
@@ -104,3 +104,4 @@ $$
 
 * Bagging typically reduces variance compared to a single decision tree in the provided examples.
 * For 0-1 loss, if bias is 1, increasing variance can reduce loss (a counterintuitive edge case).
+

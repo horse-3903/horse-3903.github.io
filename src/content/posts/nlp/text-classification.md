@@ -1,4 +1,4 @@
-﻿---
+---
 title: Text Classification
 published: 2026-02-01
 description: "Common workflows for assigning labels to text."
@@ -9,7 +9,7 @@ draft: false
 
 # Syllabus Map
 
-* Study map: [Syllabus Study Map](/posts/syllabus/study-map/)
+* Study map: [Syllabus Study Map](/posts/syllabus/ioai-study-map/)
 
 ---
 # Overview
@@ -36,5 +36,6 @@ draft: false
 
 * Handle class imbalance carefully.
 * Use proper train/validation splits.
+
 
 

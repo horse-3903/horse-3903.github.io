@@ -9,7 +9,7 @@ draft: false
 
 # Syllabus Map
 
-* Study map: [Syllabus Study Map](/posts/syllabus/study-map/)
+* Study map: [Syllabus Study Map](/posts/syllabus/ioai-study-map/)
 
 ---
 # Overview
@@ -173,3 +173,4 @@ $$
 
 * Cross Entropy for multi-class problems.
 * Binary Cross Entropy for two-class problems.
+

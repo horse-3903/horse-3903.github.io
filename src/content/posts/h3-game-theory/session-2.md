@@ -9,7 +9,7 @@ draft: false
 
 # SMU H3 Map
 
-* Content map: [SMU H3 Game Theory Map](/posts/game-theory/smu-h3/)
+* Content map: [SMU H3 Game Theory Map](/posts/syllabus/smu-h3-study-map/)
 
 ---
 

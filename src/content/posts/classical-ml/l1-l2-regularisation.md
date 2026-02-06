@@ -10,7 +10,7 @@ draft: false
 
 # Syllabus Map
 
-* Study map: [Syllabus Study Map](/posts/syllabus/study-map/)
+* Study map: [Syllabus Study Map](/posts/syllabus/ioai-study-map/)
 
 ---
 # Introduction
@@ -253,4 +253,5 @@ $$
 * Tune $\lambda$ via cross-validation, not by training loss.
 * Use Elastic Net when you want sparsity with grouped features.
 * Track coefficient paths to understand shrinkage effects.
+
 

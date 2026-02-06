@@ -12,7 +12,7 @@ draft: false
 
 # Syllabus Map
 
-* Study map: [Syllabus Study Map](/posts/syllabus/study-map/)
+* Study map: [Syllabus Study Map](/posts/syllabus/ioai-study-map/)
 
 ---
 # Overview
@@ -93,5 +93,6 @@ draft: false
 ## Data Augmentation
 
 * Flip, crop, noise injection.
+
 
 

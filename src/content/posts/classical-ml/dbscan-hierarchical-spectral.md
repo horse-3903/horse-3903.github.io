@@ -12,7 +12,7 @@ draft: false
 
 # Syllabus Map
 
-* Study map: [Syllabus Study Map](/posts/syllabus/study-map/)
+* Study map: [Syllabus Study Map](/posts/syllabus/ioai-study-map/)
 
 ---
 # Overview
@@ -79,5 +79,6 @@ draft: false
 
 * Good for non-convex clusters.
 * Requires choosing number of clusters.
+
 
 

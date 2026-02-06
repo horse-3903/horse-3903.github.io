@@ -1,4 +1,4 @@
-﻿---
+---
 title: Vision-Text Encoders
 published: 2026-02-01
 description: "Joint vision-language embedding models."
@@ -9,7 +9,7 @@ draft: false
 
 # Syllabus Map
 
-* Study map: [Syllabus Study Map](/posts/syllabus/study-map/)
+* Study map: [Syllabus Study Map](/posts/syllabus/ioai-study-map/)
 
 ---
 # Overview
@@ -35,5 +35,6 @@ draft: false
 
 * Enables zero-shot classification.
 * Useful for retrieval and captioning pipelines.
+
 
 

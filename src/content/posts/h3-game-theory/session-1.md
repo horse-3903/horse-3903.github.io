@@ -9,7 +9,7 @@ draft: false
 
 # SMU H3 Map
 
-* Content map: [SMU H3 Game Theory Map](/posts/game-theory/smu-h3/)
+* Content map: [SMU H3 Game Theory Map](/posts/syllabus/smu-h3-study-map/)
 
 ---
 
@@ -122,3 +122,4 @@ draft: false
 - Iteratively, the game state evolves as:
   - 25 → 12.5 → 6.25 → 3.125 → … → 0
 - If everyone chooses 0, the outcome is also 0
+

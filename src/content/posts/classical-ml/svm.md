@@ -1,4 +1,4 @@
-﻿---
+---
 title: Support Vector Machines
 published: 2026-01-17
 description: "A comprehensive guide to support vector machines — exploring how margin maximisation and regularisation create powerful and flexible classifiers."
@@ -10,7 +10,7 @@ draft: false
 
 # Syllabus Map
 
-* Study map: [Syllabus Study Map](/posts/syllabus/study-map/)
+* Study map: [Syllabus Study Map](/posts/syllabus/ioai-study-map/)
 
 ---
 # Overview
@@ -249,5 +249,6 @@ Acts as a regularisation parameter.
 * Tune $C$ and kernel parameters with cross-validation.
 * Prefer linear SVMs for large, sparse feature spaces.
 * Calibrate probabilities with Platt scaling if required.
+
 
 

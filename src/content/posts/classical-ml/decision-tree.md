@@ -10,7 +10,7 @@ draft: false
 
 # Syllabus Map
 
-* Study map: [Syllabus Study Map](/posts/syllabus/study-map/)
+* Study map: [Syllabus Study Map](/posts/syllabus/ioai-study-map/)
 
 ---
 # Introduction
@@ -514,4 +514,5 @@ $$
 * Use cross-validation to pick pruning or depth settings.
 * Handle class imbalance with class weights or balanced sampling.
 * Prune for generalisation, not just training accuracy.
+
 

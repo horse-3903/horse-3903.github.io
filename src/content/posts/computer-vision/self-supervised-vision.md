@@ -1,4 +1,4 @@
-﻿---
+---
 title: Self-Supervised Learning for Vision
 published: 2026-02-01
 description: "Pretext tasks and representation learning without labels."
@@ -9,7 +9,7 @@ draft: false
 
 # Syllabus Map
 
-* Study map: [Syllabus Study Map](/posts/syllabus/study-map/)
+* Study map: [Syllabus Study Map](/posts/syllabus/ioai-study-map/)
 
 ---
 # Overview
@@ -35,5 +35,6 @@ draft: false
 
 * Requires large, diverse datasets.
 * Often used before supervised fine-tuning.
+
 
 

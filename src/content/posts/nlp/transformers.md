@@ -1,4 +1,4 @@
-﻿---
+---
 title: Transformers
 published: 2026-02-01
 description: "Transformer architecture for sequence modeling."
@@ -9,7 +9,7 @@ draft: false
 
 # Syllabus Map
 
-* Study map: [Syllabus Study Map](/posts/syllabus/study-map/)
+* Study map: [Syllabus Study Map](/posts/syllabus/ioai-study-map/)
 
 ---
 # Overview
@@ -39,5 +39,6 @@ draft: false
 
 * Scales well with data and compute.
 * Foundation for modern LLMs.
+
 
 

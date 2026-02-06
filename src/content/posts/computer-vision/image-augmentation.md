@@ -1,4 +1,4 @@
-﻿---
+---
 title: Image Augmentation
 published: 2026-02-01
 description: "Simple augmentation techniques to improve generalization."
@@ -9,7 +9,7 @@ draft: false
 
 # Syllabus Map
 
-* Study map: [Syllabus Study Map](/posts/syllabus/study-map/)
+* Study map: [Syllabus Study Map](/posts/syllabus/ioai-study-map/)
 
 ---
 # Overview
@@ -36,5 +36,6 @@ draft: false
 
 * Keep augmentations label-preserving.
 * Tune intensity based on task sensitivity.
+
 
 

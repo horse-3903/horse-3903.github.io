@@ -1,4 +1,4 @@
-﻿---
+---
 title: Language Modeling
 published: 2026-02-01
 description: "Modeling token sequences for generation and prediction."
@@ -9,7 +9,7 @@ draft: false
 
 # Syllabus Map
 
-* Study map: [Syllabus Study Map](/posts/syllabus/study-map/)
+* Study map: [Syllabus Study Map](/posts/syllabus/ioai-study-map/)
 
 ---
 # Overview
@@ -40,5 +40,6 @@ draft: false
 ## Practical Notes
 
 * Used by encoder models like BERT.
+
 
 

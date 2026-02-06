@@ -1,4 +1,4 @@
-﻿---
+---
 title: Image Generation
 published: 2026-02-01
 description: "GANs and diffusion models for generating images."
@@ -9,7 +9,7 @@ draft: false
 
 # Syllabus Map
 
-* Study map: [Syllabus Study Map](/posts/syllabus/study-map/)
+* Study map: [Syllabus Study Map](/posts/syllabus/ioai-study-map/)
 
 ---
 # Overview
@@ -42,5 +42,6 @@ draft: false
 
 * Produces high-quality results.
 * Often slower at inference.
+
 
 

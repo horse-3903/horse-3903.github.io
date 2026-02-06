@@ -1,4 +1,4 @@
-﻿---
+---
 title: Audio Processing
 published: 2026-02-01
 description: "Audio encoders and models for speech and audio understanding."
@@ -9,7 +9,7 @@ draft: false
 
 # Syllabus Map
 
-* Study map: [Syllabus Study Map](/posts/syllabus/study-map/)
+* Study map: [Syllabus Study Map](/posts/syllabus/ioai-study-map/)
 
 ---
 # Overview
@@ -40,5 +40,6 @@ draft: false
 
 * Use spectrograms or raw waveform inputs.
 * Fine-tune with task-specific audio data.
+
 
 
