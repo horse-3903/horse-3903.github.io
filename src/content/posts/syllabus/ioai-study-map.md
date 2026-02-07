@@ -1,16 +1,18 @@
 ---
 title: IOAI Syllabus Study Map
-published: 2026-02-01
+published: 2026-02-07
 description: "A table of contents for studying the IOAI syllabus across the notes."
 tags: ["Syllabus", "Study Guide"]
 category: Notes
 draft: false
-pinned: true
+pinned: false
 ---
+
+## Syllabus
 
 # Programming Fundamentals
 
-- [ ] [Programming Fundamentals](/posts/programming/programming/)
+- [X] [Programming Fundamentals](/posts/programming/programming/)
 
 ---
 
@@ -48,8 +50,14 @@ pinned: true
 # Neural Networks
 
 - [X] [Neural Networks](/posts/neural-networks/neural-network-basics/)
-- [ ] [Deep Learning](/posts/neural-networks/deep-learning/)
+- [X] [Multi-Layer Perceptrons (MLP)](/posts/neural-networks/mlp/)
 - [X] [RNNs, LSTMs and GRUs](/posts/neural-networks/rnn-lstm-gru/)
+- [X] [Optimisers, Convergence, and Regularisation](/posts/neural-networks/optimisers-convergence-regularisation/)
+- [X] [Pooling and Batch Normalisation](/posts/neural-networks/pooling-batch-norm/)
+- [X] [Weight Initialisation](/posts/neural-networks/weight-initialisation/)
+- [ ] [Data Embeddings](/posts/neural-networks/data-embeddings/)
+- [ ] [Autoencoders](/posts/neural-networks/autoencoders/)
+- [X] [Fine-tuning](/posts/neural-networks/finetuning/)
 
 ---
 
@@ -66,7 +74,7 @@ pinned: true
 
 # NLP & Audio
 
-- [ ] [Transformers](/posts/nlp/transformers/)
+- [ ] [Attention and Transformers](/posts/nlp/attention-and-transformers/)
 - [ ] [Text Classification](/posts/nlp/text-classification/)
 - [ ] [Pre-trained Text Encoders](/posts/nlp/pretrained-text-encoders/)
 - [ ] [Language Modelling](/posts/nlp/language-modeling/)
