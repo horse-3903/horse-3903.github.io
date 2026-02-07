@@ -2,7 +2,7 @@
 title: Audio Processing
 published: 2026-02-01
 description: "Audio encoders and models for speech and audio understanding."
-tags: ["Audio", "NLP"]
+tags: ["Audio Processing"]
 category: Notes
 draft: false
 ---

@@ -1,7 +1,7 @@
 ---
 title: H3 Game Theory Session 4
 published: 2026-01-30
-description: "SMU H3 Game Theory Session 1 Notes"
+description: "SMU H3 Game Theory Session 4 Notes"
 tags: ["Game Theory", "Economics", "SMU H3"]
 category: Notes
 draft: false

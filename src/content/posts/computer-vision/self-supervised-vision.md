@@ -2,7 +2,7 @@
 title: Self-Supervised Learning for Vision
 published: 2026-02-01
 description: "Pretext tasks and representation learning without labels."
-tags: ["Computer Vision", "Self-Supervised Learning"]
+tags: ["Computer Vision", "Deep Learning"]
 category: Notes
 draft: false
 ---

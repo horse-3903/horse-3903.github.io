@@ -2,7 +2,7 @@
 title: Language Modeling
 published: 2026-02-01
 description: "Modeling token sequences for generation and prediction."
-tags: ["NLP", "Language Models"]
+tags: ["Natural Language Processing"]
 category: Notes
 draft: false
 ---

@@ -3,7 +3,7 @@ title: Bias-Variance Decomposition
 published: 2026-02-06
 updated: 2026-02-06
 description: "Notes on bias-variance decomposition for regression and classification based on mlxtend."
-tags: ["Classical ML", "Bias", "Variance", "Evaluation"]
+tags: ["Classical Machine Learning"]
 category: Notes
 draft: false
 ---

@@ -2,7 +2,7 @@
 title: "Neural Networks: Perceptron and Training Basics"
 published: 2026-02-06
 description: "Perceptron fundamentals, optimization, backpropagation, activations, and loss functions."
-tags: ["Deep Learning", "Neural Networks", "Optimization"]
+tags: ["Neural Networks", "Deep Learning"]
 category: Notes
 draft: false
 ---
@@ -104,7 +104,7 @@ $$
 $$
 ### Updates
 $$
-w_{t+1} = w_t - \eta \nabla_w L, \\ b_{t+1} = b_t - \eta \nabla_b L
+w_{t+1} = w_t - \eta \nabla_w L \\ b_{t+1} = b_t - \eta \nabla_b L
 $$
 
 ---
@@ -120,6 +120,23 @@ $$
 
 * Requires differentiable activation functions.
 * Makes training deep networks computationally feasible.
+* Cache intermediate activations to reuse during gradient computation.
+* Gradients flow from loss to output layer, then to hidden layers, then to inputs.
+
+## Example Neural Network
+
+* Consider a 2-2-1 network for binary prediction:
+  * Input $x \in \mathbb{R}^2$
+  * Hidden layer $h = \sigma(W_1 x + b_1)$ with $W_1 \in \mathbb{R}^{2 \times 2}$
+  * Output $\hat{y} = \sigma(W_2 h + b_2)$ with $W_2 \in \mathbb{R}^{1 \times 2}$
+* Use binary cross entropy: $L = -\big(y \log \hat{y} + (1-y)\log(1-\hat{y})\big)$
+
+## Backprop Flow (Key Gradients)
+
+* Output layer error: $\delta_2 = \hat{y} - y$
+* Output weights: $\nabla_{W_2} L = \delta_2 h^\top$, bias: $\nabla_{b_2} L = \delta_2$
+* Hidden error: $\delta_1 = (W_2^\top \delta_2) \odot \sigma'(W_1 x + b_1)$
+* Hidden weights: $\nabla_{W_1} L = \delta_1 x^\top$, bias: $\nabla_{b_1} L = \delta_1$
 
 ---
 
@@ -173,4 +190,3 @@ $$
 
 * Cross Entropy for multi-class problems.
 * Binary Cross Entropy for two-class problems.
-

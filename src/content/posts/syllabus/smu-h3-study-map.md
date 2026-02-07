@@ -24,8 +24,8 @@ pinned: true
 
 # Sessions
 
-* [Session 1](/posts/game-theory/session-1/)
-* [Session 2](/posts/game-theory/session-2/)
-* [Session 3](/posts/game-theory/session-3/)
-* [Session 4](/posts/game-theory/session-4/)
-
+## [Session 1](/posts/h3-game-theory/session-1/)
+## [Session 2](/posts/h3-game-theory/session-2/)
+## [Session 3](/posts/h3-game-theory/session-3/)
+## [Session 4](/posts/h3-game-theory/session-4/)
+## [Session 5](/posts/h3-game-theory/session-5/)

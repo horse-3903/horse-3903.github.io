@@ -2,7 +2,7 @@
 title: Logistic Regression
 published: 2025-10-18
 description: "A comprehensive guide to Logistic Regression — exploring how it transforms Linear Regression into a powerful tool for binary and multi-class classification."
-tags: ["Machine Learning", "Supervised Learning"]
+tags: ["Classical Machine Learning", "Supervised Learning"]
 category: Notes
 draft: false
 ---

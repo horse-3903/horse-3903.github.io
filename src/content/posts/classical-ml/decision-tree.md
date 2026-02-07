@@ -2,7 +2,7 @@
 title: Decision Tree
 published: 2025-10-22
 description: "A comprehensive guide to Decision Trees — exploring how they recursively split data to model complex decision boundaries for classification and regression tasks."
-tags: ["Machine Learning", "Supervised Learning"]
+tags: ["Classical Machine Learning", "Supervised Learning"]
 category: Notes
 draft: false
 ---

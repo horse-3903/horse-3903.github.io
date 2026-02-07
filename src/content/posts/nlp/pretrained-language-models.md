@@ -2,7 +2,7 @@
 title: Pre-trained Language Models
 published: 2026-02-01
 description: "Open-source and API-based language model families."
-tags: ["NLP", "LLM"]
+tags: ["Natural Language Processing"]
 category: Notes
 draft: false
 ---

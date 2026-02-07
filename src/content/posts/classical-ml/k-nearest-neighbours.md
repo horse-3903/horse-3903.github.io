@@ -2,7 +2,7 @@
 title: K-Nearest Neighbours
 published: 2025-11-14
 description: "A comprehensive guide to K-Nearest Neighbours — exploring how local similarity drives instance-based learning."
-tags: ["Machine Learning", "Supervised Learning"]
+tags: ["Classical Machine Learning", "Supervised Learning"]
 category: Notes
 draft: false
 ---

@@ -2,7 +2,7 @@
 title: Data Science Fundamentals
 published: 2026-02-01
 description: "Core data science evaluation, validation, and feature practices."
-tags: ["Machine Learning", "Data Science"]
+tags: ["Data Science Fundamentals"]
 category: Notes
 draft: false
 ---

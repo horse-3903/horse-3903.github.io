@@ -2,7 +2,7 @@
 title: Image Augmentation
 published: 2026-02-01
 description: "Simple augmentation techniques to improve generalization."
-tags: ["Computer Vision", "Data Augmentation"]
+tags: ["Computer Vision"]
 category: Notes
 draft: false
 ---

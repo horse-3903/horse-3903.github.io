@@ -2,7 +2,7 @@
 title: Ensemble Methods
 published: 2026-01-21
 description: "A comprehensive guide to ensemble learning — exploring how combining multiple models improves accuracy, robustness, and generalisation."
-tags: ["Machine Learning", "Supervised Learning"]
+tags: ["Classical Machine Learning", "Supervised Learning"]
 category: Notes
 draft: false
 --- 

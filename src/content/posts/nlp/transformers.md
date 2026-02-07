@@ -2,7 +2,7 @@
 title: Transformers
 published: 2026-02-01
 description: "Transformer architecture for sequence modeling."
-tags: ["NLP", "Deep Learning"]
+tags: ["Natural Language Processing", "Deep Learning"]
 category: Notes
 draft: false
 ---

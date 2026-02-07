@@ -2,7 +2,7 @@
 title: Encoder-Decoder Models
 published: 2026-02-01
 description: "Sequence-to-sequence models for translation and multimodal tasks."
-tags: ["NLP", "Seq2Seq"]
+tags: ["Natural Language Processing"]
 category: Notes
 draft: false
 ---

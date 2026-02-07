@@ -2,7 +2,7 @@
 title: Deep Learning
 published: 2026-02-01
 description: "Multi-layer networks and representations for modern deep learning."
-tags: ["Deep Learning", "Neural Networks"]
+tags: ["Deep Learning"]
 category: Notes
 draft: false
 ---

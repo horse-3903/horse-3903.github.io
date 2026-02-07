@@ -2,7 +2,7 @@
 title: Pre-trained Text Encoders
 published: 2026-02-01
 description: "Transformer-based text encoders and their use cases."
-tags: ["NLP", "Transformers"]
+tags: ["Natural Language Processing"]
 category: Notes
 draft: false
 ---

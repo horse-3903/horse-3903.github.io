@@ -2,7 +2,7 @@
 title: Support Vector Machines
 published: 2026-01-17
 description: "A comprehensive guide to support vector machines — exploring how margin maximisation and regularisation create powerful and flexible classifiers."
-tags: ["Machine Learning", "Supervised Learning"]
+tags: ["Classical Machine Learning", "Supervised Learning"]
 category: Notes
 draft: false
 ---

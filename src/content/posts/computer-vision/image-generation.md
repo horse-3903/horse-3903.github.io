@@ -2,7 +2,7 @@
 title: Image Generation
 published: 2026-02-01
 description: "GANs and diffusion models for generating images."
-tags: ["Computer Vision", "Generative Models"]
+tags: ["Computer Vision", "Deep Learning"]
 category: Notes
 draft: false
 ---

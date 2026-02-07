@@ -2,7 +2,7 @@
 title: Text Classification
 published: 2026-02-01
 description: "Common workflows for assigning labels to text."
-tags: ["NLP", "Supervised Learning"]
+tags: ["Natural Language Processing", "Supervised Learning"]
 category: Notes
 draft: false
 ---

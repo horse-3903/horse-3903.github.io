@@ -2,7 +2,7 @@
 title: Principal Component Analysis (PCA)
 published: 2026-02-01
 description: "A comprehensive guide to PCA — reducing dimensionality by projecting data onto directions of maximum variance."
-tags: ["Machine Learning", "Unsupervised Learning"]
+tags: ["Classical Machine Learning", "Unsupervised Learning"]
 category: Notes
 draft: false
 ---

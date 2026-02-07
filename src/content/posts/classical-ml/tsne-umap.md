@@ -2,7 +2,7 @@
 title: t-SNE & UMAP
 published: 2026-02-01
 description: "A concise guide to t-SNE and UMAP for nonlinear dimensionality reduction."
-tags: ["Machine Learning", "Unsupervised Learning"]
+tags: ["Classical Machine Learning", "Unsupervised Learning"]
 category: Notes
 draft: false
 ---

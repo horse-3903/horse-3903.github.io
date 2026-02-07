@@ -2,7 +2,7 @@
 title: Linear Regression
 published: 2025-10-18
 description: "A comprehensive guide to Linear Regression — exploring how it models relationships between variables to make accurate continuous predictions."
-tags: ["Machine Learning", "Supervised Learning"]
+tags: ["Classical Machine Learning", "Supervised Learning"]
 category: Notes
 draft: false
 ---
