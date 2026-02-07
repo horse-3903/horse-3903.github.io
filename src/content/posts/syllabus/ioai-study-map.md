@@ -47,9 +47,9 @@ pinned: true
 
 # Neural Networks
 
-- [ ] [Neural Networks](/posts/neural-networks/neural-network-basics/)
+- [X] [Neural Networks](/posts/neural-networks/neural-network-basics/)
 - [ ] [Deep Learning](/posts/neural-networks/deep-learning/)
-- [ ] [RNNs, LSTMs and GRUs](/posts/neural-networks/rnn-lstm-gru/)
+- [X] [RNNs, LSTMs and GRUs](/posts/neural-networks/rnn-lstm-gru/)
 
 ---
 

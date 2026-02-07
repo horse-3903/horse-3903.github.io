@@ -99,6 +99,15 @@
         }
     }
 
+    input[type="checkbox"] {
+        accent-color: var(--primary);
+    }
+    input[type="checkbox"][disabled] {
+        opacity: 1;
+        filter: none;
+        cursor: default;
+    }
+
     table {
         @apply mx-auto;
         width: max-content;
