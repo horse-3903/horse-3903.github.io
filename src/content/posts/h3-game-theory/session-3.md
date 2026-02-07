@@ -318,7 +318,7 @@ $$
 
 ## Take-Home Problem 1
 
-### <p style="text-align: center;"><i>"For the beauty contest, is the choice of 100 dominated by 99, 99 dominated by 98, 98 dominated by 97, 97 dominated by 96 and so on?"</i></p>
+### <p style="text-align: centre;"><i>"For the beauty contest, is the choice of 100 dominated by 99, 99 dominated by 98, 98 dominated by 97, 97 dominated by 96 and so on?"</i></p>
 
 ### Guess and Verify
 $$ \text{for simplicity, let there be 2 players in the game} $$

@@ -70,7 +70,7 @@ $$
 * When the training data changes often and **retraining cost** should be minimal.
 * When **example-based explanations** are useful for stakeholders.
 * When **local neighbourhoods** reflect meaningful similarity.
-* When you can trade **slower inference** for simple modeling.
+* When you can trade **slower inference** for simple modelling.
 
 ## When Not to Use K-Nearest Neighbours
 

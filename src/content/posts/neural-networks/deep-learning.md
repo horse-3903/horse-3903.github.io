@@ -28,8 +28,8 @@ draft: false
 
 ## Practical Notes
 
-* Requires careful initialization and regularization.
-* Often paired with batch normalization and dropout.
+* Requires careful initialisation and regularisation.
+* Often paired with batch normalisation and dropout.
 
 ---
 

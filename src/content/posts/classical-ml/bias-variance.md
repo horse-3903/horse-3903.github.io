@@ -16,7 +16,7 @@ draft: false
 
 # Overview
 
-* **Bias and variance** are commonly used to describe **underfitting** and **overfitting** behavior.
+* **Bias and variance** are commonly used to describe **underfitting** and **overfitting** behaviour.
 * **Decomposing loss** into bias and variance helps interpret model performance.
 
 ---

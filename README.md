@@ -24,7 +24,7 @@ A static blog template built with [Astro](https://astro.build).
 - [x] Built with [Astro](https://astro.build) and [Tailwind CSS](https://tailwindcss.com)
 - [x] Smooth animations and page transitions
 - [x] Light / dark mode
-- [x] Customizable theme colors & banner
+- [x] Customizable theme colours & banner
 - [x] Responsive design
 - [x] Search functionality with [Pagefind](https://pagefind.app/)
 - [x] [Markdown extended features](https://github.com/saicaca/fuwari?tab=readme-ov-file#-markdown-extended-syntax)

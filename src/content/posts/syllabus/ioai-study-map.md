@@ -8,15 +8,6 @@ draft: false
 pinned: true
 ---
 
----
-
-# Overview
-
-### This page is a table of contents for the IOAI syllabus notes.
-### Use it to navigate across topics and track your study path.
-
----
-
 # Programming Fundamentals
 
 - [ ] [Programming Fundamentals](/posts/programming/programming/)
@@ -40,7 +31,8 @@ pinned: true
 
 ## Data Science
 
-- [ ] [Data Science Fundamentals](/posts/classical-ml/data-science/)
+- [X] [Data Science Fundamentals](/posts/classical-ml/data-science/)
+- [X] [Bias-Variance Tradeoff](/posts/classical-ml/bias-variance/)
 
 ## Dimensionality Reduction
 
@@ -56,8 +48,8 @@ pinned: true
 # Neural Networks
 
 - [ ] [Neural Networks](/posts/neural-networks/neural-network-basics/)
-- [ ] [Neural Networks](/posts/neural-networks/neural-network-basics/)
 - [ ] [Deep Learning](/posts/neural-networks/deep-learning/)
+- [ ] [RNNs, LSTMs and GRUs](/posts/neural-networks/rnn-lstm-gru/)
 
 ---
 
@@ -77,7 +69,7 @@ pinned: true
 - [ ] [Transformers](/posts/nlp/transformers/)
 - [ ] [Text Classification](/posts/nlp/text-classification/)
 - [ ] [Pre-trained Text Encoders](/posts/nlp/pretrained-text-encoders/)
-- [ ] [Language Modeling](/posts/nlp/language-modeling/)
+- [ ] [Language Modelling](/posts/nlp/language-modeling/)
 - [ ] [Encoder-Decoder Models](/posts/nlp/encoder-decoder-models/)
 - [ ] [Pre-trained Language Models](/posts/nlp/pretrained-language-models/)
 - [ ] [Audio Processing](/posts/nlp/audio-processing/)

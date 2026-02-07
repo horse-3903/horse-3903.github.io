@@ -10,8 +10,14 @@ lang: "en"
 ---
 # RNNs, LSTMs, and GRUs
 
+# Syllabus Map
+
+* Study map: [Syllabus Study Map](/posts/syllabus/ioai-study-map/)
+
+---
+
 ## Outline
-- Sequence modeling is a machine learning technique for analysing and predicting patterns in ordered data
+- Sequence modelling is a machine learning technique for analysing and predicting patterns in ordered data
 - This means the sequence (like words in a sentence or stock prices over time) matters
 - These sequential models typically consist of:
   - RNNs
@@ -98,7 +104,7 @@ $$
 
 ### How it works (specific)
 #### 1. Set the initial states $ h_0 $ and $ C_0 $
-- Initialize the hidden state and cell state (often zeros).
+- Initialise the hidden state and cell state (often zeros).
 - Some implementations learn $ h_0 $ and $ C_0 $ as **trainable parameters**
 - These initial states seed the memory for the first timestep
 
@@ -141,7 +147,7 @@ h_t = o_t \odot \tanh(C_t)
 $$
 
 ### Practical usage
-- Long-range dependency tasks (e.g., document classification, language modeling, machine translation)
+- Long-range dependency tasks (e.g., document classification, language modelling, machine translation)
 - Speech recognition and synthesis, where temporal context matters over many steps
 - Time-series forecasting with seasonal or delayed effects
 
@@ -164,7 +170,7 @@ $$
 
 ### How it works (specific)
 #### 1. Set the initial hidden state $ h_0 $
-- Initialize the hidden state (often zeros).
+- Initialise the hidden state (often zeros).
 - Some implementations learn a **trainable** $ h_0 $
 - This state acts as the initial memory before any inputs
 

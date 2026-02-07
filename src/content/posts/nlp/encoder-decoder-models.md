@@ -29,7 +29,7 @@ draft: false
 
 * Machine translation.
 * Summarization.
-* Vision-language modeling.
+* Vision-language modelling.
 
 
 

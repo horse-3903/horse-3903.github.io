@@ -417,11 +417,124 @@ X_test_scaled  = scaler.transform(X_test)
 
 # Pytorch Basics
 
+```py
+import torch
+import torch.nn as nn
+import torch.nn.functional as F
+import torch.optim as optim
+```
+
+## Tensors
+```py
+# Create tensors
+x = torch.tensor([1.0, 2.0, 3.0])
+X = torch.randn(3, 4)
+Z = torch.zeros(2, 2)
+
+# Attributes
+X.shape
+X.ndim
+X.dtype
+X.device
+```
+
+## Autograd
+```py
+x = torch.tensor([2.0, 3.0], requires_grad=True)
+y = (x ** 2).sum()
+y.backward()
+x.grad
+```
+
+## Modules
+```py
+class MLP(nn.Module):
+    def __init__(self, in_dim, hidden_dim, out_dim):
+        super().__init__()
+        self.net = nn.Sequential(
+            nn.Linear(in_dim, hidden_dim),
+            nn.ReLU(),
+            nn.Linear(hidden_dim, out_dim)
+        )
+
+    def forward(self, x):
+        return self.net(x)
+```
+
+## Loss and Optimiser
+```py
+model = MLP(10, 32, 2)
+criterion = nn.CrossEntropyLoss()
+optimizer = optim.Adam(model.parameters(), lr=1e-3)
+```
+
 ---
 
 # Tensor Manipulation
+
+```py
+# Reshape / view
+X = torch.randn(8, 4)
+X.view(4, 8)
+X.reshape(2, 16)
+
+# Transpose and permute
+X.T
+X.permute(1, 0)
+
+# Concatenate / stack
+torch.cat([X, X], dim=0)
+torch.stack([X, X], dim=0)
+
+# Slicing
+X[:2]
+X[:, 1:3]
+
+# Broadcasting
+X + 3
+X + torch.randn(1, 4)
+
+# Type and device
+X.float()
+X.long()
+X.to("cpu")
+```
 
 ---
 
 # Training Models on CPU and GPU
 
+## Device selection
+```py
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+model = MLP(10, 32, 2).to(device)
+```
+
+## Training loop
+```py
+for epoch in range(10):
+    model.train()
+    for X_batch, y_batch in train_loader:
+        X_batch = X_batch.to(device)
+        y_batch = y_batch.to(device)
+
+        optimizer.zero_grad()
+        logits = model(X_batch)
+        loss = criterion(logits, y_batch)
+        loss.backward()
+        optimizer.step()
+
+    model.eval()
+    with torch.no_grad():
+        for X_batch, y_batch in val_loader:
+            X_batch = X_batch.to(device)
+            y_batch = y_batch.to(device)
+            logits = model(X_batch)
+```
+
+## Saving and loading
+```py
+torch.save(model.state_dict(), "model.pt")
+model.load_state_dict(torch.load("model.pt", map_location=device))
+model.eval()
+```

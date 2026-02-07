@@ -1,7 +1,7 @@
 ---
-title: Language Modeling
+title: Language Modelling
 published: 2026-02-01
-description: "Modeling token sequences for generation and prediction."
+description: "Modelling token sequences for generation and prediction."
 tags: ["Natural Language Processing"]
 category: Notes
 draft: false
@@ -18,7 +18,7 @@ draft: false
 
 ---
 
-# Autoregressive Modeling
+# Autoregressive Modelling
 
 ## Core Idea
 
@@ -31,7 +31,7 @@ draft: false
 
 ---
 
-# Masked Modeling
+# Masked Modelling
 
 ## Core Idea
 

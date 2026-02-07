@@ -39,13 +39,13 @@ draft: false
 
 * Start with a **data matrix** $X \in \mathbb{R}^{m \times n}$ where rows are samples and columns are features.
 
-* **Mean-center** each feature:
+* **Mean-centre** each feature:
   $$
   X_c = X - \mu
   $$
   where $\mu$ is the feature-wise mean vector.
 
-* **Mean-centering** means subtracting each feature's average from every sample, so **every column has mean 0**.
+* **Mean-centring** means subtracting each feature's average from every sample, so **every column has mean 0**.
 
 * Compute the **covariance matrix**:
   $$
@@ -119,7 +119,7 @@ draft: false
 
 # Projection to Lower Dimensions
 
-* **Project** the centered data into the new feature space:
+* **Project** the centred data into the new feature space:
   $$
   Z = X_c W_k
   $$
@@ -161,7 +161,7 @@ draft: false
 
 * The **error comes from discarding components**: lower-variance directions still contain information that is lost when projecting to $k$ dimensions.
 
-* **Mean-centering does not create this error**; it only shifts data to zero mean so variance is measured consistently.
+* **Mean-centring does not create this error**; it only shifts data to zero mean so variance is measured consistently.
 
 ---
 

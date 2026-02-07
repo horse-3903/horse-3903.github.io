@@ -36,7 +36,7 @@ draft: false
   $$
 * The bandwidth $\sigma_i$ is chosen so that the **perplexity** of $p_{j|i}$ matches a target value.
 * Perplexity is a parameter that sets the **effective number of neighbors** each point should have in t‑SNE.
-* This represents **how likely point $(x_i)$ would “choose” point $(x_j)$ as a neighbor** if neighbors were sampled from a **Gaussian centered at $(x_i)$**.
+* This represents **how likely point $(x_i)$ would “choose” point $(x_j)$ as a neighbor** if neighbors were sampled from a **Gaussian centred at $(x_i)$**.
 
 ### Step 2: Symmetrise the Probabilities
 
@@ -70,7 +70,7 @@ draft: false
 ## Practical Notes
 
 * Sensitive to **perplexity** and **learning rate**.
-* Typically used for **visualization**, not downstream modeling.
+* Typically used for **visualization**, not downstream modelling.
 
 ---
 

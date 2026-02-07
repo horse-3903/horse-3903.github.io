@@ -1,7 +1,7 @@
 ---
 title: "Neural Networks: Perceptron and Training Basics"
 published: 2026-02-06
-description: "Perceptron fundamentals, optimization, backpropagation, activations, and loss functions."
+description: "Perceptron fundamentals, optimisation, backpropagation, activations, and loss functions."
 tags: ["Neural Networks", "Deep Learning"]
 category: Notes
 draft: false
@@ -164,7 +164,7 @@ $$
 
 ## Tanh
 
-* Outputs in $[-1, 1]$, centered around zero.
+* Outputs in $[-1, 1]$, centred around zero.
 * Often trains faster than sigmoid in hidden layers.
 
 ---
@@ -178,7 +178,7 @@ $$
 
 ## Practical Notes
 
-* Scaling and label encoding affect loss behavior.
+* Scaling and label encoding affect loss behaviour.
 * Monitor both loss curves and task metrics during training.
 
 ## Regression

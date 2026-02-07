@@ -156,7 +156,7 @@ draft: false
 ## Why Boosting Works
 ![](../assets/ensemble/image4.png)
 * Boosting reduces bias by correcting for errors from previous iterations of the model.
-* This also builds complex decision boundaries through additive modeling.
+* This also builds complex decision boundaries through additive modelling.
 
 ---
 

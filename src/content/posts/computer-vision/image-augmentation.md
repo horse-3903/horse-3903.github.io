@@ -1,7 +1,7 @@
 ---
 title: Image Augmentation
 published: 2026-02-01
-description: "Simple augmentation techniques to improve generalization."
+description: "Simple augmentation techniques to improve generalisation."
 tags: ["Computer Vision"]
 category: Notes
 draft: false
@@ -28,7 +28,7 @@ draft: false
 ## Photometric
 
 * Brightness and contrast.
-* Color jitter and noise.
+* Colour jitter and noise.
 
 ---
 
