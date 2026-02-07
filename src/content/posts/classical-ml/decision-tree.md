@@ -16,8 +16,8 @@ draft: false
 # Introduction
 
 ## Overall Goals
-* Recursively split the dataset to improve purity
-* Done until no further meaningful split is possible
+* **Recursively split** the dataset to improve **purity**
+* Done until **no further meaningful split** is possible
 
 ---
 
@@ -25,27 +25,27 @@ draft: false
 
 ## Root Node
 
-* The starting point of the decision tree and represents the entire dataset
-* It is the initial node from which the tree branches out, and does not have incoming branches
+* The **starting point** of the decision tree and represents the entire dataset
+* It is the initial node from which the tree **branches out**, and does not have incoming branches
 
 ## Decision Node
 
-* These nodes represent a point where a decision is made based on a feature of the data
-* They have both incoming and outgoing branches, as they split the data into sub-nodes
+* These nodes represent a **decision point** based on a feature of the data
+* They have **incoming and outgoing branches**, as they split the data into sub-nodes
 
 ## Leaf Node
 
-* These nodes are the final nodes of the decision tree and represent the ultimate outcome
-* Leaf nodes do not have any outgoing branches, as no further splitting occurs at these points
-* They contain the final classification or regression value for a given data point
+* These nodes are the **final nodes** of the decision tree and represent the ultimate outcome
+* Leaf nodes do not have any **outgoing branches**, as no further splitting occurs at these points
+* They contain the **final classification or regression value** for a given data point
 
 ## Parent Node
 
-* This is a relative term, referring to any node that splits into two or more child nodes.
+* This is a **relative term**, referring to any node that splits into two or more child nodes.
 
 ## Child Node
 
-* This is a relative term, referring to any node that originates from a parent node
+* This is a **relative term**, referring to any node that originates from a parent node
 
 ---
 
@@ -54,14 +54,14 @@ draft: false
 ## Step-by-Step Procedure
 
 ### 1. Start with the full training dataset at the root node
-* All samples and their labels are considered together.
+* **All samples and labels** are considered together.
 
 ### 2. Check if the node should stop splitting
-* All samples belong to one class, or
-* The stopping condition is met.
+* **All samples belong to one class**, or
+* The **stopping condition** is met.
 
 #### For each feature
-* Evaluate all possible split points.
+* Evaluate **all possible split points**.
 
 #### For numeric features:
 * Sort unique values.
@@ -73,36 +73,36 @@ draft: false
 
 ### 3. Compute the impurity or loss for each possible split
 
-* Use Entropy / Information Gain or Gini Index (for classification).
+* Use **Entropy / Information Gain** or **Gini Index** (for classification).
 
-* Use Mean Squared Error (for regression).
+* Use **Mean Squared Error** (for regression).
 
 ### 4. Select the split with the best score
 
-* Highest information gain or lowest impurity.
+* **Highest information gain** or **lowest impurity**.
 
-* Record the chosen feature and threshold.
+* Record the **chosen feature and threshold**.
 
 ### 5. Partition the dataset into child nodes
 
-* Left node → samples satisfying the condition
+* **Left node** → samples satisfying the condition
 
-* Right node → samples not satisfying it
+* **Right node** → samples not satisfying it
 
 ### 7. Repeat recursively for each child node
 
-* Treat each child as a new dataset.
+* Treat **each child** as a new dataset.
 
-* Apply the same splitting logic.
+* Apply the **same splitting logic**.
 
-* Stop when leaf conditions are met.
+* Stop when **leaf conditions** are met.
 
 ## Recursive Splitting Logic
 * The process is **greedy**: it chooses the best split at each step, not globally optimal.
 
-* The resulting tree can easily overfit, which is why pruning is necessary.
+* The resulting tree can **overfit**, which is why **pruning** is necessary.
 
-* Real implementations (like CART) use binary splits only.
+* Real implementations (like **CART**) use **binary splits** only.
 
 ---
 
@@ -185,9 +185,9 @@ $$
 
 # Stopping Condition
 
-* Stops splitting of nodes when leaf node is reached
-* Use a minimum count on the number of training instances assigned to each leaf node
-* Basically atomic-class nodes
+* Stops splitting of nodes when **leaf node** is reached
+* Use a **minimum count** on the number of training instances assigned to each leaf node
+* Basically **atomic-class nodes**
 
 ---
 

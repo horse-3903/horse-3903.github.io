@@ -14,19 +14,19 @@ draft: false
 
 ---
 # Overview
-* Support Vector Machines (SVMs) are effective out-of-the-box classifiers.
+* **Support Vector Machines (SVMs)** are effective out-of-the-box classifiers.
 
-* SVM is also a generalisation of the simple yet elegant algorithm called the maximal margin classifier.
+* SVM is also a generalisation of the **maximal margin classifier**.
 
-* Assuming we have a dataset with two classes, we want to find the optimal hyperplane which can separate the two classes.
+* Assuming we have a dataset with two classes, we want to find the **optimal hyperplane** which can separate the two classes.
 
-* The margin refers to the minimum distance between two data points of two different classes perpendicular to the direction of the hyperplane.
+* The **margin** refers to the **minimum distance** between two data points of two different classes perpendicular to the direction of the hyperplane.
 
 # What is a Hyperplane?
 ![](../assets/svm/image.jpg)
-* For a hyperplane in $ p $ dimensions, it is defined as a flat affine subspace with $ p - 1 $ dimensions.
+* For a hyperplane in $ p $ dimensions, it is defined as a **flat affine subspace** with $ p - 1 $ dimensions.
 
-* In other words, a hyperplane can be thought of as a decision boundary. 
+* In other words, a hyperplane can be thought of as a **decision boundary**. 
 
 # Defining the separating hyperplane
 * Assume we have a dataset in a two-dimensional space which can be linearly separated, the hyperplane dividing the data points according to their classes is a line.
@@ -52,9 +52,9 @@ $$
   * $ y_i \in \{-1, 1\} $
 
 # Finding the optimal separating hyperplane
-* Since our dataset can be perfectly separated using a hyperplane and any hyperplane can be shifted and rotated, there are an infinite number of possible solutions in choosing a hyperplane.
+* Since our dataset can be perfectly separated using a hyperplane and any hyperplane can be shifted and rotated, there are an **infinite number of possible solutions**.
 
-* The **optimal separating hyperplane** is the solution that is farthest away from the closest data point, or maximises the margin.
+* The **optimal separating hyperplane** is the solution that is farthest away from the closest data point, or **maximises the margin**.
 
 ## Defining the margin
 * In order to maximize the distance between the two hyperplanes, we need to find a way to calculate the margin.

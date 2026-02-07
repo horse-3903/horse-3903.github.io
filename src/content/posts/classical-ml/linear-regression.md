@@ -15,7 +15,7 @@ draft: false
 ---
 # Overview
 
-* Linear Regression is the simplest and most fundamental algorithms in Machine Learning for regression.
+* **Linear Regression** is one of the simplest and most fundamental algorithms in Machine Learning for regression.
 
 * It models the relationship between an **input variable** $x$ and an **output variable** $y$ by fitting a straight line that best represents the data.
 
@@ -23,7 +23,7 @@ draft: false
 
 # Mathematical Formulation
 
-* The linear model predicts the target value $\hat{y}$ as:
+* The **linear model** predicts the target value $\hat{y}$ as:
 
 $$
 \hat{y}_i = w x_i + b
@@ -108,24 +108,24 @@ $$
 
 ## When to Use Linear Regression
 
-* When relationships are approximately linear and additive.
-* When you need fast training and a strong baseline.
-* When coefficient interpretability matters for decisions.
-* When data is large and noise is moderate.
+* When relationships are **approximately linear and additive**.
+* When you need **fast training** and a **strong baseline**.
+* When **coefficient interpretability** matters for decisions.
+* When data is **large** and noise is moderate.
 
 ## When Not to Use Linear Regression
 
-* When relationships are highly nonlinear without feature engineering.
-* When outliers dominate the fit and robust methods are needed.
-* When multicollinearity makes coefficients unstable without regularisation.
-* When the target is bounded, categorical, or count-based.
+* When relationships are **highly nonlinear** without feature engineering.
+* When **outliers dominate** the fit and robust methods are needed.
+* When **multicollinearity** makes coefficients unstable without regularisation.
+* When the target is **bounded, categorical, or count-based**.
 
 ## Practical Notes
 
-* Standardise features before applying regularisation.
-* Inspect residuals for heteroscedasticity and bias.
-* Use Ridge or LASSO when there are many correlated features.
-* Add interaction terms only when they are justified by domain knowledge.
+* **Standardise features** before applying regularisation.
+* Inspect **residuals** for heteroscedasticity and bias.
+* Use **Ridge or LASSO** when there are many correlated features.
+* Add **interaction terms** only when they are justified by domain knowledge.
 
 
 

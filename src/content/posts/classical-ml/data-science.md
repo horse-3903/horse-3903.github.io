@@ -17,8 +17,8 @@ draft: false
 ---
 # Overview
 
-* Data science fundamentals cover evaluation, validation, and feature workflows.
-* Emphasis is on reliable model assessment and clean data pipelines.
+* **Data science fundamentals** cover evaluation, validation, and feature workflows.
+* Emphasis is on **reliable model assessment** and **clean data pipelines**.
 
 ---
 
@@ -26,15 +26,15 @@ draft: false
 
 ## Classification Metrics
 
-* Accuracy.
-* Precision.
-* Recall.
-* F1-score.
+* **Accuracy**.
+* **Precision**.
+* **Recall**.
+* **F1-score**.
 
 ## Diagnostic Tools
 
-* Confusion matrix.
-* ROC curve and AUC.
+* **Confusion matrix**.
+* **ROC curve** and **AUC**.
 
 ---
 
@@ -42,11 +42,11 @@ draft: false
 
 ## Underfitting
 
-* Model is too simple to capture signal.
+* Model is **too simple** to capture signal.
 
 ## Overfitting
 
-* Model memorizes noise and fails to generalize.
+* Model **memorizes noise** and fails to generalize.
 
 ---
 
@@ -54,11 +54,11 @@ draft: false
 
 ## Train / Validation / Test Split
 
-* Use separate splits to avoid leakage.
+* Use **separate splits** to avoid leakage.
 
 ## Cross-Validation
 
-* Estimate generalization more robustly.
+* Estimate **generalization** more robustly.
 
 ---
 
@@ -66,17 +66,17 @@ draft: false
 
 ## Encoding
 
-* One-hot encoding.
-* Target or frequency encoding.
+* **One-hot encoding**.
+* **Target** or **frequency encoding**.
 
 ## Statistical Features
 
-* Mean, variance, percentiles.
-* Rolling windows for time series.
+* **Mean**, **variance**, **percentiles**.
+* **Rolling windows** for time series.
 
 ## Embeddings
 
-* Learned dense representations for text, images, and audio.
+* **Learned dense representations** for text, images, and audio.
 
 ---
 
@@ -84,15 +84,15 @@ draft: false
 
 ## Missing Values
 
-* Impute with mean/median or model-based methods.
+* **Impute** with mean/median or model-based methods.
 
 ## Scaling
 
-* Standardization or normalization.
+* **Standardization** or **normalization**.
 
 ## Data Augmentation
 
-* Flip, crop, noise injection.
+* **Flip**, **crop**, **noise injection**.
 
 
 

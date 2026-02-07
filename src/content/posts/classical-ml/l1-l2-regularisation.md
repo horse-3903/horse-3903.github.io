@@ -16,16 +16,16 @@ draft: false
 # Introduction
 
 ## Limitations of Linear Regression
-* The standard implementatioon of linear regression does not guarantee a generalisation of the model
-* It is limited to the calculation of the empirical error (MSE) without:
-  * Controlling the norm of the weight vector
-  * Regularisation of the model
-* This leads to poorer performance of the model for limited viable practical applications
+* The standard implementatioon of linear regression does not guarantee **generalisation** of the model
+* It is limited to the calculation of **empirical error (MSE)** without:
+  * **Controlling the norm** of the weight vector
+  * **Regularisation** of the model
+* This leads to **poorer performance** of the model for limited viable practical applications
 
 ## Use of Regularisation
-* In order to mitigate these limitations, regularisation can be used to control the model
-* Regularisation essentially adds an additional term to the error, which is minimised
-* This leads to a new minimisation objective - the Regularised Loss Minimisation (RLM) - which outputs a hypothesis where: 
+* In order to mitigate these limitations, **regularisation** can be used to control the model
+* Regularisation adds an **additional term** to the error, which is minimised
+* This leads to a new minimisation objective - the **Regularised Loss Minimisation (RLM)** - which outputs a hypothesis where: 
 
 $$
 \argmin_w(L(w) + R(w))
@@ -62,7 +62,7 @@ $$
 
 * In words:
   * Changing one training example can change the loss by at most $\beta$.  
-  * A smaller $\beta$ means the algorithm is more stable.
+  * A **smaller $\beta$** means the algorithm is more stable.
 
 
 ## Why Stability Matters
@@ -78,8 +78,8 @@ $$
 $$
 
 * Meaning:
-  * Stable algorithms generalise better  
-  * Unstable algorithms overfit by being too sensitive to small perturbations
+* **Stable algorithms** generalise better  
+* **Unstable algorithms** overfit by being too sensitive to small perturbations
 
 ## Why Regularisation Improves Stability
 
@@ -121,16 +121,16 @@ $$
 
 ## Features of L1 Regression
 ### Produces Sparse Weights
-* L1 regularisation pushes some weights exactly to zero.
+* L1 regularisation **pushes some weights exactly to zero**.
 
-* This creates a model that selects features automatically.
+* This creates a model that **selects features automatically**.
 
 ### Leads to Simpler Models
-* Unimportant features are removed, meaning that models are more efficient and interpretable.
+* **Unimportant features** are removed, meaning that models are more efficient and interpretable.
 
 ## Gradient Calculation
 
-* The L1 regulariser is not differentiable at $w_j = 0$.
+* The L1 regulariser is **not differentiable** at $w_j = 0$.
 * Therefore, we use the **subgradient** instead of the gradient.
 
 * Subgradient of the L1 term:
@@ -146,8 +146,8 @@ $$
 $$
 
 * Since the L1 norm cannot be differentiated at 0:
-  * L1 minimisation has **no closed-form solution**
-  * It must use iterative algorithms
+* L1 minimisation has **no closed-form solution**
+* It must use **iterative algorithms**
 
 ---
 
@@ -171,12 +171,12 @@ $$
 
 ## Features of L2 Regression
 ### Improves numerical stability:
-* Adding $ \lambda I $ ensures $X^\top X + \lambda I$ is invertible.
-* Prevents the model from blowing up when features are highly correlated.
+* Adding $ \lambda I $ ensures $X^\top X + \lambda I$ is **invertible**.
+* Prevents the model from **blowing up** when features are highly correlated.
 
 ### Reduces model variance:
-* Shrinks weights smoothly toward zero.
-* Makes the model less sensitive to noise, improving generalisation performance.
+* **Shrinks weights** smoothly toward zero.
+* Makes the model **less sensitive to noise**, improving generalisation performance.
 
 
 ## Gradient Calculation
