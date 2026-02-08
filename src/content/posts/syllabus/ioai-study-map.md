@@ -5,7 +5,7 @@ description: "A table of contents for studying the IOAI syllabus across the note
 tags: ["Syllabus", "Study Guide"]
 category: Notes
 draft: false
-pinned: false
+pinned: true
 ---
 
 ## Syllabus
