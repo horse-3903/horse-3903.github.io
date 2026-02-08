@@ -1,6 +1,6 @@
 ---
 title: IOAI Syllabus Study Map
-published: 2026-02-07
+published: 2026-02-08
 description: "A table of contents for studying the IOAI syllabus across the notes."
 tags: ["Syllabus", "Study Guide"]
 category: Notes
@@ -43,6 +43,7 @@ pinned: false
 
 ## Clustering
 
+- [X] [K-Means Clustering](/posts/classical-ml/k-means-clustering/)
 - [ ] [DBSCAN, Hierarchical & Spectral Clustering](/posts/classical-ml/dbscan-hierarchical-spectral/)
 
 ---
