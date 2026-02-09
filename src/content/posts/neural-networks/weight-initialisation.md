@@ -26,12 +26,12 @@ pinned: false
 ## Normal distribution
 * Bell‑shaped curve centred at zero.
 * Higher probability near the mean, fewer extreme values.
-![](../assets/weight-initialisation/normal-distribution.svg)
+![](../assets/weight-initialization/normal-distribution.svg)
 
 ## Uniform distribution
 * Flat distribution where all values in a range are equally likely.
 * Produces **bounded** weights with no heavy tails.
-![](../assets/weight-initialisation/uniform-distribution.svg)
+![](../assets/weight-initialization/uniform-distribution.svg)
 
 ---
 

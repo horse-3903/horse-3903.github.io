@@ -1,4 +1,4 @@
----
+﻿---
 title: Convolutional Layers
 published: 2026-02-01
 description: "Convolution basics and core CNN building blocks."
@@ -126,7 +126,7 @@ $$
 ## Why residual learning helps
 * **Degradation problem**: very deep plain CNNs can have **higher training error** than shallower ones.
 * Learning a **residual** $F(x)$ is often easier than learning a full mapping $H(x)$ directly.
-* If the optimal mapping is close to identity, then $H(x) \approx x$ and the residual $F(x) = H(x) - x \approx 0$, which is easier to optimize.
+* If the optimal mapping is close to identity, then $H(x) \approx x$ and the residual $F(x) = H(x) - x \approx 0$, which is easier to optimise.
 
 ## Identity vs projection shortcuts
 * **Identity shortcut**: $y = F(x) + x$ (same shape).
@@ -137,7 +137,7 @@ $$
 ## Gradient flow
 * Skip connections create **short paths** for gradients.
 * They **reduce** vanishing gradients but **do not eliminate** them completely.
-* Optimization becomes easier even if generalization stays similar.
+* Optimisation becomes easier even if generalization stays similar.
 
 ---
 

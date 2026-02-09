@@ -17,7 +17,7 @@ draft: false
 
 # Definition
 
-* The **k-nearest neighbors (KNN)** algorithm is a **non-parametric, supervised** learning classifier.
+* The **k-nearest neighbours (KNN)** algorithm is a **non-parametric, supervised** learning classifier.
 * It uses **proximity** to make classifications or predictions about the grouping of an individual data point.
 
 # Distance Metrics

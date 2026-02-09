@@ -48,7 +48,7 @@ model.fc = nn.Linear(model.fc.in_features, num_classes)
 
 ### Why it helps
 * Cleaner **identity path** for the skip connection.
-* Improves gradient flow and optimization in very deep nets.
+* Improves gradient flow and optimisation in very deep nets.
 
 ## Hypothesis Space (Intuition)
 
@@ -73,7 +73,7 @@ model.fc = nn.Linear(model.fc.in_features, num_classes)
 
 ## Failure Cases & Tradeoffs
 
-* **Very deep** nets can still be hard to optimize if data is small.
+* **Very deep** nets can still be hard to optimise if data is small.
 * **Pooling** or aggressive stride can remove spatial detail (hurts localization).
 * **Residuals help less** when the task doesn’t benefit from depth.
 * **DenseNet**: strong accuracy and reuse, but memory-heavy.

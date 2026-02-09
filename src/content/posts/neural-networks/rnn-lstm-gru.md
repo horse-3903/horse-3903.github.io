@@ -81,7 +81,7 @@ $$
 ### Practical usage
 - Short-sequence tasks where long-term memory is not critical (e.g., character-level text, simple sequence classification)
 - Baseline time-series forecasting or anomaly detection with limited context
-- Lightweight sequence labeling when model size and speed matter
+- Lightweight sequence labelling when model size and speed matter
 
 ## LSTMs
 ![](../assets/rnn-lstm-gru/lstm.jpg)

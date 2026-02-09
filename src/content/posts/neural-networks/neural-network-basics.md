@@ -85,7 +85,7 @@ $$
 ### Mini-Batch Gradient Descent
 
 * Uses small batches (e.g., 32 to 512) per update.
-* Common default due to efficient hardware utilization and smoother gradients.
+* Common default due to efficient hardware utilisation and smoother gradients.
 
 ## Linear Regression Form
 

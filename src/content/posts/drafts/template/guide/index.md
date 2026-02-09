@@ -1,4 +1,4 @@
----
+﻿---
 title: Simple Guides for Fuwari
 published: 2024-04-01
 description: "How to use this blog template."
@@ -40,7 +40,7 @@ draft: false
 
 
 
-Your post files should be placed in `src/content/posts/` directory. You can also create sub-directories to better organize your posts and assets.
+Your post files should be placed in `src/content/posts/` directory. You can also create sub-directories to better organise your posts and assets.
 
 ```
 src/content/posts/
