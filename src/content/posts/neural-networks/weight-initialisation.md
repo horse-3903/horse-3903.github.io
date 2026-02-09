@@ -31,7 +31,7 @@ pinned: false
 ## Uniform distribution
 * Flat distribution where all values in a range are equally likely.
 * Produces **bounded** weights with no heavy tails.
-![](../assets/weight-initialization/uniform-distribution.svg)
+![](../assets/weight-initialisation/uniform-distribution.svg)
 
 ---
 
