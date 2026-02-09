@@ -1,4 +1,4 @@
-﻿---
+---
 title: Weight Initialisation
 published: 2026-02-07
 description: "Weight initialisation schemes and practical guidelines for stable training."
@@ -26,7 +26,7 @@ pinned: false
 ## Normal distribution
 * Bell‑shaped curve centred at zero.
 * Higher probability near the mean, fewer extreme values.
-![](../assets/weight-initialization/normal-distribution.svg)
+![](../assets/weight-initialisation/normal-distribution.svg)
 
 ## Uniform distribution
 * Flat distribution where all values in a range are equally likely.
