@@ -1,9 +1,9 @@
----
+﻿---
 title: IOAI Syllabus Study Map
 published: 2026-02-08
 description: "A table of contents for studying the IOAI syllabus across the notes."
 tags: ["Syllabus", "Study Guide"]
-category: Notes
+category: IOAI ML Notes
 draft: false
 pinned: true
 ---
@@ -64,8 +64,11 @@ pinned: true
 
 # Computer Vision
 
-- [ ] [Convolutional Layers](/posts/computer-vision/convolutional-layers/)
+- [X] [Convolutional Layers](/posts/computer-vision/convolutional-layers/)
+- [X] [Pre-trained Vision Encoders](/posts/computer-vision/pre-trained-vision-encoders/)
 - [ ] [CNN Tasks](/posts/computer-vision/cnn-tasks/)
+- [ ] [R-CNN Family](/posts/computer-vision/rcnn-family/)
+- [ ] [Vision Transformers](/posts/computer-vision/vision-transformers/)
 - [ ] [Image Augmentation](/posts/computer-vision/image-augmentation/)
 - [ ] [Self-Supervised Learning for Vision](/posts/computer-vision/self-supervised-vision/)
 - [ ] [Vision-Text Encoders](/posts/computer-vision/vision-text-encoders/)
@@ -82,4 +85,5 @@ pinned: true
 - [ ] [Encoder-Decoder Models](/posts/nlp/encoder-decoder-models/)
 - [ ] [Pre-trained Language Models](/posts/nlp/pretrained-language-models/)
 - [ ] [Audio Processing](/posts/nlp/audio-processing/)
+
 

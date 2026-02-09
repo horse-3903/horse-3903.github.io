@@ -1,9 +1,9 @@
----
+﻿---
 title: Self-Supervised Learning for Vision
 published: 2026-02-01
 description: "Pretext tasks and representation learning without labels."
 tags: ["Computer Vision", "Deep Learning"]
-category: Notes
+category: IOAI ML Notes
 draft: false
 ---
 
@@ -35,6 +35,7 @@ draft: false
 
 * Requires large, diverse datasets.
 * Often used before supervised fine-tuning.
+
 
 
 

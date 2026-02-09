@@ -1,9 +1,9 @@
----
+﻿---
 title: CNN Tasks
 published: 2026-02-01
 description: "Core CNN-based vision tasks and common model families."
 tags: ["Computer Vision", "Deep Learning"]
-category: Notes
+category: IOAI ML Notes
 draft: false
 ---
 
@@ -50,6 +50,8 @@ draft: false
 ## Common Models
 
 * U-Net.
+
+
 
 
 

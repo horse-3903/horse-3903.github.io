@@ -1,9 +1,9 @@
----
+﻿---
 title: K-Nearest Neighbours
 published: 2025-11-14
 description: "A comprehensive guide to K-Nearest Neighbours — exploring how local similarity drives instance-based learning."
 tags: ["Classical Machine Learning", "Supervised Learning"]
-category: Notes
+category: IOAI ML Notes
 draft: false
 ---
 
@@ -85,5 +85,7 @@ $$
 * **Weight neighbours** by distance to reduce boundary noise.
 * **Tune $k$ and the metric** with cross-validation.
 * Consider **dimensionality reduction** before KNN in high dimensions.
+
+
 
 

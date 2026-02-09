@@ -1,9 +1,9 @@
----
+﻿---
 title: Text Classification
 published: 2026-02-01
 description: "Common workflows for assigning labels to text."
 tags: ["Natural Language Processing", "Supervised Learning"]
-category: Notes
+category: IOAI ML Notes
 draft: false
 ---
 
@@ -36,6 +36,7 @@ draft: false
 
 * Handle class imbalance carefully.
 * Use proper train/validation splits.
+
 
 
 

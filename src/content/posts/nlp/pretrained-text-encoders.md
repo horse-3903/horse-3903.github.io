@@ -1,9 +1,9 @@
----
+﻿---
 title: Pre-trained Text Encoders
 published: 2026-02-01
 description: "Transformer-based text encoders and their use cases."
 tags: ["Natural Language Processing"]
-category: Notes
+category: IOAI ML Notes
 draft: false
 ---
 
@@ -35,6 +35,7 @@ draft: false
 ## Fine-Tuning
 
 * Update all weights for task-specific performance.
+
 
 
 

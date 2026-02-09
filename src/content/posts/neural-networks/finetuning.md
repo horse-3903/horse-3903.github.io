@@ -1,9 +1,9 @@
----
+﻿---
 title: Fine-tuning
 published: 2026-02-07
 description: "Fine-tuning strategies for adapting pretrained models to specific tasks."
 tags: ["Neural Network", "Deep Learning"]
-category: Notes
+category: IOAI ML Notes
 draft: false
 pinned: false
 ---
@@ -88,3 +88,5 @@ pinned: false
 ## Step 4: Evaluate and deploy
 * Compare against the base model.
 * Save the fine‑tuned weights or adapters.
+
+

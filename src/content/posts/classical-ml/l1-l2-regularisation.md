@@ -1,9 +1,9 @@
----
+﻿---
 title: L1 and L2 Regularisation
 published: 2025-11-15
 description: "A comprehensive guide to L1 and L2 Regularisation — exploring how LASSO and Ridge improve generalisation."
 tags: ["Classical Machine Learning", "Supervised Learning"]
-category: Notes
+category: IOAI ML Notes
 draft: false
 ---
 
@@ -253,5 +253,7 @@ $$
 * Tune $\lambda$ via cross-validation, not by training loss.
 * Use Elastic Net when you want sparsity with grouped features.
 * Track coefficient paths to understand shrinkage effects.
+
+
 
 

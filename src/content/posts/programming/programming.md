@@ -3,9 +3,13 @@ title: Programming Fundamentals
 published: 2025-11-14
 description: "Fundamentals to Programming with Machine Learning — all you need to know about programming concepts and packages"
 tags: ["Programming Fundamentals"]
-category: Notes
+category: IOAI ML Notes
 draft: false
 ---
+
+# Syllabus Map
+
+* Study map: [Syllabus Study Map](/posts/syllabus/ioai-study-map/)
 
 ---
 

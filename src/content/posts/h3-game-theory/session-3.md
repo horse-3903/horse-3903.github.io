@@ -1,9 +1,9 @@
----
+﻿---
 title: H3 Game Theory Session 3
 published: 2026-01-23
 description: "SMU H3 Game Theory Session 3 Notes"
 tags: ["Game Theory", "Economics", "SMU H3"]
-category: Notes
+category: SMU H3 Notes
 draft: false
 ---
 
@@ -436,3 +436,4 @@ $$ \text{let } V_1 = 100, V_2 = 250 $$
 * **First-Price Sealed Auction**: Nash Equilbrium Strategy is $(99.9, 100)$
 * **Second-Price Sealed Auction**: Nash Equilibrium Strategy is $ (100, 250) $
 * In both cases, the seller receives $ 100 $
+

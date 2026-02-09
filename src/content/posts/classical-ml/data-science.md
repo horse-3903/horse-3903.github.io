@@ -1,9 +1,9 @@
----
+﻿---
 title: Data Science Fundamentals
 published: 2026-02-01
 description: "Core data science evaluation, validation, and feature practices."
 tags: ["Data Science Fundamentals"]
-category: Notes
+category: IOAI ML Notes
 draft: false
 ---
 
@@ -231,3 +231,5 @@ draft: false
 * **Flip**, **crop**, **noise injection**.
 * Use augmentation to improve robustness, not to replace real data.
 * For NLP, consider back-translation or synonym replacement.
+
+

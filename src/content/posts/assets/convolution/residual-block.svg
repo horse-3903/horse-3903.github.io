@@ -1,1 +1,33 @@
-<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 198.13 107.19"><rect width="100%" height="100%" fill="#ffffff"/><defs><style>.cls-1{fill:#fff;}.cls-2{fill:none;stroke:#000;stroke-linecap:round;stroke-linejoin:round;stroke-width:0.75px;}.cls-3{fill-rule:evenodd;}.cls-4{font-size:10px;}.cls-4,.cls-5{fill:#231f20;font-family:ArialMT, Arial;}.cls-5{font-size:14px;}</style></defs><rect class="cls-1" x="65.08" y="30.93" width="58.5" height="13.5"/><rect class="cls-2" x="65.08" y="30.93" width="58.5" height="13.5"/><rect class="cls-1" x="65.08" y="57.93" width="58.5" height="13.5"/><rect class="cls-2" x="65.08" y="57.93" width="58.5" height="13.5"/><line class="cls-2" x1="94.33" y1="44.43" x2="94.33" y2="54.62"/><path class="cls-3" d="M94.33,57.93l-2.19-4.38a4.89,4.89,0,0,0,4.38,0Z"/><line class="cls-2" x1="94.33" y1="17.43" x2="94.33" y2="27.62"/><path class="cls-3" d="M94.33,30.93l-2.19-4.38a4.89,4.89,0,0,0,4.38,0Z"/><line class="cls-2" x1="94.33" y1="71.43" x2="94.33" y2="77.12"/><path class="cls-3" d="M94.33,80.43l-2.19-4.38a4.89,4.89,0,0,0,4.38,0Z"/><circle class="cls-1" cx="94.33" cy="84.93" r="4.5"/><circle class="cls-2" cx="94.33" cy="84.93" r="4.5"/><line class="cls-2" x1="92.08" y1="84.93" x2="96.58" y2="84.93"/><line class="cls-2" x1="94.33" y1="87.18" x2="94.33" y2="82.68"/><line class="cls-2" x1="94.33" y1="89.43" x2="94.33" y2="95.12"/><path class="cls-3" d="M94.33,98.43l-2.19-4.38a4.89,4.89,0,0,0,4.38,0Z"/><path class="cls-2" d="M98.83,21.93c42.39,0,49.27,16.6,46.81,39.69-1.13,10.64-4.25,22.65-43.49,23.29"/><path class="cls-3" d="M98.83,84.93l4.4,2.16a4.89,4.89,0,0,1,0-4.38Z"/><line class="cls-2" x1="94.33" y1="21.93" x2="98.83" y2="21.93"/><text class="cls-4" transform="translate(83.49 40.35)">layer</text><text class="cls-4" transform="translate(83.49 67.35)">layer</text><text class="cls-4" transform="translate(151.93 54.62)">identity</text><text class="cls-5" transform="translate(86.33 14.02)">x</text><text class="cls-5" transform="translate(32.93 96.24)">x + F(x)</text><text class="cls-5" transform="translate(35.1 54.62)">F(x)</text></svg>
+<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="-10 -10 218.13 127.19">
+    <rect width="100%" height="100%" fill="#ffffff" />
+    <defs>
+        <style>.cls-1{fill:#fff;}.cls-2{fill:none;stroke:#000;stroke-linecap:round;stroke-linejoin:round;stroke-width:0.75px;}.cls-3{fill-rule:evenodd;}.cls-4{font-size:10px;}.cls-4,.cls-5{fill:#231f20;font-family:ArialMT,
+            Arial;}.cls-5{font-size:14px;}</style>
+    </defs>
+    <rect class="cls-1" x="65.08" y="30.93" width="58.5" height="13.5" />
+    <rect class="cls-2" x="65.08" y="30.93" width="58.5" height="13.5" />
+    <rect class="cls-1" x="65.08" y="57.93" width="58.5" height="13.5" />
+    <rect class="cls-2" x="65.08" y="57.93" width="58.5" height="13.5" />
+    <line class="cls-2" x1="94.33" y1="44.43" x2="94.33" y2="54.62" />
+    <path class="cls-3" d="M94.33,57.93l-2.19-4.38a4.89,4.89,0,0,0,4.38,0Z" />
+    <line class="cls-2" x1="94.33" y1="17.43" x2="94.33" y2="27.62" />
+    <path class="cls-3" d="M94.33,30.93l-2.19-4.38a4.89,4.89,0,0,0,4.38,0Z" />
+    <line class="cls-2" x1="94.33" y1="71.43" x2="94.33" y2="77.12" />
+    <path class="cls-3" d="M94.33,80.43l-2.19-4.38a4.89,4.89,0,0,0,4.38,0Z" />
+    <circle class="cls-1" cx="94.33" cy="84.93" r="4.5" />
+    <circle class="cls-2" cx="94.33" cy="84.93" r="4.5" />
+    <line class="cls-2" x1="92.08" y1="84.93" x2="96.58" y2="84.93" />
+    <line class="cls-2" x1="94.33" y1="87.18" x2="94.33" y2="82.68" />
+    <line class="cls-2" x1="94.33" y1="89.43" x2="94.33" y2="95.12" />
+    <path class="cls-3" d="M94.33,98.43l-2.19-4.38a4.89,4.89,0,0,0,4.38,0Z" />
+    <path class="cls-2"
+        d="M98.83,21.93c42.39,0,49.27,16.6,46.81,39.69-1.13,10.64-4.25,22.65-43.49,23.29" />
+    <path class="cls-3" d="M98.83,84.93l4.4,2.16a4.89,4.89,0,0,1,0-4.38Z" />
+    <line class="cls-2" x1="94.33" y1="21.93" x2="98.83" y2="21.93" />
+    <text class="cls-4" transform="translate(83.49 40.35)">layer</text>
+    <text class="cls-4" transform="translate(83.49 67.35)">layer</text>
+    <text class="cls-4" transform="translate(151.93 54.62)">identity</text>
+    <text class="cls-5" transform="translate(86.33 14.02)">x</text>
+    <text class="cls-5" transform="translate(32.93 96.24)">x + F(x)</text>
+    <text class="cls-5" transform="translate(35.1 54.62)">F(x)</text>
+</svg>

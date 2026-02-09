@@ -1,9 +1,9 @@
----
+﻿---
 title: Encoder-Decoder Models
 published: 2026-02-01
 description: "Sequence-to-sequence models for translation and multimodal tasks."
 tags: ["Natural Language Processing"]
-category: Notes
+category: IOAI ML Notes
 draft: false
 ---
 
@@ -30,6 +30,7 @@ draft: false
 * Machine translation.
 * Summarization.
 * Vision-language modelling.
+
 
 
 

@@ -1,9 +1,9 @@
----
+﻿---
 title: DBSCAN, Hierarchical & Spectral Clustering
 published: 2026-02-01
 description: "A concise guide to density-based, hierarchical, and spectral clustering."
 tags: ["Classical Machine Learning", "Unsupervised Learning"]
-category: Notes
+category: IOAI ML Notes
 draft: false
 ---
 
@@ -79,6 +79,8 @@ draft: false
 
 * Good for **non-convex clusters**.
 * Requires choosing **number of clusters**.
+
+
 
 
 

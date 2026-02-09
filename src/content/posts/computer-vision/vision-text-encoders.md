@@ -1,9 +1,9 @@
----
+﻿---
 title: Vision-Text Encoders
 published: 2026-02-01
 description: "Joint vision-language embedding models."
 tags: ["Computer Vision", "Natural Language Processing"]
-category: Notes
+category: IOAI ML Notes
 draft: false
 ---
 
@@ -35,6 +35,7 @@ draft: false
 
 * Enables zero-shot classification.
 * Useful for retrieval and captioning pipelines.
+
 
 
 

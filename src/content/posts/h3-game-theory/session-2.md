@@ -1,9 +1,9 @@
----
+﻿---
 title: H3 Game Theory Session 2
 published: 2026-01-16
 description: "SMU H3 Game Theory Session 2 Notes"
 tags: ["Game Theory", "Economics", "SMU H3"]
-category: Notes
+category: SMU H3 Notes
 draft: false
 ---
 
@@ -217,3 +217,4 @@ Both **yes** and **no** are equally optimal answers.
 - Challenger should enter the market, and cooperate to maximise payoff
 - Monopolist can improve the outcome by *cutting off the branch* which results in the suboptimal rollback equilibrium
 - This can be done by setting a precedent that they **will not cooperate**
+

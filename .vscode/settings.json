@@ -16,5 +16,8 @@
 	"editor.codeActionsOnSave": {
 		"source.fixAll.biome": "explicit"
 	},
-	"frontMatter.dashboard.openOnStart": false
+	"frontMatter.dashboard.openOnStart": false,
+	"[xml]": {
+		"editor.defaultFormatter": "redhat.vscode-xml"
+	}
 }

@@ -1,9 +1,9 @@
----
+﻿---
 title: Image Augmentation
 published: 2026-02-01
 description: "Simple augmentation techniques to improve generalisation."
 tags: ["Computer Vision"]
-category: Notes
+category: IOAI ML Notes
 draft: false
 ---
 
@@ -36,6 +36,8 @@ draft: false
 
 * Keep augmentations label-preserving.
 * Tune intensity based on task sensitivity.
+
+
 
 
 
