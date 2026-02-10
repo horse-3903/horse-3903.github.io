@@ -1,10 +1,11 @@
-﻿---
+---
 title: Linear Regression
 published: 2025-10-18
 description: "A comprehensive guide to Linear Regression — exploring how it models relationships between variables to make accurate continuous predictions."
 tags: ["Classical Machine Learning", "Supervised Learning"]
 category: IOAI ML Notes
 draft: false
+access: restricted
 ---
 
 
@@ -126,6 +127,7 @@ $$
 * Inspect **residuals** for heteroscedasticity and bias.
 * Use **Ridge or LASSO** when there are many correlated features.
 * Add **interaction terms** only when they are justified by domain knowledge.
+
 
 
 

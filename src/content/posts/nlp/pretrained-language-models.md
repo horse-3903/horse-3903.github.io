@@ -1,10 +1,11 @@
-﻿---
+---
 title: Pre-trained Language Models
 published: 2026-02-01
 description: "Open-source and API-based language model families."
 tags: ["Natural Language Processing"]
 category: IOAI ML Notes
 draft: false
+access: restricted
 ---
 
 # Syllabus Map
@@ -36,6 +37,7 @@ draft: false
 # Practical Notes
 
 * Choose based on latency, cost, and data constraints.
+
 
 
 

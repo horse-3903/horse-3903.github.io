@@ -1,4 +1,4 @@
-﻿---
+---
 title: RNNs, LSTMs and GRUs
 published: 2026-02-04
 updated: 2026-02-04
@@ -7,6 +7,7 @@ tags: ["Neural Networks", "RNN", "LSTM", "GRU"]
 category: IOAI ML Notes
 draft: false
 lang: "en"
+access: restricted
 ---
 # RNNs, LSTMs, and GRUs
 
@@ -206,5 +207,6 @@ $$
 - Similar to LSTMs but with fewer parameters, useful for smaller datasets or faster training
 - Real-time or edge deployments where model size/latency is constrained
 - Robust baselines for many sequence tasks (e.g., sentiment, tagging, forecasting)
+
 
 

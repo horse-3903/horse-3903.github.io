@@ -12,6 +12,7 @@ const postsCollection = defineCollection({
 		category: z.string().optional().nullable().default(""),
 		lang: z.string().optional().default(""),
 		pinned: z.boolean().optional().default(false),
+		access: z.enum(["public", "restricted"]).optional().default("public"),
 
 		/* For internal use */
 		prevTitle: z.string().default(""),

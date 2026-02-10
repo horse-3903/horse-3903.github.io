@@ -1,10 +1,11 @@
-﻿---
+---
 title: t-SNE & UMAP
 published: 2026-02-01
 description: "A concise guide to t-SNE and UMAP for nonlinear dimensionality reduction."
 tags: ["Classical Machine Learning", "Unsupervised Learning"]
 category: IOAI ML Notes
 draft: false
+access: restricted
 ---
 
 # Syllabus Map
@@ -132,5 +133,6 @@ draft: false
 * Often preserves **more global structure** than t-SNE.
 * Fit on training data only; **transform** validation/test consistently.
 * Embeddings are **nonlinear** and **not directly interpretable** as feature axes.
+
 
 

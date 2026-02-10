@@ -1,10 +1,11 @@
-﻿---
+---
 title: "Neural Networks: Perceptron and Training Basics"
 published: 2026-02-06
 description: "Perceptron fundamentals, optimisation, backpropagation, activations, and loss functions."
 tags: ["Neural Networks", "Deep Learning"]
 category: IOAI ML Notes
 draft: false
+access: restricted
 ---
 
 # Syllabus Map
@@ -190,5 +191,6 @@ $$
 
 * Cross Entropy for multi-class problems.
 * Binary Cross Entropy for two-class problems.
+
 
 

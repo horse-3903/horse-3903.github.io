@@ -1,10 +1,11 @@
-﻿---
+---
 title: H3 Game Theory Session 4
 published: 2026-01-30
 description: "SMU H3 Game Theory Session 4 Notes"
 tags: ["Game Theory", "Economics", "SMU H3"]
 category: SMU H3 Notes
 draft: false
+access: restricted
 ---
 
 # SMU H3 Map
@@ -318,4 +319,5 @@ $$
 * Birds are genetically programmed to choose one strategy 
 * The strategy that gets more off-springs survives evolutionary pressures
 * This represents a form of a mixed strategy
+
 

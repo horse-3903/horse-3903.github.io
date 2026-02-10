@@ -1,4 +1,4 @@
-﻿---
+---
 title: Bias-Variance Decomposition
 published: 2026-02-06
 updated: 2026-02-06
@@ -6,6 +6,7 @@ description: "Notes on bias-variance decomposition for regression and classifica
 tags: ["Classical Machine Learning"]
 category: IOAI ML Notes
 draft: false
+access: restricted
 ---
 
 # Syllabus Map
@@ -104,6 +105,7 @@ $$
 
 * Bagging typically reduces variance compared to a single decision tree in the provided examples.
 * For 0-1 loss, if bias is 1, increasing variance can reduce loss (a counterintuitive edge case).
+
 
 
 

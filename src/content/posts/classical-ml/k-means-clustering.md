@@ -1,10 +1,11 @@
-﻿---
+---
 title: K-Means Clustering
 published: 2026-02-07
 description: "A concise guide to k-means clustering, its objective, and practical usage."
 tags: ["Classical Machine Learning", "Unsupervised Learning"]
 category: IOAI ML Notes
 draft: false
+access: restricted
 ---
 
 # Syllabus Map
@@ -74,5 +75,6 @@ $$
 * Requires choosing $k$ (use **elbow** or **silhouette** methods).
 * Struggles with **non-spherical** or **unequal density** clusters.
 * Scale features before clustering to avoid dominance by large‑scale dimensions.
+
 
 

@@ -6,6 +6,7 @@ tags: ["Neural Network", "Deep Learning"]
 category: IOAI ML Notes
 draft: false
 pinned: false
+access: restricted
 ---
 
 # Syllabus Map

@@ -12,7 +12,7 @@ import { Icon } from "astro-icon/components";
 import { licenseConfig } from "src/config";
 import ImageWrapper from "../../components/misc/ImageWrapper.astro";
 import PostMetadata from "../../components/PostMeta.astro";
-import { profileConfig, siteConfig } from "../../config";
+import { accessConfig, profileConfig, siteConfig } from "../../config";
 import { formatDateToYYYYMMDD } from "../../utils/date-utils";
 
 export async function getStaticPaths() {
@@ -27,6 +27,8 @@ const { entry } = Astro.props;
 const { Content, headings } = await entry.render();
 
 const { remarkPluginFrontmatter } = await entry.render();
+const requiresAccessCode =
+	accessConfig.enabled && entry.data.access === "restricted";
 
 const jsonLd = {
 	"@context": "https://schema.org",
@@ -103,9 +105,45 @@ const jsonLd = {
             }
 
 
-            <Markdown class="mb-6 markdown-content onload-animation">
-                <Content />
-            </Markdown>
+            {requiresAccessCode && (
+                <div id="access-gate" data-access-required="true" class="card-base mb-6 p-5 md:p-6 rounded-2xl border border-black/10 dark:border-white/10 relative overflow-hidden">
+                    <div class="absolute inset-0 pointer-events-none bg-gradient-to-br from-black/[0.04] via-transparent to-black/[0.06] dark:from-white/[0.06] dark:to-white/[0.02]"></div>
+                    <div class="relative">
+                        <div class="flex items-center gap-3 mb-2">
+                            <div class="h-9 w-9 rounded-xl bg-black/5 dark:bg-white/10 text-black/70 dark:text-white/80 flex items-center justify-center">
+                                <Icon name="material-symbols:lock"></Icon>
+                            </div>
+                            <div>
+                                <div class="text-2xl font-bold text-black/90 dark:text-white/90">Protected post</div>
+                                <div class="text-xs text-black/50 dark:text-white/50">Access required</div>
+                            </div>
+                        </div>
+                        <div class="text-sm text-black/60 dark:text-white/60 mb-4 max-w-2xl">
+                            Enter the access code once to unlock all protected posts on this device.
+                        </div>
+                        <div class="flex flex-col md:flex-row gap-3 items-start md:items-center">
+                            <div class="flex-1 w-full md:max-w-sm">
+                                <input id="access-code-input" type="password" inputmode="text" autocomplete="off"
+                                    class="w-full px-3 py-2.5 rounded-lg border border-black/10 dark:border-white/10 bg-white/80 dark:bg-white/5 text-black/90 dark:text-white/90 placeholder:text-black/40 dark:placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-[var(--primary)]/30"
+                                    placeholder="Access code" />
+                            </div>
+                            <button id="access-code-submit" class="btn-regular px-5 py-2.5 rounded-lg flex items-center gap-2 text-black/90 dark:text-white/90">
+                                <Icon name="material-symbols:lock-open"></Icon>
+                                Unlock
+                            </button>
+                        </div>
+                        <div id="access-code-error" class="text-sm text-red-600 dark:text-red-400 mt-3 hidden" aria-live="polite">
+                            Incorrect code. Try again.
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            <div id="protected-content" class:list={["mb-6", {"hidden": requiresAccessCode}]}>
+                <Markdown class="markdown-content onload-animation">
+                    <Content />
+                </Markdown>
+            </div>
 
             {licenseConfig.enable && <License title={entry.data.title} slug={entry.slug} pubDate={entry.data.published} class="mb-6 rounded-xl license-container onload-animation"></License>}
 
@@ -143,4 +181,86 @@ const jsonLd = {
             )}
         </a>
     </div>
+    <script
+        is:inline
+        define:vars={{
+            accessCodeHash: accessConfig.codeHash,
+            storageKey: accessConfig.storageKey,
+        }}
+    >
+        const initAccessGate = () => {
+            const gate = document.getElementById("access-gate");
+            const content = document.getElementById("protected-content");
+            const input = document.getElementById("access-code-input");
+            const button = document.getElementById("access-code-submit");
+            const error = document.getElementById("access-code-error");
+
+            if (!gate || !content || !input || !button) {
+                return;
+            }
+
+            const unlock = () => {
+                gate?.classList.add("hidden");
+                content?.classList.remove("hidden");
+            };
+
+            if (localStorage.getItem(storageKey) === "true") {
+                unlock();
+            }
+
+            const toHex = (buffer) => {
+                const bytes = new Uint8Array(buffer);
+                return Array.from(bytes)
+                    .map((b) => b.toString(16).padStart(2, "0"))
+                    .join("");
+            };
+
+            const hashText = async (text) => {
+                const data = new TextEncoder().encode(text);
+                const digest = await crypto.subtle.digest("SHA-256", data);
+                return toHex(digest);
+            };
+
+            const tryUnlock = async () => {
+                if (!input) return;
+                const value = input.value.trim();
+                if (value) {
+                    const hash = await hashText(value);
+                    if (hash === accessCodeHash) {
+                        localStorage.setItem(storageKey, "true");
+                        unlock();
+                        return;
+                    }
+                }
+                error?.classList.remove("hidden");
+            };
+
+            const disableWhile = async (fn) => {
+                button.disabled = true;
+                button.classList.add("opacity-70", "pointer-events-none");
+                try {
+                    await fn();
+                } finally {
+                    button.disabled = false;
+                    button.classList.remove("opacity-70", "pointer-events-none");
+                }
+            };
+
+            const onSubmit = () => disableWhile(tryUnlock);
+
+            button.addEventListener("click", onSubmit);
+            input.addEventListener("keydown", (event) => {
+                if (event.key === "Enter") onSubmit();
+            });
+            input.addEventListener("input", () => {
+                error?.classList.add("hidden");
+            });
+        };
+
+        initAccessGate();
+        if (window?.swup?.hooks) {
+            window.swup.hooks.on("content:replace", initAccessGate);
+            window.swup.hooks.on("page:view", initAccessGate);
+        }
+    </script>
 </MainGridLayout>

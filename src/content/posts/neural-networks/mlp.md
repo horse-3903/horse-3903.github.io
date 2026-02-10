@@ -1,4 +1,4 @@
-﻿---
+---
 title: Multi-Layer Perceptrons (MLP)
 published: 2026-02-07
 description: "Core concepts, architecture, and training notes for multi-layer perceptrons."
@@ -6,6 +6,7 @@ tags: ["Neural Network", "Deep Learning"]
 category: IOAI ML Notes
 draft: false
 pinned: false
+access: restricted
 ---
 
 # Syllabus Map
@@ -102,5 +103,6 @@ pinned: false
 * Use MLPs for **tabular classification/regression**, embeddings, and small‑scale tasks.
 * Pair with **normalisation** and **regularisation** for stability.
 * For images or text, consider CNNs or transformers unless the input is already vectorised.
+
 
 

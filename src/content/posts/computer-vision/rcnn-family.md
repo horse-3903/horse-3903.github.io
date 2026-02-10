@@ -1,10 +1,11 @@
-﻿---
+---
 title: R-CNN, Fast R-CNN, and Faster R-CNN
 published: 2026-02-09
 description: "Region-based CNN detectors and how they evolved from R-CNN to Faster R-CNN."
 tags: ["Computer Vision", "Deep Learning"]
 category: IOAI ML Notes
 draft: false
+access: restricted
 ---
 
 # Syllabus Map
@@ -106,5 +107,6 @@ model.roi_heads.box_predictor = FastRCNNPredictor(in_features, num_classes)
 
 model.train()
 ```
+
 
 

@@ -1,4 +1,4 @@
-﻿---
+---
 title: Optimisers, Convergence, and Regularisation
 published: 2026-02-07
 description: "Optimisers, learning rate behaviour, and regularisation techniques such as dropout and weight decay."
@@ -6,6 +6,7 @@ tags: ["Neural Network", "Deep Learning"]
 category: IOAI ML Notes
 draft: false
 pinned: false
+access: restricted
 ---
 
 # Syllabus Map
@@ -264,5 +265,6 @@ for epoch in range(100):
 * Combine **data augmentation** with regularisation for best results.
 * Use **dropout** more in fully connected layers than in convolutional layers.
 * Prefer **AdamW** when using weight decay with Adam-style optimisers.
+
 
 

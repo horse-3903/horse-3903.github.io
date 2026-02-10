@@ -101,3 +101,9 @@ export type BlogPostData = {
 export type ExpressiveCodeConfig = {
 	theme: string;
 };
+
+export type AccessConfig = {
+	enabled: boolean;
+	codeHash: string;
+	storageKey: string;
+};

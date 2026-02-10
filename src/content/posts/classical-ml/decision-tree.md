@@ -1,10 +1,11 @@
-﻿---
+---
 title: Decision Tree
 published: 2025-10-22
 description: "A comprehensive guide to Decision Trees — exploring how they recursively split data to model complex decision boundaries for classification and regression tasks."
 tags: ["Classical Machine Learning", "Supervised Learning"]
 category: IOAI ML Notes
 draft: false
+access: restricted
 ---
 
 
@@ -514,6 +515,7 @@ $$
 * Use cross-validation to pick pruning or depth settings.
 * Handle class imbalance with class weights or balanced sampling.
 * Prune for generalisation, not just training accuracy.
+
 
 
 

@@ -1,10 +1,11 @@
-﻿---
+---
 title: Ensemble Methods
 published: 2026-01-21
 description: "A comprehensive guide to ensemble learning — exploring how combining multiple models improves accuracy, robustness, and generalisation."
 tags: ["Classical Machine Learning", "Supervised Learning"]
 category: IOAI ML Notes
 draft: false
+access: restricted
 --- 
 
 
@@ -376,6 +377,7 @@ $$
 * Keep base models diverse to avoid correlated errors.
 * Monitor calibration; averaging can still be miscalibrated.
 * Apply early stopping for boosting to control overfitting.
+
 
 
 

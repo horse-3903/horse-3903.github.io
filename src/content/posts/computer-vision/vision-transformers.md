@@ -1,10 +1,11 @@
-﻿---
+---
 title: Vision Transformers
 published: 2026-02-09
 description: "How vision transformers model images as token sequences."
 tags: ["Computer Vision", "Deep Learning"]
 category: IOAI ML Notes
 draft: false
+access: restricted
 ---
 
 # Syllabus Map
@@ -79,4 +80,5 @@ model.heads.head = nn.Linear(model.heads.head.in_features, num_classes)
 * Patch size trades off detail vs compute.
 * Use strong augmentation and regularisation for smaller datasets.
 * For dense prediction (segmentation), use token-to-pixel heads.
+
 

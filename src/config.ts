@@ -1,4 +1,5 @@
 import type {
+	AccessConfig,
 	ExpressiveCodeConfig,
 	LicenseConfig,
 	NavBarConfig,
@@ -88,4 +89,10 @@ export const expressiveCodeConfig: ExpressiveCodeConfig = {
 	// Note: Some styles (such as background color) are being overridden, see the astro.config.mjs file.
 	// Please select a dark theme, as this blog theme currently only supports dark background color
 	theme: "github-dark",
+};
+
+export const accessConfig: AccessConfig = {
+	enabled: true,
+	codeHash: "a6e2dc2ba26aeb86b4ff79e4f53da8d17fe94b1161a51463b4e6d13bbdb1f294",
+	storageKey: "site_access_granted",
 };

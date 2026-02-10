@@ -1,10 +1,11 @@
-﻿---
+---
 title: Convolutional Layers
 published: 2026-02-01
 description: "Convolution basics and core CNN building blocks."
 tags: ["Computer Vision", "Deep Learning"]
 category: IOAI ML Notes
 draft: false
+access: restricted
 ---
 
 # Syllabus Map
@@ -213,5 +214,6 @@ from torch.utils.data import DataLoader
 train_loader = DataLoader(train_ds, batch_size=32, shuffle=True, num_workers=2)
 val_loader = DataLoader(val_ds, batch_size=32, shuffle=False, num_workers=2)
 ```
+
 
 

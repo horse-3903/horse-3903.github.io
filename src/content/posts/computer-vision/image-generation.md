@@ -1,10 +1,11 @@
-﻿---
+---
 title: Image Generation
 published: 2026-02-01
 description: "GANs and diffusion models for generating images."
 tags: ["Computer Vision", "Deep Learning"]
 category: IOAI ML Notes
 draft: false
+access: restricted
 ---
 
 # Syllabus Map
@@ -42,6 +43,7 @@ draft: false
 
 * Produces high-quality results.
 * Often slower at inference.
+
 
 
 

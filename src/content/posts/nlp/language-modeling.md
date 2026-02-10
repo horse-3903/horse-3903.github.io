@@ -1,10 +1,11 @@
-﻿---
+---
 title: Language Modelling
 published: 2026-02-01
 description: "Modelling token sequences for generation and prediction."
 tags: ["Natural Language Processing"]
 category: IOAI ML Notes
 draft: false
+access: restricted
 ---
 
 # Syllabus Map
@@ -40,6 +41,7 @@ draft: false
 ## Practical Notes
 
 * Used by encoder models like BERT.
+
 
 
 

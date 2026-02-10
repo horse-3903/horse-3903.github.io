@@ -1,10 +1,11 @@
-﻿---
+---
 title: Pre-trained Vision Encoders
 published: 2026-02-08
 description: "Common vision backbones and how to use them for transfer learning."
 tags: ["Computer Vision", "Deep Learning"]
 category: IOAI ML Notes
 draft: false
+access: restricted
 ---
 
 # Syllabus Map
@@ -241,5 +242,6 @@ model.classifier = nn.Linear(model.classifier.in_features, num_classes)
 
 * Use for transfer learning.
 * Freeze early layers when data is limited.
+
 
 
