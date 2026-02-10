@@ -5,6 +5,7 @@ description: "Fundamentals to Programming with Machine Learning — all you need
 tags: ["Programming Fundamentals"]
 category: IOAI ML Notes
 draft: false
+access: public
 ---
 
 # Syllabus Map

@@ -5,7 +5,7 @@ description: "Perceptron fundamentals, optimisation, backpropagation, activation
 tags: ["Neural Networks", "Deep Learning"]
 category: IOAI ML Notes
 draft: false
-access: restricted
+access: public
 ---
 
 # Syllabus Map

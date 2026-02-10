@@ -5,7 +5,7 @@ description: "A comprehensive guide to Decision Trees — exploring how they rec
 tags: ["Classical Machine Learning", "Supervised Learning"]
 category: IOAI ML Notes
 draft: false
-access: restricted
+access: public
 ---
 
 

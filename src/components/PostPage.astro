@@ -2,13 +2,15 @@
 import type { CollectionEntry } from "astro:content";
 import { getPostUrlBySlug } from "@utils/url-utils";
 import PostCard from "./PostCard.astro";
+import { Icon } from "astro-icon/components";
+import { accessConfig } from "../config";
 
 const { page } = Astro.props;
 
 let delay = 0;
 const interval = 50;
 ---
-<div class="transition flex flex-col rounded-[var(--radius-large)] bg-[var(--card-bg)] py-1 md:py-0 md:bg-transparent md:gap-4 mb-4">
+<div class="transition flex flex-col rounded-[var(--radius-large)] bg-[var(--card-bg)] py-1 md:py-0 md:bg-transparent md:gap-4 mb-4 overflow-visible">
     {page.data.map((entry: CollectionEntry<"posts">) => (
         <PostCard
                 entry={entry}
@@ -26,3 +28,28 @@ const interval = 50;
         ></PostCard>
     ))}
 </div>
+<template id="access-icon-locked">
+    <Icon name="material-symbols:lock" class="text-[1rem]"></Icon>
+</template>
+<template id="access-icon-unlocked">
+    <Icon name="material-symbols:lock-open" class="text-[1rem]"></Icon>
+</template>
+<script is:inline define:vars={{ storageKey: accessConfig.storageKey }}>
+    const applyAccessIcons = () => {
+        const unlocked = localStorage.getItem(storageKey) === "true";
+        const icons = document.querySelectorAll("[data-access-icon]");
+        const lockedTemplate = document.getElementById("access-icon-locked");
+        const unlockedTemplate = document.getElementById("access-icon-unlocked");
+        if (!lockedTemplate || !unlockedTemplate) return;
+        const template = unlocked ? unlockedTemplate : lockedTemplate;
+        icons.forEach((el) => {
+            el.innerHTML = template.innerHTML;
+        });
+    };
+
+    applyAccessIcons();
+    if (window?.swup?.hooks) {
+        window.swup.hooks.on("content:replace", applyAccessIcons);
+        window.swup.hooks.on("page:view", applyAccessIcons);
+    }
+</script>

@@ -5,7 +5,7 @@ description: "A comprehensive guide to Linear Regression — exploring how it mo
 tags: ["Classical Machine Learning", "Supervised Learning"]
 category: IOAI ML Notes
 draft: false
-access: restricted
+access: public
 ---
 
 

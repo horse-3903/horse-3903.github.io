@@ -5,7 +5,7 @@ description: "Convolution basics and core CNN building blocks."
 tags: ["Computer Vision", "Deep Learning"]
 category: IOAI ML Notes
 draft: false
-access: restricted
+access: public
 ---
 
 # Syllabus Map

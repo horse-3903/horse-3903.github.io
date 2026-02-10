@@ -5,7 +5,7 @@ description: "Core CNN-based vision tasks and common model families."
 tags: ["Computer Vision", "Deep Learning"]
 category: IOAI ML Notes
 draft: false
-access: restricted
+access: public
 ---
 
 # Syllabus Map

@@ -6,7 +6,7 @@ description: "Notes on bias-variance decomposition for regression and classifica
 tags: ["Classical Machine Learning"]
 category: IOAI ML Notes
 draft: false
-access: restricted
+access: public
 ---
 
 # Syllabus Map

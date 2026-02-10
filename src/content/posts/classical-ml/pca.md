@@ -5,7 +5,7 @@ description: "A comprehensive guide to PCA — reducing dimensionality by projec
 tags: ["Classical Machine Learning", "Unsupervised Learning"]
 category: IOAI ML Notes
 draft: false
-access: restricted
+access: public
 ---
 
 

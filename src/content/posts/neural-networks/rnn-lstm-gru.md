@@ -7,7 +7,7 @@ tags: ["Neural Networks", "RNN", "LSTM", "GRU"]
 category: IOAI ML Notes
 draft: false
 lang: "en"
-access: restricted
+access: public
 ---
 # RNNs, LSTMs, and GRUs
 

@@ -1,4 +1,4 @@
-﻿---
+---
 title: SMU H3 Game Theory Map
 published: 2026-02-06
 description: "A content map for the SMU H3 game theory notes."

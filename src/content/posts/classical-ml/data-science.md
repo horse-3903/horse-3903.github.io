@@ -5,7 +5,7 @@ description: "Core data science evaluation, validation, and feature practices."
 tags: ["Data Science Fundamentals"]
 category: IOAI ML Notes
 draft: false
-access: restricted
+access: public
 ---
 
 # Syllabus Map

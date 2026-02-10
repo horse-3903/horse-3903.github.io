@@ -5,7 +5,7 @@ description: "Transformer-based text encoders and their use cases."
 tags: ["Natural Language Processing"]
 category: IOAI ML Notes
 draft: false
-access: restricted
+access: public
 ---
 
 # Syllabus Map

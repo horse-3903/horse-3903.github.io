@@ -5,7 +5,7 @@ description: "A concise guide to k-means clustering, its objective, and practica
 tags: ["Classical Machine Learning", "Unsupervised Learning"]
 category: IOAI ML Notes
 draft: false
-access: restricted
+access: public
 ---
 
 # Syllabus Map

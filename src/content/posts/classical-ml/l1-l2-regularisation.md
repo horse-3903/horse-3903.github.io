@@ -5,7 +5,7 @@ description: "A comprehensive guide to L1 and L2 Regularisation — exploring ho
 tags: ["Classical Machine Learning", "Supervised Learning"]
 category: IOAI ML Notes
 draft: false
-access: restricted
+access: public
 ---
 
 

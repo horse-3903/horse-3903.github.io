@@ -5,7 +5,7 @@ description: "Open-source and API-based language model families."
 tags: ["Natural Language Processing"]
 category: IOAI ML Notes
 draft: false
-access: restricted
+access: public
 ---
 
 # Syllabus Map

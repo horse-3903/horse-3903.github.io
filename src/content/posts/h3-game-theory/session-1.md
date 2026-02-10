@@ -5,7 +5,7 @@ description: "SMU H3 Game Theory Session 1 Notes"
 tags: ["Game Theory", "Economics", "SMU H3"]
 category: SMU H3 Notes
 draft: false
-access: restricted
+access: public
 ---
 
 # SMU H3 Map
