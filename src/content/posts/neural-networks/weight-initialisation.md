@@ -99,4 +99,3 @@ $$
 
 * Match initialisation to activation function.
 * Biases are often initialised to zero.
-
