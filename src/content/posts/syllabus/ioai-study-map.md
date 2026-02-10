@@ -8,7 +8,7 @@ draft: false
 pinned: true
 ---
 
-## Syllabus
+# IOAI Syllabus Study Map
 
 # Programming Fundamentals
 
