@@ -68,8 +68,13 @@ const { remarkPluginFrontmatter } = await entry.render();
                 </div>
             )}
             {isRestricted && (
-                <div class="meta-icon text-[var(--primary)] shrink-0 ml-1 access-lock-icon" data-access-icon>
-                    <Icon name="material-symbols:lock" class="text-[1rem]"></Icon>
+                <div class="meta-icon text-[var(--primary)] shrink-0 ml-1 access-lock-icon" aria-label="Restricted">
+                    <span class="access-locked">
+                        <Icon name="material-symbols:lock" class="text-[1rem]"></Icon>
+                    </span>
+                    <span class="access-unlocked">
+                        <Icon name="material-symbols:lock-open" class="text-[1rem]"></Icon>
+                    </span>
                 </div>
             )}
         </div>
@@ -128,5 +133,14 @@ const { remarkPluginFrontmatter } = await entry.render();
     }
     :global(.dark) .post-card-outline {
         border-color: rgba(255, 255, 255, 0.12);
+    }
+    :global(.access-unlocked) .access-lock-icon .access-locked {
+        display: none;
+    }
+    :global(.access-unlocked) .access-lock-icon .access-unlocked {
+        display: inline;
+    }
+    :global(.access-lock-icon) .access-unlocked {
+        display: none;
     }
 </style>

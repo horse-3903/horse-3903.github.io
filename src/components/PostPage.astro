@@ -1,7 +1,6 @@
 ---
 import type { CollectionEntry } from "astro:content";
 import { getPostUrlBySlug } from "@utils/url-utils";
-import { Icon } from "astro-icon/components";
 import { accessConfig } from "../config";
 import PostCard from "./PostCard.astro";
 
@@ -28,28 +27,15 @@ const interval = 50;
         ></PostCard>
     ))}
 </div>
-<template id="access-icon-locked">
-    <Icon name="material-symbols:lock" class="text-[1rem]"></Icon>
-</template>
-<template id="access-icon-unlocked">
-    <Icon name="material-symbols:lock-open" class="text-[1rem]"></Icon>
-</template>
 <script is:inline define:vars={{ storageKey: accessConfig.storageKey }}>
-    const applyAccessIcons = () => {
+    const applyAccessState = () => {
         const unlocked = localStorage.getItem(storageKey) === "true";
-        const icons = document.querySelectorAll("[data-access-icon]");
-        const lockedTemplate = document.getElementById("access-icon-locked");
-        const unlockedTemplate = document.getElementById("access-icon-unlocked");
-        if (!lockedTemplate || !unlockedTemplate) return;
-        const template = unlocked ? unlockedTemplate : lockedTemplate;
-        icons.forEach((el) => {
-            el.innerHTML = template.innerHTML;
-        });
+        document.documentElement.classList.toggle("access-unlocked", unlocked);
     };
 
-    applyAccessIcons();
+    applyAccessState();
     if (window?.swup?.hooks) {
-        window.swup.hooks.on("content:replace", applyAccessIcons);
-        window.swup.hooks.on("page:view", applyAccessIcons);
+        window.swup.hooks.on("content:replace", applyAccessState);
+        window.swup.hooks.on("page:view", applyAccessState);
     }
 </script>

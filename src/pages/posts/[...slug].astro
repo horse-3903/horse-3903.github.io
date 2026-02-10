@@ -202,6 +202,7 @@ const jsonLd = {
             const unlock = () => {
                 gate?.classList.add("hidden");
                 content?.classList.remove("hidden");
+                document.documentElement.classList.add("access-unlocked");
             };
 
             if (localStorage.getItem(storageKey) === "true") {
