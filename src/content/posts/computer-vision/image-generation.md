@@ -1,13 +1,12 @@
 ---
 title: Image Generation
-published: 2026-02-01
+published: 2026-02-12
 description: "GANs and diffusion models for generating images."
 tags: ["Computer Vision", "Deep Learning"]
 category: IOAI ML Notes
 draft: false
 access: restricted
 ---
-
 # Syllabus Map
 
 * Study map: [Syllabus Study Map](/posts/syllabus/ioai-study-map/)
@@ -15,7 +14,7 @@ access: restricted
 ---
 # Overview
 
-* Generative models synthesize realistic images.
+* Generative models synthesise realistic images.
 
 ---
 
@@ -23,8 +22,8 @@ access: restricted
 
 ## Core Idea
 
-* Generator creates samples.
-* Discriminator judges real vs fake.
+* Generatour creates samples.
+* Discriminatour judges real vs fake.
 
 ## Practical Notes
 

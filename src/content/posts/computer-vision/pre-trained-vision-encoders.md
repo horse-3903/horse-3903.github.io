@@ -1,13 +1,12 @@
 ---
 title: Pre-trained Vision Encoders
-published: 2026-02-08
+published: 2026-02-12
 description: "Common vision backbones and how to use them for transfer learning."
 tags: ["Computer Vision", "Deep Learning"]
 category: IOAI ML Notes
 draft: false
 access: restricted
 ---
-
 # Syllabus Map
 
 * Study map: [Syllabus Study Map](/posts/syllabus/ioai-study-map/)
@@ -53,7 +52,7 @@ model.fc = nn.Linear(model.fc.in_features, num_classes)
 
 ## Hypothesis Space (Intuition)
 
-* ResNets **reparameterize** the function space around the identity.
+* ResNets **reparameterise** the function space around the identity.
 * Easier to search near $H(x) \approx x$ than arbitrary $H(x)$.
 * Can be viewed as an **ensemble of shallow paths** through the network.
 
@@ -61,7 +60,7 @@ model.fc = nn.Linear(model.fc.in_features, num_classes)
 
 ### ResNet vs VGG
 * VGG: deeper stacks of convs but **no skips** → degradation at high depth.
-* ResNet: skips stabilize very deep training.
+* ResNet: skips stabilise very deep training.
 
 ### DenseNet vs ResNet
 * **ResNet**: addition of features.
@@ -75,7 +74,7 @@ model.fc = nn.Linear(model.fc.in_features, num_classes)
 ## Failure Cases & Tradeoffs
 
 * **Very deep** nets can still be hard to optimise if data is small.
-* **Pooling** or aggressive stride can remove spatial detail (hurts localization).
+* **Pooling** or aggressive stride can remove spatial detail (hurts localisation).
 * **Residuals help less** when the task doesn’t benefit from depth.
 * **DenseNet**: strong accuracy and reuse, but memory-heavy.
 
@@ -123,7 +122,7 @@ $$
 \mathcal{O}(K^2 M H W + M N H W)
 $$
 * **Notation**:
-  * **$K$**: kernel size (assume square).
+  * **$K$**: kernel sise (assume square).
   * **$H, W$**: input height and width.
   * **$M$**: input channels.
   * **$N$**: output channels.
@@ -136,7 +135,7 @@ $$
 $$
 \text{depthwise + pointwise: } K^2 M H W + M N H W
 $$
-* **When to use**: mobile and edge devices where latency and size matter.
+* **When to use**: mobile and edge devices where latency and sise matter.
 ## PyTorch access
 ```py
 from torchvision import models

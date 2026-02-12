@@ -1,13 +1,12 @@
 ---
 title: Vision-Text Encoders
-published: 2026-02-01
+published: 2026-02-12
 description: "Joint vision-language embedding models."
 tags: ["Computer Vision", "Natural Language Processing"]
 category: IOAI ML Notes
 draft: false
 access: restricted
 ---
-
 # Syllabus Map
 
 * Study map: [Syllabus Study Map](/posts/syllabus/ioai-study-map/)

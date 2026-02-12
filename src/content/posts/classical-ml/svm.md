@@ -1,21 +1,19 @@
 ---
-title: Support Vector Machines
-published: 2026-01-17
-description: "A comprehensive guide to support vector machines — exploring how margin maximisation and regularisation create powerful and flexible classifiers."
+title: Support Vectour Machines
+published: 2026-02-12
+description: "A comprehensive guide to support vectour machines — exploring how margin maximisation and regularisation create powerful and flexible classifiers."
 tags: ["Classical Machine Learning", "Supervised Learning"]
 category: IOAI ML Notes
 draft: false
 access: public
 ---
-
-
 # Syllabus Map
 
 * Study map: [Syllabus Study Map](/posts/syllabus/ioai-study-map/)
 
 ---
 # Overview
-* **Support Vector Machines (SVMs)** are effective out-of-the-box classifiers.
+* **Support Vectour Machines (SVMs)** are effective out-of-the-box classifiers.
 
 * SVM is also a generalisation of the **maximal margin classifier**.
 
@@ -58,7 +56,7 @@ $$
 * The **optimal separating hyperplane** is the solution that is farthest away from the closest data point, or **maximises the margin**.
 
 ## Defining the margin
-* In order to maximize the distance between the two hyperplanes, we need to find a way to calculate the margin.
+* In order to maximise the distance between the two hyperplanes, we need to find a way to calculate the margin.
 
 * The margin can also be interpreted as a direction perpendicular to the hyperplane with a magnitude equal to the margin.
 
@@ -104,12 +102,12 @@ $$
 $$
 
 * Maximising the margin $ \gamma $ is equivalent to: 
-  * Minimising the denominator $ \sqrt{w_1^2 + w_2^2 + \cdots + w_p^2} $
+  * Minimising the denominatour $ \sqrt{w_1^2 + w_2^2 + \cdots + w_p^2} $
   * Minimising the squared norm $ w_1^2 + w_2^2 + \cdots + w_p^2 $
 
 ### 4. Primal Optimisation Problem
 
-* Maximising the margin is equivalent to minimising the squared norm of the weight vector.
+* Maximising the margin is equivalent to minimising the squared norm of the weight vectour.
 
 $$
 \min_{w_1, \dots, w_p, b} \frac{1}{2}(w_1^2 + \cdots + w_p^2)
@@ -200,7 +198,7 @@ $$
 * By introducing two terms, we can allow more "slack" in determining a (mostly) optimal margin hyperplane.
 
 * The new terms are:
-  * $ \xi_i $ : *Slack variable* which gives an acceptable margin of error, allowing input $ x_i $ to be closer (or even the wrong side) of the hyperplane.
+  * $ \xi_i $ : *Slack variable* which gives an acceptable margin of errour, allowing input $ x_i $ to be closer (or even the wrong side) of the hyperplane.
   * $ C $ : *Slack penalty* which controls how much slack is allowed.
 
 * Thus, the constrained optimisation problem becomes:
@@ -219,7 +217,7 @@ $$
 Acts as a regularisation parameter.
 
 # Geometric Interpretation of the SVM
-- In vector form, 
+- In vectour form, 
   - $w$ is perpendicular (normal) to the hyperplane.
   - $b$ controls the offset of the hyperplane from the origin.
 - $|w|$ controls the margin width.
@@ -228,11 +226,11 @@ Acts as a regularisation parameter.
 - Classification is based on the sign of $w^Tx + b$.
 - Thus, SVM chooses the boundary that is most robust to perturbations.
 
-# Support Vector Machines In Practice
+# Support Vectour Machines In Practice
 
 ## When to Use SVMs
 
-* When you need a strong baseline for medium-sized datasets.
+* When you need a strong baseline for medium-sised datasets.
 * When data is high-dimensional and sparse (linear SVM).
 * When margin-based robustness is valuable.
 * When nonlinear boundaries can be captured with kernels.

@@ -1,14 +1,12 @@
 ---
 title: K-Nearest Neighbours
-published: 2025-11-14
+published: 2026-02-12
 description: "A comprehensive guide to K-Nearest Neighbours — exploring how local similarity drives instance-based learning."
 tags: ["Classical Machine Learning", "Supervised Learning"]
 category: IOAI ML Notes
 draft: false
 access: public
 ---
-
-
 # Syllabus Map
 
 * Study map: [Syllabus Study Map](/posts/syllabus/ioai-study-map/)

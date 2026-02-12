@@ -1,6 +1,6 @@
 ---
 title: Optimisers, Convergence, and Regularisation
-published: 2026-02-07
+published: 2026-02-12
 description: "Optimisers, learning rate behaviour, and regularisation techniques such as dropout and weight decay."
 tags: ["Neural Network", "Deep Learning"]
 category: IOAI ML Notes
@@ -8,7 +8,6 @@ draft: false
 pinned: false
 access: public
 ---
-
 # Syllabus Map
 
 * Study map: [Syllabus Study Map](/posts/syllabus/ioai-study-map/)
@@ -67,7 +66,7 @@ $$
   * $ r_t $ is the **accumulated sum of squared gradients** for each parameter.
   * It grows over time, so parameters with large historical gradients get **smaller effective steps**.
   * $ \eta $ is the **global base learning rate**, while $ r_t $ is the **per‑parameter history** that scales it.
-  * Effective step size is $ \eta \over (\sqrt{r_t} + \epsilon) $, which shrinks as $ r_t $ increases.
+  * Effective step sise is $ \eta \over (\sqrt{r_t} + \epsilon) $, which shrinks as $ r_t $ increases.
 * Update rule:
 $$
 r_t = r_{t-1} + g_t^2
@@ -201,7 +200,7 @@ $$
 ## Diagnostics
 * Plot **loss curves** for train and validation.
 * Watch for **overfitting** (train loss down, val loss up).
-* Monitor gradients to detect **exploding/vanishing** behaviour.
+* Monitour gradients to detect **exploding/vanishing** behaviour.
 
 ---
 
@@ -215,7 +214,7 @@ $$
 * Randomly **zeroes activations** during training:  
   $ h' = m \odot h, \quad m \sim \text{Bernoulli}(p) $
 * Forces the network to learn **redundant representations**.
-* Use typical rates: 0.1–0.5 depending on model size.
+* Use typical rates: 0.1–0.5 depending on model sise.
 
 ### PyTorch example
 ```py

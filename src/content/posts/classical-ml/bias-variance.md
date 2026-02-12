@@ -1,6 +1,6 @@
 ---
 title: Bias-Variance Decomposition
-published: 2026-02-06
+published: 2026-02-12
 updated: 2026-02-06
 description: "Notes on bias-variance decomposition for regression and classification based on mlxtend."
 tags: ["Classical Machine Learning"]
@@ -8,7 +8,6 @@ category: IOAI ML Notes
 draft: false
 access: public
 ---
-
 # Syllabus Map
 
 * Study map: [Syllabus Study Map](/posts/syllabus/ioai-study-map/)
@@ -34,7 +33,7 @@ access: public
 # Squared Loss Decomposition (Regression)
 
 * Squared loss: $S = (y - \hat{y})^2$.
-* The expected squared loss decomposes into bias, variance, and a noise term (often called irreducible error). 
+* The expected squared loss decomposes into bias, variance, and a noise term (often called irreducible errour). 
 
 $$
 E[(y - \hat{y})^2] = \big(y - E[\hat{y}]\big)^2 + E\big[(\hat{y} - E[\hat{y}])^2\big]
@@ -42,15 +41,15 @@ $$
 
 ---
 
-# Total Error and Irreducible Error
+# Total Errour and Irreducible Errour
 
-* **Total error** (expected loss) can be viewed as:
-  * **Bias** (systematic error from wrong assumptions),
-  * **Variance** (error from sensitivity to training data),
-  * **Irreducible error** (noise in the data that no model can remove). 
-* In the squared-loss decomposition, the irreducible error is the noise term that is often omitted for simplicity. 
+* **Total errour** (expected loss) can be viewed as:
+  * **Bias** (systematic errour from wrong assumptions),
+  * **Variance** (errour from sensitivity to training data),
+  * **Irreducible errour** (noise in the data that no model can remove). 
+* In the squared-loss decomposition, the irreducible errour is the noise term that is often omitted for simplicity. 
 
-## Why Total Error = Bias^2 + Variance + Irreducible Error
+## Why Total Errour = Bias^2 + Variance + Irreducible Errour
 
 Notation:
 * $x$: input features
@@ -84,11 +83,11 @@ $$
 So:
 * **Bias^2**: $(f(x) - E[\hat{y}])^2$
 * **Variance**: $E[(\hat{y} - E[\hat{y}])^2]$
-* **Irreducible error**: $E[\varepsilon^2] = \sigma^2$
+* **Irreducible errour**: $E[\varepsilon^2] = \sigma^2$
 
 Therefore:
 $$
-E[(y - \hat{y})^2] = \text{Bias}^2 + \text{Variance} + \text{Irreducible Error}
+E[(y - \hat{y})^2] = \text{Bias}^2 + \text{Variance} + \text{Irreducible Errour}
 $$
 
 ---

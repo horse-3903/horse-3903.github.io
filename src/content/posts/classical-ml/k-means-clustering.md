@@ -1,13 +1,12 @@
 ---
 title: K-Means Clustering
-published: 2026-02-07
+published: 2026-02-12
 description: "A concise guide to k-means clustering, its objective, and practical usage."
 tags: ["Classical Machine Learning", "Unsupervised Learning"]
 category: IOAI ML Notes
 draft: false
 access: public
 ---
-
 # Syllabus Map
 
 * Study map: [Syllabus Study Map](/posts/syllabus/ioai-study-map/)

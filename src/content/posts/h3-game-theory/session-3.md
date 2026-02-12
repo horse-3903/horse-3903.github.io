@@ -1,13 +1,12 @@
 ---
 title: H3 Game Theory Session 3
-published: 2026-01-23
+published: 2026-02-12
 description: "SMU H3 Game Theory Session 3 Notes"
 tags: ["Game Theory", "Economics", "SMU H3"]
 category: SMU H3 Notes
 draft: false
 access: public
 ---
-
 # SMU H3 Map
 
 * Content map: [SMU H3 Game Theory Map](/posts/syllabus/smu-h3-study-map/)
@@ -29,13 +28,13 @@ access: public
 * $ \{split, steal\} $
 
 ## Outcomes
-* If the players choose to *split*, both players get half the prize each
-* If one player chooses to *steal* and the other player chooses to *split*, the player who chooses to *steal* receives all of the prize
+* If the players choose to *split*, both players get half the prise each
+* If one player chooses to *steal* and the other player chooses to *split*, the player who chooses to *steal* receives all of the prise
 * If both players choose to *steal*, both players get nothing
 
 ## Payoffs
 ### Summary
-$ \text{let } p \text{ be the total prize available to both players} $
+$ \text{let } p \text{ be the total prise available to both players} $
 $$ 
 (split, split) \rightarrow (\frac{p}{2}, \frac{p}{2}) \quad
 

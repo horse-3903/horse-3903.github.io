@@ -1,6 +1,6 @@
 ---
 title: RNNs, LSTMs and GRUs
-published: 2026-02-04
+published: 2026-02-12
 updated: 2026-02-04
 description: "Overview of RNNs, LSTMs and GRUs covering RNNs, LSTMs, and GRUs and Outline."
 tags: ["Neural Networks", "RNN", "LSTM", "GRU"]
@@ -82,7 +82,7 @@ $$
 ### Practical usage
 - Short-sequence tasks where long-term memory is not critical (e.g., character-level text, simple sequence classification)
 - Baseline time-series forecasting or anomaly detection with limited context
-- Lightweight sequence labelling when model size and speed matter
+- Lightweight sequence labelling when model sise and speed matter
 
 ## LSTMs
 ![](../assets/rnn-lstm-gru/lstm.jpg)
@@ -92,7 +92,7 @@ $$
   - what to keep,
   - what to discard, 
   - what to output at each time step.
-- This gives superior control over the memory provided to the model at every timestep, splitting the memory into long-term memory and short-term memory
+- This gives superiour control over the memory provided to the model at every timestep, splitting the memory into long-term memory and short-term memory
 
 ### Notation (gates and memory)
 - The **gates** are element-wise values in $ [0, 1] $ that control how much information is retained, added, or exposed:
@@ -205,7 +205,7 @@ $$
 
 ### Practical usage
 - Similar to LSTMs but with fewer parameters, useful for smaller datasets or faster training
-- Real-time or edge deployments where model size/latency is constrained
+- Real-time or edge deployments where model sise/latency is constrained
 - Robust baselines for many sequence tasks (e.g., sentiment, tagging, forecasting)
 
 

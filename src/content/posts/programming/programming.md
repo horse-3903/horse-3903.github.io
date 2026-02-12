@@ -1,13 +1,12 @@
 ---
 title: Programming Fundamentals
-published: 2025-11-14
+published: 2026-02-12
 description: "Fundamentals to Programming with Machine Learning — all you need to know about programming concepts and packages"
 tags: ["Programming Fundamentals"]
 category: IOAI ML Notes
 draft: false
 access: public
 ---
-
 # Syllabus Map
 
 * Study map: [Syllabus Study Map](/posts/syllabus/ioai-study-map/)
@@ -475,7 +474,7 @@ optimizer = optim.Adam(model.parameters(), lr=1e-3)
 
 ---
 
-# Tensor Manipulation
+# Tensour Manipulation
 
 ```py
 # Reshape / view

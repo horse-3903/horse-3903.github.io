@@ -1,6 +1,6 @@
 ---
 title: Multi-Layer Perceptrons (MLP)
-published: 2026-02-07
+published: 2026-02-12
 description: "Core concepts, architecture, and training notes for multi-layer perceptrons."
 tags: ["Neural Network", "Deep Learning"]
 category: IOAI ML Notes
@@ -8,7 +8,6 @@ draft: false
 pinned: false
 access: public
 ---
-
 # Syllabus Map
 
 * Study map: [Syllabus Study Map](/posts/syllabus/ioai-study-map/)
@@ -18,7 +17,7 @@ access: public
 # Overview
 
 * **Multi-layer perceptrons (MLPs)** are fully connected neural networks that map input features to outputs through stacked linear layers and non-linear activations.
-* They learn **non-linear decision boundaries**, making them a strong baseline for tabular data and small to mid‑sized feature sets.
+* They learn **non-linear decision boundaries**, making them a strong baseline for tabular data and small to mid‑sised feature sets.
 * MLPs are simple, fast to train, and easy to scale, but they **do not model spatial or sequential structure** well.
 * Key design levers are **depth**, **width**, **activation functions**, and **regularisation**.
 
@@ -29,10 +28,10 @@ access: public
 ![](../assets/mlp/mlp-diagram.svg)
 
 * An MLP composes multiple **affine transformations** with **non-linear activations** to approximate complex functions.
-* It transforms an input vector $ x $ into a prediction $ \hat{y} $ through layers:  
+* It transforms an input vectour $ x $ into a prediction $ \hat{y} $ through layers:  
   $ x \rightarrow h_1 \rightarrow h_2 \rightarrow \cdots \rightarrow \hat{y} $.
 * **Benefits**:
-  * Universal function approximator in theory (with sufficient width).
+  * Universal function approximatour in theory (with sufficient width).
   * Strong baseline for **tabular** classification and regression.
   * Straightforward to implement, debug, and deploy.
 * **Drawbacks**:
@@ -45,9 +44,9 @@ access: public
 # How it works
 
 ## Step 1: Define the input and output
-* Input $ x \in \mathbb{R}^d $ (feature vector).
+* Input $ x \in \mathbb{R}^d $ (feature vectour).
 * Output $ \hat{y} $ is either:
-  * **Regression**: real‑valued vector, or
+  * **Regression**: real‑valued vectour, or
   * **Classification**: class scores (logits).
 
 ## Step 2: Compute the hidden layers
@@ -72,7 +71,7 @@ access: public
   * **MSE** for regression: $ \mathcal{L}=\frac{1}{n}\sum (y-\hat{y})^2 $
   * **Cross‑entropy** for classification:  
     $ \mathcal{L}=-\sum_i y_i \log p_i $
-* The loss measures prediction error across the batch.
+* The loss measures prediction errour across the batch.
 
 ## Step 5: Backpropagate gradients
 * Use the chain rule to compute gradients:
@@ -83,7 +82,7 @@ access: public
 ## Step 6: Iterate with batches and epochs
 * Training proceeds over **mini‑batches** for stable gradient estimates.
 * Multiple **epochs** are used to fit the dataset.
-* Monitor validation loss to detect **overfitting**.
+* Monitour validation loss to detect **overfitting**.
 
 ---
 

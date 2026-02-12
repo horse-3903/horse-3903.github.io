@@ -1,13 +1,12 @@
 ---
 title: Data Science Fundamentals
-published: 2026-02-01
+published: 2026-02-12
 description: "Core data science evaluation, validation, and feature practices."
 tags: ["Data Science Fundamentals"]
 category: IOAI ML Notes
 draft: false
 access: public
 ---
-
 # Syllabus Map
 
 * Study map: [Syllabus Study Map](/posts/syllabus/ioai-study-map/)
@@ -49,7 +48,7 @@ access: public
 
 ### Balanced Accuracy
 * Formula: $ \frac{1}{2}(\text{TPR} + \text{TNR}) $.
-* Accounts for **unequal class sizes**.
+* Accounts for **unequal class sises**.
 * Equivalent to the average of per-class recall in binary settings.
 
 ### Macro vs Micro Averaging
@@ -59,7 +58,7 @@ access: public
 
 ## Diagnostic Tools
 
-* **Confusion matrix**: shows per-class error structure.
+* **Confusion matrix**: shows per-class errour structure.
 * **ROC curve** and **AUC**: threshold-independent tradeoff of TPR vs FPR.
 * **PR curve** is often more informative under heavy class imbalance.
 * **Calibration**: reliability curves and Brier score measure probability quality.
@@ -68,8 +67,8 @@ access: public
 
 ![](../assets/data-science/confusion-matrix.png)
 
-* Summarizes **true positives**, **false positives**, **true negatives**, and **false negatives**.
-* Makes **error types** visible (e.g., false alarms vs misses).
+* Summarises **true positives**, **false positives**, **true negatives**, and **false negatives**.
+* Makes **errour types** visible (e.g., false alarms vs misses).
 * Helps identify **systematic confusion** between specific classes.
 
 ### ROC Curve
@@ -115,7 +114,7 @@ access: public
 
 ### MAPE
 * Formula: $ \frac{100}{n}\sum \left|\frac{y_i-\hat{y}_i}{y_i}\right| $.
-* Expresses error as a **percentage**.
+* Expresses errour as a **percentage**.
 * Avoid when $ y_i \approx 0 $ (can blow up).
 
 ---
@@ -123,20 +122,20 @@ access: public
 # Bias, Variance, and Generalisation
 
 * Refer to bias-variance notes for more detail
-* **Bias**: error from overly simple assumptions.
-* **Variance**: error from sensitivity to data fluctuations.
-* Goal is to minimize **expected generalisation error**: $ \mathbb{E}_{(x,y)}[\ell(y, f(x))] $.
+* **Bias**: errour from overly simple assumptions.
+* **Variance**: errour from sensitivity to data fluctuations.
+* Goal is to minimise **expected generalisation errour**: $ \mathbb{E}_{(x,y)}[\ell(y, f(x))] $.
 
 ## Underfitting
 
 * Model is **too simple** to capture signal.
-* High training error and high validation error.
+* High training errour and high validation errour.
 * Fix by adding features, increasing model capacity, or reducing regularisation.
 
 ## Overfitting
 
-* Model **memorizes noise** and fails to generalize.
-* Low training error, high validation error.
+* Model **memorises noise** and fails to generalise.
+* Low training errour, high validation errour.
 * Fix with regularisation, more data, or simpler models.
 
 ---
@@ -163,7 +162,7 @@ access: public
 ## Encoding
 
 ### One-hot encoding
-* Expands a category into a **binary vector**.
+* Expands a category into a **binary vectour**.
 * Works well for low-cardinality, **unordered** categories.
 * Can blow up dimensionality for high-cardinality fields.
 
@@ -223,7 +222,7 @@ access: public
 
 ## Scaling
 
-* **Standardization** or **normalisation**.
+* **Standardisation** or **normalisation**.
 * For models using distance (k-NN, SVM), scaling is essential.
 * Fit scalers on training data only to avoid leakage.
 

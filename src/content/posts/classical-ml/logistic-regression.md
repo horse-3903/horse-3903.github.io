@@ -1,14 +1,12 @@
 ---
 title: Logistic Regression
-published: 2025-10-18
+published: 2026-02-12
 description: "A comprehensive guide to Logistic Regression — exploring how it transforms Linear Regression into a powerful tool for binary and multi-class classification."
 tags: ["Classical Machine Learning", "Supervised Learning"]
 category: IOAI ML Notes
 draft: false
 access: public
 ---
-
-
 # Syllabus Map
 
 * Study map: [Syllabus Study Map](/posts/syllabus/ioai-study-map/)
@@ -74,7 +72,7 @@ $$
 \sigma(\vec{z})_i = \frac{e^{z_i}}{\sum_{j=1}^{n} e^{z_j}}
 $$
 
-* Softmax produces a vector of probabilities across all classes that sum to 1.
+* Softmax produces a vectour of probabilities across all classes that sum to 1.
 
 ---
 

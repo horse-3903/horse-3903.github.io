@@ -1,13 +1,12 @@
 ---
 title: DBSCAN, Hierarchical & Spectral Clustering
-published: 2026-02-01
+published: 2026-02-12
 description: "A concise guide to density-based, hierarchical, and spectral clustering."
 tags: ["Classical Machine Learning", "Unsupervised Learning"]
 category: IOAI ML Notes
 draft: false
 access: restricted
 ---
-
 ---
 
 
@@ -74,7 +73,7 @@ access: restricted
 
 * Build a **similarity graph**.
 * Compute **Laplacian eigenvectors**.
-* Run **k-means** on the eigenvector representation.
+* Run **k-means** on the eigenvectour representation.
 
 ## Practical Notes
 

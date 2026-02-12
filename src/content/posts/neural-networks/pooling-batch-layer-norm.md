@@ -1,14 +1,13 @@
 ---
-title: Pooling and Batch Normalisation
-published: 2026-02-07
-description: "Pooling layers and batch normalisation fundamentals."
+title: Pooling, Batch Norm, and Layer Norm
+published: 2026-02-12
+description: "Pooling plus batch and layer normalisation fundamentals."
 tags: ["Neural Network", "Deep Learning"]
 category: IOAI ML Notes
 draft: false
 pinned: false
 access: restricted
 ---
-
 # Syllabus Map
 
 * Study map: [Syllabus Study Map](/posts/syllabus/ioai-study-map/)
@@ -35,10 +34,10 @@ access: restricted
 
 ## How it works (2D)
 * Input feature map: $H \times W$, window $K \times K$, stride $S$, padding $P$.
-* Output size:
+* Output sise:
 $$
-H_{out} = \left\lfloor \frac{H + 2P - K}{S} \right\rfloor + 1,\quad
-W_{out} = \left\lfloor \frac{W + 2P - K}{S} \right\rfloor + 1
+H_{out} = \left\lfloour \frac{H + 2P - K}{S} \right\rfloour + 1,\quad
+W_{out} = \left\lfloour \frac{W + 2P - K}{S} \right\rfloour + 1
 $$
 * For a window $W$ of activations:
   * Max pooling: $ y = \max_{x \in W} x $
@@ -49,12 +48,12 @@ $$
 * **Average pooling**: gradient is evenly distributed across all elements in the window.
 
 ## Design knobs
-* **Window size**: larger windows discard more spatial detail.
+* **Window sise**: larger windows discard more spatial detail.
 * **Stride**: larger stride downsamples faster.
-* **Padding**: used to preserve size when needed ("same" style pooling).
+* **Padding**: used to preserve sise when needed ("same" style pooling).
 
 ## Practical notes
-* Pooling can **hurt localization** tasks (detection/segmentation) due to spatial loss.
+* Pooling can **hurt localisation** tasks (detection/segmentation) due to spatial loss.
 * Many modern CNNs replace pooling with **strided convolutions** for learnable downsampling.
 * **Global average pooling** is a strong default before a classifier head.
 * For small objects, avoid aggressive early pooling.
@@ -90,7 +89,7 @@ global_avg = nn.AdaptiveAvgPool2d((1, 1))
 * **Train vs eval**:
   * `model.train()` uses batch stats and updates running averages.
   * `model.eval()` uses running averages only.
-* **Small batch sizes** can make BN unstable.
+* **Small batch sises** can make BN unstable.
   * Options: **SyncBatchNorm**, **GroupNorm**, or **LayerNorm**.
 * **Placement**:
   * Common: `Conv → BatchNorm → ReLU`.
@@ -114,4 +113,40 @@ block = nn.Sequential(
 )
 ```
 
+---
+
+# Layer Normalisation
+
+## Core idea
+* Layer norm normalises activations **within each sample** across its feature dimensions.
+* It does not depend on batch statistics, so it behaves the same in train and eval.
+
+## How it works
+* For a sample with $d$ features:
+  * Mean: $ \mu = \frac{1}{d}\sum_{j=1}^d x_j $
+  * Variance: $ \sigma^2 = \frac{1}{d}\sum_{j=1}^d (x_j - \mu)^2 $
+  * Normalise: $ \hat{x}_j = \frac{x_j - \mu}{\sqrt{\sigma^2 + \epsilon}} $
+  * Scale/shift: $ y_j = \gamma \hat{x}_j + \beta $
+* Stats are computed **per sample**, not across the batch.
+
+## Practical notes
+* **Batch-sise agnostic**: stable even with very small batches.
+* Common in **RNNs** and **Transformers**, where batch stats can be noisy.
+* No running averages are needed; train and eval behave identically.
+* Placement:
+  * Classic: `Linear → LayerNorm → ReLU` or `Linear → LayerNorm`.
+  * Transformers: often use **pre-norm** (`LayerNorm → sublayer`) for stability.
+
+## PyTorch examples
+```py
+import torch.nn as nn
+
+ln = nn.LayerNorm(normalized_shape=512)
+
+block = nn.Sequential(
+    nn.Linear(512, 512, bias=False),
+    nn.LayerNorm(512),
+    nn.ReLU(inplace=True)
+)
+```
 

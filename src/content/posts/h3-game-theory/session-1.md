@@ -1,13 +1,12 @@
 ---
 title: H3 Game Theory Session 1
-published: 2026-01-09
+published: 2026-02-12
 description: "SMU H3 Game Theory Session 1 Notes"
 tags: ["Game Theory", "Economics", "SMU H3"]
 category: SMU H3 Notes
 draft: false
 access: public
 ---
-
 # SMU H3 Map
 
 * Content map: [SMU H3 Game Theory Map](/posts/syllabus/smu-h3-study-map/)
@@ -92,7 +91,7 @@ access: public
 
 ## Strategy
 - Use backward induction
-- Set the game indicator as the number of flags left
+- Set the game indicatour as the number of flags left
 - Draw up a table:
 
 | No. of Flags Left | Optimal Choice |

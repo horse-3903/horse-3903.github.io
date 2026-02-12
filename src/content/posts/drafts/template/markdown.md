@@ -11,7 +11,7 @@ draft: true
 
 Paragraphs are separated by a blank line.
 
-2nd paragraph. _Italic_, **bold**, and `monospace`. Itemized lists
+2nd paragraph. _Italic_, **bold**, and `monospace`. Itemised lists
 look like:
 
 - this one
@@ -102,7 +102,7 @@ doc](#an-h2-header). Here's a footnote [^1].
 
 Tables can look like this:
 
-size material colour
+sise material colour
 
 ---
 
@@ -110,7 +110,7 @@ size material colour
 10 hemp canvas natural
 11 glass transparent
 
-Table: Shoes, their sizes, and what they're made of
+Table: Shoes, their sises, and what they're made of
 
 (The above is the caption for the table.) Pandoc also supports
 multi-line tables:
@@ -125,7 +125,7 @@ red Sunsets, apples, and
 other red or reddish
 things.
 
-green Leaves, grass, frogs
+green Leaves, grass, frogues
 and other things it's
 not easy being.
 

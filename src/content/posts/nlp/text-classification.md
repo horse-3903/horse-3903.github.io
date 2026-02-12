@@ -1,13 +1,12 @@
 ---
 title: Text Classification
-published: 2026-02-01
+published: 2026-02-12
 description: "Common workflows for assigning labels to text."
 tags: ["Natural Language Processing", "Supervised Learning"]
 category: IOAI ML Notes
 draft: false
 access: restricted
 ---
-
 # Syllabus Map
 
 * Study map: [Syllabus Study Map](/posts/syllabus/ioai-study-map/)

@@ -1,13 +1,12 @@
 ---
 title: H3 Game Theory Session 5
-published: 2026-02-06
+published: 2026-02-12
 description: "SMU H3 Game Theory Session 5 Notes"
 tags: ["Game Theory", "Economics", "SMU H3"]
 category: SMU H3 Notes
 draft: false
 access: restricted
 ---
-
 # SMU H3 Map
 
 * Content map: [SMU H3 Game Theory Map](/posts/syllabus/smu-h3-study-map/)

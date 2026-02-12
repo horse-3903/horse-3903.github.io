@@ -1,13 +1,12 @@
 ---
 title: H3 Game Theory Session 2
-published: 2026-01-16
+published: 2026-02-12
 description: "SMU H3 Game Theory Session 2 Notes"
 tags: ["Game Theory", "Economics", "SMU H3"]
 category: SMU H3 Notes
 draft: false
 access: public
 ---
-
 # SMU H3 Map
 
 * Content map: [SMU H3 Game Theory Map](/posts/syllabus/smu-h3-study-map/)
@@ -170,7 +169,7 @@ Both **yes** and **no** are equally optimal answers.
 
 ## Rules
 - Agreeing to $ x $ in the second round is payoff equivalent to agreeing to $ \delta x $ in the first round, where $ 0 < \delta < 1 $
-- The pie to split has size 1, where any real number $ x \in [0, 1] $ can be offered
+- The pie to split has sise 1, where any real number $ x \in [0, 1] $ can be offered
 - This means that :
   - P1's split is of the form $ (x, 1-x) $
   - P2's split is of the form $ (y, 1-y) $

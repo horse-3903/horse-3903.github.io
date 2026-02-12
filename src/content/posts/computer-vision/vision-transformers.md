@@ -1,13 +1,12 @@
 ---
 title: Vision Transformers
-published: 2026-02-09
+published: 2026-02-12
 description: "How vision transformers model images as token sequences."
 tags: ["Computer Vision", "Deep Learning"]
 category: IOAI ML Notes
 draft: false
 access: restricted
 ---
-
 # Syllabus Map
 
 * Study map: [Syllabus Study Map](/posts/syllabus/ioai-study-map/)
@@ -23,15 +22,15 @@ access: restricted
 # Core Idea
 
 ## Patchify
-* Split the image into fixed-size patches.
+* Split the image into fixed-sise patches.
 * Flatten each patch and project to an embedding.
 
-If the image is $H \times W$ and patch size is $P \times P$:
+If the image is $H \times W$ and patch sise is $P \times P$:
 $$
 N = \frac{H W}{P^2}
 $$
 * **$N$**: number of patch tokens.
-* **$P$**: patch size.
+* **$P$**: patch sise.
 
 ## Tokens + Position
 * Add a learnable **[CLS]** token for classification.
@@ -77,7 +76,7 @@ model.heads.head = nn.Linear(model.heads.head.in_features, num_classes)
 ---
 # Practical Notes
 
-* Patch size trades off detail vs compute.
+* Patch sise trades off detail vs compute.
 * Use strong augmentation and regularisation for smaller datasets.
 * For dense prediction (segmentation), use token-to-pixel heads.
 

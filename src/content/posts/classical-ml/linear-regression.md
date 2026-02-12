@@ -1,14 +1,12 @@
 ---
 title: Linear Regression
-published: 2025-10-18
+published: 2026-02-12
 description: "A comprehensive guide to Linear Regression — exploring how it models relationships between variables to make accurate continuous predictions."
 tags: ["Classical Machine Learning", "Supervised Learning"]
 category: IOAI ML Notes
 draft: false
 access: public
 ---
-
-
 # Syllabus Map
 
 * Study map: [Syllabus Study Map](/posts/syllabus/ioai-study-map/)
@@ -39,7 +37,7 @@ $$
 
 # Cost Function
 
-* To measure how well our model fits the data, we use the **Mean Squared Error (MSE)** cost function:
+* To measure how well our model fits the data, we use the **Mean Squared Errour (MSE)** cost function:
 
 $$
 C = \frac{1}{2m} \sum_{i=1}^{m} (\hat{y}_i - y_i)^2

@@ -1,14 +1,12 @@
 ---
 title: Ensemble Methods
-published: 2026-01-21
+published: 2026-02-12
 description: "A comprehensive guide to ensemble learning — exploring how combining multiple models improves accuracy, robustness, and generalisation."
 tags: ["Classical Machine Learning", "Supervised Learning"]
 category: IOAI ML Notes
 draft: false
 access: public
---- 
-
-
+---
 # Syllabus Map
 
 * Study map: [Syllabus Study Map](/posts/syllabus/ioai-study-map/)
@@ -34,10 +32,10 @@ access: public
   * Sensitivity to noise
   * Sensitivity to data splits
 
-## Error Decomposition
-* **Prediction error** measures how far model predictions are from the true labels.
-* **Generalisation error**  measures the expected error on unseen data.
-* **Total expected error** can be decomposed to Bias² + Variance + Irreducible Noise.
+## Errour Decomposition
+* **Prediction errour** measures how far model predictions are from the true labels.
+* **Generalisation errour**  measures the expected errour on unseen data.
+* **Total expected errour** can be decomposed to Bias² + Variance + Irreducible Noise.
   * *Bias*: Underfitting due to simplistic assumptions.
   * *Variance*: Overfitting due to hypersensitivity to data.
   * *Irreducible noise*: Randomness in data.
@@ -75,7 +73,7 @@ access: public
 
 ## Core Idea
 
-* Bagging uses the same training algorithm for every predictor.
+* Bagging uses the same training algorithm for every predictour.
 * However, it trains them on different random subsets of the training set.
 * When sampling is performed with replacement, this method is called *bagging*.
 * When sampling is performed without replacement, it is called *pasting*.
@@ -165,7 +163,7 @@ access: public
 
 ### Key Concepts
 
-* AdaBoost works by paying more attention to the training instances that the predecessor misclassified.
+* AdaBoost works by paying more attention to the training instances that the predecessour misclassified.
 * This results in new predictors focusing more and more on  hard cases in the samples.
 
 ### Algorithm Outline
@@ -178,7 +176,7 @@ access: public
 
 ### Intuition
 
-* Mistakes made by predecessor models get more attention (higher weight) while retraining.
+* Mistakes made by predecessour models get more attention (higher weight) while retraining.
 * This means that the model can progressively correct its mistakes.
 * However, this makes it sensitive to noisy labels and outliers.
 
@@ -187,16 +185,16 @@ access: public
 * Each instance weight $ w_i $ is set to $ 1/m $.
 * The model is trained on the samples.
 
-#### Step 2: Calculate Weighted Error Rate
-* The weighted error rate $ r_j $ is computed on the training set for model $ j $.
+#### Step 2: Calculate Weighted Errour Rate
+* The weighted errour rate $ r_j $ is computed on the training set for model $ j $.
 
 $$
 r_j = \frac{\sum^{m}_{i=1} w_i \space \text{ s.t. } \hat{y}_{i,j} \ne y_i}{\sum^{m}_{i=1} w_i}
 $$
 
-#### Step 3: Calculate the Predictor's Weight
-* The weight $ a_j $ of the predictor $ j $ will be calculated to assess its performance.
-  * The more accurate the predictor is, the higher its weight will be. 
+#### Step 3: Calculate the Predictour's Weight
+* The weight $ a_j $ of the predictour $ j $ will be calculated to assess its performance.
+  * The more accurate the predictour is, the higher its weight will be. 
   * If it is just guessing randomly, then its weight will be close to zero. 
   * However, if it is most often wrong, then its weight will be negative.
 
@@ -206,7 +204,7 @@ $$
 
 #### Step 4: Update the Weights of the Samples
 * The instance weights of the the misclassified instances
-are boosted for predictor $ j $.
+are boosted for predictour $ j $.
 
 $$
 w_i 
@@ -228,7 +226,7 @@ $$
 
 #### Step 5: Make Predictions
 
-* AdaBoost computes the predictions of all the predictors and weighs them using the predictor weights $ \alpha_j $.
+* AdaBoost computes the predictions of all the predictors and weighs them using the predictour weights $ \alpha_j $.
 
 $$
 \hat y = \argmax_k \sum^{N}_{j=1, \space \hat y_j = k} \alpha_j
@@ -240,19 +238,19 @@ $$
 ### Core Idea
 
 * Like AdaBoost, Gradient Boosting works by sequentially adding predictors to correct its predecessors.
-* However, it fits each new predictor to the **residual errors** (loss) of the current model.
+* However, it fits each new predictour to the **residual errors** (loss) of the current model.
 
 ### Algorithm Outline
 
 1. Initialise the model with a constant prediction that minimises the loss.
 2. Compute the negative gradient (residuals) of the loss with respect to the current predictions.
 3. Fit a new weak learner to these residuals.
-4. Scale the learner by a step size and add it to the ensemble.
+4. Scale the learner by a step sise and add it to the ensemble.
 5. Repeat steps 2–4 for the desired number of iterations.
 
 ### Loss Functions
 
-* **Mean Squared Error** loss for regressors.
+* **Mean Squared Errour** loss for regressors.
 * **Negative Log-Likelihood** for classifiers.
 
 ---
@@ -360,7 +358,7 @@ $$
 ## When to Use Ensemble Methods
 
 * When single models underperform and you can afford extra compute.
-* When base learners have complementary error patterns.
+* When base learners have complementary errour patterns.
 * When variance reduction or bias reduction is a primary goal.
 * When you need strong performance on tabular data.
 
@@ -369,13 +367,13 @@ $$
 * When training data is very small and overfitting risk is high.
 * When model debugging and traceability are critical.
 * When you need real-time updates or streaming inference.
-* When deployment size and latency budgets are tight.
+* When deployment sise and latency budgets are tight.
 
 ## Practical Notes
 
 * Use cross-validation or out-of-bag estimates to tune ensembles.
 * Keep base models diverse to avoid correlated errors.
-* Monitor calibration; averaging can still be miscalibrated.
+* Monitour calibration; averaging can still be miscalibrated.
 * Apply early stopping for boosting to control overfitting.
 
 

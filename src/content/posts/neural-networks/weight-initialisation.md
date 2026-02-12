@@ -1,6 +1,6 @@
 ---
 title: Weight Initialisation
-published: 2026-02-07
+published: 2026-02-12
 description: "Weight initialisation schemes and practical guidelines for stable training."
 tags: ["Neural Network", "Deep Learning"]
 category: IOAI ML Notes
@@ -8,7 +8,6 @@ draft: false
 pinned: false
 access: restricted
 ---
-
 # Syllabus Map
 
 * Study map: [Syllabus Study Map](/posts/syllabus/ioai-study-map/)
@@ -39,7 +38,7 @@ access: restricted
 # Notation / Terminology
 
 * $ W $: weight matrix for a layer.
-* $ b $: bias vector.
+* $ b $: bias vectour.
 * $ n_{in} $: number of input units (fan‑in).
 * $ n_{out} $: number of output units (fan‑out).
 * $ \mathrm{Var}(W) $: variance of the weight distribution.
@@ -65,6 +64,8 @@ access: restricted
 * Bad for hidden weights because it **does not break symmetry**.
 
 ## Xavier / Glorot
+* This initialisation ensures that signals do not explode or vanish as they pass through many layers.
+* It sets weights with a variance tied to the number of input and output connections, so the inputs and outputs have the same scale.
 * Best for **tanh/sigmoid** activations.
 * Variance: $ \mathrm{Var}(W) = \frac{2}{n_{in}+n_{out}} $
 
@@ -81,6 +82,7 @@ $$
 * Equivalent variance to the uniform version, but with a Gaussian distribution.
 
 ## He / Kaiming
+* To keep signal scale stable, it starts weights a bit larger than Xavier, with variance based only on the number of input connections.
 * Best for **ReLU‑like** activations.
 * Variance: $ \mathrm{Var}(W) = \frac{2}{n_{in}} $
 

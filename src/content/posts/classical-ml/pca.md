@@ -1,14 +1,12 @@
 ---
 title: Principal Component Analysis (PCA)
-published: 2026-02-07
+published: 2026-02-12
 description: "A comprehensive guide to PCA — reducing dimensionality by projecting data onto directions of maximum variance."
 tags: ["Classical Machine Learning", "Unsupervised Learning"]
 category: IOAI ML Notes
 draft: false
 access: public
 ---
-
-
 # Syllabus Map
 
 * Study map: [Syllabus Study Map](/posts/syllabus/ioai-study-map/)
@@ -44,7 +42,7 @@ access: public
   $$
   X_c = X - \mu
   $$
-  where $\mu$ is the feature-wise mean vector.
+  where $\mu$ is the feature-wise mean vectour.
 
 * **Mean-centring** means subtracting each feature's average from every sample, so **every column has mean 0**.
 
@@ -66,7 +64,7 @@ access: public
   \Sigma v_i = \lambda_i v_i
   $$
 
-* Each **eigenvector** $v_i$ is a principal component direction.
+* Each **eigenvectour** $v_i$ is a principal component direction.
 
 * Each **eigenvalue** $\lambda_i$ is the variance captured along that direction.
 
@@ -85,7 +83,7 @@ access: public
 
 * A matrix can be seen as a transformation that **stretches, squashes, or rotates** space.
 
-* Most directions get rotated, but an **eigenvector** is a special direction that does **not** rotate — it only scales.
+* Most directions get rotated, but an **eigenvectour** is a special direction that does **not** rotate — it only scales.
 
 * The amount of scaling is the **eigenvalue**.
 
@@ -114,7 +112,7 @@ access: public
 
 * These components are **not original features**
 
-* They are **new directions** (linear combinations of features) that maximize variance along each direction.
+* They are **new directions** (linear combinations of features) that maximise variance along each direction.
 
 ---
 
@@ -151,18 +149,18 @@ access: public
 
 ---
 
-# Reconstruction and Error
+# Reconstruction and Errour
 
 * **Approximate reconstruction** back to the original space:
   $$
   \hat{X} = Z W_k^\top + \mu
   $$
 
-* **Reconstruction error decreases** as $k$ increases, but so does compression.
+* **Reconstruction errour decreases** as $k$ increases, but so does compression.
 
-* The **error comes from discarding components**: lower-variance directions still contain information that is lost when projecting to $k$ dimensions.
+* The **errour comes from discarding components**: lower-variance directions still contain information that is lost when projecting to $k$ dimensions.
 
-* **Mean-centring does not create this error**; it only shifts data to zero mean so variance is measured consistently.
+* **Mean-centring does not create this errour**; it only shifts data to zero mean so variance is measured consistently.
 
 ---
 

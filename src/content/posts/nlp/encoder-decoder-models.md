@@ -1,13 +1,12 @@
 ---
 title: Encoder-Decoder Models
-published: 2026-02-01
+published: 2026-02-12
 description: "Sequence-to-sequence models for translation and multimodal tasks."
 tags: ["Natural Language Processing"]
 category: IOAI ML Notes
 draft: false
 access: restricted
 ---
-
 # Syllabus Map
 
 * Study map: [Syllabus Study Map](/posts/syllabus/ioai-study-map/)
@@ -29,7 +28,7 @@ access: restricted
 # Use Cases
 
 * Machine translation.
-* Summarization.
+* Summarisation.
 * Vision-language modelling.
 
 

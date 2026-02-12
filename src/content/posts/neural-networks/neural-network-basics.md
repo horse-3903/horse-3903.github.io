@@ -1,13 +1,12 @@
 ---
 title: "Neural Networks: Perceptron and Training Basics"
-published: 2026-02-06
+published: 2026-02-12
 description: "Perceptron fundamentals, optimisation, backpropagation, activations, and loss functions."
 tags: ["Neural Networks", "Deep Learning"]
 category: IOAI ML Notes
 draft: false
 access: public
 ---
-
 # Syllabus Map
 
 * Study map: [Syllabus Study Map](/posts/syllabus/ioai-study-map/)
@@ -59,11 +58,11 @@ $$
 ## Core Idea
 
 * Iteratively update parameters to reduce the loss.
-* Learning rate controls the step size.
+* Learning rate controls the step sise.
 
 ## Practical Notes
 
-* Batch size affects stability and noise.
+* Batch sise affects stability and noise.
 * Momentum or adaptive methods can speed up convergence.
 * In general, the update rule is:
 $$
@@ -115,7 +114,7 @@ $$
 ## Core Idea
 
 * Uses the chain rule to compute gradients layer by layer.
-* Propagates error backward from the output to earlier layers.
+* Propagates errour backward from the output to earlier layers.
 
 ## Practical Notes
 
@@ -134,9 +133,9 @@ $$
 
 ## Backprop Flow (Key Gradients)
 
-* Output layer error: $\delta_2 = \hat{y} - y$
+* Output layer errour: $\delta_2 = \hat{y} - y$
 * Output weights: $\nabla_{W_2} L = \delta_2 h^\top$, bias: $\nabla_{b_2} L = \delta_2$
-* Hidden error: $\delta_1 = (W_2^\top \delta_2) \odot \sigma'(W_1 x + b_1)$
+* Hidden errour: $\delta_1 = (W_2^\top \delta_2) \odot \sigma'(W_1 x + b_1)$
 * Hidden weights: $\nabla_{W_1} L = \delta_1 x^\top$, bias: $\nabla_{b_1} L = \delta_1$
 
 ---
@@ -174,18 +173,18 @@ $$
 
 ## Core Idea
 
-* A loss measures prediction error and drives gradient updates.
+* A loss measures prediction errour and drives gradient updates.
 * Pick losses to match the output type and task.
 
 ## Practical Notes
 
 * Scaling and label encoding affect loss behaviour.
-* Monitor both loss curves and task metrics during training.
+* Monitour both loss curves and task metrics during training.
 
 ## Regression
 
-* Mean Squared Error (MSE) penalizes large errors strongly.
-* Mean Absolute Error (MAE) is more robust to outliers.
+* Mean Squared Errour (MSE) penalises large errors strongly.
+* Mean Absolute Errour (MAE) is more robust to outliers.
 
 ## Classification
 

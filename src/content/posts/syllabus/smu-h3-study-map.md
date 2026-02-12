@@ -1,13 +1,12 @@
 ---
 title: SMU H3 Game Theory Map
-published: 2026-02-06
+published: 2026-02-12
 description: "A content map for the SMU H3 game theory notes."
 tags: ["Game Theory", "SMU H3", "Study Guide"]
 category: SMU H3 Notes
 draft: false
 pinned: true
 ---
-
 # SMU H3 Map
 
 * Content map: [SMU H3 Game Theory Map](/posts/syllabus/smu-h3-study-map/)

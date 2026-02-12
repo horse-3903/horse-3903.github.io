@@ -58,7 +58,7 @@ Optional information to help a user be more successful.
 
 ### Custom Titles
 
-The title of the admonition can be customized.
+The title of the admonition can be customised.
 
 :::note[MY CUSTOM TITLE]
 This is a note with a custom title.

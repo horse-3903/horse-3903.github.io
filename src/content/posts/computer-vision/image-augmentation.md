@@ -1,13 +1,12 @@
 ---
 title: Image Augmentation
-published: 2026-02-01
+published: 2026-02-12
 description: "Simple augmentation techniques to improve generalisation."
 tags: ["Computer Vision"]
 category: IOAI ML Notes
 draft: false
 access: restricted
 ---
-
 # Syllabus Map
 
 * Study map: [Syllabus Study Map](/posts/syllabus/ioai-study-map/)

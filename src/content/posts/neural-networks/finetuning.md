@@ -1,6 +1,6 @@
 ---
 title: Fine-tuning
-published: 2026-02-07
+published: 2026-02-12
 description: "Fine-tuning strategies for adapting pretrained models to specific tasks."
 tags: ["Neural Network", "Deep Learning"]
 category: IOAI ML Notes
@@ -8,7 +8,6 @@ draft: false
 pinned: false
 access: restricted
 ---
-
 # Syllabus Map
 
 * Study map: [Syllabus Study Map](/posts/syllabus/ioai-study-map/)
@@ -19,7 +18,7 @@ access: restricted
 
 * Fine‑tuning adapts a **pretrained model** to a new task or dataset.
 * It can be **full fine‑tuning** (update all weights) or **parameter‑efficient** (update small adapters).
-* The choice depends on data size, compute budget, and how far the task is from pretraining.
+* The choice depends on data sise, compute budget, and how far the task is from pretraining.
 
 ---
 
@@ -50,7 +49,7 @@ access: restricted
 ## Tips
 * Use smaller learning rates for stability.
 * Consider layer‑wise learning rates (lower for early layers).
-* Monitor validation to avoid overfitting.
+* Monitour validation to avoid overfitting.
 
 ---
 
@@ -84,7 +83,7 @@ access: restricted
 
 ## Step 3: Train
 * Use warmup and decay schedules.
-* Monitor loss curves and early stop if needed.
+* Monitour loss curves and early stop if needed.
 
 ## Step 4: Evaluate and deploy
 * Compare against the base model.

@@ -22,13 +22,13 @@ pinned: true
 
 - [X] [Linear Regression](/posts/classical-ml/linear-regression/)
 - [X] [Logistic Regression](/posts/classical-ml/logistic-regression/)
-- [X] [K-Nearest Neighbours](/posts/classical-ml/k-nearest-neighbors/)
+- [X] [K-Nearest Neighbours](/posts/classical-ml/k-nearest-neighbours/)
 - [X] [Decision Tree](/posts/classical-ml/decision-tree/)
-- [X] [Support Vector Machines](/posts/classical-ml/svm/)
+- [X] [Support Vectour Machines](/posts/classical-ml/svm/)
 
 ## Regularisation & Ensembles
 
-- [X] [L1 & L2 Regularisation](/posts/classical-ml/l1-l2-regularization/)
+- [X] [L1 & L2 Regularisation](/posts/classical-ml/l1-l2-regularisation/)
 - [X] [Ensemble Methods](/posts/classical-ml/ensemble/)
 
 ## Data Science
@@ -53,11 +53,11 @@ pinned: true
 - [X] [Neural Networks](/posts/neural-networks/neural-network-basics/)
 - [X] [Multi-Layer Perceptrons (MLP)](/posts/neural-networks/mlp/)
 - [X] [RNNs, LSTMs and GRUs](/posts/neural-networks/rnn-lstm-gru/)
-- [X] [Optimisers, Convergence, and Regularisation](/posts/neural-networks/optimisers-convergence-regularization/)
-- [X] [Pooling and Batch Normalisation](/posts/neural-networks/pooling-batch-norm/)
-- [X] [Weight Initialisation](/posts/neural-networks/weight-initialization/)
+- [X] [Optimisers, Convergence, and Regularisation](/posts/neural-networks/optimisers-convergence-regularisation/)
+- [X] [Pooling, Batch Norm, and Layer Norm](/posts/neural-networks/pooling-batch-layer-norm/)
+- [X] [Weight Initialisation](/posts/neural-networks/weight-initialisation/)
 - [ ] [Data Embeddings](/posts/neural-networks/data-embeddings/)
-- [ ] [Autoencoders](/posts/neural-networks/autoencoders/)
+- [X] [Autoencoders](/posts/neural-networks/autoencoders/)
 - [X] [Fine-tuning](/posts/neural-networks/finetuning/)
 
 ---
@@ -81,7 +81,7 @@ pinned: true
 - [ ] [Attention and Transformers](/posts/nlp/attention-and-transformers/)
 - [ ] [Text Classification](/posts/nlp/text-classification/)
 - [ ] [Pre-trained Text Encoders](/posts/nlp/pretrained-text-encoders/)
-- [ ] [Language Modelling](/posts/nlp/language-modeling/)
+- [ ] [Language Modelling](/posts/nlp/language-modelling/)
 - [ ] [Encoder-Decoder Models](/posts/nlp/encoder-decoder-models/)
 - [ ] [Pre-trained Language Models](/posts/nlp/pretrained-language-models/)
 - [ ] [Audio Processing](/posts/nlp/audio-processing/)

@@ -1,14 +1,12 @@
 ---
 title: L1 and L2 Regularisation
-published: 2025-11-15
+published: 2026-02-12
 description: "A comprehensive guide to L1 and L2 Regularisation — exploring how LASSO and Ridge improve generalisation."
 tags: ["Classical Machine Learning", "Supervised Learning"]
 category: IOAI ML Notes
 draft: false
 access: public
 ---
-
-
 # Syllabus Map
 
 * Study map: [Syllabus Study Map](/posts/syllabus/ioai-study-map/)
@@ -18,14 +16,14 @@ access: public
 
 ## Limitations of Linear Regression
 * The standard implementatioon of linear regression does not guarantee **generalisation** of the model
-* It is limited to the calculation of **empirical error (MSE)** without:
-  * **Controlling the norm** of the weight vector
+* It is limited to the calculation of **empirical errour (MSE)** without:
+  * **Controlling the norm** of the weight vectour
   * **Regularisation** of the model
 * This leads to **poorer performance** of the model for limited viable practical applications
 
 ## Use of Regularisation
 * In order to mitigate these limitations, **regularisation** can be used to control the model
-* Regularisation adds an **additional term** to the error, which is minimised
+* Regularisation adds an **additional term** to the errour, which is minimised
 * This leads to a new minimisation objective - the **Regularised Loss Minimisation (RLM)** - which outputs a hypothesis where: 
 
 $$
@@ -104,7 +102,7 @@ $$
 
 ## Overview
 
-* **LASSO (Least Absolute Shrinkage and Selection Operator)** regression uses a regularisation rule which is defined as 
+* **LASSO (Least Absolute Shrinkage and Selection Operatour)** regression uses a regularisation rule which is defined as 
 
 $$
 R(w) = \lambda ||w||
@@ -114,7 +112,7 @@ $$
   * $ \lambda $ is a scalar where $ \lambda > 0 $,
   * $ ||w|| = \sum^{d}_{i=1} |w_i| $ is the $ l_1 $ norm.
 
-* Applying the learning rule with linear regression and mean-squared error (MSE) loss:
+* Applying the learning rule with linear regression and mean-squared errour (MSE) loss:
 
 $$
 J(w) = \lambda||w||^2 \space + \space \frac{1}{m} \sum_{i=1}^{N}\frac{1}{2}(w_i x_i - y_i)^2
@@ -164,7 +162,7 @@ $$
   * $ \lambda $ is a scalar where $ \lambda > 0 $,
   * $ ||w|| = \sqrt{\sum^{d}_{i=1} w_i^2}$ is the $ l_2 $ norm.
 
-* Applying the learning rule with linear regression and mean-squared error (MSE) loss:
+* Applying the learning rule with linear regression and mean-squared errour (MSE) loss:
 
 $$
 J(w) = \lambda||w||^2 \space + \space \frac{1}{m} \sum_{i=1}^{N}\frac{1}{2}(w_i x_i - y_i)^2
@@ -206,7 +204,7 @@ $$
 = \frac{w_j}{\sqrt{r}}
 $$
 
-* Vector form:
+* Vectour form:
 
 $$
 \nabla_w ||w|| = \frac{w}{||w||}
@@ -226,7 +224,7 @@ $$
 \frac{\partial R}{\partial w_j} = 2\lambda w_j
 $$
 
-* Vector form:
+* Vectour form:
 
 $$
 \nabla_w R(w) = 2\lambda w
