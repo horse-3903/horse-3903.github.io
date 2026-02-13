@@ -18,7 +18,7 @@ access: restricted
 
 * Fine‑tuning adapts a **pretrained model** to a new task or dataset.
 * It can be **full fine‑tuning** (update all weights) or **parameter‑efficient** (update small adapters).
-* The choice depends on data sise, compute budget, and how far the task is from pretraining.
+* The choice depends on data size, compute budget, and how far the task is from pretraining.
 
 ---
 
@@ -88,6 +88,7 @@ access: restricted
 ## Step 4: Evaluate and deploy
 * Compare against the base model.
 * Save the fine‑tuned weights or adapters.
+
 
 
 

@@ -1,7 +1,7 @@
 ---
-title: Support Vectour Machines
+title: Support Vector Machines
 published: 2026-02-12
-description: "A comprehensive guide to support vectour machines — exploring how margin maximisation and regularisation create powerful and flexible classifiers."
+description: "A comprehensive guide to support vector machines — exploring how margin maximisation and regularisation create powerful and flexible classifiers."
 tags: ["Classical Machine Learning", "Supervised Learning"]
 category: IOAI ML Notes
 draft: false
@@ -13,7 +13,7 @@ access: public
 
 ---
 # Overview
-* **Support Vectour Machines (SVMs)** are effective out-of-the-box classifiers.
+* **Support Vector Machines (SVMs)** are effective out-of-the-box classifiers.
 
 * SVM is also a generalisation of the **maximal margin classifier**.
 
@@ -107,7 +107,7 @@ $$
 
 ### 4. Primal Optimisation Problem
 
-* Maximising the margin is equivalent to minimising the squared norm of the weight vectour.
+* Maximising the margin is equivalent to minimising the squared norm of the weight vector.
 
 $$
 \min_{w_1, \dots, w_p, b} \frac{1}{2}(w_1^2 + \cdots + w_p^2)
@@ -198,7 +198,7 @@ $$
 * By introducing two terms, we can allow more "slack" in determining a (mostly) optimal margin hyperplane.
 
 * The new terms are:
-  * $ \xi_i $ : *Slack variable* which gives an acceptable margin of errour, allowing input $ x_i $ to be closer (or even the wrong side) of the hyperplane.
+  * $ \xi_i $ : *Slack variable* which gives an acceptable margin of Error, allowing input $ x_i $ to be closer (or even the wrong side) of the hyperplane.
   * $ C $ : *Slack penalty* which controls how much slack is allowed.
 
 * Thus, the constrained optimisation problem becomes:
@@ -217,7 +217,7 @@ $$
 Acts as a regularisation parameter.
 
 # Geometric Interpretation of the SVM
-- In vectour form, 
+- In vector form, 
   - $w$ is perpendicular (normal) to the hyperplane.
   - $b$ controls the offset of the hyperplane from the origin.
 - $|w|$ controls the margin width.
@@ -226,7 +226,7 @@ Acts as a regularisation parameter.
 - Classification is based on the sign of $w^Tx + b$.
 - Thus, SVM chooses the boundary that is most robust to perturbations.
 
-# Support Vectour Machines In Practice
+# Support Vector Machines In Practice
 
 ## When to Use SVMs
 
@@ -248,6 +248,7 @@ Acts as a regularisation parameter.
 * Tune $C$ and kernel parameters with cross-validation.
 * Prefer linear SVMs for large, sparse feature spaces.
 * Calibrate probabilities with Platt scaling if required.
+
 
 
 

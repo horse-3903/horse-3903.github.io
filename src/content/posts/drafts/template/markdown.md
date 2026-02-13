@@ -1,4 +1,4 @@
-﻿---
+---
 title: Markdown Example
 published: 2023-10-01
 description: A simple example of a Markdown blog post.
@@ -102,7 +102,7 @@ doc](#an-h2-header). Here's a footnote [^1].
 
 Tables can look like this:
 
-sise material colour
+size material colour
 
 ---
 
@@ -173,3 +173,4 @@ $$
 
 And note that you can backslash-escape any punctuation characters
 which you wish to be displayed literally, ex.: \`foo\`, \*bar\*, etc.
+

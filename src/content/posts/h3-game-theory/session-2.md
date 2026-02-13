@@ -169,7 +169,7 @@ Both **yes** and **no** are equally optimal answers.
 
 ## Rules
 - Agreeing to $ x $ in the second round is payoff equivalent to agreeing to $ \delta x $ in the first round, where $ 0 < \delta < 1 $
-- The pie to split has sise 1, where any real number $ x \in [0, 1] $ can be offered
+- The pie to split has size 1, where any real number $ x \in [0, 1] $ can be offered
 - This means that :
   - P1's split is of the form $ (x, 1-x) $
   - P2's split is of the form $ (y, 1-y) $
@@ -217,5 +217,6 @@ Both **yes** and **no** are equally optimal answers.
 - Challenger should enter the market, and cooperate to maximise payoff
 - Monopolist can improve the outcome by *cutting off the branch* which results in the suboptimal rollback equilibrium
 - This can be done by setting a precedent that they **will not cooperate**
+
 
 

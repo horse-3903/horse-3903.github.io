@@ -28,7 +28,7 @@ access: public
 ![](../assets/mlp/mlp-diagram.svg)
 
 * An MLP composes multiple **affine transformations** with **non-linear activations** to approximate complex functions.
-* It transforms an input vectour $ x $ into a prediction $ \hat{y} $ through layers:  
+* It transforms an input vector $ x $ into a prediction $ \hat{y} $ through layers:  
   $ x \rightarrow h_1 \rightarrow h_2 \rightarrow \cdots \rightarrow \hat{y} $.
 * **Benefits**:
   * Universal function approximatour in theory (with sufficient width).
@@ -44,9 +44,9 @@ access: public
 # How it works
 
 ## Step 1: Define the input and output
-* Input $ x \in \mathbb{R}^d $ (feature vectour).
+* Input $ x \in \mathbb{R}^d $ (feature vector).
 * Output $ \hat{y} $ is either:
-  * **Regression**: real‑valued vectour, or
+  * **Regression**: real‑valued vector, or
   * **Classification**: class scores (logits).
 
 ## Step 2: Compute the hidden layers
@@ -71,7 +71,7 @@ access: public
   * **MSE** for regression: $ \mathcal{L}=\frac{1}{n}\sum (y-\hat{y})^2 $
   * **Cross‑entropy** for classification:  
     $ \mathcal{L}=-\sum_i y_i \log p_i $
-* The loss measures prediction errour across the batch.
+* The loss measures prediction Error across the batch.
 
 ## Step 5: Backpropagate gradients
 * Use the chain rule to compute gradients:
@@ -102,6 +102,7 @@ access: public
 * Use MLPs for **tabular classification/regression**, embeddings, and small‑scale tasks.
 * Pair with **normalisation** and **regularisation** for stability.
 * For images or text, consider CNNs or transformers unless the input is already vectorised.
+
 
 
 

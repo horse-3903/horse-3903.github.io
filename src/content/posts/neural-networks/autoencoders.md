@@ -25,16 +25,16 @@ access: restricted
 
 # Core Idea
 
-* Learn an encoder $f_\theta$ that maps input $x$ to a compact latent vectour $z$.
+* Learn an encoder $f_\theta$ that maps input $x$ to a compact latent vector $z$.
 * Learn a decoder $g_\phi$ that reconstructs $\hat{x}$ from $z$.
-* Train by minimising reconstruction errour so $x \approx \hat{x}$.
+* Train by minimising reconstruction Error so $x \approx \hat{x}$.
 
 ---
 
 # How It Works
 
 ### Step 1: Encode the input
-* Start with input vectour $x \in \mathbb{R}^d$.
+* Start with input vector $x \in \mathbb{R}^d$.
 * Compute latent code $z = f_\theta(x) \text{ s.t. } z \in \mathbb{R}^k$.
 * The bottleneck dimension $k$ is typically smaller than $d$.
 
@@ -43,7 +43,7 @@ access: restricted
 * Decoder mirrors the encoder or uses a task-specific head.
 * Output shape matches the input shape.
 
-### Step 3: Measure reconstruction errour
+### Step 3: Measure reconstruction Error
 * Compare $x$ and $\hat{x}$ with a suitable loss.
 * Typical losses: MSE for real-valued data, BCE for binary data.
 * The loss defines what details are prioritised in reconstruction.
@@ -81,35 +81,55 @@ $$
 ### Undercomplete
 * Bottleneck $k \ll d$ forces compression.
 * Good for dimensionality reduction and compact representations.
+* Encoder must discard redundant features and keep only information needed for reconstruction.
+* Typically uses a stack of linear layers with non-linearities to learn a low-dimensional manifold.
 
 ### Overcomplete
 * Bottleneck $k \ge d$ can copy inputs.
 * Needs regularisation to avoid identity mapping.
+* Encoder can learn a high-capacity representation, so constraints (sparsity, noise, weight decay) are required.
+* Without constraints, the encoder-decoder pair can approximate an identity function.
 
 ### Sparse
 * Add sparsity penalty (e.g. $\ell_1$ on $z$, KL constraint).
 * Encourages only a few active units per example.
+* Encoder learns a distributed code where most latent units are near zero for any given input.
+* Sparsity makes the representation more interpretable and robust to irrelevant features.
 
 ### Denoising
 * Corrupt input $\tilde{x}$ and reconstruct clean $x$.
 * Improves robustness to noise and missing values.
+* Encoder learns features that are stable under input perturbations.
+* Corruption can be Gaussian noise, masking, or salt-and-pepper noise.
 
 ### Contractive
 * Penalise encoder sensitivity (Jacobian norm).
 * Learns locally invariant features.
+* Encoder is pushed to map nearby inputs to similar latents.
+* Works like a smoothness constraint on $f_\theta$.
 
 ### Variational (VAE)
 * Learn a distribution over $z$ with KL regularisation.
 * Enables sampling and generation.
+* Encoder outputs $\mu(x)$ and $\sigma(x)$ for a Gaussian $q_\theta(z \mid x)$.
+* Sample $z = \mu + \sigma \odot \epsilon$ using the reparameterization trick.
+* KL term shapes the latent space toward a known prior (e.g. $\mathcal{N}(0, I)$).
 
 ### Convolutional
 * Use conv layers for spatial data.
 * Preserves locality and scales to images.
+* Encoder uses strided convolutions or pooling to reduce spatial resolution.
+* Latent code captures hierarchical spatial features (edges, textures, objects).
 
 ### Sequence
 * Use RNN/Transformer encoder-decoder.
 * Works for text and time series.
+* Encoder compresses a variable-length sequence into a fixed-size state or a set of token embeddings.
+* Attention-based encoders preserve long-range dependencies better than plain RNNs.
 
 ### Adversarial (AAE)
-* Match latent distribution with a discriminatour.
+* Match latent distribution with a discriminator.
 * KL replaced by adversarial training.
+* Encoder is trained to fool the discriminator so $z$ matches a target prior.
+* Reconstruction loss and adversarial loss jointly shape the encoder output.
+

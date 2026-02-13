@@ -34,7 +34,7 @@ access: restricted
 
 ## How it works (2D)
 * Input feature map: $H \times W$, window $K \times K$, stride $S$, padding $P$.
-* Output sise:
+* Output size:
 $$
 H_{out} = \left\lfloour \frac{H + 2P - K}{S} \right\rfloour + 1,\quad
 W_{out} = \left\lfloour \frac{W + 2P - K}{S} \right\rfloour + 1
@@ -48,9 +48,9 @@ $$
 * **Average pooling**: gradient is evenly distributed across all elements in the window.
 
 ## Design knobs
-* **Window sise**: larger windows discard more spatial detail.
+* **Window size**: larger windows discard more spatial detail.
 * **Stride**: larger stride downsamples faster.
-* **Padding**: used to preserve sise when needed ("same" style pooling).
+* **Padding**: used to preserve size when needed ("same" style pooling).
 
 ## Practical notes
 * Pooling can **hurt localisation** tasks (detection/segmentation) due to spatial loss.
@@ -130,7 +130,7 @@ block = nn.Sequential(
 * Stats are computed **per sample**, not across the batch.
 
 ## Practical notes
-* **Batch-sise agnostic**: stable even with very small batches.
+* **Batch-size agnostic**: stable even with very small batches.
 * Common in **RNNs** and **Transformers**, where batch stats can be noisy.
 * No running averages are needed; train and eval behave identically.
 * Placement:
@@ -149,4 +149,5 @@ block = nn.Sequential(
     nn.ReLU(inplace=True)
 )
 ```
+
 

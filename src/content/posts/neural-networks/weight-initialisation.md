@@ -38,7 +38,7 @@ access: restricted
 # Notation / Terminology
 
 * $ W $: weight matrix for a layer.
-* $ b $: bias vectour.
+* $ b $: bias vector.
 * $ n_{in} $: number of input units (fan‑in).
 * $ n_{out} $: number of output units (fan‑out).
 * $ \mathrm{Var}(W) $: variance of the weight distribution.

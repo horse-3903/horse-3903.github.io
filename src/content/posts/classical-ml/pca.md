@@ -42,7 +42,7 @@ access: public
   $$
   X_c = X - \mu
   $$
-  where $\mu$ is the feature-wise mean vectour.
+  where $\mu$ is the feature-wise mean vector.
 
 * **Mean-centring** means subtracting each feature's average from every sample, so **every column has mean 0**.
 
@@ -149,18 +149,18 @@ access: public
 
 ---
 
-# Reconstruction and Errour
+# Reconstruction and Error
 
 * **Approximate reconstruction** back to the original space:
   $$
   \hat{X} = Z W_k^\top + \mu
   $$
 
-* **Reconstruction errour decreases** as $k$ increases, but so does compression.
+* **Reconstruction Error decreases** as $k$ increases, but so does compression.
 
-* The **errour comes from discarding components**: lower-variance directions still contain information that is lost when projecting to $k$ dimensions.
+* The **Error comes from discarding components**: lower-variance directions still contain information that is lost when projecting to $k$ dimensions.
 
-* **Mean-centring does not create this errour**; it only shifts data to zero mean so variance is measured consistently.
+* **Mean-centring does not create this Error**; it only shifts data to zero mean so variance is measured consistently.
 
 ---
 
@@ -186,6 +186,7 @@ access: public
 * **Standardise features** before computing components.
 * Choose component count via **explained variance** or cross-validation.
 * Inspect **loadings** to understand what each component captures.
+
 
 
 

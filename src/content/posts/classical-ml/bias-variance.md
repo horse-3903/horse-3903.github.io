@@ -33,7 +33,7 @@ access: public
 # Squared Loss Decomposition (Regression)
 
 * Squared loss: $S = (y - \hat{y})^2$.
-* The expected squared loss decomposes into bias, variance, and a noise term (often called irreducible errour). 
+* The expected squared loss decomposes into bias, variance, and a noise term (often called irreducible Error). 
 
 $$
 E[(y - \hat{y})^2] = \big(y - E[\hat{y}]\big)^2 + E\big[(\hat{y} - E[\hat{y}])^2\big]
@@ -41,15 +41,15 @@ $$
 
 ---
 
-# Total Errour and Irreducible Errour
+# Total Error and Irreducible Error
 
-* **Total errour** (expected loss) can be viewed as:
-  * **Bias** (systematic errour from wrong assumptions),
-  * **Variance** (errour from sensitivity to training data),
-  * **Irreducible errour** (noise in the data that no model can remove). 
-* In the squared-loss decomposition, the irreducible errour is the noise term that is often omitted for simplicity. 
+* **Total Error** (expected loss) can be viewed as:
+  * **Bias** (systematic Error from wrong assumptions),
+  * **Variance** (Error from sensitivity to training data),
+  * **Irreducible Error** (noise in the data that no model can remove). 
+* In the squared-loss decomposition, the irreducible Error is the noise term that is often omitted for simplicity. 
 
-## Why Total Errour = Bias^2 + Variance + Irreducible Errour
+## Why Total Error = Bias^2 + Variance + Irreducible Error
 
 Notation:
 * $x$: input features
@@ -83,11 +83,11 @@ $$
 So:
 * **Bias^2**: $(f(x) - E[\hat{y}])^2$
 * **Variance**: $E[(\hat{y} - E[\hat{y}])^2]$
-* **Irreducible errour**: $E[\varepsilon^2] = \sigma^2$
+* **Irreducible Error**: $E[\varepsilon^2] = \sigma^2$
 
 Therefore:
 $$
-E[(y - \hat{y})^2] = \text{Bias}^2 + \text{Variance} + \text{Irreducible Errour}
+E[(y - \hat{y})^2] = \text{Bias}^2 + \text{Variance} + \text{Irreducible Error}
 $$
 
 ---
@@ -104,6 +104,7 @@ $$
 
 * Bagging typically reduces variance compared to a single decision tree in the provided examples.
 * For 0-1 loss, if bias is 1, increasing variance can reduce loss (a counterintuitive edge case).
+
 
 
 

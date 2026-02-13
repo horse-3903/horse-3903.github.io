@@ -252,18 +252,18 @@ $$
 $$
 \pi_1
 \begin{cases}
-V_1 - b_1 \quad \text{if} \quad b_1 > b_2 \\
-0 \quad \text{if} \quad b_1 < b_2 \\
-\frac{V_1 - b_1}{2} \quad \text{if} \quad b_1 = b_2
+V_1 - b_1 & \text{if} \quad b_1 > b_2 \\
+0 & \text{if} \quad b_1 < b_2 \\
+\frac{V_1 - b_1}{2} & \text{if} \quad b_1 = b_2
 \end{cases}
 $$
 
 $$
 \pi_2
 \begin{cases}
-V_2 - b_2 \quad \text{if} \quad b_2 > b_1 \\
-0 \quad \text{if} \quad b_2 < b_1 \\
-\frac{V_2 - b_2}{2} \quad \text{if} \quad b_2 = b_1
+V_2 - b_2 & \text{if} \quad b_2 > b_1 \\
+0 & \text{if} \quad b_2 < b_1 \\
+\frac{V_2 - b_2}{2} & \text{if} \quad b_2 = b_1
 \end{cases}
 $$
 
@@ -342,9 +342,9 @@ $$
 $$
 \text{winner}
 \begin{cases}
-\text{tie} \quad \text{if } c_1 = c_2 \text{ or } d_1 = d_2 \\
-P1 \quad \text{if } d_1 < d_2 \\
-P2 \quad \text{otherwise}
+\text{tie} & \text{if } c_1 = c_2 \text{ or } d_1 = d_2 \\
+P1 & \text{if } d_1 < d_2 \\
+P2 & \text{otherwise}
 \end{cases}
 $$
 
@@ -410,9 +410,9 @@ $$ \text{let } V_1 = 100, V_2 = 250 $$
 $$
 \pi_2 
 \begin{cases}
-250 - b_1 \quad \text{if } b_2 > b_1 \\
-0 \quad \text{if } b_2 < b_1 \\
-\frac{250 - b_1}{2} \quad \text{if } b_2 = b_1
+250 - b_1 & \text{if } b_2 > b_1 \\
+0 & \text{if } b_2 < b_1 \\
+\frac{250 - b_1}{2} & \text{if } b_2 = b_1
 \end{cases}
 $$
 

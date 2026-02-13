@@ -199,15 +199,15 @@ $$
 $$
 \pi_1 = 
 \begin{cases}
-\frac{10x}{x+y} - x \quad \text{if } x \ne 0 \text{ or } y \ne 0\\
-5 \quad \text{if } x = y = 0
+\frac{10x}{x+y} - x & \text{if } x \ne 0 \text{ or } y \ne 0\\
+5 & \text{if } x = y = 0
 \end{cases}
 $$
 
 $$
 \pi_2 = 
 \begin{cases}
-\frac{10y}{x+y} - x \quad \text{if } x \ne 0 \text{ or } y \ne 0\\
+\frac{10y}{x+y} - x & \text{if } x \ne 0 \text{ or } y \ne 0\\
 5 \quad \text{if } x = y = 0
 \end{cases}
 $$

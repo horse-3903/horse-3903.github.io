@@ -32,10 +32,10 @@ access: public
   * Sensitivity to noise
   * Sensitivity to data splits
 
-## Errour Decomposition
-* **Prediction errour** measures how far model predictions are from the true labels.
-* **Generalisation errour**  measures the expected errour on unseen data.
-* **Total expected errour** can be decomposed to Bias² + Variance + Irreducible Noise.
+## Error Decomposition
+* **Prediction Error** measures how far model predictions are from the true labels.
+* **Generalisation Error**  measures the expected Error on unseen data.
+* **Total expected Error** can be decomposed to Bias² + Variance + Irreducible Noise.
   * *Bias*: Underfitting due to simplistic assumptions.
   * *Variance*: Overfitting due to hypersensitivity to data.
   * *Irreducible noise*: Randomness in data.
@@ -185,8 +185,8 @@ access: public
 * Each instance weight $ w_i $ is set to $ 1/m $.
 * The model is trained on the samples.
 
-#### Step 2: Calculate Weighted Errour Rate
-* The weighted errour rate $ r_j $ is computed on the training set for model $ j $.
+#### Step 2: Calculate Weighted Error Rate
+* The weighted Error rate $ r_j $ is computed on the training set for model $ j $.
 
 $$
 r_j = \frac{\sum^{m}_{i=1} w_i \space \text{ s.t. } \hat{y}_{i,j} \ne y_i}{\sum^{m}_{i=1} w_i}
@@ -245,12 +245,12 @@ $$
 1. Initialise the model with a constant prediction that minimises the loss.
 2. Compute the negative gradient (residuals) of the loss with respect to the current predictions.
 3. Fit a new weak learner to these residuals.
-4. Scale the learner by a step sise and add it to the ensemble.
+4. Scale the learner by a step size and add it to the ensemble.
 5. Repeat steps 2–4 for the desired number of iterations.
 
 ### Loss Functions
 
-* **Mean Squared Errour** loss for regressors.
+* **Mean Squared Error** loss for regressors.
 * **Negative Log-Likelihood** for classifiers.
 
 ---
@@ -358,7 +358,7 @@ $$
 ## When to Use Ensemble Methods
 
 * When single models underperform and you can afford extra compute.
-* When base learners have complementary errour patterns.
+* When base learners have complementary Error patterns.
 * When variance reduction or bias reduction is a primary goal.
 * When you need strong performance on tabular data.
 
@@ -367,7 +367,7 @@ $$
 * When training data is very small and overfitting risk is high.
 * When model debugging and traceability are critical.
 * When you need real-time updates or streaming inference.
-* When deployment sise and latency budgets are tight.
+* When deployment size and latency budgets are tight.
 
 ## Practical Notes
 
@@ -375,6 +375,8 @@ $$
 * Keep base models diverse to avoid correlated errors.
 * Monitour calibration; averaging can still be miscalibrated.
 * Apply early stopping for boosting to control overfitting.
+
+
 
 
 

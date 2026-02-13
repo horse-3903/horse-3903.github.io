@@ -58,7 +58,7 @@ access: public
 
 ## Diagnostic Tools
 
-* **Confusion matrix**: shows per-class errour structure.
+* **Confusion matrix**: shows per-class Error structure.
 * **ROC curve** and **AUC**: threshold-independent tradeoff of TPR vs FPR.
 * **PR curve** is often more informative under heavy class imbalance.
 * **Calibration**: reliability curves and Brier score measure probability quality.
@@ -68,7 +68,7 @@ access: public
 ![](../assets/data-science/confusion-matrix.png)
 
 * Summarises **true positives**, **false positives**, **true negatives**, and **false negatives**.
-* Makes **errour types** visible (e.g., false alarms vs misses).
+* Makes **Error types** visible (e.g., false alarms vs misses).
 * Helps identify **systematic confusion** between specific classes.
 
 ### ROC Curve
@@ -114,7 +114,7 @@ access: public
 
 ### MAPE
 * Formula: $ \frac{100}{n}\sum \left|\frac{y_i-\hat{y}_i}{y_i}\right| $.
-* Expresses errour as a **percentage**.
+* Expresses Error as a **percentage**.
 * Avoid when $ y_i \approx 0 $ (can blow up).
 
 ---
@@ -122,20 +122,20 @@ access: public
 # Bias, Variance, and Generalisation
 
 * Refer to bias-variance notes for more detail
-* **Bias**: errour from overly simple assumptions.
-* **Variance**: errour from sensitivity to data fluctuations.
-* Goal is to minimise **expected generalisation errour**: $ \mathbb{E}_{(x,y)}[\ell(y, f(x))] $.
+* **Bias**: Error from overly simple assumptions.
+* **Variance**: Error from sensitivity to data fluctuations.
+* Goal is to minimise **expected generalisation Error**: $ \mathbb{E}_{(x,y)}[\ell(y, f(x))] $.
 
 ## Underfitting
 
 * Model is **too simple** to capture signal.
-* High training errour and high validation errour.
+* High training Error and high validation Error.
 * Fix by adding features, increasing model capacity, or reducing regularisation.
 
 ## Overfitting
 
 * Model **memorises noise** and fails to generalise.
-* Low training errour, high validation errour.
+* Low training Error, high validation Error.
 * Fix with regularisation, more data, or simpler models.
 
 ---
@@ -162,7 +162,7 @@ access: public
 ## Encoding
 
 ### One-hot encoding
-* Expands a category into a **binary vectour**.
+* Expands a category into a **binary vector**.
 * Works well for low-cardinality, **unordered** categories.
 * Can blow up dimensionality for high-cardinality fields.
 
@@ -231,6 +231,7 @@ access: public
 * **Flip**, **crop**, **noise injection**.
 * Use augmentation to improve robustness, not to replace real data.
 * For NLP, consider back-translation or synonym replacement.
+
 
 
 

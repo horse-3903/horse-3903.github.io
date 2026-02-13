@@ -82,7 +82,7 @@ $$
 ### Practical usage
 - Short-sequence tasks where long-term memory is not critical (e.g., character-level text, simple sequence classification)
 - Baseline time-series forecasting or anomaly detection with limited context
-- Lightweight sequence labelling when model sise and speed matter
+- Lightweight sequence labelling when model size and speed matter
 
 ## LSTMs
 ![](../assets/rnn-lstm-gru/lstm.jpg)
@@ -205,8 +205,9 @@ $$
 
 ### Practical usage
 - Similar to LSTMs but with fewer parameters, useful for smaller datasets or faster training
-- Real-time or edge deployments where model sise/latency is constrained
+- Real-time or edge deployments where model size/latency is constrained
 - Robust baselines for many sequence tasks (e.g., sentiment, tagging, forecasting)
+
 
 
 

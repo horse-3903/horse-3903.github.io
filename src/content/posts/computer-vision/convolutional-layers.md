@@ -33,10 +33,10 @@ access: public
 ## Key Concepts
 
 ### Kernels
-![](../assets/convolution/kernel-sise.gif)
+![](../assets/convolution/kernel-size.gif)
 * A kernel is a small window of learnable weights.
 * It slides across the input to detect local patterns.
-* Kernel sise controls how much context the filter sees.
+* Kernel size controls how much context the filter sees.
 
 ### Stride
 ![](../assets/convolution/stride.gif)
@@ -45,15 +45,15 @@ access: public
 
 ### Padding
 ![](../assets/convolution/padding.gif)
-* Adds border pixels to preserve spatial sise.
+* Adds border pixels to preserve spatial size.
 * Helps retain edge information.
 
-### Output sise
-![](../assets/convolution/output-sise.gif)
-* Depends on input sise, kernel sise, stride, and padding.
+### Output size
+![](../assets/convolution/output-size.gif)
+* Depends on input size, kernel size, stride, and padding.
 * Use the formula below to compute $H_{out}$ and $W_{out}$.
 
-* For input sise $ H \times W $:
+* For input size $ H \times W $:
 $$
 H_{out} = \left\lfloour \frac{H + 2P - K}{S} \right\rfloour + 1
 $$
@@ -61,8 +61,8 @@ $$
 W_{out} = \left\lfloour \frac{W + 2P - K}{S} \right\rfloour + 1
 $$
 * **$H, W$**: input height and width.
-* **$K$**: kernel sise (assume square kernel for simplicity).
-* **$P$**: padding sise on each side.
+* **$K$**: kernel size (assume square kernel for simplicity).
+* **$P$**: padding size on each side.
 * **$S$**: stride.
 * **$H_{out}, W_{out}$**: output height and width.
 
@@ -105,10 +105,10 @@ $$
 * **Local connectivity**: filters see small neighborhoods first.
 * **Weight sharing**: same filter across the image cuts parameters.
 * **Translation tolerance**: same pattern can be detected anywhere.
-* **Parameter efficiency**: FC layers explode in sise for high-res inputs.
+* **Parameter efficiency**: FC layers explode in size for high-res inputs.
 
 ## When FC makes sense
-* Small, fixed-sise tabular inputs.
+* Small, fixed-size tabular inputs.
 * As a final classifier head after convolutional features.
 
 ---
@@ -124,7 +124,7 @@ $$
 * This helps gradients flow and enables **very deep** networks.
 
 ## Why residual learning helps
-* **Degradation problem**: very deep plain CNNs can have **higher training errour** than shallower ones.
+* **Degradation problem**: very deep plain CNNs can have **higher training Error** than shallower ones.
 * Learning a **residual** $F(x)$ is often easier than learning a full mapping $H(x)$ directly.
 * If the optimal mapping is close to identity, then $H(x) \approx x$ and the residual $F(x) = H(x) - x \approx 0$, which is easier to optimise.
 
@@ -213,6 +213,7 @@ from torch.utils.data import DataLoader
 train_loader = DataLoader(train_ds, batch_size=32, shuffle=True, num_workers=2)
 val_loader = DataLoader(val_ds, batch_size=32, shuffle=False, num_workers=2)
 ```
+
 
 
 

@@ -20,7 +20,7 @@ access: restricted
 
 ---
 # ResNet
-
+![](../assets/vision-encoders/resnet.png)
 ## Core idea
 * Learn residual mappings so each block refines features rather than relearning them.
 * Skip connections keep gradients stable in very deep networks.
@@ -84,8 +84,6 @@ model.fc = nn.Linear(model.fc.in_features, num_classes)
 
 ---
 # VGG
-
-## Core idea
 * Use simple, repeated $3 \times 3$ convolutions to build depth.
 * Keep architecture uniform to make behaviour predictable.
 
@@ -106,7 +104,7 @@ model.classifier[-1] = nn.Linear(model.classifier[-1].in_features, num_classes)
 
 ---
 # MobileNet
-
+![](../assets/vision-encoders/mobilenet.png)
 ## Core idea
 * Factorise standard convolution to reduce compute on mobile hardware.
 * Separate spatial filtering from channel mixing.
@@ -122,7 +120,7 @@ $$
 \mathcal{O}(K^2 M H W + M N H W)
 $$
 * **Notation**:
-  * **$K$**: kernel sise (assume square).
+  * **$K$**: kernel size (assume square).
   * **$H, W$**: input height and width.
   * **$M$**: input channels.
   * **$N$**: output channels.
@@ -135,7 +133,7 @@ $$
 $$
 \text{depthwise + pointwise: } K^2 M H W + M N H W
 $$
-* **When to use**: mobile and edge devices where latency and sise matter.
+* **When to use**: mobile and edge devices where latency and size matter.
 ## PyTorch access
 ```py
 from torchvision import models
@@ -241,6 +239,7 @@ model.classifier = nn.Linear(model.classifier.in_features, num_classes)
 
 * Use for transfer learning.
 * Freeze early layers when data is limited.
+
 
 
 

@@ -12,8 +12,7 @@
 		"type-check": "tsc --noEmit --isolatedDeclarations",
 		"new-post": "node scripts/new-post.js",
 		"update-published": "node scripts/update-published.js",
-		"to-british": "node scripts/american-to-british.js",
-		"format-all": "pnpm format && pnpm update-published && pnpm to-british && pnpm lint",
+		"format-all": "pnpm format && pnpm update-published && pnpm lint",
 		"format": "biome format --write ./src",
 		"lint": "biome check --write ./src",
 		"preinstall": "npx only-allow pnpm"

@@ -58,11 +58,11 @@ $$
 ## Core Idea
 
 * Iteratively update parameters to reduce the loss.
-* Learning rate controls the step sise.
+* Learning rate controls the step size.
 
 ## Practical Notes
 
-* Batch sise affects stability and noise.
+* Batch size affects stability and noise.
 * Momentum or adaptive methods can speed up convergence.
 * In general, the update rule is:
 $$
@@ -114,7 +114,7 @@ $$
 ## Core Idea
 
 * Uses the chain rule to compute gradients layer by layer.
-* Propagates errour backward from the output to earlier layers.
+* Propagates Error backward from the output to earlier layers.
 
 ## Practical Notes
 
@@ -133,9 +133,9 @@ $$
 
 ## Backprop Flow (Key Gradients)
 
-* Output layer errour: $\delta_2 = \hat{y} - y$
+* Output layer Error: $\delta_2 = \hat{y} - y$
 * Output weights: $\nabla_{W_2} L = \delta_2 h^\top$, bias: $\nabla_{b_2} L = \delta_2$
-* Hidden errour: $\delta_1 = (W_2^\top \delta_2) \odot \sigma'(W_1 x + b_1)$
+* Hidden Error: $\delta_1 = (W_2^\top \delta_2) \odot \sigma'(W_1 x + b_1)$
 * Hidden weights: $\nabla_{W_1} L = \delta_1 x^\top$, bias: $\nabla_{b_1} L = \delta_1$
 
 ---
@@ -173,7 +173,7 @@ $$
 
 ## Core Idea
 
-* A loss measures prediction errour and drives gradient updates.
+* A loss measures prediction Error and drives gradient updates.
 * Pick losses to match the output type and task.
 
 ## Practical Notes
@@ -183,13 +183,15 @@ $$
 
 ## Regression
 
-* Mean Squared Errour (MSE) penalises large errors strongly.
-* Mean Absolute Errour (MAE) is more robust to outliers.
+* Mean Squared Error (MSE) penalises large errors strongly.
+* Mean Absolute Error (MAE) is more robust to outliers.
 
 ## Classification
 
 * Cross Entropy for multi-class problems.
 * Binary Cross Entropy for two-class problems.
+
+
 
 
 

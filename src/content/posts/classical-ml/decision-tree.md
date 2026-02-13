@@ -74,7 +74,7 @@ access: public
 
 * Use **Entropy / Information Gain** or **Gini Index** (for classification).
 
-* Use **Mean Squared Errour** (for regression).
+* Use **Mean Squared Error** (for regression).
 
 ### 4. Select the split with the best score
 
@@ -155,7 +155,7 @@ $$
 
 * Regression-based MSE over a set $ S $
 
-* The Mean Squared Errour of a set $ S $ is defined as
+* The Mean Squared Error of a set $ S $ is defined as
 
 $$
 \text{MSE}(S) = \frac{1}{|S|} \sum_{(x, y_S) \in S} (y - \bar y_S)^2
@@ -177,7 +177,7 @@ $$
 | **Numeric / Continuous** | x < t  or  x > t  | $ \cdot $ Sort all unique values of (x) <br>$ \cdot $ Compute midpoints between consecutive values <br>$ \cdot $ Each midpoint = possible threshold (t) | `Age < 32.5` |
 | **Ordered Categories** | rank(x) < t  | $ \cdot $ Map categories to ranks <br>$ \cdot $ Treat as numeric thresholds | `EducationLevel ≤ 2` |
 | **Binary Categorical** |  x = v  | $ \cdot $ Single split into {v} vs. {not v} | `IsStudent = Yes` |
-| **Multi-Categorical** | x ∈ S  or  x ∉ S | $ \cdot $ Enumerate all possible subsets S of categories <br>$ \cdot $ Often one-hot encode and treat as binary features | `Color ∈ {Red, Blue}` |
+| **Multi-Categorical** | x ∈ S  or  x ∉ S | $ \cdot $ Enumerate all possible subsets S of categories <br>$ \cdot $ Often one-hot encode and treat as binary features | `Colour ∈ {Red, Blue}` |
 | **Boolean** | x < 0.5  or  x ≥ 0.5 | $ \cdot $ Treated as numeric with only one possible threshold | `IsWeekend < 0.5` |
 
 ---
@@ -208,9 +208,9 @@ $$
 ## Post-Pruning (Reducing Nodes)
 
 * **Cost-Complexity Pruning (CCP)**: Assigns a price to each subtre­e based on its accuracy and complexity, the­n selects the subtre­e with the lowest fee
-* **Re­duced Errour Pruning**: Removes branche­s that do not significantly affect the overall accuracy
+* **Re­duced Error Pruning**: Removes branche­s that do not significantly affect the overall accuracy
 * **Minimum Impurity De­crease**: Prunes node­s if the decrease­ in impurity (Gini impurity or entropy) is beneath a ce­rtain threshold
-* **Minimum Leaf Sise**: Re­moves leaf nodes with fe­wer samples than a specifie­d threshold
+* **Minimum Leaf Size**: Re­moves leaf nodes with fe­wer samples than a specifie­d threshold
 
 ---
 
@@ -308,7 +308,7 @@ $$
 **Feature Handling**:
   * Works with both categorical and continuous features.
 
-**Pruning**: Pessimistic pruning: Replaces subtrees with leaves when the errour estimate shows no significant improvement.
+**Pruning**: Pessimistic pruning: Replaces subtrees with leaves when the Error estimate shows no significant improvement.
 
 **Limitation**: Gain Ratio can over-penalise attributes with many branches, sometimes ignoring good splits.
 
@@ -339,8 +339,8 @@ $$
 #### Step 1: Grow the Full Tree
 * Decision tree is grown until its maximum depth 
 
-#### Step 2: Estimate the True Errour Rate of a Node
-* The observed errour rate $ E_t $ at a node $ t $ is defined as
+#### Step 2: Estimate the True Error Rate of a Node
+* The observed Error rate $ E_t $ at a node $ t $ is defined as
 
 $$
 
@@ -352,7 +352,7 @@ $$
   * $ N_t $ is the number of training samples at that node
   * $ e_t $ is the number of misclassified samples 
 
-* However, since this is measured on the training data, it likely underestimates the true errour.
+* However, since this is measured on the training data, it likely underestimates the true Error.
 
 * C4.5 adjusts it upward using a pessimistic correction factor, derived from the normal approximation to the binomial distribution:
 
@@ -362,7 +362,7 @@ E(t) = \frac{e_t + 0.5}{N_t}
 
 $$
 
-#### Step 3: Estimate the True Errour Rate of a Sub-tree
+#### Step 3: Estimate the True Error Rate of a Sub-tree
 * For any internal node $ t $ in subtree $ T $, sum up the adjusted errors of its nodes:
 $$
 
@@ -372,7 +372,7 @@ $$
 
 ## CART
 
-* **Splitting Criterion**: Gini Impurity (for classification) or Mean Squared Errour (for regression).
+* **Splitting Criterion**: Gini Impurity (for classification) or Mean Squared Error (for regression).
 
 * **Output**: Classification ($ \bar y $) and Regression ($ \hat y $).
 
@@ -396,7 +396,7 @@ $$
 * Decision tree is grown until its maximum depth 
 
 #### Step 2: Calculate Cost Complexity Criterion of Tree and Subtree
-* Cost complexity $ R(t) $ is the errour from collapsing the subtree at node $ t $
+* Cost complexity $ R(t) $ is the Error from collapsing the subtree at node $ t $
 * The total cost complexity of a tree $R_\alpha(T)$ is defined as :
 
 $$
@@ -413,8 +413,8 @@ $$
 
 * Where: 
   * $ L(T) $ is the set of leaves in the entire tree,
-  * $ R(T) $ is the training errour of the entire tree,
-  * $ R(t) $ is the training errour of a single node,
+  * $ R(T) $ is the training Error of the entire tree,
+  * $ R(t) $ is the training Error of a single node,
   * $ | T | $ is the number of leaves in the tree
   * $ \alpha $ is a tuning parameter, where a higher $ \alpha $ means more pruning and vice versa, 
   * $ r(t) $ is the impurity of the leaf, 
@@ -428,7 +428,7 @@ g(t) = \frac{R(t) - R(T_t)}{|L(T_t) - 1|}
 $$
 
 * Where: 
-  * $ R(t) - R(T_t) $ is the increase in errour if the subtree $ T_t $ is replaced by a leaf $ t $
+  * $ R(t) - R(T_t) $ is the increase in Error if the subtree $ T_t $ is replaced by a leaf $ t $
   * $ |L(T_t) - 1| $ is the number of leaves removed (excluding the new leaf)
 
 #### Step 4: Generate Pruning Path
@@ -444,7 +444,7 @@ T_0 \supset T_1 \supset T_2 \dots T_K \subset T_R
 $$
 
 #### Step 5: Select the best subtree
-* Use cross-validation, validation errour, 1-standard-errour rule, etc.
+* Use cross-validation, validation Error, 1-standard-Error rule, etc.
 * Find the optimal subtree
 
 ---
@@ -513,6 +513,7 @@ $$
 * Use cross-validation to pick pruning or depth settings.
 * Handle class imbalance with class weights or balanced sampling.
 * Prune for generalisation, not just training accuracy.
+
 
 
 

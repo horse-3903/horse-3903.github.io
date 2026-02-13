@@ -16,14 +16,14 @@ access: public
 
 ## Limitations of Linear Regression
 * The standard implementatioon of linear regression does not guarantee **generalisation** of the model
-* It is limited to the calculation of **empirical errour (MSE)** without:
-  * **Controlling the norm** of the weight vectour
+* It is limited to the calculation of **empirical Error (MSE)** without:
+  * **Controlling the norm** of the weight vector
   * **Regularisation** of the model
 * This leads to **poorer performance** of the model for limited viable practical applications
 
 ## Use of Regularisation
 * In order to mitigate these limitations, **regularisation** can be used to control the model
-* Regularisation adds an **additional term** to the errour, which is minimised
+* Regularisation adds an **additional term** to the Error, which is minimised
 * This leads to a new minimisation objective - the **Regularised Loss Minimisation (RLM)** - which outputs a hypothesis where: 
 
 $$
@@ -112,7 +112,7 @@ $$
   * $ \lambda $ is a scalar where $ \lambda > 0 $,
   * $ ||w|| = \sum^{d}_{i=1} |w_i| $ is the $ l_1 $ norm.
 
-* Applying the learning rule with linear regression and mean-squared errour (MSE) loss:
+* Applying the learning rule with linear regression and mean-squared Error (MSE) loss:
 
 $$
 J(w) = \lambda||w||^2 \space + \space \frac{1}{m} \sum_{i=1}^{N}\frac{1}{2}(w_i x_i - y_i)^2
@@ -162,7 +162,7 @@ $$
   * $ \lambda $ is a scalar where $ \lambda > 0 $,
   * $ ||w|| = \sqrt{\sum^{d}_{i=1} w_i^2}$ is the $ l_2 $ norm.
 
-* Applying the learning rule with linear regression and mean-squared errour (MSE) loss:
+* Applying the learning rule with linear regression and mean-squared Error (MSE) loss:
 
 $$
 J(w) = \lambda||w||^2 \space + \space \frac{1}{m} \sum_{i=1}^{N}\frac{1}{2}(w_i x_i - y_i)^2
@@ -204,7 +204,7 @@ $$
 = \frac{w_j}{\sqrt{r}}
 $$
 
-* Vectour form:
+* Vector form:
 
 $$
 \nabla_w ||w|| = \frac{w}{||w||}
@@ -224,7 +224,7 @@ $$
 \frac{\partial R}{\partial w_j} = 2\lambda w_j
 $$
 
-* Vectour form:
+* Vector form:
 
 $$
 \nabla_w R(w) = 2\lambda w
@@ -252,6 +252,7 @@ $$
 * Tune $\lambda$ via cross-validation, not by training loss.
 * Use Elastic Net when you want sparsity with grouped features.
 * Track coefficient paths to understand shrinkage effects.
+
 
 
 

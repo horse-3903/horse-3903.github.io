@@ -66,7 +66,7 @@ $$
   * $ r_t $ is the **accumulated sum of squared gradients** for each parameter.
   * It grows over time, so parameters with large historical gradients get **smaller effective steps**.
   * $ \eta $ is the **global base learning rate**, while $ r_t $ is the **per‑parameter history** that scales it.
-  * Effective step sise is $ \eta \over (\sqrt{r_t} + \epsilon) $, which shrinks as $ r_t $ increases.
+  * Effective step size is $ \eta \over (\sqrt{r_t} + \epsilon) $, which shrinks as $ r_t $ increases.
 * Update rule:
 $$
 r_t = r_{t-1} + g_t^2
@@ -214,7 +214,7 @@ $$
 * Randomly **zeroes activations** during training:  
   $ h' = m \odot h, \quad m \sim \text{Bernoulli}(p) $
 * Forces the network to learn **redundant representations**.
-* Use typical rates: 0.1–0.5 depending on model sise.
+* Use typical rates: 0.1–0.5 depending on model size.
 
 ### PyTorch example
 ```py
@@ -264,6 +264,7 @@ for epoch in range(100):
 * Combine **data augmentation** with regularisation for best results.
 * Use **dropout** more in fully connected layers than in convolutional layers.
 * Prefer **AdamW** when using weight decay with Adam-style optimisers.
+
 
 
 

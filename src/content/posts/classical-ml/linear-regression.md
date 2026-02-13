@@ -37,7 +37,7 @@ $$
 
 # Cost Function
 
-* To measure how well our model fits the data, we use the **Mean Squared Errour (MSE)** cost function:
+* To measure how well our model fits the data, we use the **Mean Squared Error (MSE)** cost function:
 
 $$
 C = \frac{1}{2m} \sum_{i=1}^{m} (\hat{y}_i - y_i)^2
@@ -125,6 +125,7 @@ $$
 * Inspect **residuals** for heteroscedasticity and bias.
 * Use **Ridge or LASSO** when there are many correlated features.
 * Add **interaction terms** only when they are justified by domain knowledge.
+
 
 
 

@@ -1,4 +1,4 @@
-﻿---
+---
 title: IOAI Syllabus Study Map
 published: 2026-02-08
 description: "A table of contents for studying the IOAI syllabus across the notes."
@@ -24,7 +24,7 @@ pinned: true
 - [X] [Logistic Regression](/posts/classical-ml/logistic-regression/)
 - [X] [K-Nearest Neighbours](/posts/classical-ml/k-nearest-neighbours/)
 - [X] [Decision Tree](/posts/classical-ml/decision-tree/)
-- [X] [Support Vectour Machines](/posts/classical-ml/svm/)
+- [X] [Support Vector Machines](/posts/classical-ml/svm/)
 
 ## Regularisation & Ensembles
 

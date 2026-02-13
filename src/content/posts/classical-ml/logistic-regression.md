@@ -72,7 +72,7 @@ $$
 \sigma(\vec{z})_i = \frac{e^{z_i}}{\sum_{j=1}^{n} e^{z_j}}
 $$
 
-* Softmax produces a vectour of probabilities across all classes that sum to 1.
+* Softmax produces a vector of probabilities across all classes that sum to 1.
 
 ---
 

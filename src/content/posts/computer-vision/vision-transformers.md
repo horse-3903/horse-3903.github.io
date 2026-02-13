@@ -22,15 +22,15 @@ access: restricted
 # Core Idea
 
 ## Patchify
-* Split the image into fixed-sise patches.
+* Split the image into fixed-size patches.
 * Flatten each patch and project to an embedding.
 
-If the image is $H \times W$ and patch sise is $P \times P$:
+If the image is $H \times W$ and patch size is $P \times P$:
 $$
 N = \frac{H W}{P^2}
 $$
 * **$N$**: number of patch tokens.
-* **$P$**: patch sise.
+* **$P$**: patch size.
 
 ## Tokens + Position
 * Add a learnable **[CLS]** token for classification.
@@ -76,8 +76,9 @@ model.heads.head = nn.Linear(model.heads.head.in_features, num_classes)
 ---
 # Practical Notes
 
-* Patch sise trades off detail vs compute.
+* Patch size trades off detail vs compute.
 * Use strong augmentation and regularisation for smaller datasets.
 * For dense prediction (segmentation), use token-to-pixel heads.
+
 
 
