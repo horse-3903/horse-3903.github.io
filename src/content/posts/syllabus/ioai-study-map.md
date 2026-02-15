@@ -68,11 +68,11 @@ pinned: true
 - [X] [Pre-trained Vision Encoders](/posts/computer-vision/pre-trained-vision-encoders/)
 - [X] [CNN Tasks](/posts/computer-vision/cnn-tasks/)
 - [X] [R-CNN Family](/posts/computer-vision/rcnn-family/)
-- [ ] [Vision Transformers](/posts/computer-vision/vision-transformers/)
-- [ ] [Image Augmentation](/posts/computer-vision/image-augmentation/)
-- [ ] [Self-Supervised Learning for Vision](/posts/computer-vision/self-supervised-vision/)
+- [X] [Vision Transformers](/posts/computer-vision/vision-transformers/)
+- [X] [Image Augmentation](/posts/computer-vision/image-augmentation/)
+- [X] [Self-Supervised Learning for Vision](/posts/computer-vision/self-supervised-vision/)
 - [ ] [Vision-Text Encoders](/posts/computer-vision/vision-text-encoders/)
-- [ ] [Image Generation](/posts/computer-vision/image-generation/)
+- [X] [Image Generation](/posts/computer-vision/image-generation/)
 
 ---
 
