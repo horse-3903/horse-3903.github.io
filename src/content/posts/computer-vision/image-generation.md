@@ -1,6 +1,6 @@
 ---
 title: Image Generation
-published: 2026-02-12
+published: 2026-02-15
 description: "GANs and diffusion models for generating images."
 tags: ["Computer Vision", "Deep Learning"]
 category: IOAI ML Notes

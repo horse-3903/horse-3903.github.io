@@ -1,13 +1,12 @@
 ---
 title: IOAI Syllabus Study Map
-published: 2026-02-08
+published: 2026-02-15
 description: "A table of contents for studying the IOAI syllabus across the notes."
 tags: ["Syllabus", "Study Guide"]
 category: IOAI ML Notes
 draft: false
 pinned: true
 ---
-
 # IOAI Syllabus Study Map
 
 # Programming Fundamentals
@@ -84,6 +83,7 @@ pinned: true
 - [ ] [Language Modelling](/posts/nlp/language-modelling/)
 - [ ] [Encoder-Decoder Models](/posts/nlp/encoder-decoder-models/)
 - [ ] [Pre-trained Language Models](/posts/nlp/pretrained-language-models/)
-- [ ] [Audio Processing](/posts/nlp/audio-processing/)
+- [ ] [Pre-trained Audio Encoders](/posts/nlp/pretrained-audio-encoders/)
+- [ ] [Audio Models](/posts/nlp/audio-models)
 
 

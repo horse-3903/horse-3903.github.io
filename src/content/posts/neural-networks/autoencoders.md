@@ -1,6 +1,6 @@
 ---
 title: Autoencoders
-published: 2026-02-12
+published: 2026-02-13
 description: "Autoencoder architectures, objectives, and common applications."
 tags: ["Neural Network", "Deep Learning"]
 category: IOAI ML Notes

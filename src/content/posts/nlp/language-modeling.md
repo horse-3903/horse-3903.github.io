@@ -1,6 +1,6 @@
 ---
 title: Language Modelling
-published: 2026-02-12
+published: 2026-02-15
 description: "Modelling token sequences for generation and prediction."
 tags: ["Natural Language Processing"]
 category: IOAI ML Notes
@@ -15,6 +15,11 @@ access: restricted
 # Overview
 
 * Language models learn to predict the next token in a sequence.
+* They estimate sequence probability and support generation, scoring, and completion.
+
+$$
+P(x_{1:T})=\prod_{t=1}^{T}P(x_t\mid x_{<t})
+$$
 
 ---
 
@@ -22,12 +27,17 @@ access: restricted
 
 ## Core Idea
 
-* Predict token t given previous tokens.
+* Predict token $x_t$ from previous tokens $x_{<t}$ with causal masking.
+
+$$
+\mathcal{L}_{\text{AR}}=-\sum_{t=1}^{T}\log P_\theta(x_t\mid x_{<t})
+$$
 
 ## Practical Notes
 
 * Enables text generation.
 * Often trained with large corpora.
+* Supports few-shot prompting and instruction tuning.
 
 ---
 
@@ -37,9 +47,85 @@ access: restricted
 
 * Predict masked tokens using full context.
 
+$$
+\mathcal{L}_{\text{MLM}}=-\sum_{i\in \mathcal{M}}\log P_\theta(x_i\mid x_{\backslash\mathcal{M}})
+$$
+
 ## Practical Notes
 
 * Used by encoder models like BERT.
+* Strong for understanding tasks, not direct left-to-right generation.
+
+---
+
+# Evaluation Metrics
+
+## Perplexity
+
+$$
+\text{PPL}=\exp\left(
+-\frac{1}{T}\sum_{t=1}^{T}\log P_\theta(x_t\mid x_{<t})
+\right)
+$$
+
+* Lower perplexity means better next-token prediction.
+* Compare only with same tokenizer and data domain.
+
+---
+
+# Decoding Strategies (Autoregressive)
+
+## Greedy Decoding
+
+* Select highest-probability token each step.
+* Fast but can be repetitive.
+
+## Temperature Sampling
+
+$$
+p_i'=\frac{\exp(\log p_i / \tau)}{\sum_j \exp(\log p_j / \tau)}
+$$
+
+* $\tau<1$ makes output more deterministic.
+* $\tau>1$ increases diversity.
+
+## Top-k and Top-p (Nucleus)
+
+* **Top-k**: sample only from top $k$ tokens.
+* **Top-p**: sample smallest token set with cumulative probability $\ge p$.
+* Usually combine with repetition penalties for longer outputs.
+
+---
+
+# Training Pipeline (Practical)
+
+## Step 1: Prepare corpus
+
+* Deduplicate and clean text.
+* Build tokenizer aligned with domain vocabulary.
+
+## Step 2: Create training sequences
+
+* Chunk documents into fixed context windows.
+* Build labels by shifting tokens one position for AR training.
+
+## Step 3: Optimize model
+
+* Use AdamW, LR warmup/decay, mixed precision.
+* Monitor training/validation perplexity and divergence.
+
+## Step 4: Adapt model
+
+* Continue pretraining on domain text.
+* Apply supervised fine-tuning or instruction tuning for specific behavior.
+
+---
+
+# Practical Notes
+
+* Data quality often matters more than modest architecture changes.
+* Context length improves long-dependency tasks but increases cost.
+* Safety/alignment layers are needed for production deployment.
 
 
 

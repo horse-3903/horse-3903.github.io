@@ -1,6 +1,6 @@
 ---
 title: Image Augmentation
-published: 2026-02-12
+published: 2026-02-15
 description: "Simple augmentation techniques to improve generalisation."
 tags: ["Computer Vision"]
 category: IOAI ML Notes

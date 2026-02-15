@@ -1,6 +1,6 @@
 ---
 title: Vision Transformers
-published: 2026-02-12
+published: 2026-02-15
 description: "How vision transformers model images as token sequences."
 tags: ["Computer Vision", "Deep Learning"]
 category: IOAI ML Notes

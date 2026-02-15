@@ -1,6 +1,6 @@
 ---
 title: Decision Tree
-published: 2026-02-12
+published: 2026-02-14
 description: "A comprehensive guide to Decision Trees — exploring how they recursively split data to model complex decision boundaries for classification and regression tasks."
 tags: ["Classical Machine Learning", "Supervised Learning"]
 category: IOAI ML Notes
