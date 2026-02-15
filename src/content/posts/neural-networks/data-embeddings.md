@@ -30,6 +30,52 @@ access: restricted
 
 ---
 
+# Sparse vs Dense Embeddings
+
+## Sparse Embeddings
+
+* Most dimensions are zero; only a small subset are non-zero.
+* Common examples: one-hot vectors, bag-of-words, and TF-IDF.
+* Usually high-dimensional, such as vocabulary-sized vectors.
+* Easy to interpret because each dimension maps to a specific token/feature.
+
+$$
+x \in \mathbb{R}^V,\quad \|x\|_0 \ll V
+$$
+
+## Dense Embeddings
+
+* Most dimensions contain non-zero values.
+* Common examples: Word2Vec, GloVe, BERT token embeddings, CLIP embeddings.
+* Usually lower-dimensional, such as $d=128$ to $d=4096$.
+* Harder to interpret directly, but better at capturing semantic similarity.
+
+$$
+z = f(x),\quad z \in \mathbb{R}^d,\quad d \ll V
+$$
+
+## Key Tradeoffs
+
+* **Interpretability**:
+* Sparse vectors are more human-readable.
+* Dense vectors are less interpretable but often more expressive.
+* **Memory and compute**:
+* Sparse vectors can be memory-heavy at very large vocab sizes.
+* Dense vectors are compact and efficient for neural models.
+* **Generalisation**:
+* Sparse methods treat tokens as mostly independent.
+* Dense methods share statistical strength across similar tokens/items.
+* **Best use cases**:
+* Sparse: classical IR/search baselines, small-data linear models.
+* Dense: semantic search, transfer learning, deep learning pipelines.
+
+## Practical Rule
+
+* Start with sparse features (for example TF-IDF) for a fast baseline.
+* Move to dense embeddings when you need semantic similarity, transfer, or multimodal alignment.
+
+---
+
 # Text Embeddings
 
 ## Tokenisation matters

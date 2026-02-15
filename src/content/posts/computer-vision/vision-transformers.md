@@ -31,14 +31,57 @@ N = \frac{H W}{P^2}
 $$
 * **$N$**: number of patch tokens.
 * **$P$**: patch size.
+* Each patch has raw dimension $P^2 C$ (with $C$ input channels).
+* Linear projection maps each patch to model dimension $D$.
+
+$$
+x_p \in \mathbb{R}^{N \times (P^2 C)}, \quad z_0 = x_p E \in \mathbb{R}^{N \times D}
+$$
+* **$E$** is the learnable patch embedding matrix.
 
 ## Tokens + Position
 * Add a learnable **[CLS]** token for classification.
 * Add positional embeddings so order is known.
+* Final encoder input is:
+
+$$
+z_0 = [x_{\text{cls}}; x_p E] + E_{\text{pos}}
+$$
+* **$x_{\text{cls}}$** is the class token and **$E_{\text{pos}}$** is learnable positional embedding.
 
 ## Transformer Encoder
 * Stack multi-head self-attention + MLP blocks.
 * Output at [CLS] token is used for classification.
+* Layer structure (pre-norm style):
+
+$$
+z_l' = z_{l-1} + \text{MSA}(\text{LN}(z_{l-1}))
+$$
+
+$$
+z_l = z_l' + \text{MLP}(\text{LN}(z_l'))
+$$
+
+* Classification head:
+
+$$
+\hat{y} = \text{softmax}(W z_L^{\text{cls}})
+$$
+
+## Attention Computation
+* Queries, keys, values are linear projections of tokens.
+* Attention weights are scaled dot products.
+
+$$
+\text{Attention}(Q,K,V)=\text{softmax}\!\left(\frac{QK^\top}{\sqrt{d_k}}\right)V
+$$
+
+* Full self-attention cost grows quadratically with token count:
+
+$$
+\mathcal{O}(N^2 D)
+$$
+* Smaller patch size increases $N$, which increases compute and memory.
 
 ---
 # Why It Works
@@ -46,13 +89,15 @@ $$
 * **Global receptive field** from the first layer.
 * Scales well with data and compute.
 * Pretrained ViTs transfer well to detection and segmentation.
+* Patch tokens learn semantically rich features when pretrained at scale (for example, ImageNet-21k / JFT-style corpora).
 
 ---
 # Key Variants
 
-* **ViT**: baseline patch + transformer encoder.
-* **DeiT**: data-efficient training for smaller datasets.
-* **Swin Transformer**: windowed attention for better scaling on high-res images.
+* **ViT**: baseline patch + global attention.
+* **DeiT**: strong augmentation + distillation token to train with less data.
+* **Swin Transformer**: shifted local windows for near-linear scaling with image size.
+* **Hybrid ViT**: CNN stem before transformer to improve local inductive bias.
 
 ---
 # When To Use
@@ -60,25 +105,23 @@ $$
 * **Large datasets**: ViTs shine with lots of pretraining data.
 * **Transfer learning**: strong backbone for downstream tasks.
 * **Hybrid setups**: CNN stem + transformer for efficiency.
-
----
-# PyTorch Quickstart
-
-```py
-import torch
-import torch.nn as nn
-from torchvision import models
-
-model = models.vit_b_16(weights=models.ViT_B_16_Weights.DEFAULT)
-model.heads.head = nn.Linear(model.heads.head.in_features, num_classes)
-```
+* **High-resolution tasks**: use hierarchical/windowed variants (for example, Swin) to reduce quadratic attention cost.
 
 ---
 # Practical Notes
 
-* Patch size trades off detail vs compute.
-* Use strong augmentation and regularisation for smaller datasets.
-* For dense prediction (segmentation), use token-to-pixel heads.
+* Patch size trades off detail vs compute:
+* Smaller $P$ gives finer detail but larger $N$ and higher memory.
+* Typical settings: $P=16$ for classification baselines, smaller patches for dense tasks.
+* Training recipe matters for data-limited settings:
+* Use RandAugment/Mixup/CutMix, label smoothing, stochastic depth, and AdamW.
+* Positional embedding interpolation is needed when fine-tuning at different image resolutions.
+* For dense prediction (segmentation/detection), attach FPN/UPerNet-style heads instead of only using [CLS].
+
+## Typical Model Scales
+* **ViT-Tiny/Small**: faster experimentation, lower memory.
+* **ViT-Base**: common transfer-learning default.
+* **ViT-Large/Huge**: best quality with large-scale pretraining and strong compute budget.
 
 
 

@@ -56,7 +56,7 @@ pinned: true
 - [X] [Optimisers, Convergence, and Regularisation](/posts/neural-networks/optimisers-convergence-regularisation/)
 - [X] [Pooling, Batch Norm, and Layer Norm](/posts/neural-networks/pooling-batch-layer-norm/)
 - [X] [Weight Initialisation](/posts/neural-networks/weight-initialisation/)
-- [ ] [Data Embeddings](/posts/neural-networks/data-embeddings/)
+- [X] [Data Embeddings](/posts/neural-networks/data-embeddings/)
 - [X] [Autoencoders](/posts/neural-networks/autoencoders/)
 - [X] [Fine-tuning](/posts/neural-networks/finetuning/)
 
@@ -66,8 +66,8 @@ pinned: true
 
 - [X] [Convolutional Layers](/posts/computer-vision/convolutional-layers/)
 - [X] [Pre-trained Vision Encoders](/posts/computer-vision/pre-trained-vision-encoders/)
-- [ ] [CNN Tasks](/posts/computer-vision/cnn-tasks/)
-- [ ] [R-CNN Family](/posts/computer-vision/rcnn-family/)
+- [X] [CNN Tasks](/posts/computer-vision/cnn-tasks/)
+- [X] [R-CNN Family](/posts/computer-vision/rcnn-family/)
 - [ ] [Vision Transformers](/posts/computer-vision/vision-transformers/)
 - [ ] [Image Augmentation](/posts/computer-vision/image-augmentation/)
 - [ ] [Self-Supervised Learning for Vision](/posts/computer-vision/self-supervised-vision/)

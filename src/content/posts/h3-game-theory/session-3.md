@@ -103,7 +103,7 @@ $$
 
 ## Justification for Dominant Strategy
 * Given **common knowledge**, since the player knows that the other player will play a dominant strategy, the current player will change their strategy to outperform him
-* In many cases, this would be to not play a dominanted strategy, and play a **dominant strategy**
+* In many cases, this would be to not play a dominated strategy, and play a **dominant strategy**
 
 ## Existence of Dominated Strategies
 * In many games, there might not be a **dominant strategy**

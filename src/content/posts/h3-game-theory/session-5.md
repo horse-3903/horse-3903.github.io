@@ -33,9 +33,9 @@ access: restricted
 * When a circle is made around two choices, it means the player is unaware of the decisions made by the other player
 * This allows simultaneous games to be mapped out as game trees
 
-## Idenitfying Sub-games 
+## Identifying Sub-games 
 ![](../assets/h3/image8.png)
-* Sub-games can be obtained when games are broken down into its component branches
+* Sub-games can be obtained when games are broken down into their component branches
 * This simplifies the games as each game can be considered as being isolated
 * In this game, there are 4 subgames:
   * **Subgame 1**: $ (Invest, Invest ) $
@@ -228,7 +228,7 @@ $$
 * P1 and P2 care about their profits 
 
 ## Perform backward induction to determine whether firms will invest in the technology
-### Strat
+### Start
 * There are 4 sub-games
 * For each sub-games, we need to compute the Nash equilibrium prices and their associated profits
 * Remember that profits are

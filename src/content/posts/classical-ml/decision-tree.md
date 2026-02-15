@@ -208,7 +208,7 @@ $$
 ## Post-Pruning (Reducing Nodes)
 
 * **Cost-Complexity Pruning (CCP)**: Assigns a price to each subtre­e based on its accuracy and complexity, the­n selects the subtre­e with the lowest fee
-* **Re­duced Error Pruning**: Removes branche­s that do not significantly affect the overall accuracy
+* **Re­duced Error Pruning**: Removes branches that do not significantly affect the overall accuracy
 * **Minimum Impurity De­crease**: Prunes node­s if the decrease­ in impurity (Gini impurity or entropy) is beneath a ce­rtain threshold
 * **Minimum Leaf Size**: Re­moves leaf nodes with fe­wer samples than a specifie­d threshold
 
@@ -261,7 +261,7 @@ $$
 
 #### Case 2: No more attributes $ x $ to split the set $ S $
 
-* Node should be represented by the most common occurence of $ y $, or
+* Node should be represented by the most common occurrence of $ y $, or
 * Node should be represented by the mean of $ y $
 
 ### Recursive Case
