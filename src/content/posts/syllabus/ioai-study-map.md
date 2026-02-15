@@ -71,7 +71,7 @@ pinned: true
 - [X] [Vision Transformers](/posts/computer-vision/vision-transformers/)
 - [X] [Image Augmentation](/posts/computer-vision/image-augmentation/)
 - [X] [Self-Supervised Learning for Vision](/posts/computer-vision/self-supervised-vision/)
-- [ ] [Vision-Text Encoders](/posts/computer-vision/vision-text-encoders/)
+- [X] [Vision-Text Encoders](/posts/computer-vision/vision-text-encoders/)
 - [X] [Image Generation](/posts/computer-vision/image-generation/)
 
 ---
