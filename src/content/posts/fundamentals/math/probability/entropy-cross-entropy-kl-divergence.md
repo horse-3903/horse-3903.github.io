@@ -31,4 +31,7 @@ $$
 
 ## Why This Matters for ML
 
-* Core to classification loss functions, variational objectives, and distribution matching.
+* Cross-entropy is the default objective for modern classification.
+* KL divergence measures distribution mismatch in variational, distillation, and representation settings.
+* Entropy regularization appears in uncertainty-aware and exploration-driven methods.
+* These information measures connect probabilistic predictions to optimization objectives.

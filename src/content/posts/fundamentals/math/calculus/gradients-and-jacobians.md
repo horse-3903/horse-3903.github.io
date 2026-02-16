@@ -40,4 +40,7 @@ $$
 
 ## Why This Matters for ML
 
-* Required for optimization, backprop, and model sensitivity analysis.
+* Gradient vectors determine direction and strength of optimization updates.
+* Jacobians describe how representations change under transformations, useful in sensitivity checks.
+* Many modern objectives (contrastive, sequence, diffusion components) rely on multivariate gradients.
+* Understanding gradient geometry helps with clipping, normalization, and optimization stability.

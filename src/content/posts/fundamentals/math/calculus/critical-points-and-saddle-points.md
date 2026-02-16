@@ -30,4 +30,7 @@ access: public
 
 ## Why This Matters for ML
 
-* Important for understanding non-convex neural network optimization.
+* Training may stall at flat regions or saddle points even when not near good minima.
+* Zero gradient alone is not enough to conclude optimization success.
+* Curvature interpretation helps explain why momentum/adaptive methods can escape plateaus.
+* This is central to understanding deep-network loss landscapes.

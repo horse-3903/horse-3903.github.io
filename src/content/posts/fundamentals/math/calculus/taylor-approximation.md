@@ -36,4 +36,7 @@ $$
 
 ## Why This Matters for ML
 
-* Provides intuition for gradient methods and curvature-aware optimization.
+* Local linear/quadratic approximations explain why gradient-based steps work.
+* Curvature-aware reasoning guides step-size choice and second-order method intuition.
+* Loss-landscape analysis around minima uses Taylor expansions conceptually.
+* Approximation error intuition helps interpret optimizer behavior away from optimum.

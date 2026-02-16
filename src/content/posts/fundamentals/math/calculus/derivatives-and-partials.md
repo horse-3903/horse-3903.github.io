@@ -40,4 +40,7 @@ $$
 
 ## Why This Matters for ML
 
-* Loss optimization depends on parameter-wise sensitivity.
+* Parameter updates depend on partial derivatives of loss with respect to each weight.
+* Sensitivity analysis of features and parameters uses derivative magnitude and sign.
+* Regularizers and constraints are optimized through derivative-based updates.
+* Understanding local rate of change is necessary for debugging training dynamics.

@@ -25,4 +25,7 @@ access: public
 
 ## Why This Matters for ML
 
-* Explains generalization behavior across model families.
+* The bias-variance framework explains why models underfit or overfit.
+* Regularization, ensembling, and model capacity decisions are guided by this tradeoff.
+* It provides a principled lens for interpreting validation curves and generalization gaps.
+* Many syllabus topics (bagging, boosting, ridge/lasso) are direct bias-variance interventions.

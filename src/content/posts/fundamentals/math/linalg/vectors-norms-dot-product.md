@@ -45,4 +45,7 @@ $$
 
 ## Why This Matters for ML
 
-* Core to KNN distance, cosine similarity, regularisation, margin methods, and embedding search.
+* Similarity metrics in KNN, retrieval, and embedding search are built from dot products and norms.
+* Regularisation terms in linear/logistic regression (L1, L2) are norm penalties on parameters.
+* Cosine similarity is a default metric in NLP and representation-learning pipelines.
+* Gradient magnitudes and clipping also use vector norms during optimization.

@@ -157,3 +157,11 @@ $$
 
 * Pivoting strategies reduce numerical error in floating-point arithmetic.
 
+---
+
+## Why This Matters for ML
+
+* REF/RREF gives a practical method for diagnosing solvability and dependence in linear systems.
+* Pivot patterns explain when model parameters are identifiable versus underdetermined.
+* Rank insights from echelon forms connect to multicollinearity and redundant features.
+* These tools build the algebraic intuition behind least-squares and regularized linear models.

@@ -64,9 +64,7 @@ access: public
 
 ---
 
-# Why This Matters for ML
+## Why This Matters for ML
 
-* ML models optimize expected loss under uncertain data.
-* Evaluation, calibration, generalization, and uncertainty all depend on probability/statistics.
-* Key methods in logistic regression, generative modeling, and dimensionality reduction are probabilistic.
-
+* These concepts provide the uncertainty framework behind model fitting, evaluation, and generalization.
+* They are essential for principled loss design and trustworthy ML conclusions.

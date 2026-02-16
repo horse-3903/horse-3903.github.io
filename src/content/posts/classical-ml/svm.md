@@ -226,6 +226,20 @@ Acts as a regularisation parameter.
 - Classification is based on the sign of $w^Tx + b$.
 - Thus, SVM chooses the boundary that is most robust to perturbations.
 
+# Kernel Trick and RBF Kernel
+
+* For nonlinear data, SVM can use a kernel to compute similarity in an implicit higher-dimensional feature space.
+* The most common nonlinear choice is the **RBF (Gaussian) kernel**:
+
+$$
+K(x_i, x_j) = \exp\left(-\gamma \|x_i - x_j\|^2\right)
+$$
+
+* Here, $\gamma$ controls how local each support vector's influence is.
+  * Large $\gamma$: very local influence, more complex boundary, higher overfitting risk.
+  * Small $\gamma$: smoother influence, simpler boundary, higher underfitting risk.
+* In practice, tune both $C$ and $\gamma$ together with cross-validation.
+
 # Support Vector Machines In Practice
 
 ## When to Use SVMs
@@ -250,6 +264,7 @@ Acts as a regularisation parameter.
 ### Tune $C$ and kernel parameters with cross-validation.
 
 * Tune $C$ and kernel parameters with cross-validation.
+* For RBF SVM, the most important kernel parameter is $\gamma$.
 ### Prefer linear SVMs for large, sparse feature spaces.
 
 * Prefer linear SVMs for large, sparse feature spaces.

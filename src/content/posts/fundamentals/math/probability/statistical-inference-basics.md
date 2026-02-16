@@ -26,4 +26,7 @@ access: public
 
 ## Why This Matters for ML
 
-* Supports reliable interpretation of benchmark and ablation differences.
+* Confidence intervals and significance testing contextualize model comparison results.
+* They help separate real performance gains from random variation.
+* Ablation and benchmark claims are stronger when paired with uncertainty estimates.
+* Inference basics improve rigor in experimental ML reporting.

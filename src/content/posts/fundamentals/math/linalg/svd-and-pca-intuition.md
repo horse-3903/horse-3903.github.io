@@ -40,4 +40,7 @@ $$
 
 ## Why This Matters for ML
 
-* Core for denoising, compression, visualization baselines, and feature preprocessing.
+* SVD powers low-rank compression, denoising, and latent-structure extraction.
+* PCA is a standard preprocessing step for high-dimensional tabular and vision features.
+* Principal components can reduce overfitting and improve downstream training efficiency.
+* Spectral views connect directly to embedding quality and variance-preserving representations.

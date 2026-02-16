@@ -35,4 +35,7 @@ $$
 
 ## Why This Matters for ML
 
-* Backpropagation is the chain rule applied over computation graphs.
+* Backpropagation is repeated chain-rule application through layered computations.
+* Gradient quality in deep models depends on products of local derivatives.
+* Vanishing/exploding gradients are chain-rule phenomena across many layers/time steps.
+* Correct chain-rule intuition is essential for designing activations and stable architectures.

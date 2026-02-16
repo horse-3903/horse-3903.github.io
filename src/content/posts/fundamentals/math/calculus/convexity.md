@@ -35,4 +35,7 @@ $$
 
 ## Why This Matters for ML
 
-* Explains when optimization guarantees are available.
+* Convex objectives provide stronger guarantees for reaching globally optimal solutions.
+* Many classical models (linear/logistic with proper regularization) are optimized in convex settings.
+* Non-convexity in deep learning explains dependence on initialization and optimizer heuristics.
+* Convexity intuition helps compare algorithmic reliability across model families.

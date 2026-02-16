@@ -180,3 +180,11 @@ $$
 
 * Unscaled features can dominate matrix operations and degrade conditioning.
 
+---
+
+## Why This Matters for ML
+
+* Feature matrices and parameter matrices are the core objects in ML pipelines.
+* Linear regression, logistic regression, and neural network forward passes are matrix-based computations.
+* Conditioning, rank, and invertibility directly affect stability, optimization, and generalization.
+* Dimensionality reduction and covariance modeling are impossible to understand without matrix geometry.

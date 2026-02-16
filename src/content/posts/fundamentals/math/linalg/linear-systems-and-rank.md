@@ -40,4 +40,7 @@ $$
 
 ## Why This Matters for ML
 
-* Essential for least-squares solutions, feature redundancy analysis, and stability checks.
+* Least-squares fitting and many closed-form estimators reduce to solving linear systems.
+* Rank reveals multicollinearity and redundant features, which affect model identifiability.
+* Underdetermined systems motivate regularisation and minimum-norm solutions.
+* Pivot structure from REF/RREF gives a practical diagnostic for solvability and feature dependence.

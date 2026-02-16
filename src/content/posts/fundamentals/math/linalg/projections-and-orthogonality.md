@@ -37,4 +37,7 @@ $$
 
 ## Why This Matters for ML
 
-* Core to regression geometry, PCA intuition, and subspace methods.
+* Linear regression is projection of targets onto the feature span.
+* Residual orthogonality provides a geometric check of least-squares solutions.
+* Orthogonal bases reduce numerical coupling and simplify optimization.
+* Subspace projection ideas underlie PCA and many representation methods.

@@ -27,4 +27,7 @@ access: public
 
 ## Why This Matters for ML
 
-* Many losses and likelihoods are derived from these distributions.
+* Data-type-specific modeling assumptions map directly to distribution choices.
+* Bernoulli/Binomial link to binary/count tasks; Gaussian assumptions appear in noise models.
+* Losses like MSE and logistic loss have probabilistic interpretations via these distributions.
+* Calibration and uncertainty interpretation depend on correct distributional modeling.

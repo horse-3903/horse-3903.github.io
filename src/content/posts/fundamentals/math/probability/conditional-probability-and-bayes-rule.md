@@ -31,4 +31,7 @@ $$
 
 ## Why This Matters for ML
 
-* Central for probabilistic modeling and classifier reasoning.
+* Classification and inference often require conditioning on observed evidence.
+* Bayes reasoning appears in posterior prediction and probabilistic model updates.
+* It clarifies prior-vs-data influence, especially in small-data settings.
+* Many decision rules can be interpreted as choosing outcomes with highest posterior probability.

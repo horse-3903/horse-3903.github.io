@@ -1,6 +1,6 @@
 ---
 title: Optimisers, Convergence, and Regularisation
-published: 2026-02-12
+published: 2026-02-16
 description: "Optimisers, learning rate behaviour, and regularisation techniques such as dropout and weight decay."
 tags: ["Neural Network", "Deep Learning"]
 category: IOAI ML Notes
@@ -259,6 +259,17 @@ for epoch in range(100):
   $ \mathcal{L}' = \mathcal{L} + \lambda \|\theta\|^2 $
 * Shrinks weights and improves **generalisation**.
 * Commonly paired with SGD or AdamW.
+
+## Label smoothing
+* Replaces hard one-hot targets with slightly softened targets.
+* Reduces overconfident predictions and can improve generalisation.
+* For $K$ classes and smoothing factor $\alpha$:
+  * True class target: $1-\alpha$
+  * Each non-true class target: $\frac{\alpha}{K-1}$
+* Example for $K=5$, $\alpha=0.1$:
+  * True class target is $0.9$, others are $0.025$ each.
+* Typical $\alpha$ values are small (for example `0.05` to `0.2`).
+* Too much smoothing can hurt class separation and calibration for some tasks.
 
 ## Practical usage
 * Combine **data augmentation** with regularisation for best results.

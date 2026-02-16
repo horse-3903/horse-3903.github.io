@@ -30,4 +30,7 @@ $$
 
 ## Why This Matters for ML
 
-* Basis for risk minimization, uncertainty quantification, and model evaluation.
+* Loss minimization is usually expectation minimization under unknown data distributions.
+* Variance quantifies uncertainty and instability in model predictions and estimates.
+* Evaluation metrics across folds/runs are interpreted through expectation/variance behavior.
+* These concepts underpin risk, uncertainty, and robust model comparison.

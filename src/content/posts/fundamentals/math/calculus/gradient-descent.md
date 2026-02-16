@@ -35,4 +35,7 @@ $$
 
 ## Why This Matters for ML
 
-* Central optimizer for classical and deep learning models.
+* Gradient descent and its variants are the core training engines for most ML models.
+* Update-rule behavior determines speed, stability, and final model performance.
+* Batch vs mini-batch tradeoffs affect noise, generalization, and compute efficiency.
+* Practical tuning of optimizers is impossible without gradient-descent fundamentals.

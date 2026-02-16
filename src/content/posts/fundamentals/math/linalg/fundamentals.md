@@ -63,10 +63,7 @@ access: public
 
 ---
 
-# Why This Matters for ML
+## Why This Matters for ML
 
-* Linear and logistic regression use vector/matrix operations directly.
-* Regularisation and SVM margins depend on norms and geometry.
-* PCA and spectral clustering require eigen/spectral understanding.
-* Neural network layers are matrix transformations optimized over high-dimensional spaces.
-
+* These concepts are foundational for representing data, transformations, and optimization structures in ML.
+* They are repeatedly used in core IOAI syllabus algorithms and analyses.

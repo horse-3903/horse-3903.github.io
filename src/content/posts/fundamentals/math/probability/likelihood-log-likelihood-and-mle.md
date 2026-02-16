@@ -31,4 +31,7 @@ $$
 
 ## Why This Matters for ML
 
-* Logistic regression and many generative models are MLE-based.
+* MLE is the statistical foundation of many classical ML estimators.
+* Log-likelihood turns products into sums, enabling stable optimization and gradient methods.
+* Logistic regression and many generative models are trained by maximizing likelihood objectives.
+* Understanding likelihood is key for comparing models and defining principled losses.

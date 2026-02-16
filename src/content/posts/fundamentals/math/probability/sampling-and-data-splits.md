@@ -29,4 +29,7 @@ access: public
 
 ## Why This Matters for ML
 
-* Prevents optimistic bias and supports trustworthy model comparison.
+* Reliable generalization estimates require clean train/validation/test separation.
+* Sampling strategy affects class balance, metric stability, and fairness of comparisons.
+* Leakage from improper splits can invalidate reported performance.
+* Cross-validation and stratification decisions are rooted in these fundamentals.

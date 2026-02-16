@@ -1,6 +1,6 @@
 ---
 title: Pooling, Batch Norm, and Layer Norm
-published: 2026-02-12
+published: 2026-02-16
 description: "Pooling plus batch and layer normalisation fundamentals."
 tags: ["Neural Network", "Deep Learning"]
 category: IOAI ML Notes
@@ -16,7 +16,7 @@ access: restricted
 
 # Overview
 
-* This note covers **pooling** and **batch normalisation**.
+* This note covers **pooling**, **batch normalisation**, and **layer normalisation**.
 * These techniques improve **stability**, **generalisation**, and **training speed** in deep networks.
 
 ---
@@ -150,4 +150,24 @@ block = nn.Sequential(
 )
 ```
 
+---
 
+# Layer Norm vs Batch Norm
+
+## Key differences
+* **Statistics source**:
+  * BatchNorm uses batch-level statistics (across samples).
+  * LayerNorm uses per-sample statistics (across features).
+* **Train vs eval behavior**:
+  * BatchNorm behaves differently in train/eval because of running statistics.
+  * LayerNorm behaves the same in train/eval.
+* **Batch-size sensitivity**:
+  * BatchNorm can degrade with very small batches.
+  * LayerNorm is batch-size agnostic.
+* **Typical use cases**:
+  * BatchNorm: CNNs with reasonably large batches.
+  * LayerNorm: Transformers/RNNs or small-batch regimes.
+
+## Rule of thumb
+* Use **BatchNorm** for vision models with stable batch statistics.
+* Use **LayerNorm** when batch statistics are unreliable or sequence modeling dominates.

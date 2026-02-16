@@ -29,4 +29,7 @@ access: public
 
 ## Why This Matters for ML
 
-* Determines training efficiency and final model quality.
+* Learning rate is one of the highest-impact hyperparameters in training.
+* Convergence diagnostics (oscillation, divergence, stagnation) guide schedule decisions.
+* Warmup/decay policies often determine whether large models train stably.
+* Generalization quality can depend strongly on the optimization path set by step-size policy.

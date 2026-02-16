@@ -58,9 +58,7 @@ access: public
 
 ---
 
-# Why This Matters for ML
+## Why This Matters for ML
 
-* Almost all ML training is optimization of a loss function.
-* Neural network training depends on chain rule and gradient flow.
-* Regularisation and objective design rely on calculus-based behavior of loss surfaces.
-
+* These concepts are required to understand optimization, backpropagation, and convergence in modern ML systems.
+* They explain training stability, update rules, and loss-surface behavior across IOAI topics.

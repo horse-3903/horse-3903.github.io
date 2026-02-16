@@ -24,4 +24,7 @@ access: public
 
 ## Why This Matters for ML
 
-* Critical for feature analysis, causal caution, and assumption checking.
+* Feature engineering and model assumptions often confuse correlation with independence.
+* Spurious correlations can mislead interpretation and degrade robustness.
+* Independence assumptions appear in simplified models and require careful validation.
+* This distinction helps prevent incorrect causal or predictive conclusions.

@@ -41,4 +41,7 @@ $$
 
 ## Why This Matters for ML
 
-* Used in forward passes, linear models, covariance computation, and batch transformations.
+* Every linear layer in neural networks is matrix multiplication plus bias.
+* Batched prediction, feature transforms, and covariance calculations all rely on matrix operations.
+* Understanding shape rules prevents common implementation and debugging errors in ML code.
+* Efficient tensor/matrix operations are central to training speed on GPU hardware.

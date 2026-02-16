@@ -73,6 +73,8 @@ Corresponding eigenvectors (up to scaling):
 * Eigenvectors are special directions that remain on the same line.
 * Eigenvalues tell how much stretching/compression occurs along those directions.
 
+![](../../../assets/eigenvalues-eigenvectors/eigen-geometric-intuition.png)
+
 ---
 
 # Diagonalisation
@@ -107,6 +109,8 @@ with orthonormal $Q$.
 
 This is the basis of PCA and many optimisation results.
 
+![](../../../assets/eigenvalues-eigenvectors/symmetric-orthogonal-eigenvectors.png)
+
 ---
 
 # Connection to SVD
@@ -125,34 +129,9 @@ $$
 
 ---
 
-# Why This Matters in ML
+## Why This Matters for ML
 
-## PCA
-
-* PCA finds principal directions as eigenvectors of covariance matrix.
-* Largest eigenvalues correspond to directions of highest variance.
-
-## Dynamical Systems / Iterative Methods
-
-* Eigenvalues control growth/decay rates and convergence behavior.
-
-## Graph Methods
-
-* Spectral clustering uses eigenvectors of graph Laplacians.
-
----
-
-# Practical Notes
-
-## Normalise eigenvectors when comparing directions.
-
-* Scaling does not change eigenvector direction, so unit vectors are easier to interpret.
-
-## Use symmetric solvers when matrices are symmetric.
-
-* They are more stable and efficient than generic eigensolvers.
-
-## Watch conditioning when eigenvalues are very close.
-
-* Near-degenerate eigenvalues can make eigenvectors numerically unstable.
-
+* PCA, spectral clustering, and graph-based methods depend on eigenvectors/eigenvalues.
+* Eigenvalues indicate variance/energy concentration and stability properties of transformations.
+* Iterative optimization and dynamical behavior are often explained by spectral radius and modes.
+* Symmetric eigendecompositions are foundational in covariance analysis and many kernels.
