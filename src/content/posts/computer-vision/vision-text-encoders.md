@@ -1,6 +1,6 @@
 ---
 title: Vision-Text Encoders
-published: 2026-02-15
+published: 2026-02-16
 description: "Joint vision-language embedding models."
 tags: ["Computer Vision", "Natural Language Processing"]
 category: IOAI ML Notes
@@ -157,18 +157,39 @@ $$
 
 # Practical Notes
 
-* Enables zero-shot classification.
-* Useful for retrieval and captioning pipelines.
-* Prompt engineering matters: template choice can change zero-shot accuracy.
-* Multiple prompt ensembling (average class prompt embeddings) often improves results.
-* For retrieval at scale, index normalized embeddings with ANN search (for example, FAISS/HNSW).
-* Common metrics:
-* Zero-shot classification: top-1/top-5 accuracy.
-* Retrieval: Recall@K and mean reciprocal rank.
-* Known limitations:
-* Sensitive to web-data bias and prompt wording.
-* Struggles with fine-grained counting or OCR-heavy scenes without task adaptation.
+## Enables zero-shot classification.
 
+* Enables zero-shot classification.
+## Useful for retrieval and captioning pipelines.
+
+* Useful for retrieval and captioning pipelines.
+## Prompt engineering matters: template choice can change zero-shot accuracy.
+
+* Prompt engineering matters: template choice can change zero-shot accuracy.
+## Multiple prompt ensembling (average class prompt embeddings) often improves results.
+
+* Multiple prompt ensembling (average class prompt embeddings) often improves results.
+## For retrieval at scale, index normalized embeddings with ANN search (for example, FAISS/HNSW).
+
+* For retrieval at scale, index normalized embeddings with ANN search (for example, FAISS/HNSW).
+## Common metrics:
+
+* Common metrics:
+## Zero-shot classification: top-1/top-5 accuracy.
+
+* Zero-shot classification: top-1/top-5 accuracy.
+## Retrieval: Recall@K and mean reciprocal rank.
+
+* Retrieval: Recall@K and mean reciprocal rank.
+## Known limitations:
+
+* Known limitations:
+## Sensitive to web-data bias and prompt wording.
+
+* Sensitive to web-data bias and prompt wording.
+## Struggles with fine-grained counting or OCR-heavy scenes without task adaptation.
+
+* Struggles with fine-grained counting or OCR-heavy scenes without task adaptation.
 
 
 

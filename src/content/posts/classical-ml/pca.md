@@ -1,6 +1,6 @@
 ---
 title: Principal Component Analysis (PCA)
-published: 2026-02-12
+published: 2026-02-16
 description: "A comprehensive guide to PCA — reducing dimensionality by projecting data onto directions of maximum variance."
 tags: ["Classical Machine Learning", "Unsupervised Learning"]
 category: IOAI ML Notes
@@ -182,11 +182,18 @@ access: public
 
 ## Practical Notes
 
-* **Fit PCA on the training set only**, then transform validation and test sets.
-* **Standardise features** before computing components.
-* Choose component count via **explained variance** or cross-validation.
-* Inspect **loadings** to understand what each component captures.
+### **Fit PCA on the training set only**, then transform validation and test sets.
 
+* **Fit PCA on the training set only**, then transform validation and test sets.
+### **Standardise features** before computing components.
+
+* **Standardise features** before computing components.
+### Choose component count via **explained variance** or cross-validation.
+
+* Choose component count via **explained variance** or cross-validation.
+### Inspect **loadings** to understand what each component captures.
+
+* Inspect **loadings** to understand what each component captures.
 
 
 

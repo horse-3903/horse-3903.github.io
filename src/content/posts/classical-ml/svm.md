@@ -1,6 +1,6 @@
 ---
 title: Support Vector Machines
-published: 2026-02-12
+published: 2026-02-16
 description: "A comprehensive guide to support vector machines — exploring how margin maximisation and regularisation create powerful and flexible classifiers."
 tags: ["Classical Machine Learning", "Supervised Learning"]
 category: IOAI ML Notes
@@ -244,11 +244,18 @@ Acts as a regularisation parameter.
 
 ## Practical Notes
 
-* Standardise features before training.
-* Tune $C$ and kernel parameters with cross-validation.
-* Prefer linear SVMs for large, sparse feature spaces.
-* Calibrate probabilities with Platt scaling if required.
+### Standardise features before training.
 
+* Standardise features before training.
+### Tune $C$ and kernel parameters with cross-validation.
+
+* Tune $C$ and kernel parameters with cross-validation.
+### Prefer linear SVMs for large, sparse feature spaces.
+
+* Prefer linear SVMs for large, sparse feature spaces.
+### Calibrate probabilities with Platt scaling if required.
+
+* Calibrate probabilities with Platt scaling if required.
 
 
 

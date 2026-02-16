@@ -1,6 +1,6 @@
 ---
 title: Encoder-Decoder Models
-published: 2026-02-15
+published: 2026-02-16
 description: "Sequence-to-sequence models for translation and multimodal tasks."
 tags: ["Natural Language Processing"]
 category: IOAI ML Notes
@@ -101,10 +101,15 @@ $$
 
 # Practical Notes
 
-* Beam size improves quality but increases latency.
-* Exposure bias can appear because training uses teacher forcing but inference uses model outputs.
-* For long inputs, memory can be a bottleneck due to attention complexity.
+## Beam size improves quality but increases latency.
 
+* Beam size improves quality but increases latency.
+## Exposure bias can appear because training uses teacher forcing but inference uses model outputs.
+
+* Exposure bias can appear because training uses teacher forcing but inference uses model outputs.
+## For long inputs, memory can be a bottleneck due to attention complexity.
+
+* For long inputs, memory can be a bottleneck due to attention complexity.
 
 
 

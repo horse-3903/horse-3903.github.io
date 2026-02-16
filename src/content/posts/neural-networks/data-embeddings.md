@@ -1,6 +1,6 @@
 ---
 title: Data Embeddings
-published: 2026-02-14
+published: 2026-02-16
 description: "Embeddings for text, images, audio and structured data with practical usage notes."
 tags: ["Neural Network", "Deep Learning"]
 category: IOAI ML Notes
@@ -93,8 +93,14 @@ $$
 * **Contrastive**: pull positives together, push negatives apart.
 
 ## Practical notes
+### For similarity, **cosine** is a strong default.
+
 * For similarity, **cosine** is a strong default.
+### Normalise embeddings if using dot products across batches.
+
 * Normalise embeddings if using dot products across batches.
+### Mean-pooling of token vectors is a good baseline for sentence embeddings.
+
 * Mean-pooling of token vectors is a good baseline for sentence embeddings.
 
 ---
@@ -422,8 +428,14 @@ R(\theta)=
 $$
 
 ## Practical Notes
+### **Add vs concat**: adding keeps dimensionality fixed; concatenation grows it.
+
 * **Add vs concat**: adding keeps dimensionality fixed; concatenation grows it.
+### **Vision Transformers**: learned 2D positional embeddings for image patches.
+
 * **Vision Transformers**: learned 2D positional embeddings for image patches.
+### **Long context**: relative or RoPE-style embeddings usually perform better.
+
 * **Long context**: relative or RoPE-style embeddings usually perform better.
 
 ---
@@ -485,7 +497,11 @@ $$
 * **When to use**: label-scarce domains or foundation model pretraining.
 
 ## Practical notes
+### Pretrained image encoders often transfer well with **linear probing**.
+
 * Pretrained image encoders often transfer well with **linear probing**.
+### For retrieval, **L2-normalise** embeddings.
+
 * For retrieval, **L2-normalise** embeddings.
 
 ---
@@ -544,10 +560,20 @@ $$
 * **SpecAugment**: time/frequency masking on spectrograms.
 
 ## Practical notes
+### Log-mel spectrograms at 16 kHz with 64-128 mel bins are a strong default.
+
 * Log-mel spectrograms at 16 kHz with 64-128 mel bins are a strong default.
+### Normalise per-clip or per-dataset; mismatched scaling hurts transfer.
+
 * Normalise per-clip or per-dataset; mismatched scaling hurts transfer.
+### For retrieval, L2-normalise embeddings; for classification, raw vectors can work better.
+
 * For retrieval, L2-normalise embeddings; for classification, raw vectors can work better.
+### Beware **shortcut features** (background noise, mic artifacts) leaking into embeddings.
+
 * Beware **shortcut features** (background noise, mic artifacts) leaking into embeddings.
+### Evaluate on tasks with domain shift to test robustness.
+
 * Evaluate on tasks with domain shift to test robustness.
 
 ---
@@ -617,7 +643,6 @@ tokens = torch.randint(0, 30000, (8, 32))  # batch, seq
 emb = tok_emb(tokens)
 sent_emb = emb.mean(dim=1)
 ```
-
 
 
 

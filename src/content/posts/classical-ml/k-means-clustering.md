@@ -1,6 +1,6 @@
 ---
 title: K-Means Clustering
-published: 2026-02-12
+published: 2026-02-16
 description: "A concise guide to k-means clustering, its objective, and practical usage."
 tags: ["Classical Machine Learning", "Unsupervised Learning"]
 category: IOAI ML Notes
@@ -70,10 +70,17 @@ $$
 
 ## Practical Notes
 
-* Sensitive to **initialisation**; use **k-means++** for stability.
-* Requires choosing $k$ (use **elbow** or **silhouette** methods).
-* Struggles with **non-spherical** or **unequal density** clusters.
-* Scale features before clustering to avoid dominance by large‑scale dimensions.
+### Sensitive to **initialisation**; use **k-means++** for stability.
 
+* Sensitive to **initialisation**; use **k-means++** for stability.
+### Requires choosing $k$ (use **elbow** or **silhouette** methods).
+
+* Requires choosing $k$ (use **elbow** or **silhouette** methods).
+### Struggles with **non-spherical** or **unequal density** clusters.
+
+* Struggles with **non-spherical** or **unequal density** clusters.
+### Scale features before clustering to avoid dominance by large‑scale dimensions.
+
+* Scale features before clustering to avoid dominance by large‑scale dimensions.
 
 

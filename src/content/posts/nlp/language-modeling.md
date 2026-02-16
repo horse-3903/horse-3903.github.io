@@ -1,6 +1,6 @@
 ---
 title: Language Modelling
-published: 2026-02-15
+published: 2026-02-16
 description: "Modelling token sequences for generation and prediction."
 tags: ["Natural Language Processing"]
 category: IOAI ML Notes
@@ -35,8 +35,14 @@ $$
 
 ## Practical Notes
 
+### Enables text generation.
+
 * Enables text generation.
+### Often trained with large corpora.
+
 * Often trained with large corpora.
+### Supports few-shot prompting and instruction tuning.
+
 * Supports few-shot prompting and instruction tuning.
 
 ---
@@ -53,7 +59,11 @@ $$
 
 ## Practical Notes
 
+### Used by encoder models like BERT.
+
 * Used by encoder models like BERT.
+### Strong for understanding tasks, not direct left-to-right generation.
+
 * Strong for understanding tasks, not direct left-to-right generation.
 
 ---
@@ -123,10 +133,15 @@ $$
 
 # Practical Notes
 
-* Data quality often matters more than modest architecture changes.
-* Context length improves long-dependency tasks but increases cost.
-* Safety/alignment layers are needed for production deployment.
+## Data quality often matters more than modest architecture changes.
 
+* Data quality often matters more than modest architecture changes.
+## Context length improves long-dependency tasks but increases cost.
+
+* Context length improves long-dependency tasks but increases cost.
+## Safety/alignment layers are needed for production deployment.
+
+* Safety/alignment layers are needed for production deployment.
 
 
 

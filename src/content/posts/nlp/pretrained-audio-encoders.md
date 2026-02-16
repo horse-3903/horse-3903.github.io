@@ -1,6 +1,6 @@
 ---
 title: Pre-trained Audio Encoders
-published: 2026-02-15
+published: 2026-02-16
 description: "Self-supervised and supervised audio encoders for speech and general audio tasks."
 tags: ["Audio Processing", "Deep Learning"]
 category: IOAI ML Notes
@@ -90,10 +90,15 @@ $$
 
 # Practical Notes
 
-* Pretraining data diversity strongly affects robustness (accents, noise, microphones).
-* Domain adaptation with continued pretraining can improve noisy or specialized audio.
-* For long audio, chunking + overlap or streaming encoders are important for latency.
+## Pretraining data diversity strongly affects robustness (accents, noise, microphones).
 
+* Pretraining data diversity strongly affects robustness (accents, noise, microphones).
+## Domain adaptation with continued pretraining can improve noisy or specialized audio.
+
+* Domain adaptation with continued pretraining can improve noisy or specialized audio.
+## For long audio, chunking + overlap or streaming encoders are important for latency.
+
+* For long audio, chunking + overlap or streaming encoders are important for latency.
 
 
 

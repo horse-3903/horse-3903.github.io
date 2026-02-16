@@ -1,6 +1,6 @@
 ---
 title: Attention and Transformers
-published: 2026-02-15
+published: 2026-02-16
 description: "Attention mechanisms and transformer architectures for sequence modelling."
 tags: ["Neural Network", "Deep Learning"]
 category: IOAI ML Notes
@@ -146,8 +146,13 @@ $$
 
 # Practical Notes
 
-* Attention heads and depth matter more than single-layer width for many tasks.
-* Longer context improves tasks with long dependencies but raises cost.
-* Prompt/instruction format strongly affects decoder-model behavior at inference.
+## Attention heads and depth matter more than single-layer width for many tasks.
 
+* Attention heads and depth matter more than single-layer width for many tasks.
+## Longer context improves tasks with long dependencies but raises cost.
+
+* Longer context improves tasks with long dependencies but raises cost.
+## Prompt/instruction format strongly affects decoder-model behavior at inference.
+
+* Prompt/instruction format strongly affects decoder-model behavior at inference.
 

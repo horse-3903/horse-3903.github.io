@@ -1,6 +1,6 @@
 ---
 title: Pre-trained Vision Encoders
-published: 2026-02-13
+published: 2026-02-16
 description: "Common vision backbones and how to use them for transfer learning."
 tags: ["Computer Vision", "Deep Learning"]
 category: IOAI ML Notes
@@ -79,7 +79,11 @@ model.fc = nn.Linear(model.fc.in_features, num_classes)
 * **DenseNet**: strong accuracy and reuse, but memory-heavy.
 
 ## Practical notes
+### Used heavily in **ResNet** family models.
+
 * Used heavily in **ResNet** family models.
+### Improves training stability without adding many parameters.
+
 * Improves training stability without adding many parameters.
 
 ---
@@ -237,9 +241,12 @@ model.classifier = nn.Linear(model.classifier.in_features, num_classes)
 ---
 # Practical Notes
 
-* Use for transfer learning.
-* Freeze early layers when data is limited.
+## Use for transfer learning.
 
+* Use for transfer learning.
+## Freeze early layers when data is limited.
+
+* Freeze early layers when data is limited.
 
 
 

@@ -1,6 +1,6 @@
 ---
 title: The Intricacies of Economics, Business and Management
-published: 2026-02-14
+published: 2026-02-16
 description: "A self-reflection of various economics- and finance-centric studies."
 tags: ["Economics", "Business", "Management", "Finance", "Game Theory"]
 category: Journals

@@ -1,6 +1,6 @@
 ---
 title: Vision Transformers
-published: 2026-02-15
+published: 2026-02-16
 description: "How vision transformers model images as token sequences."
 tags: ["Computer Vision", "Deep Learning"]
 category: IOAI ML Notes
@@ -110,18 +110,39 @@ $$
 ---
 # Practical Notes
 
+## Patch size trades off detail vs compute:
+
 * Patch size trades off detail vs compute:
+## Smaller $P$ gives finer detail but larger $N$ and higher memory.
+
 * Smaller $P$ gives finer detail but larger $N$ and higher memory.
+## Typical settings: $P=16$ for classification baselines, smaller patches for dense tasks.
+
 * Typical settings: $P=16$ for classification baselines, smaller patches for dense tasks.
+## Training recipe matters for data-limited settings:
+
 * Training recipe matters for data-limited settings:
+## Use RandAugment/Mixup/CutMix, label smoothing, stochastic depth, and AdamW.
+
 * Use RandAugment/Mixup/CutMix, label smoothing, stochastic depth, and AdamW.
+## Positional embedding interpolation is needed when fine-tuning at different image resolutions.
+
 * Positional embedding interpolation is needed when fine-tuning at different image resolutions.
+## For dense prediction (segmentation/detection), attach FPN/UPerNet-style heads instead of only using [CLS].
+
 * For dense prediction (segmentation/detection), attach FPN/UPerNet-style heads instead of only using [CLS].
 
 ## Typical Model Scales
-* **ViT-Tiny/Small**: faster experimentation, lower memory.
-* **ViT-Base**: common transfer-learning default.
-* **ViT-Large/Huge**: best quality with large-scale pretraining and strong compute budget.
 
+* Typical Model Scales
+## **ViT-Tiny/Small**: faster experimentation, lower memory.
+
+* **ViT-Tiny/Small**: faster experimentation, lower memory.
+## **ViT-Base**: common transfer-learning default.
+
+* **ViT-Base**: common transfer-learning default.
+## **ViT-Large/Huge**: best quality with large-scale pretraining and strong compute budget.
+
+* **ViT-Large/Huge**: best quality with large-scale pretraining and strong compute budget.
 
 

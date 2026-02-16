@@ -1,6 +1,6 @@
 ---
 title: Audio Models
-published: 2026-02-15
+published: 2026-02-16
 description: "Task-specific audio model families for recognition, understanding, and generation."
 tags: ["Audio Processing", "Natural Language Processing", "Deep Learning"]
 category: IOAI ML Notes
@@ -79,7 +79,11 @@ $$
 
 ## Practical Notes
 
+### Use class-balanced sampling for rare events.
+
 * Use class-balanced sampling for rare events.
+### Strong augmentations: SpecAugment, time masking, noise, reverb.
+
 * Strong augmentations: SpecAugment, time masking, noise, reverb.
 
 ---
@@ -144,6 +148,12 @@ $$
 
 # Practical Notes
 
+## Match sample rate and frontend to pretrained checkpoint assumptions.
+
 * Match sample rate and frontend to pretrained checkpoint assumptions.
+## Domain mismatch (accent, channel, background noise) can dominate errors.
+
 * Domain mismatch (accent, channel, background noise) can dominate errors.
+## Evaluate by domain slice, not only aggregate metrics.
+
 * Evaluate by domain slice, not only aggregate metrics.

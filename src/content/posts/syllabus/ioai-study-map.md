@@ -1,6 +1,6 @@
 ---
 title: IOAI Syllabus Study Map
-published: 2026-02-15
+published: 2026-02-16
 description: "A table of contents for studying the IOAI syllabus across the notes."
 tags: ["Syllabus", "Study Guide"]
 category: IOAI ML Notes
@@ -9,9 +9,52 @@ pinned: true
 ---
 # IOAI Syllabus Study Map
 
-# Programming Fundamentals
+# Fundamentals
+## Programming Fundamentals
 
-- [X] [Programming Fundamentals](/posts/programming/programming/)
+- [X] [NumPy and Pandas for Data Handling](/posts/fundamentals/programming/numpy-pandas/)
+- [X] [Matplotlib and Seaborn for Visualisation](/posts/fundamentals/programming/matplotlib-seaborn/)
+- [X] [Scikit-Learn for ML](/posts/fundamentals/programming/scikit-learn/)
+- [X] [PyTorch Basics](/posts/fundamentals/programming/pytorch-basics/)
+- [X] [PyTorch Tensor Manipulation](/posts/fundamentals/programming/pytorch-tensor-manipulation/)
+- [X] [Training Models on CPU and GPU](/posts/fundamentals/programming/pytorch-training-cpu-gpu/)
+
+## Mathematics Fundamentals
+### Linear Algebra
+- [X] [Linear Algebra Fundamentals for ML](/posts/fundamentals/math/linalg/fundamentals/)
+- [X] [Matrix Fundamentals](/posts/fundamentals/math/linalg/matrices/)
+- [X] [Eigenvalues and Eigenvectors](/posts/fundamentals/math/linalg/eigenvalues-eigenvectors/)
+- [X] [REF and RREF](/posts/fundamentals/math/linalg/ref-rref/)
+- [X] [Vectors, Norms, and Dot Product](/posts/fundamentals/math/linalg/vectors-norms-dot-product/)
+- [X] [Matrix Operations](/posts/fundamentals/math/linalg/matrix-operations/)
+- [X] [Determinant and Invertibility](/posts/fundamentals/math/linalg/determinant-and-invertibility/)
+- [X] [Linear Systems and Rank](/posts/fundamentals/math/linalg/linear-systems-and-rank/)
+- [X] [Projections and Orthogonality](/posts/fundamentals/math/linalg/projections-and-orthogonality/)
+- [X] [Covariance and Quadratic Forms](/posts/fundamentals/math/linalg/covariance-and-quadratic-forms/)
+- [X] [SVD and PCA Intuition](/posts/fundamentals/math/linalg/svd-and-pca-intuition/)
+
+### Calculus
+- [X] [Calculus Fundamentals for ML](/posts/fundamentals/math/calculus/fundamentals/)
+- [X] [Derivatives and Partial Derivatives](/posts/fundamentals/math/calculus/derivatives-and-partials/)
+- [X] [Chain Rule](/posts/fundamentals/math/calculus/chain-rule/)
+- [X] [Gradients and Jacobians](/posts/fundamentals/math/calculus/gradients-and-jacobians/)
+- [X] [Taylor Approximation](/posts/fundamentals/math/calculus/taylor-approximation/)
+- [X] [Convexity](/posts/fundamentals/math/calculus/convexity/)
+- [X] [Critical Points and Saddle Points](/posts/fundamentals/math/calculus/critical-points-and-saddle-points/)
+- [X] [Gradient Descent](/posts/fundamentals/math/calculus/gradient-descent/)
+- [X] [Learning Rate and Convergence](/posts/fundamentals/math/calculus/learning-rate-and-convergence/)
+
+### Probability
+- [X] [Probability Fundamentals for ML](/posts/fundamentals/math/probability/fundamentals/)
+- [X] [Random Variables, Expectation, and Variance](/posts/fundamentals/math/probability/random-variables-expectation-variance/)
+- [X] [Conditional Probability and Bayes Rule](/posts/fundamentals/math/probability/conditional-probability-and-bayes-rule/)
+- [X] [Common Distributions](/posts/fundamentals/math/probability/common-distributions/)
+- [X] [Likelihood, Log-Likelihood, and MLE](/posts/fundamentals/math/probability/likelihood-log-likelihood-and-mle/)
+- [X] [Entropy, Cross-Entropy, and KL Divergence](/posts/fundamentals/math/probability/entropy-cross-entropy-kl-divergence/)
+- [X] [Bias-Variance Tradeoff](/posts/fundamentals/math/probability/bias-variance-tradeoff/)
+- [X] [Sampling and Data Splits](/posts/fundamentals/math/probability/sampling-and-data-splits/)
+- [X] [Correlation vs Independence](/posts/fundamentals/math/probability/correlation-vs-independence/)
+- [X] [Statistical Inference Basics](/posts/fundamentals/math/probability/statistical-inference-basics/)
 
 ---
 
@@ -85,5 +128,6 @@ pinned: true
 - [ ] [Pre-trained Language Models](/posts/nlp/pretrained-language-models/)
 - [ ] [Pre-trained Audio Encoders](/posts/nlp/pretrained-audio-encoders/)
 - [ ] [Audio Models](/posts/nlp/audio-models)
+
 
 

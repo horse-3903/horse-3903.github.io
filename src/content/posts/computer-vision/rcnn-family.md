@@ -1,6 +1,6 @@
 ---
 title: R-CNN, Fast R-CNN, and Faster R-CNN
-published: 2026-02-15
+published: 2026-02-16
 description: "Region-based CNN detectors and how they evolved from R-CNN to Faster R-CNN."
 tags: ["Computer Vision", "Deep Learning"]
 category: IOAI ML Notes
@@ -167,6 +167,12 @@ access: restricted
 ---
 # Practical Notes
 
+## Fast R-CNN and Faster R-CNN usually train with SGD, momentum 0.9, and weight decay ~5e-4 (classic configs).
+
 * Fast R-CNN and Faster R-CNN usually train with SGD, momentum 0.9, and weight decay ~5e-4 (classic configs).
+## Faster R-CNN originally used **alternating training** (train RPN, then detector, then fine-tune jointly).
+
 * Faster R-CNN originally used **alternating training** (train RPN, then detector, then fine-tune jointly).
+## R-CNN style per-proposal CNN compute is ~2k forward passes per image, which dominates runtime.
+
 * R-CNN style per-proposal CNN compute is ~2k forward passes per image, which dominates runtime.

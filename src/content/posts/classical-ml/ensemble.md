@@ -1,6 +1,6 @@
 ---
 title: Ensemble Methods
-published: 2026-02-12
+published: 2026-02-16
 description: "A comprehensive guide to ensemble learning — exploring how combining multiple models improves accuracy, robustness, and generalisation."
 tags: ["Classical Machine Learning", "Supervised Learning"]
 category: IOAI ML Notes
@@ -73,7 +73,7 @@ access: public
 
 ## Core Idea
 
-* Bagging uses the same training algorithm for every predictour.
+* Bagging uses the same training algorithm for every predictor.
 * However, it trains them on different random subsets of the training set.
 * When sampling is performed with replacement, this method is called *bagging*.
 * When sampling is performed without replacement, it is called *pasting*.
@@ -163,20 +163,20 @@ access: public
 
 ### Key Concepts
 
-* AdaBoost works by paying more attention to the training instances that the predecessour misclassified.
+* AdaBoost works by paying more attention to the training instances that the predecessor misclassified.
 * This results in new predictors focusing more and more on  hard cases in the samples.
 
 ### Algorithm Outline
 
-1. A first base model is trained and used to make predictions on the training set.
-2. The relative weight of misclassified training instances is then increased.
-3. Train a new classifier on the reweighted data and generate updated predictions.
-4. Repeat steps 2-3
-5. Predict by obtaining the 
+1. Initialise equal sample weights and train a first weak classifier.
+2. Compute the classifier's weighted error and assign it a model weight.
+3. Increase weights of misclassified samples, decrease weights of correctly classified samples, then normalise.
+4. Train the next weak classifier on the reweighted data and repeat steps 2-3 for multiple rounds.
+5. Make the final prediction using a weighted majority vote of all weak classifiers.
 
 ### Intuition
 
-* Mistakes made by predecessour models get more attention (higher weight) while retraining.
+* Mistakes made by predecessor models get more attention (higher weight) while retraining.
 * This means that the model can progressively correct its mistakes.
 * However, this makes it sensitive to noisy labels and outliers.
 
@@ -192,9 +192,9 @@ $$
 r_j = \frac{\sum^{m}_{i=1} w_i \space \text{ s.t. } \hat{y}_{i,j} \ne y_i}{\sum^{m}_{i=1} w_i}
 $$
 
-#### Step 3: Calculate the Predictour's Weight
-* The weight $ a_j $ of the predictour $ j $ will be calculated to assess its performance.
-  * The more accurate the predictour is, the higher its weight will be. 
+#### Step 3: Calculate the Predictor's Weight
+* The weight $ a_j $ of the predictor $ j $ will be calculated to assess its performance.
+  * The more accurate the predictor is, the higher its weight will be. 
   * If it is just guessing randomly, then its weight will be close to zero. 
   * However, if it is most often wrong, then its weight will be negative.
 
@@ -203,8 +203,8 @@ $$
 $$
 
 #### Step 4: Update the Weights of the Samples
-* The instance weights of the the misclassified instances
-are boosted for predictour $ j $.
+* The instance weights of the misclassified instances
+are boosted for predictor $ j $.
 
 $$
 w_i 
@@ -226,7 +226,7 @@ $$
 
 #### Step 5: Make Predictions
 
-* AdaBoost computes the predictions of all the predictors and weighs them using the predictour weights $ \alpha_j $.
+* AdaBoost computes the predictions of all the predictors and weighs them using the predictor weights $ \alpha_j $.
 
 $$
 \hat y = \argmax_k \sum^{N}_{j=1, \space \hat y_j = k} \alpha_j
@@ -238,7 +238,7 @@ $$
 ### Core Idea
 
 * Like AdaBoost, Gradient Boosting works by sequentially adding predictors to correct its predecessors.
-* However, it fits each new predictour to the **residual errors** (loss) of the current model.
+* However, it fits each new predictor to the **residual errors** (loss) of the current model.
 
 ### Algorithm Outline
 
@@ -252,6 +252,14 @@ $$
 
 * **Mean Squared Error** loss for regressors.
 * **Negative Log-Likelihood** for classifiers.
+
+### How XGBoost Handles Missing Values
+
+* XGBoost handles missing values **natively**, so you usually do not need separate imputation.
+* During training, for each split, it learns a **default direction** (left or right) for samples with missing feature values.
+* It chooses the default direction that gives the **best gain** in the objective.
+* During inference, if a feature value is missing, the sample follows that learned default branch.
+* This lets XGBoost treat missingness as potentially informative rather than only as missing data noise.
 
 ---
 
@@ -371,11 +379,18 @@ $$
 
 ## Practical Notes
 
-* Use cross-validation or out-of-bag estimates to tune ensembles.
-* Keep base models diverse to avoid correlated errors.
-* Monitour calibration; averaging can still be miscalibrated.
-* Apply early stopping for boosting to control overfitting.
+### Use cross-validation or out-of-bag estimates to tune ensembles.
 
+* Use cross-validation or out-of-bag estimates to tune ensembles.
+### Keep base models diverse to avoid correlated errors.
+
+* Keep base models diverse to avoid correlated errors.
+### Monitor calibration; averaging can still be miscalibrated.
+
+* Monitor calibration; averaging can still be miscalibrated.
+### Apply early stopping for boosting to control overfitting.
+
+* Apply early stopping for boosting to control overfitting.
 
 
 

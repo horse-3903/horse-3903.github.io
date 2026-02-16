@@ -1,6 +1,6 @@
 ---
 title: Linear Regression
-published: 2026-02-12
+published: 2026-02-16
 description: "A comprehensive guide to Linear Regression — exploring how it models relationships between variables to make accurate continuous predictions."
 tags: ["Classical Machine Learning", "Supervised Learning"]
 category: IOAI ML Notes
@@ -121,11 +121,18 @@ $$
 
 ## Practical Notes
 
-* **Standardise features** before applying regularisation.
-* Inspect **residuals** for heteroscedasticity and bias.
-* Use **Ridge or LASSO** when there are many correlated features.
-* Add **interaction terms** only when they are justified by domain knowledge.
+### **Standardise features** before applying regularisation.
 
+* **Standardise features** before applying regularisation.
+### Inspect **residuals** for heteroscedasticity and bias.
+
+* Inspect **residuals** for heteroscedasticity and bias.
+### Use **Ridge or LASSO** when there are many correlated features.
+
+* Use **Ridge or LASSO** when there are many correlated features.
+### Add **interaction terms** only when they are justified by domain knowledge.
+
+* Add **interaction terms** only when they are justified by domain knowledge.
 
 
 

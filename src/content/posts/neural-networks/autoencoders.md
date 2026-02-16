@@ -1,6 +1,6 @@
 ---
 title: Autoencoders
-published: 2026-02-13
+published: 2026-02-16
 description: "Autoencoder architectures, objectives, and common applications."
 tags: ["Neural Network", "Deep Learning"]
 category: IOAI ML Notes
@@ -69,9 +69,17 @@ $$
 
 # Practical Notes
 
+## **Undercomplete** autoencoders (small $k$) encourage compact, informative codes.
+
 * **Undercomplete** autoencoders (small $k$) encourage compact, informative codes.
+## **Overcomplete** autoencoders need regularisation (e.g. sparsity, dropout) to avoid trivial identity mapping.
+
 * **Overcomplete** autoencoders need regularisation (e.g. sparsity, dropout) to avoid trivial identity mapping.
+## Reconstruction quality can be high even when downstream representations are weak, so validate with task metrics.
+
 * Reconstruction quality can be high even when downstream representations are weak, so validate with task metrics.
+## For images, convolutional encoders/decoders usually outperform fully connected ones.
+
 * For images, convolutional encoders/decoders usually outperform fully connected ones.
 
 ---
@@ -132,4 +140,3 @@ $$
 * KL replaced by adversarial training.
 * Encoder is trained to fool the discriminator so $z$ matches a target prior.
 * Reconstruction loss and adversarial loss jointly shape the encoder output.
-

@@ -1,6 +1,6 @@
 ---
 title: Logistic Regression
-published: 2026-02-12
+published: 2026-02-16
 description: "A comprehensive guide to Logistic Regression — exploring how it transforms Linear Regression into a powerful tool for binary and multi-class classification."
 tags: ["Classical Machine Learning", "Supervised Learning"]
 category: IOAI ML Notes
@@ -248,11 +248,18 @@ $$
 
 ## Practical Notes
 
-* Standardise features and tune regularisation strength.
-* Use class weights or decision thresholds to control precision and recall.
-* Prefer multinomial loss for multi-class problems when available.
-* Check calibration and use Platt scaling if needed.
+### Standardise features and tune regularisation strength.
 
+* Standardise features and tune regularisation strength.
+### Use class weights or decision thresholds to control precision and recall.
+
+* Use class weights or decision thresholds to control precision and recall.
+### Prefer multinomial loss for multi-class problems when available.
+
+* Prefer multinomial loss for multi-class problems when available.
+### Check calibration and use Platt scaling if needed.
+
+* Check calibration and use Platt scaling if needed.
 
 
 

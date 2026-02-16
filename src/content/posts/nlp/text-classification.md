@@ -1,6 +1,6 @@
 ---
 title: Text Classification
-published: 2026-02-15
+published: 2026-02-16
 description: "Common workflows for assigning labels to text."
 tags: ["Natural Language Processing", "Supervised Learning"]
 category: IOAI ML Notes
@@ -96,14 +96,27 @@ $$
 
 # Practical Notes
 
-* Handle class imbalance carefully.
-* Use proper train/validation splits.
-* Imbalance fixes: class-weighted loss, focal loss, oversampling minority classes.
-* Error analysis matters:
-* inspect confusion matrix,
-* inspect false positives/negatives by class,
-* inspect tokenization issues and domain-specific vocabulary gaps.
+## Handle class imbalance carefully.
 
+* Handle class imbalance carefully.
+## Use proper train/validation splits.
+
+* Use proper train/validation splits.
+## Imbalance fixes: class-weighted loss, focal loss, oversampling minority classes.
+
+* Imbalance fixes: class-weighted loss, focal loss, oversampling minority classes.
+## Error analysis matters:
+
+* Error analysis matters:
+## inspect confusion matrix,
+
+* inspect confusion matrix,
+## inspect false positives/negatives by class,
+
+* inspect false positives/negatives by class,
+## inspect tokenization issues and domain-specific vocabulary gaps.
+
+* inspect tokenization issues and domain-specific vocabulary gaps.
 
 
 

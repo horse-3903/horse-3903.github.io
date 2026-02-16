@@ -1,6 +1,6 @@
 ---
 title: K-Nearest Neighbours
-published: 2026-02-12
+published: 2026-02-16
 description: "A comprehensive guide to K-Nearest Neighbours — exploring how local similarity drives instance-based learning."
 tags: ["Classical Machine Learning", "Supervised Learning"]
 category: IOAI ML Notes
@@ -80,11 +80,18 @@ $$
 
 ## Practical Notes
 
-* Use **KD-tree** or **ball-tree** search for speed in low dimensions.
-* **Weight neighbours** by distance to reduce boundary noise.
-* **Tune $k$ and the metric** with cross-validation.
-* Consider **dimensionality reduction** before KNN in high dimensions.
+### Use **KD-tree** or **ball-tree** search for speed in low dimensions.
 
+* Use **KD-tree** or **ball-tree** search for speed in low dimensions.
+### **Weight neighbours** by distance to reduce boundary noise.
+
+* **Weight neighbours** by distance to reduce boundary noise.
+### **Tune $k$ and the metric** with cross-validation.
+
+* **Tune $k$ and the metric** with cross-validation.
+### Consider **dimensionality reduction** before KNN in high dimensions.
+
+* Consider **dimensionality reduction** before KNN in high dimensions.
 
 
 

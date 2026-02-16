@@ -1,6 +1,6 @@
 ---
 title: Self-Supervised Learning for Vision
-published: 2026-02-14
+published: 2026-02-16
 description: "Pretext tasks and representation learning without labels."
 tags: ["Computer Vision", "Deep Learning"]
 category: IOAI ML Notes
@@ -185,11 +185,20 @@ $$
 
 # Practical Notes
 
-* Requires large, diverse datasets.
-* Contrastive methods are compute-heavy due to multiple views per image.
-* Masked image modeling scales well with ViT and large datasets.
-* Often used before supervised fine-tuning.
-* Linear probing is the fastest way to compare SSL methods fairly.
+## Requires large, diverse datasets.
 
+* Requires large, diverse datasets.
+## Contrastive methods are compute-heavy due to multiple views per image.
+
+* Contrastive methods are compute-heavy due to multiple views per image.
+## Masked image modeling scales well with ViT and large datasets.
+
+* Masked image modeling scales well with ViT and large datasets.
+## Often used before supervised fine-tuning.
+
+* Often used before supervised fine-tuning.
+## Linear probing is the fastest way to compare SSL methods fairly.
+
+* Linear probing is the fastest way to compare SSL methods fairly.
 
 

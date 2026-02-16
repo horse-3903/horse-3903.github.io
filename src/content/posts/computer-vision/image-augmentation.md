@@ -1,6 +1,6 @@
 ---
 title: Image Augmentation
-published: 2026-02-15
+published: 2026-02-16
 description: "Simple augmentation techniques to improve generalisation."
 tags: ["Computer Vision"]
 category: IOAI ML Notes
@@ -109,11 +109,18 @@ $$
 
 # Practical Notes
 
-* Keep augmentations label-preserving.
-* Tune intensity based on task sensitivity.
-* Augmentation and regularization interact: stronger augmentation often allows larger models or fewer explicit regularizers.
-* For small datasets, augmentation can matter as much as architecture choice.
+## Keep augmentations label-preserving.
 
+* Keep augmentations label-preserving.
+## Tune intensity based on task sensitivity.
+
+* Tune intensity based on task sensitivity.
+## Augmentation and regularization interact: stronger augmentation often allows larger models or fewer explicit regularizers.
+
+* Augmentation and regularization interact: stronger augmentation often allows larger models or fewer explicit regularizers.
+## For small datasets, augmentation can matter as much as architecture choice.
+
+* For small datasets, augmentation can matter as much as architecture choice.
 
 
 

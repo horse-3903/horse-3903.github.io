@@ -1,6 +1,6 @@
 ---
 title: t-SNE & UMAP
-published: 2026-02-12
+published: 2026-02-16
 description: "A concise guide to t-SNE and UMAP for nonlinear dimensionality reduction."
 tags: ["Classical Machine Learning", "Unsupervised Learning"]
 category: IOAI ML Notes
@@ -69,12 +69,27 @@ access: restricted
 
 ## Practical Notes
 
+### Hyperparameter Sensitivity
+
 * Sensitive to **perplexity** and **learning rate**.
+
+### Primary Use Case
+
 * Typically used for **visualisation**, not downstream modelling.
+
+## Limitations
+
+* In t-SNE plots, the **distance between separate clusters is usually not meaningful**.
+* You can interpret **which points are local neighbours**, but not absolute spacing or relative gaps between far-apart groups.
+* t-SNE can show **splintering**, where one true cluster is broken into multiple small islands due to: 
+  * Hyperparameter choices
+  * Noise
+  * Optimisation randomness
+* Because of splintering, visual clusters in 2D should be validated against the original high-dimensional structure before making conclusions.
 
 ---
 
-# UMAP
+# UMAP (Uniform Manifold Approximation and Projection)
 
 ## Core Idea
 
@@ -100,7 +115,12 @@ access: restricted
 
 ### Step 3: Construct the Low-Dimensional Fuzzy Graph
 
-* Initialise low‑dimensional points $y_i$ (often random or via PCA).
+* Initialise low‑dimensional points $y_i$.
+* Common initialisation choices:
+  * **Spectral** (common default): uses a spectral layout from the graph structure.
+  * **Random**: starts points from random positions.
+  * **PCA**: starts from a PCA projection.
+  * **Custom init**: uses user-provided initial coordinates.
 * For low-dimensional points $y_i$, define:
   $$
   \tilde{w}_{ij} = \frac{1}{1 + a\|y_i - y_j\|^{2b}}
@@ -128,10 +148,43 @@ access: restricted
 
 ## Practical Notes
 
+### Runtime on Large Datasets
+
 * **Faster than t-SNE** for larger datasets.
+
+### Global Structure Preservation
+
 * Often preserves **more global structure** than t-SNE.
+
+### Supervised and Semi-Supervised UMAP
+
+* UMAP can be run in a **supervised or semi-supervised** mode, where target labels are used to influence the neighbour graph and pull same-label points closer in the embedding.
+* This often improves class separation for visualisation, but can hide true unsupervised structure if labels are noisy or incomplete.
+
+### Fit/Transform Workflow
+
 * Fit on training data only; **transform** validation/test consistently.
+
+### Axis Interpretability
+
 * Embeddings are **nonlinear** and **not directly interpretable** as feature axes.
 
+---
 
+# PCA vs t-SNE vs UMAP
 
+![](../assets/tsne-umap/compare.png)
+
+## Quick Comparison
+
+| Method | Type | What It Preserves Best | Speed | Typical Use |
+|---|---|---|---|---|
+| PCA | Linear projection | Global variance structure | Fastest | Compression, preprocessing, baseline visualisation |
+| t-SNE | Nonlinear embedding | Local neighbourhoods | Slowest | Visual cluster inspection |
+| UMAP | Nonlinear manifold/graph embedding | Local structure + some global geometry | Medium | Visualisation and sometimes downstream features |
+
+## Key Takeaways
+
+* **PCA** is best when you want a simple, stable linear reduction.
+* **t-SNE** is best for local cluster visualisation, but inter-cluster distances are not reliable.
+* **UMAP** often gives a better speed/structure tradeoff and supports supervised guidance.

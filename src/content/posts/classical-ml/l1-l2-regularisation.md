@@ -1,6 +1,6 @@
 ---
 title: L1 and L2 Regularisation
-published: 2026-02-12
+published: 2026-02-16
 description: "A comprehensive guide to L1 and L2 Regularisation — exploring how LASSO and Ridge improve generalisation."
 tags: ["Classical Machine Learning", "Supervised Learning"]
 category: IOAI ML Notes
@@ -123,6 +123,8 @@ $$
 * L1 regularisation **pushes some weights exactly to zero**.
 
 * This creates a model that **selects features automatically**.
+* Therefore, L1 regularisation is useful for **feature selection**, since zero-weight features are effectively removed.
+* In optimisation updates, L1 contributes a **constant-magnitude term** ($\pm\lambda$ away from zero), which is why it can zero out coefficients.
 
 ### Leads to Simpler Models
 * **Unimportant features** are removed, meaning that models are more efficient and interpretable.
@@ -172,6 +174,7 @@ $$
 ### Improves numerical stability:
 * Adding $ \lambda I $ ensures $X^\top X + \lambda I$ is **invertible**.
 * Prevents the model from **blowing up** when features are highly correlated.
+* L2 regularisation is commonly called **weight decay** because each update shrinks weights toward zero proportionally to their size.
 
 ### Reduces model variance:
 * **Shrinks weights** smoothly toward zero.
@@ -230,6 +233,17 @@ $$
 \nabla_w R(w) = 2\lambda w
 $$
 
+# Shape of L1 and L2 Constraints
+
+* Geometrically, regularisation can be viewed as constraining weights to lie inside a norm ball.
+* For two parameters $(w_1, w_2)$:
+  * **L1 constraint** ($|w_1| + |w_2| \le c$) forms a **diamond**.
+  * **L2 constraint** ($w_1^2 + w_2^2 \le c$) forms a **circle**.
+* The sharp corners of the L1 diamond make it more likely to hit axes, producing exact zeros (sparsity).
+* The smooth L2 circle shrinks weights continuously, usually keeping them non-zero.
+
+![](../assets/l1-l2/l1l2.png)
+
 # L1 and L2 Regularisation In Practice
 
 ## When to Use L1 and L2 Regularisation
@@ -248,11 +262,18 @@ $$
 
 ## Practical Notes
 
-* Standardise all features before applying L1 or L2 penalties.
-* Tune $\lambda$ via cross-validation, not by training loss.
-* Use Elastic Net when you want sparsity with grouped features.
-* Track coefficient paths to understand shrinkage effects.
+### Standardise all features before applying L1 or L2 penalties.
 
+* Standardise all features before applying L1 or L2 penalties.
+### Tune $\lambda$ via cross-validation, not by training loss.
+
+* Tune $\lambda$ via cross-validation, not by training loss.
+### Use Elastic Net when you want sparsity with grouped features.
+
+* Use Elastic Net when you want sparsity with grouped features.
+### Track coefficient paths to understand shrinkage effects.
+
+* Track coefficient paths to understand shrinkage effects.
 
 
 

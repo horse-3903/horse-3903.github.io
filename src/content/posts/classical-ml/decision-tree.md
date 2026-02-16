@@ -1,6 +1,6 @@
 ---
 title: Decision Tree
-published: 2026-02-14
+published: 2026-02-16
 description: "A comprehensive guide to Decision Trees — exploring how they recursively split data to model complex decision boundaries for classification and regression tasks."
 tags: ["Classical Machine Learning", "Supervised Learning"]
 category: IOAI ML Notes
@@ -509,11 +509,18 @@ $$
 
 ## Practical Notes
 
-* Control depth and minimum leaf sises to manage variance.
-* Use cross-validation to pick pruning or depth settings.
-* Handle class imbalance with class weights or balanced sampling.
-* Prune for generalisation, not just training accuracy.
+### Control depth and minimum leaf sises to manage variance.
 
+* Control depth and minimum leaf sises to manage variance.
+### Use cross-validation to pick pruning or depth settings.
+
+* Use cross-validation to pick pruning or depth settings.
+### Handle class imbalance with class weights or balanced sampling.
+
+* Handle class imbalance with class weights or balanced sampling.
+### Prune for generalisation, not just training accuracy.
+
+* Prune for generalisation, not just training accuracy.
 
 
 

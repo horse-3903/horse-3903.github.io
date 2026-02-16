@@ -1,6 +1,6 @@
 ---
 title: Pre-trained Language Models
-published: 2026-02-15
+published: 2026-02-16
 description: "Open-source and API-based language model families."
 tags: ["Natural Language Processing"]
 category: IOAI ML Notes
@@ -103,10 +103,15 @@ access: public
 
 # Practical Notes
 
-* Choose based on latency, cost, and data constraints.
-* Always evaluate on a held-out task set with failure-case slices.
-* Track regression across model/version changes.
+## Choose based on latency, cost, and data constraints.
 
+* Choose based on latency, cost, and data constraints.
+## Always evaluate on a held-out task set with failure-case slices.
+
+* Always evaluate on a held-out task set with failure-case slices.
+## Track regression across model/version changes.
+
+* Track regression across model/version changes.
 
 
 
