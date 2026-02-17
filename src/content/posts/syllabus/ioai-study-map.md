@@ -1,6 +1,6 @@
 ---
 title: IOAI Syllabus Study Map
-published: 2026-02-16
+published: 2026-02-18
 description: "A table of contents for studying the IOAI syllabus across the notes."
 tags: ["Syllabus", "Study Guide"]
 category: IOAI ML Notes
@@ -86,7 +86,7 @@ pinned: true
 ## Clustering
 
 - [X] [K-Means Clustering](/posts/classical-ml/k-means-clustering/)
-- [ ] [DBSCAN, Hierarchical & Spectral Clustering](/posts/classical-ml/dbscan-hierarchical-spectral/)
+- [X] [DBSCAN, Hierarchical & Spectral Clustering](/posts/classical-ml/dbscan-hierarchical-spectral/)
 
 ---
 
@@ -120,14 +120,14 @@ pinned: true
 
 # NLP & Audio
 
-- [ ] [Attention and Transformers](/posts/nlp/attention-and-transformers/)
-- [ ] [Text Classification](/posts/nlp/text-classification/)
-- [ ] [Pre-trained Text Encoders](/posts/nlp/pretrained-text-encoders/)
-- [ ] [Language Modelling](/posts/nlp/language-modelling/)
-- [ ] [Encoder-Decoder Models](/posts/nlp/encoder-decoder-models/)
-- [ ] [Pre-trained Language Models](/posts/nlp/pretrained-language-models/)
-- [ ] [Pre-trained Audio Encoders](/posts/nlp/pretrained-audio-encoders/)
-- [ ] [Audio Models](/posts/nlp/audio-models)
+- [X] [Attention and Transformers](/posts/nlp/attention-and-transformers/)
+- [X] [Text Classification](/posts/nlp/text-classification/)
+- [X] [Pre-trained Text Encoders](/posts/nlp/pretrained-text-encoders/)
+- [X] [Language Modelling](/posts/nlp/language-modelling/)
+- [X] [Encoder-Decoder Models](/posts/nlp/encoder-decoder-models/)
+- [X] [Pre-trained Language Models](/posts/nlp/pretrained-language-models/)
+- [X] [Pre-trained Audio Encoders](/posts/nlp/pretrained-audio-encoders/)
+- [X] [Audio Models](/posts/nlp/audio-models)
 
 
 

@@ -1,6 +1,6 @@
 ---
 title: Image Generation
-published: 2026-02-16
+published: 2026-02-18
 description: "GANs and diffusion models for generating images."
 tags: ["Computer Vision", "Deep Learning"]
 category: IOAI ML Notes
@@ -20,7 +20,9 @@ access: restricted
 
 ---
 
-# Generating Images with GANs
+# GAN (Generative Adversial Network)
+
+![](../assets/image-generation/gan-overview-diagram.png)
 
 ## Core Idea
 
@@ -63,17 +65,9 @@ $$
 
 ## Practical Notes
 
-### Training can be unstable.
-
 * Training can be unstable.
-### Requires careful balance of $G$ and $D$.
-
 * Requires careful balance of $G$ and $D$.
-### Common failure mode: mode collapse (limited diversity).
-
 * Common failure mode: mode collapse (limited diversity).
-### Common quality metrics: FID and IS.
-
 * Common quality metrics: FID and IS.
 
 ---
@@ -138,17 +132,9 @@ $$
 
 ## Practical Notes
 
-### Produces high-quality results.
-
 * Produces high-quality results.
-### Often slower at inference.
-
 * Often slower at inference.
-### Latent diffusion reduces cost by denoising in compressed latent space.
-
 * Latent diffusion reduces cost by denoising in compressed latent space.
-### Key quality controls: noise schedule, number of denoising steps, guidance scale, and sampler.
-
 * Key quality controls: noise schedule, number of denoising steps, guidance scale, and sampler.
 
 ---

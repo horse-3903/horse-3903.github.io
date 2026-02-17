@@ -1,6 +1,6 @@
 ---
 title: Data Embeddings
-published: 2026-02-16
+published: 2026-02-18
 description: "Embeddings for text, images, audio and structured data with practical usage notes."
 tags: ["Neural Network", "Deep Learning"]
 category: IOAI ML Notes
@@ -57,17 +57,17 @@ $$
 ## Key Tradeoffs
 
 * **Interpretability**:
-* Sparse vectors are more human-readable.
-* Dense vectors are less interpretable but often more expressive.
+  * Sparse vectors are more human-readable.
+  * Dense vectors are less interpretable but often more expressive.
 * **Memory and compute**:
-* Sparse vectors can be memory-heavy at very large vocab sizes.
-* Dense vectors are compact and efficient for neural models.
+  * Sparse vectors can be memory-heavy at very large vocab sizes.
+  * Dense vectors are compact and efficient for neural models.
 * **Generalisation**:
-* Sparse methods treat tokens as mostly independent.
-* Dense methods share statistical strength across similar tokens/items.
+  * Sparse methods treat tokens as mostly independent.
+  * Dense methods share statistical strength across similar tokens/items.
 * **Best use cases**:
-* Sparse: classical IR/search baselines, small-data linear models.
-* Dense: semantic search, transfer learning, deep learning pipelines.
+  * Sparse: classical IR/search baselines, small-data linear models.
+  * Dense: semantic search, transfer learning, deep learning pipelines.
 
 ## Practical Rule
 
@@ -93,15 +93,12 @@ $$
 * **Contrastive**: pull positives together, push negatives apart.
 
 ## Practical notes
-### For similarity, **cosine** is a strong default.
-
-* For similarity, **cosine** is a strong default.
-### Normalise embeddings if using dot products across batches.
-
-* Normalise embeddings if using dot products across batches.
-### Mean-pooling of token vectors is a good baseline for sentence embeddings.
-
-* Mean-pooling of token vectors is a good baseline for sentence embeddings.
+* For similarity:
+  * **Cosine** is a strong default.
+* When using dot products across batches:
+  * Normalise embeddings first.
+* For sentence embeddings:
+  * Mean-pooling of token vectors is a strong baseline.
 
 ---
 
@@ -428,15 +425,12 @@ R(\theta)=
 $$
 
 ## Practical Notes
-### **Add vs concat**: adding keeps dimensionality fixed; concatenation grows it.
-
-* **Add vs concat**: adding keeps dimensionality fixed; concatenation grows it.
-### **Vision Transformers**: learned 2D positional embeddings for image patches.
-
-* **Vision Transformers**: learned 2D positional embeddings for image patches.
-### **Long context**: relative or RoPE-style embeddings usually perform better.
-
-* **Long context**: relative or RoPE-style embeddings usually perform better.
+* **Add vs concat**:
+  * Adding keeps dimensionality fixed; concatenation grows it.
+* **Vision Transformers**:
+  * Learned 2D positional embeddings are common for image patches.
+* **Long context**:
+  * Relative or RoPE-style embeddings usually perform better.
 
 ---
 
@@ -497,12 +491,10 @@ $$
 * **When to use**: label-scarce domains or foundation model pretraining.
 
 ## Practical notes
-### Pretrained image encoders often transfer well with **linear probing**.
-
-* Pretrained image encoders often transfer well with **linear probing**.
-### For retrieval, **L2-normalise** embeddings.
-
-* For retrieval, **L2-normalise** embeddings.
+* Transfer learning:
+  * Pretrained image encoders often work well with **linear probing**.
+* Retrieval:
+  * **L2-normalise** embeddings.
 
 ---
 
@@ -560,21 +552,16 @@ $$
 * **SpecAugment**: time/frequency masking on spectrograms.
 
 ## Practical notes
-### Log-mel spectrograms at 16 kHz with 64-128 mel bins are a strong default.
-
-* Log-mel spectrograms at 16 kHz with 64-128 mel bins are a strong default.
-### Normalise per-clip or per-dataset; mismatched scaling hurts transfer.
-
-* Normalise per-clip or per-dataset; mismatched scaling hurts transfer.
-### For retrieval, L2-normalise embeddings; for classification, raw vectors can work better.
-
-* For retrieval, L2-normalise embeddings; for classification, raw vectors can work better.
-### Beware **shortcut features** (background noise, mic artifacts) leaking into embeddings.
-
-* Beware **shortcut features** (background noise, mic artifacts) leaking into embeddings.
-### Evaluate on tasks with domain shift to test robustness.
-
-* Evaluate on tasks with domain shift to test robustness.
+* Default front-end:
+  * Log-mel spectrograms at 16 kHz with 64-128 mel bins are a strong baseline.
+* Normalisation:
+  * Normalise per-clip or per-dataset; mismatched scaling hurts transfer.
+* Task objective:
+  * For retrieval, L2-normalise embeddings; for classification, raw vectors can work better.
+* Failure modes:
+  * Beware **shortcut features** (background noise, mic artifacts) leaking into embeddings.
+* Evaluation:
+  * Test robustness with domain-shift benchmarks.
 
 ---
 
