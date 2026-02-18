@@ -38,7 +38,7 @@ access: restricted
 
 ## Contrastive Learning
 
-![](../assets/self-supervised/simclr.png)
+![](../../assets/self-supervised/simclr.png)
 
 * **SimCLR**: two augmented views; maximize agreement with InfoNCE loss.
 * **MoCo**: momentum encoder + queue of negatives for scalable contrast.
@@ -98,7 +98,7 @@ $$
 
 # Step-by-Step: Instance Discrimination
 
-![](../assets/self-supervised/instance.png)
+![](../../assets/self-supervised/instance.png)
 
 ## Step 1: Sample a Batch
 
@@ -137,7 +137,7 @@ $$
 
 # Step-by-Step: Image Subsampling / Patching
 
-![](../assets/self-supervised/patching.png)
+![](../../assets/self-supervised/patching.png)
 
 ## Step 1: Generate Local Regions or Tokens
 
@@ -187,18 +187,18 @@ $$
 
 ## Requires large, diverse datasets.
 
-* Requires large, diverse datasets.
+* In practice, requires large, diverse datasets.
 ## Contrastive methods are compute-heavy due to multiple views per image.
 
-* Contrastive methods are compute-heavy due to multiple views per image.
+* In practice, contrastive methods are compute-heavy due to multiple views per image.
 ## Masked image modeling scales well with ViT and large datasets.
 
-* Masked image modeling scales well with ViT and large datasets.
+* In practice, masked image modeling scales well with ViT and large datasets.
 ## Often used before supervised fine-tuning.
 
-* Often used before supervised fine-tuning.
+* In practice, often used before supervised fine-tuning.
 ## Linear probing is the fastest way to compare SSL methods fairly.
 
-* Linear probing is the fastest way to compare SSL methods fairly.
+* In practice, linear probing is the fastest way to compare SSL methods fairly.
 
 

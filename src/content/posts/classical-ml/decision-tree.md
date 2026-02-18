@@ -19,6 +19,8 @@ access: public
 * Done until **no further meaningful split** is possible
 
 ---
+![](../../assets/decision-tree/image.png)
+---
 
 # Structure of a Decision Tree
 
@@ -511,16 +513,16 @@ $$
 
 ### Control depth and minimum leaf sises to manage variance.
 
-* Control depth and minimum leaf sises to manage variance.
+* In practice, control depth and minimum leaf sises to manage variance.
 ### Use cross-validation to pick pruning or depth settings.
 
-* Use cross-validation to pick pruning or depth settings.
+* In practice, use cross-validation to pick pruning or depth settings.
 ### Handle class imbalance with class weights or balanced sampling.
 
-* Handle class imbalance with class weights or balanced sampling.
+* In practice, handle class imbalance with class weights or balanced sampling.
 ### Prune for generalisation, not just training accuracy.
 
-* Prune for generalisation, not just training accuracy.
+* In practice, prune for generalisation, not just training accuracy.
 
 
 

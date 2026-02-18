@@ -25,7 +25,7 @@ access: public
 
 # Core idea
 
-![](../assets/mlp/mlp-diagram.svg)
+![](../../assets/mlp/mlp-diagram.svg)
 
 * An MLP composes multiple **affine transformations** with **non-linear activations** to approximate complex functions.
 * It transforms an input vector $ x $ into a prediction $ \hat{y} $ through layers:  

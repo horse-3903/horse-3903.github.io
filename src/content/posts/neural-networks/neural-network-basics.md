@@ -49,13 +49,13 @@ $$
 
 ### Forms the intuition for multilayer networks.
 
-* Forms the intuition for multilayer networks.
+* In practice, forms the intuition for multilayer networks.
 ### Introduces learned weights, bias terms, and linear separability.
 
-* Introduces learned weights, bias terms, and linear separability.
+* In practice, introduces learned weights, bias terms, and linear separability.
 ### The perceptron learning rule updates weights on mistakes, while modern networks use gradient-based updates.
 
-* The perceptron learning rule updates weights on mistakes, while modern networks use gradient-based updates.
+* In practice, the perceptron learning rule updates weights on mistakes, while modern networks use gradient-based updates.
 
 ---
 
@@ -70,19 +70,19 @@ $$
 
 ### Batch size affects stability and noise.
 
-* Batch size affects stability and noise.
+* In practice, batch size affects stability and noise.
 ### Momentum or adaptive methods can speed up convergence.
 
-* Momentum or adaptive methods can speed up convergence.
+* In practice, momentum or adaptive methods can speed up convergence.
 ### In general, the update rule is:
 
-* In general, the update rule is:
+* In practice, in general, the update rule is:.
 $$
 w_{t+1} = w_t - \eta \nabla_w L(w_t)
 $$
 
 ## Types of Gradient Descent
-![](../assets/nn-basics/gradient-descent-types.png)
+![](../../assets/nn-basics/gradient-descent-types.png)
 
 ### Full-Batch Gradient Descent
 
@@ -132,16 +132,16 @@ $$
 
 ### Requires differentiable activation functions.
 
-* Requires differentiable activation functions.
+* In practice, requires differentiable activation functions.
 ### Makes training deep networks computationally feasible.
 
-* Makes training deep networks computationally feasible.
+* In practice, makes training deep networks computationally feasible.
 ### Cache intermediate activations to reuse during gradient computation.
 
-* Cache intermediate activations to reuse during gradient computation.
+* In practice, cache intermediate activations to reuse during gradient computation.
 ### Gradients flow from loss to output layer, then to hidden layers, then to inputs.
 
-* Gradients flow from loss to output layer, then to hidden layers, then to inputs.
+* In practice, gradients flow from loss to output layer, then to hidden layers, then to inputs.
 
 ## Example Neural Network
 
@@ -171,10 +171,10 @@ $$
 
 ### Choice affects convergence speed and stability.
 
-* Choice affects convergence speed and stability.
+* In practice, choice affects convergence speed and stability.
 ### Modern defaults often start with ReLU-like activations.
 
-* Modern defaults often start with ReLU-like activations.
+* In practice, modern defaults often start with ReLU-like activations.
 
 ## ReLU
 
@@ -204,10 +204,10 @@ $$
 
 ### Scaling and label encoding affect loss behaviour.
 
-* Scaling and label encoding affect loss behaviour.
+* In practice, scaling and label encoding affect loss behaviour.
 ### Monitour both loss curves and task metrics during training.
 
-* Monitour both loss curves and task metrics during training.
+* In practice, monitour both loss curves and task metrics during training.
 
 ## Regression
 

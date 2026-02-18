@@ -92,13 +92,13 @@ $$
 
 ## Pretraining data diversity strongly affects robustness (accents, noise, microphones).
 
-* Pretraining data diversity strongly affects robustness (accents, noise, microphones).
+* In practice, pretraining data diversity strongly affects robustness (accents, noise, microphones).
 ## Domain adaptation with continued pretraining can improve noisy or specialized audio.
 
-* Domain adaptation with continued pretraining can improve noisy or specialized audio.
+* In practice, domain adaptation with continued pretraining can improve noisy or specialized audio.
 ## For long audio, chunking + overlap or streaming encoders are important for latency.
 
-* For long audio, chunking + overlap or streaming encoders are important for latency.
+* In practice, for long audio, chunking + overlap or streaming encoders are important for latency.
 
 
 

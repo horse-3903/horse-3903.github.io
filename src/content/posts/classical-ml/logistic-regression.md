@@ -250,16 +250,16 @@ $$
 
 ### Standardise features and tune regularisation strength.
 
-* Standardise features and tune regularisation strength.
+* In practice, standardise features and tune regularisation strength.
 ### Use class weights or decision thresholds to control precision and recall.
 
-* Use class weights or decision thresholds to control precision and recall.
+* In practice, use class weights or decision thresholds to control precision and recall.
 ### Prefer multinomial loss for multi-class problems when available.
 
-* Prefer multinomial loss for multi-class problems when available.
+* In practice, prefer multinomial loss for multi-class problems when available.
 ### Check calibration and use Platt scaling if needed.
 
-* Check calibration and use Platt scaling if needed.
+* In practice, check calibration and use Platt scaling if needed.
 
 
 

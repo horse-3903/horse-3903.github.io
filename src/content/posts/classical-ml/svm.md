@@ -22,7 +22,7 @@ access: public
 * The **margin** refers to the **minimum distance** between two data points of two different classes perpendicular to the direction of the hyperplane.
 
 # What is a Hyperplane?
-![](../assets/svm/image.jpg)
+![](../../assets/svm/image.jpg)
 * For a hyperplane in $ p $ dimensions, it is defined as a **flat affine subspace** with $ p - 1 $ dimensions.
 
 * In other words, a hyperplane can be thought of as a **decision boundary**. 
@@ -260,17 +260,17 @@ $$
 
 ### Standardise features before training.
 
-* Standardise features before training.
+* In practice, standardise features before training.
 ### Tune $C$ and kernel parameters with cross-validation.
 
-* Tune $C$ and kernel parameters with cross-validation.
+* In practice, tune $C$ and kernel parameters with cross-validation.
 * For RBF SVM, the most important kernel parameter is $\gamma$.
 ### Prefer linear SVMs for large, sparse feature spaces.
 
-* Prefer linear SVMs for large, sparse feature spaces.
+* In practice, prefer linear SVMs for large, sparse feature spaces.
 ### Calibrate probabilities with Platt scaling if required.
 
-* Calibrate probabilities with Platt scaling if required.
+* In practice, calibrate probabilities with Platt scaling if required.
 
 
 

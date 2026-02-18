@@ -173,7 +173,7 @@ access: restricted
 
 # PCA vs t-SNE vs UMAP
 
-![](../assets/tsne-umap/compare.png)
+![](../../assets/tsne-umap/compare.png)
 
 ## Quick Comparison
 

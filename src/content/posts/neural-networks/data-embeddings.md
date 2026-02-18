@@ -92,18 +92,24 @@ $$
 * **Masked language modelling**: predict masked tokens.
 * **Contrastive**: pull positives together, push negatives apart.
 
-## Practical notes
-* For similarity:
-  * **Cosine** is a strong default.
-* When using dot products across batches:
-  * Normalise embeddings first.
-* For sentence embeddings:
-  * Mean-pooling of token vectors is a strong baseline.
+## Practical Notes
+
+### Default to cosine similarity for semantic comparisons
+
+* Cosine similarity is usually a strong first choice for embedding search and clustering.
+
+### Normalize before cross-batch dot-product comparisons
+
+* L2-normalization helps keep similarity scores stable across batches.
+
+### Use mean pooling as a sentence-level baseline
+
+* Averaging token embeddings is a simple and often competitive first approach.
 
 ---
 
 ## BPE (Byte-Pair Encoding)
-![](../assets/data-embeddings/bpe.png)
+![](../../assets/data-embeddings/bpe.png)
 ### Core Idea
 * Start with characters, then repeatedly merge the most frequent adjacent pairs.
 * **Why it works**: frequent word fragments become subwords, so rare words can be built from pieces.
@@ -143,7 +149,7 @@ $$
 * **When to use**: strong default for modern NLP and LLM tokenisers.
 
 ## WordPiece
-![](../assets/data-embeddings/wordpiece.png)
+![](../../assets/data-embeddings/wordpiece.png)
 ### Core Idea
 * Like BPE but merges maximise **likelihood** of the training data.
 * **Why it works**: likelihood-driven merges favour subwords that explain the corpus well, so frequent patterns become stable tokens while rare words still decompose cleanly.
@@ -242,7 +248,7 @@ $$
 * **When to use**: small/medium corpora, classical IR, or quick baselines.
 
 ## Word2Vec
-![](../assets/data-embeddings/word2vec.png)
+![](../../assets/data-embeddings/word2vec.png)
 ### Core Idea
 * Learn dense word vectors from local context.
 
@@ -384,7 +390,7 @@ $$
 * **Cons**: Does not extrapolate well beyond training length.
 
 ## Sinusoidal Positions
-![](../assets/data-embeddings/sinusoidal.png)
+![](../../assets/data-embeddings/sinusoidal.png)
 * **Idea**: Deterministic sine/cosine functions with different frequencies.
 * **How it works**:
   * $\text{PE}_{(pos,2i)} = \sin(pos / 10000^{2i/d})$
@@ -401,7 +407,7 @@ $$
 * **Cons**: More complex to implement; adds compute.
 
 ## Rotary Positional Encoding (RoPE)
-![](../assets/data-embeddings/rotary.png)
+![](../../assets/data-embeddings/rotary.png)
 * **Idea**: rotate query/key vectors by a position-dependent angle.
 * **Why it works**: turns relative position into a rotation in vector space.
 * **Pros**: Strong performance and extrapolation in practice.
@@ -425,12 +431,18 @@ R(\theta)=
 $$
 
 ## Practical Notes
-* **Add vs concat**:
-  * Adding keeps dimensionality fixed; concatenation grows it.
-* **Vision Transformers**:
-  * Learned 2D positional embeddings are common for image patches.
-* **Long context**:
-  * Relative or RoPE-style embeddings usually perform better.
+
+### Choose add vs concat based on model budget
+
+* Adding positional signals keeps dimensionality fixed, while concatenation increases it.
+
+### Use learned 2D positions for ViT patch tokens
+
+* Learned 2D positional embeddings are a common and effective default in vision transformers.
+
+### Prefer relative or RoPE-style methods for long context
+
+* Relative/rotary schemes usually extrapolate better than basic absolute embeddings.
 
 ---
 
@@ -490,11 +502,15 @@ $$
   * Reduces reliance on labels.
 * **When to use**: label-scarce domains or foundation model pretraining.
 
-## Practical notes
-* Transfer learning:
-  * Pretrained image encoders often work well with **linear probing**.
-* Retrieval:
-  * **L2-normalise** embeddings.
+## Practical Notes
+
+### Start with linear probing for transfer setup
+
+* Pretrained image encoders often perform strongly with a lightweight linear head.
+
+### Normalize embeddings for retrieval
+
+* L2-normalization is typically required for stable nearest-neighbor similarity search.
 
 ---
 
@@ -551,17 +567,27 @@ $$
 * **Time stretch / pitch shift**: invariance to tempo or pitch.
 * **SpecAugment**: time/frequency masking on spectrograms.
 
-## Practical notes
-* Default front-end:
-  * Log-mel spectrograms at 16 kHz with 64-128 mel bins are a strong baseline.
-* Normalisation:
-  * Normalise per-clip or per-dataset; mismatched scaling hurts transfer.
-* Task objective:
-  * For retrieval, L2-normalise embeddings; for classification, raw vectors can work better.
-* Failure modes:
-  * Beware **shortcut features** (background noise, mic artifacts) leaking into embeddings.
-* Evaluation:
-  * Test robustness with domain-shift benchmarks.
+## Practical Notes
+
+### Use a strong audio front-end baseline first
+
+* Log-mel spectrograms at 16 kHz with 64-128 mel bins are a reliable default.
+
+### Keep normalization policy consistent
+
+* Per-clip or per-dataset normalization can work, but train/inference mismatch hurts transfer.
+
+### Match embedding post-processing to objective
+
+* Retrieval usually benefits from L2-normalized vectors; classification can work with raw embeddings.
+
+### Watch for shortcut features
+
+* Background noise and microphone artifacts can leak label information and inflate metrics.
+
+### Evaluate robustness under domain shift
+
+* Include out-of-domain and noisy benchmarks, not only in-domain test splits.
 
 ---
 

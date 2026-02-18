@@ -71,16 +71,16 @@ $$
 
 ## **Undercomplete** autoencoders (small $k$) encourage compact, informative codes.
 
-* **Undercomplete** autoencoders (small $k$) encourage compact, informative codes.
+* In practice, undercomplete autoencoders (small $k$) encourage compact, informative codes.
 ## **Overcomplete** autoencoders need regularisation (e.g. sparsity, dropout) to avoid trivial identity mapping.
 
-* **Overcomplete** autoencoders need regularisation (e.g. sparsity, dropout) to avoid trivial identity mapping.
+* In practice, overcomplete autoencoders need regularisation (e.g. sparsity, dropout) to avoid trivial identity mapping.
 ## Reconstruction quality can be high even when downstream representations are weak, so validate with task metrics.
 
-* Reconstruction quality can be high even when downstream representations are weak, so validate with task metrics.
+* In practice, reconstruction quality can be high even when downstream representations are weak, so validate with task metrics.
 ## For images, convolutional encoders/decoders usually outperform fully connected ones.
 
-* For images, convolutional encoders/decoders usually outperform fully connected ones.
+* In practice, for images, convolutional encoders/decoders usually outperform fully connected ones.
 
 ---
 

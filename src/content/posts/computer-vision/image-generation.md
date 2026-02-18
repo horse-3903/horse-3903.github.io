@@ -22,7 +22,7 @@ access: restricted
 
 # GAN (Generative Adversial Network)
 
-![](../assets/image-generation/gan-overview-diagram.png)
+![](../../assets/image-generation/gan-overview-diagram.png)
 
 ## Core Idea
 
@@ -65,10 +65,21 @@ $$
 
 ## Practical Notes
 
-* Training can be unstable.
-* Requires careful balance of $G$ and $D$.
-* Common failure mode: mode collapse (limited diversity).
-* Common quality metrics: FID and IS.
+### Training stability is the main challenge
+
+* GAN optimization can oscillate or diverge if updates are not balanced.
+
+### Balance generator and discriminator updates
+
+* Keep $G$ and $D$ learning rates and update frequencies well matched.
+
+### Watch for mode collapse
+
+* Generated samples may lose diversity even when quality appears high.
+
+### Track quality with standard metrics
+
+* FID and IS are common diagnostics alongside qualitative inspection.
 
 ---
 
@@ -84,12 +95,12 @@ $$
 q(x_t \mid x_{t-1}) = \mathcal{N}\!\left(\sqrt{1-\beta_t}\,x_{t-1}, \beta_t I\right)
 $$
 
-* $\beta_t$ controls noise level at timestep $t$.
+* Here, $x_{t-1}$ is the sample at the previous step, $x_t$ is the noisier sample at step $t$, and $\beta_t$ is the step-$t$ noise variance.
 
 ## Step-by-Step Diffusion Training
 
 ### Step 1: Sample image and timestep
-* Draw clean image $x_0$ and random timestep $t$.
+* Draw clean image $x_0$ (original data sample) and random timestep $t \in \{1,\dots,T\}$.
 
 ### Step 2: Add noise
 * Sample $\epsilon \sim \mathcal{N}(0,I)$ and form noisy sample:
@@ -98,11 +109,11 @@ $$
 x_t = \sqrt{\bar{\alpha}_t}x_0 + \sqrt{1-\bar{\alpha}_t}\,\epsilon
 $$
 
-* $\bar{\alpha}_t = \prod_{s=1}^{t}(1-\beta_s)$.
+* $\epsilon$ is sampled Gaussian noise, and $\bar{\alpha}_t = \prod_{s=1}^{t}(1-\beta_s)$ is the cumulative signal-retention factor up to step $t$.
 
 ### Step 3: Predict noise
 * Train denoiser $\epsilon_\theta(x_t,t,c)$ to estimate the injected noise.
-* $c$ is optional conditioning input (for example text prompt).
+* $\epsilon_\theta(\cdot)$ is the model's predicted noise, and $c$ is optional conditioning input (for example text prompt).
 
 ### Step 4: Optimize denoising loss
 
@@ -114,7 +125,7 @@ $$
 $$
 
 ### Step 5: Sample images
-* Start from $x_T\sim \mathcal{N}(0,I)$.
+* Start from $x_T\sim \mathcal{N}(0,I)$, where $x_T$ is the near-pure noise state at the final diffusion step.
 * Iteratively denoise from timestep $T$ down to $0$.
 
 ## Guidance and Samplers
@@ -127,15 +138,26 @@ $$
 w\left(\epsilon_\theta(x_t,t,c)-\epsilon_\theta(x_t,t,\varnothing)\right)
 $$
 
-* $w$ is guidance scale; larger values strengthen condition fidelity but can reduce diversity.
+* $\varnothing$ denotes unconditioned input, and $w$ is guidance scale; larger values strengthen condition fidelity but can reduce diversity.
 * Common samplers: DDPM, DDIM, and DPM-Solver variants.
 
 ## Practical Notes
 
-* Produces high-quality results.
-* Often slower at inference.
-* Latent diffusion reduces cost by denoising in compressed latent space.
-* Key quality controls: noise schedule, number of denoising steps, guidance scale, and sampler.
+### Delivers strong image quality
+
+* Diffusion models are often strong on realism and diversity.
+
+### Inference is usually slower than GANs
+
+* Multiple denoising steps increase latency compared with one-pass generators.
+
+### Latent diffusion improves efficiency
+
+* Denoising in compressed latent space reduces memory and compute cost.
+
+### Tune sampler controls carefully
+
+* Noise schedule, denoising steps, guidance scale, and sampler strongly affect output behavior.
 
 ---
 

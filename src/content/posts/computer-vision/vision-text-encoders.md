@@ -159,37 +159,37 @@ $$
 
 ## Enables zero-shot classification.
 
-* Enables zero-shot classification.
+* In practice, enables zero-shot classification.
 ## Useful for retrieval and captioning pipelines.
 
-* Useful for retrieval and captioning pipelines.
+* In practice, useful for retrieval and captioning pipelines.
 ## Prompt engineering matters: template choice can change zero-shot accuracy.
 
-* Prompt engineering matters: template choice can change zero-shot accuracy.
+* In practice, prompt engineering matters: template choice can change zero-shot accuracy.
 ## Multiple prompt ensembling (average class prompt embeddings) often improves results.
 
-* Multiple prompt ensembling (average class prompt embeddings) often improves results.
+* In practice, multiple prompt ensembling (average class prompt embeddings) often improves results.
 ## For retrieval at scale, index normalized embeddings with ANN search (for example, FAISS/HNSW).
 
-* For retrieval at scale, index normalized embeddings with ANN search (for example, FAISS/HNSW).
+* In practice, for retrieval at scale, index normalized embeddings with ANN search (for example, FAISS/HNSW).
 ## Common metrics:
 
-* Common metrics:
+* In practice, common metrics:.
 ## Zero-shot classification: top-1/top-5 accuracy.
 
-* Zero-shot classification: top-1/top-5 accuracy.
+* In practice, zero-shot classification: top-1/top-5 accuracy.
 ## Retrieval: Recall@K and mean reciprocal rank.
 
-* Retrieval: Recall@K and mean reciprocal rank.
+* In practice, retrieval: Recall@K and mean reciprocal rank.
 ## Known limitations:
 
-* Known limitations:
+* In practice, known limitations:.
 ## Sensitive to web-data bias and prompt wording.
 
-* Sensitive to web-data bias and prompt wording.
+* In practice, sensitive to web-data bias and prompt wording.
 ## Struggles with fine-grained counting or OCR-heavy scenes without task adaptation.
 
-* Struggles with fine-grained counting or OCR-heavy scenes without task adaptation.
+* In practice, struggles with fine-grained counting or OCR-heavy scenes without task adaptation.
 
 
 

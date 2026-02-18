@@ -35,9 +35,17 @@ $$
 
 ## Practical Notes
 
-* Enables text generation.
-* Often trained with large corpora.
-* Supports few-shot prompting and instruction tuning.
+### Enables text generation
+
+* Autoregressive decoding produces coherent next-token continuations.
+
+### Benefits from large pretraining corpora
+
+* Larger and cleaner corpora usually improve fluency and coverage.
+
+### Supports prompting and instruction tuning
+
+* Few-shot prompts and instruction tuning can adapt behavior without architecture changes.
 
 ---
 
@@ -53,8 +61,17 @@ $$
 
 ## Practical Notes
 
-* Used by encoder models like BERT.
-* Strong for understanding tasks, not direct left-to-right generation.
+### Used by encoder models
+
+* MLM is the core objective behind BERT-style bidirectional encoders.
+
+### Strong for understanding tasks
+
+* MLM representations are typically strong for classification, retrieval, and tagging.
+
+### Not direct left-to-right generation
+
+* Standard MLM encoders do not naturally decode tokens autoregressively.
 
 ---
 
@@ -125,13 +142,13 @@ $$
 
 ## Data quality often matters more than modest architecture changes.
 
-* Data quality often matters more than modest architecture changes.
+* In practice, data quality often matters more than modest architecture changes.
 ## Context length improves long-dependency tasks but increases cost.
 
-* Context length improves long-dependency tasks but increases cost.
+* In practice, context length improves long-dependency tasks but increases cost.
 ## Safety/alignment layers are needed for production deployment.
 
-* Safety/alignment layers are needed for production deployment.
+* In practice, safety/alignment layers are needed for production deployment.
 
 
 

@@ -111,16 +111,16 @@ $$
 
 ## Keep augmentations label-preserving.
 
-* Keep augmentations label-preserving.
+* In practice, keep augmentations label-preserving.
 ## Tune intensity based on task sensitivity.
 
-* Tune intensity based on task sensitivity.
+* In practice, tune intensity based on task sensitivity.
 ## Augmentation and regularization interact: stronger augmentation often allows larger models or fewer explicit regularizers.
 
-* Augmentation and regularization interact: stronger augmentation often allows larger models or fewer explicit regularizers.
+* In practice, augmentation and regularization interact: stronger augmentation often allows larger models or fewer explicit regularizers.
 ## For small datasets, augmentation can matter as much as architecture choice.
 
-* For small datasets, augmentation can matter as much as architecture choice.
+* In practice, for small datasets, augmentation can matter as much as architecture choice.
 
 
 

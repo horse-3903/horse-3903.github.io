@@ -26,7 +26,7 @@ access: public
   - GRUs
 
 ## RNNs
-![](../assets/rnn-lstm-gru/rnn.jpg)
+![](../../assets/rnn-lstm-gru/rnn.jpg)
 
 ### Core idea (high level)
 - **RNNs** process sequences step by step, carrying a **hidden state** forward
@@ -85,7 +85,7 @@ $$
 - Lightweight sequence labelling when model size and speed matter
 
 ## LSTMs
-![](../assets/rnn-lstm-gru/lstm.jpg)
+![](../../assets/rnn-lstm-gru/lstm.jpg)
 ### Core idea (high level)
 - A standard RNN has one stream of memory that gets overwritten as new inputs arrive
 - An **LSTM** adds a separate, protected **memory channel** and explicit control mechanisms that decide:
@@ -153,7 +153,7 @@ $$
 - Time-series forecasting with seasonal or delayed effects
 
 ## GRUs
-![](../assets/rnn-lstm-gru/gru.jpg)
+![](../../assets/rnn-lstm-gru/gru.jpg)
 
 ### Core idea (high level)
 - A **GRU** merges the LSTM's cell state and hidden state into a single state $ h_t $

@@ -72,15 +72,15 @@ $$
 
 ### Sensitive to **initialisation**; use **k-means++** for stability.
 
-* Sensitive to **initialisation**; use **k-means++** for stability.
+* In practice, sensitive to initialisation; use k-means++ for stability.
 ### Requires choosing $k$ (use **elbow** or **silhouette** methods).
 
-* Requires choosing $k$ (use **elbow** or **silhouette** methods).
+* In practice, requires choosing $k$ (use elbow or silhouette methods).
 ### Struggles with **non-spherical** or **unequal density** clusters.
 
-* Struggles with **non-spherical** or **unequal density** clusters.
+* In practice, struggles with non-spherical or unequal density clusters.
 ### Scale features before clustering to avoid dominance by large‑scale dimensions.
 
-* Scale features before clustering to avoid dominance by large‑scale dimensions.
+* In practice, scale features before clustering to avoid dominance by large‑scale dimensions.
 
 

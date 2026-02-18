@@ -52,11 +52,23 @@ $$
 * **Stride**: larger stride downsamples faster.
 * **Padding**: used to preserve size when needed ("same" style pooling).
 
-## Practical notes
-* Pooling can **hurt localisation** tasks (detection/segmentation) due to spatial loss.
-* Many modern CNNs replace pooling with **strided convolutions** for learnable downsampling.
-* **Global average pooling** is a strong default before a classifier head.
-* For small objects, avoid aggressive early pooling.
+## Practical Notes
+
+### Use pooling cautiously for localization-heavy tasks
+
+* Pooling can hurt detection/segmentation quality by discarding spatial detail.
+
+### Consider strided convolutions as learnable alternatives
+
+* Many modern CNNs replace fixed pooling with strided conv downsampling.
+
+### Prefer global average pooling before classifiers
+
+* Global average pooling is a common, strong default for classification heads.
+
+### Avoid aggressive early downsampling for small objects
+
+* Early spatial compression can remove small-object signal before deeper layers.
 
 ## PyTorch examples
 ```py
@@ -85,17 +97,26 @@ global_avg = nn.AdaptiveAvgPool2d((1, 1))
 * **Affine params**: $\gamma$ and $\beta$ are learned per channel/feature.
 * **Running stats**: moving averages of mean/variance are stored for inference.
 
-## Practical notes
+## Practical Notes
+
+### Handle train/eval mode correctly
+
 * **Train vs eval**:
   * `model.train()` uses batch stats and updates running averages.
   * `model.eval()` uses running averages only.
-* **Small batch sises** can make BN unstable.
+### Mitigate small-batch instability
+
+* **Small batch sizes** can make BN unstable.
   * Options: **SyncBatchNorm**, **GroupNorm**, or **LayerNorm**.
+### Use standard layer ordering
+
 * **Placement**:
   * Common: `Conv → BatchNorm → ReLU`.
   * Avoid bias in conv layers when followed by BN (BN has $\beta$).
+### Watch BN momentum and inference behavior
+
 * **Momentum** controls how fast running stats update (PyTorch default is `0.1`).
-* **Inference**: mismatched train/eval modes cause large accuracy drops.
+* **Inference** with wrong mode settings can cause large accuracy drops.
 
 ## PyTorch examples
 ```py
@@ -129,10 +150,19 @@ block = nn.Sequential(
   * Scale/shift: $ y_j = \gamma \hat{x}_j + \beta $
 * Stats are computed **per sample**, not across the batch.
 
-## Practical notes
-* **Batch-size agnostic**: stable even with very small batches.
+## Practical Notes
+
+### Prefer for small-batch or sequence-heavy workloads
+
+* **Batch-size agnostic** behavior is stable even with very small batches.
 * Common in **RNNs** and **Transformers**, where batch stats can be noisy.
+
+### Leverage consistent train/eval behavior
+
 * No running averages are needed; train and eval behave identically.
+
+### Use proven placement patterns
+
 * Placement:
   * Classic: `Linear → LayerNorm → ReLU` or `Linear → LayerNorm`.
   * Transformers: often use **pre-norm** (`LayerNorm → sublayer`) for stability.

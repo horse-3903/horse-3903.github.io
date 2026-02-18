@@ -98,12 +98,20 @@ pinned: true
 
 # Neural Networks
 
+## Core Architectures
+
 - [X] [Neural Networks](/posts/neural-networks/neural-network-basics/)
 - [X] [Multi-Layer Perceptrons (MLP)](/posts/neural-networks/mlp/)
 - [X] [RNNs, LSTMs and GRUs](/posts/neural-networks/rnn-lstm-gru/)
+
+## Training and Optimization
+
 - [X] [Optimisers, Convergence, and Regularisation](/posts/neural-networks/optimisers-convergence-regularisation/)
 - [X] [Pooling, Batch Norm, and Layer Norm](/posts/neural-networks/pooling-batch-layer-norm/)
 - [X] [Weight Initialisation](/posts/neural-networks/weight-initialisation/)
+
+## Representation and Adaptation
+
 - [X] [Data Embeddings](/posts/neural-networks/data-embeddings/)
 - [X] [Autoencoders](/posts/neural-networks/autoencoders/)
 - [X] [Fine-tuning](/posts/neural-networks/finetuning/)
@@ -112,27 +120,43 @@ pinned: true
 
 # Computer Vision
 
+## Core Vision Models
+
 - [X] [Convolutional Layers](/posts/computer-vision/convolutional-layers/)
 - [X] [Pre-trained Vision Encoders](/posts/computer-vision/pre-trained-vision-encoders/)
 - [X] [CNN Tasks](/posts/computer-vision/cnn-tasks/)
 - [X] [R-CNN Family](/posts/computer-vision/rcnn-family/)
 - [X] [Vision Transformers](/posts/computer-vision/vision-transformers/)
+
+## Training and Representation
+
 - [X] [Image Augmentation](/posts/computer-vision/image-augmentation/)
 - [X] [Self-Supervised Learning for Vision](/posts/computer-vision/self-supervised-vision/)
 - [X] [Vision-Text Encoders](/posts/computer-vision/vision-text-encoders/)
+
+## Generation
+
 - [X] [Image Generation](/posts/computer-vision/image-generation/)
 
 ---
 
 # NLP & Audio
 
+## NLP Foundations and Tasks
+
 - [X] [Attention and Transformers](/posts/nlp/attention-and-transformers/)
 - [X] [Text Classification](/posts/nlp/text-classification/)
 - [X] [Pre-trained Text Encoders](/posts/nlp/pretrained-text-encoders/)
+
+## Language Modeling and Seq2Seq
+
 - [X] [Language Modelling](/posts/nlp/language-modelling/)
 - [X] [Masked Language Modeling](/posts/nlp/masked-language-modeling/)
 - [X] [Encoder-Decoder Models](/posts/nlp/encoder-decoder-models/)
 - [X] [Pre-trained Language Models](/posts/nlp/pretrained-language-models/)
+
+## Audio
+
 - [X] [Pre-trained Audio Encoders](/posts/nlp/pretrained-audio-encoders/)
 - [X] [Audio Models](/posts/nlp/audio-models)
 

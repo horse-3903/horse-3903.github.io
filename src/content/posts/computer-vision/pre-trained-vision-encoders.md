@@ -20,7 +20,7 @@ access: restricted
 
 ---
 # ResNet
-![](../assets/vision-encoders/resnet.png)
+![](../../assets/vision-encoders/resnet.png)
 ## Core idea
 * Learn residual mappings so each block refines features rather than relearning them.
 * Skip connections keep gradients stable in very deep networks.
@@ -78,9 +78,15 @@ model.fc = nn.Linear(model.fc.in_features, num_classes)
 * **Residuals help less** when the task doesn’t benefit from depth.
 * **DenseNet**: strong accuracy and reuse, but memory-heavy.
 
-## Practical notes
-* Used heavily in **ResNet** family models.
-* Improves training stability without adding many parameters.
+## Practical Notes
+
+### Widely adopted in modern CNN backbones
+
+* Residual connections are a default design in many ResNet-style models.
+
+### Improves deep-network optimization stability
+
+* Skip connections help gradient flow with minimal parameter overhead.
 
 ---
 # VGG
@@ -104,7 +110,7 @@ model.classifier[-1] = nn.Linear(model.classifier[-1].in_features, num_classes)
 
 ---
 # MobileNet
-![](../assets/vision-encoders/mobilenet.png)
+![](../../assets/vision-encoders/mobilenet.png)
 ## Core idea
 * Factorise standard convolution to reduce compute on mobile hardware.
 * Separate spatial filtering from channel mixing.
@@ -239,10 +245,10 @@ model.classifier = nn.Linear(model.classifier.in_features, num_classes)
 
 ## Use for transfer learning.
 
-* Use for transfer learning.
+* Pretrained encoders usually provide stronger results and faster convergence than training from scratch on small datasets.
 ## Freeze early layers when data is limited.
 
-* Freeze early layers when data is limited.
+* Freezing low-level layers reduces overfitting and compute when labeled data is scarce.
 
 
 

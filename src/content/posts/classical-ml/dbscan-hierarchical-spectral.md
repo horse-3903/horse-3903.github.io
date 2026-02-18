@@ -21,7 +21,7 @@ access: restricted
 
 # DBSCAN (Density-Based Spatial Clustering of Applications with Noise)
 
-![](../assets/dbscan-hierarchical-spectral/dbscan.png)
+![](../../assets/dbscan-hierarchical-spectral/dbscan.png)
 
 ## Core Idea
 
@@ -88,7 +88,7 @@ $$
 
 # Hierarchical Clustering
 
-![](../assets/dbscan-hierarchical-spectral/hierarchical.png)
+![](../../assets/dbscan-hierarchical-spectral/hierarchical.png)
 
 ## Core Idea
 

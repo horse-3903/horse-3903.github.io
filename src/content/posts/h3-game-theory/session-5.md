@@ -28,13 +28,13 @@ access: restricted
 
 # Entry and Pricing Game 
 ## Setup
-![](../assets/h3/image7.png)
+![](../../assets/h3/image7.png)
 
 * When a circle is made around two choices, it means the player is unaware of the decisions made by the other player
 * This allows simultaneous games to be mapped out as game trees
 
 ## Identifying Sub-games 
-![](../assets/h3/image8.png)
+![](../../assets/h3/image8.png)
 * Sub-games can be obtained when games are broken down into their component branches
 * This simplifies the games as each game can be considered as being isolated
 * In this game, there are 4 subgames:

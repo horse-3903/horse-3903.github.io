@@ -49,7 +49,7 @@ access: public
 # General Ensemble Framework
 
 ## Base Learners
-![](../assets/ensemble/image1.png)
+![](../../assets/ensemble/image1.png)
 * Weak learners are simple models that have low complexity and accuracy on their own.
 * Examples of these include:
   * *Decision Trees*
@@ -59,7 +59,7 @@ access: public
 * **Random algorithms** (like random decision trees) can be used to **produce a stronger ensemble** than very **deliberate algorithms** (like entropy-reducing decision trees).
 
 ## Combining Predictions
-![](../assets/ensemble/image2.png)
+![](../../assets/ensemble/image2.png)
 * After collectivising these weak learners, we have to combine their predictions in a meaningful way to improve the model's combined performance.
 * This can be done through:
     * **Majority voting**: Consensus of models to decide on the class label
@@ -86,7 +86,7 @@ access: public
 
 ## Algorithm Outline
 
-![](../assets/ensemble/image3.png)
+![](../../assets/ensemble/image3.png)
 1. A training set is split into random subsets for training.
 2. Weak learners are trained using these random subsets of data.
 3. A prediction for a new instance is made by simply aggregating the predictions of all predictors.
@@ -153,7 +153,7 @@ access: public
 * Each model tries to correct for the errors of the predecessors by adjusting weights of the samples.
 
 ## Why Boosting Works
-![](../assets/ensemble/image4.png)
+![](../../assets/ensemble/image4.png)
 * Boosting reduces bias by correcting for errors from previous iterations of the model.
 * This also builds complex decision boundaries through additive modelling.
 
@@ -266,7 +266,7 @@ $$
 # Stacking
 
 ## Core Idea
-![](../assets/ensemble/image5.png)
+![](../../assets/ensemble/image5.png)
 * Stacking is an ensemble method that uses **meta-learning**.
 * Instead of simple averaging or voting, it trains a **meta-model** to combine base model predictions.
 * The meta-model learns how to weight and combine different models optimally.
@@ -381,16 +381,16 @@ $$
 
 ### Use cross-validation or out-of-bag estimates to tune ensembles.
 
-* Use cross-validation or out-of-bag estimates to tune ensembles.
+* In practice, use cross-validation or out-of-bag estimates to tune ensembles.
 ### Keep base models diverse to avoid correlated errors.
 
-* Keep base models diverse to avoid correlated errors.
+* In practice, keep base models diverse to avoid correlated errors.
 ### Monitor calibration; averaging can still be miscalibrated.
 
-* Monitor calibration; averaging can still be miscalibrated.
+* In practice, monitor calibration; averaging can still be miscalibrated.
 ### Apply early stopping for boosting to control overfitting.
 
-* Apply early stopping for boosting to control overfitting.
+* In practice, apply early stopping for boosting to control overfitting.
 
 
 

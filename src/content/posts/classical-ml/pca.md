@@ -184,16 +184,16 @@ access: public
 
 ### **Fit PCA on the training set only**, then transform validation and test sets.
 
-* **Fit PCA on the training set only**, then transform validation and test sets.
+* In practice, fit PCA on the training set only, then transform validation and test sets.
 ### **Standardise features** before computing components.
 
-* **Standardise features** before computing components.
+* In practice, standardise features before computing components.
 ### Choose component count via **explained variance** or cross-validation.
 
-* Choose component count via **explained variance** or cross-validation.
+* In practice, choose component count via explained variance or cross-validation.
 ### Inspect **loadings** to understand what each component captures.
 
-* Inspect **loadings** to understand what each component captures.
+* In practice, inspect loadings to understand what each component captures.
 
 
 

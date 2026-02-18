@@ -51,7 +51,7 @@ $$
 * Each query compares against all keys using dot products.
 * Softmax turns scores into weights, then a weighted sum of values builds the context-rich output.
 
-![](../assets/attention-and-transformers/qkv-intuition-fluffy-dog.png)
+![](../../assets/attention-and-transformers/qkv-intuition-fluffy-dog.png)
 
 
 ---
@@ -212,11 +212,11 @@ $$
 
 ## Attention heads and depth matter more than single-layer width for many tasks.
 
-* Attention heads and depth matter more than single-layer width for many tasks.
+* In practice, attention heads and depth matter more than single-layer width for many tasks.
 ## Longer context improves tasks with long dependencies but raises cost.
 
-* Longer context improves tasks with long dependencies but raises cost.
+* In practice, longer context improves tasks with long dependencies but raises cost.
 ## Prompt/instruction format strongly affects decoder-model behavior at inference.
 
-* Prompt/instruction format strongly affects decoder-model behavior at inference.
+* In practice, prompt/instruction format strongly affects decoder-model behavior at inference.
 

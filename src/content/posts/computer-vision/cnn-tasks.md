@@ -44,7 +44,7 @@ access: public
 
 ## You-Only-Look-Once (YOLO)
 
-![](../assets/cnn-tasks/yolo.png)
+![](../../assets/cnn-tasks/yolo.png)
 
 ### Step 1: Prepare Labels
 
@@ -128,7 +128,7 @@ $$
 
 ## Single Shot MultiBox Detector (SSD)
 
-![](../assets/cnn-tasks/ssd.png)
+![](../../assets/cnn-tasks/ssd.png)
 
 ### Step 1: Build Multi-Scale Feature Maps
 

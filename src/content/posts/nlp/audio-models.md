@@ -79,8 +79,13 @@ $$
 
 ## Practical Notes
 
-* Use class-balanced sampling for rare events.
-* Strong augmentations: SpecAugment, time masking, noise, reverb.
+### Handle class imbalance explicitly
+
+* Use class-balanced sampling or loss reweighting for rare events.
+
+### Use augmentation aligned with audio noise conditions
+
+* SpecAugment, time masking, background noise, and reverb often improve robustness.
 
 ---
 
@@ -146,10 +151,10 @@ $$
 
 ## Match sample rate and frontend to pretrained checkpoint assumptions.
 
-* Match sample rate and frontend to pretrained checkpoint assumptions.
+* In practice, match sample rate and frontend to pretrained checkpoint assumptions.
 ## Domain mismatch (accent, channel, background noise) can dominate errors.
 
-* Domain mismatch (accent, channel, background noise) can dominate errors.
+* In practice, domain mismatch (accent, channel, background noise) can dominate errors.
 ## Evaluate by domain slice, not only aggregate metrics.
 
-* Evaluate by domain slice, not only aggregate metrics.
+* In practice, evaluate by domain slice, not only aggregate metrics.

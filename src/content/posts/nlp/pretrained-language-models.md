@@ -105,13 +105,13 @@ access: public
 
 ## Choose based on latency, cost, and data constraints.
 
-* Choose based on latency, cost, and data constraints.
+* In practice, choose based on latency, cost, and data constraints.
 ## Always evaluate on a held-out task set with failure-case slices.
 
-* Always evaluate on a held-out task set with failure-case slices.
+* In practice, always evaluate on a held-out task set with failure-case slices.
 ## Track regression across model/version changes.
 
-* Track regression across model/version changes.
+* In practice, track regression across model/version changes.
 
 
 

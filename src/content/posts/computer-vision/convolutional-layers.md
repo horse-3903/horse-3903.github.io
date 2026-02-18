@@ -24,7 +24,7 @@ access: public
 
 ## Core Idea
 
-![Kernel sliding over an image](../assets/convolution/2d-convolution.gif)
+![Kernel sliding over an image](../../assets/convolution/2d-convolution.gif)
 
 * Apply a learnable filter across the image.
 * Capture edges, textures, and shapes.
@@ -33,23 +33,23 @@ access: public
 ## Key Concepts
 
 ### Kernels
-![](../assets/convolution/kernel-size.gif)
+![](../../assets/convolution/kernel-size.gif)
 * A kernel is a small window of learnable weights.
 * It slides across the input to detect local patterns.
 * Kernel size controls how much context the filter sees.
 
 ### Stride
-![](../assets/convolution/stride.gif)
+![](../../assets/convolution/stride.gif)
 * Controls how far the kernel moves each step.
 * Larger stride reduces spatial resolution.
 
 ### Padding
-![](../assets/convolution/padding.gif)
+![](../../assets/convolution/padding.gif)
 * Adds border pixels to preserve spatial size.
 * Helps retain edge information.
 
 ### Output size
-![](../assets/convolution/output-size.gif)
+![](../../assets/convolution/output-size.gif)
 * Depends on input size, kernel size, stride, and padding.
 * Use the formula below to compute $H_{out}$ and $W_{out}$.
 
@@ -67,7 +67,7 @@ $$
 * **$H_{out}, W_{out}$**: output height and width.
 
 ### Channels and feature maps
-![](../assets/convolution/channels.svg)
+![](../../assets/convolution/channels.svg)
 * Input channels match the input (e.g., 3 for RGB).
 * Output channels are different learned filters.
 * Each output channel is a feature map highlighting a pattern.
@@ -116,7 +116,7 @@ $$
 # Residual Connections
 
 ## Core idea
-![](../assets/convolution/residual-block.svg)
+![](../../assets/convolution/residual-block.svg)
 * Residual blocks add the input back to the output:
 $$
 y = F(x) + x

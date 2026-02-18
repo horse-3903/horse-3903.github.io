@@ -126,7 +126,7 @@ $$
 
 ### Diagram representation
 
-![](../assets/h3/image6.png)
+![](../../assets/h3/image6.png)
 
 * Nash equilibrium is obtained when when $ p = q $ and it meets both FOCs
 

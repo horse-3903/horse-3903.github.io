@@ -121,7 +121,18 @@ $$
 
 ## Practical Notes
 
-* Very fast training and inference with low memory overhead.
-* Sensitive to mismatch between data distribution and likelihood assumption.
-* Smoothing strength $\alpha$ can materially affect performance and should be tuned.
-* Log-probability computation prevents numerical underflow.
+### Efficient for baseline deployment
+
+* Naive Bayes trains and serves quickly with low memory overhead.
+
+### Assumption mismatch can hurt performance
+
+* If likelihood assumptions differ from data reality, calibration and accuracy may degrade.
+
+### Tune smoothing strength
+
+* The Laplace parameter $\alpha$ can significantly change rare-feature behavior.
+
+### Compute in log space
+
+* Log-probability arithmetic helps avoid numerical underflow in long feature vectors.

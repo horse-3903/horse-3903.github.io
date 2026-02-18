@@ -26,12 +26,12 @@ access: restricted
 ## Normal distribution
 * Bell‑shaped curve centred at zero.
 * Higher probability near the mean, fewer extreme values.
-![](../assets/weight-initialisation/normal-distribution.svg)
+![](../../assets/weight-initialisation/normal-distribution.svg)
 
 ## Uniform distribution
 * Flat distribution where all values in a range are equally likely.
 * Produces **bounded** weights with no heavy tails.
-![](../assets/weight-initialisation/uniform-distribution.svg)
+![](../../assets/weight-initialisation/uniform-distribution.svg)
 
 ---
 
@@ -98,7 +98,12 @@ W \sim \mathcal{N}\left(0,\ \frac{2}{n_{in}}\right)
 $$
 * Standard Kaiming normal initialisation for ReLU‑like activations.
 
-# Practical notes
+# Practical Notes
 
-* Match initialisation to activation function.
-* Biases are often initialised to zero.
+## Match initialisation to activation function
+
+* Use Xavier-type schemes for tanh/sigmoid and He/Kaiming schemes for ReLU-like activations.
+
+## Initialize biases simply unless task-specific priors exist
+
+* Biases are commonly set to zero, with selective non-zero initialization only when justified.

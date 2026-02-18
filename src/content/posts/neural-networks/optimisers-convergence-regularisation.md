@@ -141,10 +141,19 @@ $$
 * In AdamW, the shrink is **separate and uniform**, so every weight gets the **same decay strength**.
 * This makes AdamW more predictable and usually easier to tune.
 
-## Practical notes
-* Start with **Adam** for fast baseline convergence.
-* For best generalisation on vision tasks, **SGD + momentum** is often competitive.
-* Always tune the learning rate first before changing optimiser type.
+## Practical Notes
+
+### Start with a strong optimizer baseline
+
+* Adam is usually a fast default for early experimentation.
+
+### Compare with SGD + momentum for final quality
+
+* On many vision tasks, SGD + momentum remains competitive for generalization.
+
+### Tune learning rate before optimizer switching
+
+* Learning-rate choice usually has larger impact than changing optimizer family.
 
 ---
 
@@ -168,30 +177,30 @@ $$
 
 ### Step-based schedulers
 * Drops learning rate by a fixed amount every $ k $ epochs.
-![](../assets/learning-rate-schedulers/step-lr.png)
+![](../../assets/learning-rate-schedulers/step-lr.png)
 
 ### Exponential schedulers
 * Smooth exponential decay of learning rate.
-![](../assets/learning-rate-schedulers/exponential-lr.png)
+![](../../assets/learning-rate-schedulers/exponential-lr.png)
 
 ### Cosine annealing schedulers
 * Smoothly decreases learning rate following a cosine curve.
-![](../assets/learning-rate-schedulers/cosine-annealing.png)
+![](../../assets/learning-rate-schedulers/cosine-annealing.png)
 
 ### Cyclical schedulers
 * Learning rate oscillates between a set of values.
 * wtf who designed this
-![](../assets/learning-rate-schedulers/cyclical-lr.png)
+![](../../assets/learning-rate-schedulers/cyclical-lr.png)
 
 ### Performance-based schedulers
 * Adjust learning rate based on validation performance.
 * e.g. ReduceLROnPlateau.
 * Adjust LR only when improvement stagnates.
 * Adaptive to validation metrics.
-![](../assets/learning-rate-schedulers/reduce-on-plateau.png)
+![](../../assets/learning-rate-schedulers/reduce-on-plateau.png)
 
 ### Loss performance on MNIST data
-![](../assets/learning-rate-schedulers/mnist-loss.png)
+![](../../assets/learning-rate-schedulers/mnist-loss.png)
 
 ### Warmup + decay (typical recipe)
 * To stabilise early training, models usually include a **warmup** phase, starting with a small learning rate and gradually increasing it.

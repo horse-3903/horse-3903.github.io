@@ -242,7 +242,7 @@ $$
 * The sharp corners of the L1 diamond make it more likely to hit axes, producing exact zeros (sparsity).
 * The smooth L2 circle shrinks weights continuously, usually keeping them non-zero.
 
-![](../assets/l1-l2/l1l2.png)
+![](../../assets/l1-l2/l1l2.png)
 
 # L1 and L2 Regularisation In Practice
 
@@ -264,16 +264,16 @@ $$
 
 ### Standardise all features before applying L1 or L2 penalties.
 
-* Standardise all features before applying L1 or L2 penalties.
+* In practice, standardise all features before applying L1 or L2 penalties.
 ### Tune $\lambda$ via cross-validation, not by training loss.
 
-* Tune $\lambda$ via cross-validation, not by training loss.
+* In practice, tune $\lambda$ via cross-validation, not by training loss.
 ### Use Elastic Net when you want sparsity with grouped features.
 
-* Use Elastic Net when you want sparsity with grouped features.
+* In practice, use Elastic Net when you want sparsity with grouped features.
 ### Track coefficient paths to understand shrinkage effects.
 
-* Track coefficient paths to understand shrinkage effects.
+* In practice, track coefficient paths to understand shrinkage effects.
 
 
 

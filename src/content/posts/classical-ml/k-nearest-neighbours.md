@@ -82,16 +82,16 @@ $$
 
 ### Use **KD-tree** or **ball-tree** search for speed in low dimensions.
 
-* Use **KD-tree** or **ball-tree** search for speed in low dimensions.
+* In practice, use KD-tree or ball-tree search for speed in low dimensions.
 ### **Weight neighbours** by distance to reduce boundary noise.
 
-* **Weight neighbours** by distance to reduce boundary noise.
+* In practice, weight neighbours by distance to reduce boundary noise.
 ### **Tune $k$ and the metric** with cross-validation.
 
-* **Tune $k$ and the metric** with cross-validation.
+* In practice, tune $k$ and the metric with cross-validation.
 ### Consider **dimensionality reduction** before KNN in high dimensions.
 
-* Consider **dimensionality reduction** before KNN in high dimensions.
+* In practice, consider dimensionality reduction before KNN in high dimensions.
 
 
 

@@ -71,7 +71,7 @@ access: public
 
 ## Confusion Matrix
 
-![](../assets/data-science/confusion-matrix.png)
+![](../../assets/data-science/confusion-matrix.png)
 
 * Shows TP, FP, TN, and FN structure directly.
 * Makes specific failure types visible.
@@ -79,9 +79,9 @@ access: public
 
 ## ROC Curve and AUC
 
-![](../assets/data-science/roc-curve.png)
+![](../../assets/data-science/roc-curve.png)
 
-![](../assets/data-science/auc-graph.png)
+![](../../assets/data-science/auc-graph.png)
 
 * ROC plots TPR vs FPR across thresholds.
 * AUC summarizes threshold-free ranking quality.
@@ -89,7 +89,7 @@ access: public
 
 ## PR Curve
 
-![](../assets/data-science/pr-curve.png)
+![](../../assets/data-science/pr-curve.png)
 
 * Plots precision vs recall across thresholds.
 * Often more informative than ROC under heavy imbalance.

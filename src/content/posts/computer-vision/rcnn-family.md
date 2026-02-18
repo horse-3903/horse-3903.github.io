@@ -20,7 +20,7 @@ access: restricted
 
 ---
 # R-CNN
-![](../assets/rcnn/rcnn.png)
+![](../../assets/rcnn/rcnn.png)
 ## Core idea
 * Generate region proposals, then run a CNN on each proposal.
 * Classify each region and refine its box.
@@ -59,19 +59,19 @@ access: restricted
 
 ---
 # Fast R-CNN
-![](../assets/rcnn/fast-rcnn.png)
+![](../../assets/rcnn/fast-rcnn.png)
 ## Core idea
 * Run the CNN **once per image**, then classify regions using pooled features.
 * Reuse that shared feature map for all proposals instead of recomputing convolution features per region.
 
 ## Pipeline
 * **Backbone CNN** produces a shared feature map.
-* **RoI Pooling** converts each RoI into a fixed 7x7 feature map by quantized spatial binning.
-* **Single head** outputs class scores (softmax) + box deltas for each RoI.
+* **ROI Pooling** converts each ROI into a fixed 7x7 feature map by quantized spatial binning.
+* **Single head** outputs class scores (softmax) + box deltas for each ROI.
 
 ## Why "CNN Once Per Image" Is Better
 * **R-CNN bottleneck**: if there are ~2k proposals, convolution is run ~2k times per image.
-* **Fast R-CNN change**: run convolution once on the full image, then slice RoI features from the shared map.
+* **Fast R-CNN change**: run convolution once on the full image, then slice ROI features from the shared map.
 * **Computation reuse**: overlapping proposals share most low/mid-level features, so repeated conv work is removed.
 * **Memory/I-O improvement**: no need to cache per-proposal CNN features to disk.
 * **Training simplification**: classification and box regression are learned jointly from shared features.
@@ -83,7 +83,7 @@ access: restricted
 
 ---
 # Faster R-CNN
-![](../assets/rcnn/faster-rcnn.png)
+![](../../assets/rcnn/faster-rcnn.png)
 ## Core idea
 * Replace external proposal generation with a **Region Proposal Network (RPN)**.
 
@@ -91,7 +91,7 @@ access: restricted
 * **Backbone CNN** shared by RPN and detection head.
 * **RPN**: a 3x3 conv sliding over the feature map predicts objectness + anchor box offsets.
 * **Anchors**: multiple scales and aspect ratios per location (e.g., 3 scales x 3 ratios).
-* **RoI Pooling / RoI Align** extracts proposal features (RoI Align removes quantization).
+* **ROI Pooling / ROI Align** extracts proposal features (ROI Align removes quantization).
 * **Detection head** predicts class + refined box.
 
 ## How RPN Works (Step-by-Step)
@@ -118,7 +118,7 @@ access: restricted
 * Rank proposals by objectness, apply NMS, keep top proposals (for example top 300 at inference).
 
 ### Step 7: Hand-off to detector
-* Send filtered proposals to RoI Pooling/RoI Align and then to the final classification/regression head.
+* Send filtered proposals to ROI Pooling/ROI Align and then to the final classification/regression head.
 
 ## Key traits
 * Fully end-to-end and much faster than Fast R-CNN.
@@ -134,26 +134,26 @@ access: restricted
 ## Pipeline
 * **Backbone + FPN** often used to improve multi-scale features.
 * **RPN** generates proposals as in Faster R-CNN.
-* **RoI Align** replaces RoI Pooling to avoid misalignment from quantization.
+* **ROI Align** replaces ROI Pooling to avoid misalignment from quantization.
 * **Two heads**: class + box regression, and a small FCN mask head that predicts a K x m x m mask per class.
 
 ## Key traits
 * Adds instance segmentation with minimal overhead.
 * Mask loss is **per-pixel sigmoid** (not softmax across classes).
-* Requires precise RoI alignment for good mask quality.
+* Requires precise ROI alignment for good mask quality.
 
 ---
 # How They Differ
 
 * **R-CNN**: per-region CNN, SVMs, slow.
-* **Fast R-CNN**: shared CNN, RoI Pooling, still external proposals.
+* **Fast R-CNN**: shared CNN, ROI Pooling, still external proposals.
 * **Faster R-CNN**: shared CNN + built-in RPN proposals.
-* **Mask R-CNN**: Faster R-CNN + mask head with RoI Align.
+* **Mask R-CNN**: Faster R-CNN + mask head with ROI Align.
 
 ---
 # Training Objectives (High Level)
 
-* **Classification loss**: object class per RoI.
+* **Classification loss**: object class per ROI.
 * **Box regression loss**: refine bounding box coordinates.
 * **RPN loss** (Faster R-CNN only): objectness + anchor box offsets.
 
@@ -167,12 +167,20 @@ access: restricted
 ---
 # Practical Notes
 
-## Fast R-CNN and Faster R-CNN usually train with SGD, momentum 0.9, and weight decay ~5e-4 (classic configs).
+## Use stable optimization defaults first
 
-* Fast R-CNN and Faster R-CNN usually train with SGD, momentum 0.9, and weight decay ~5e-4 (classic configs).
-## Faster R-CNN originally used **alternating training** (train RPN, then detector, then fine-tune jointly).
+* Fast R-CNN and Faster R-CNN are commonly trained with SGD, momentum around 0.9, and weight decay around $5\times10^{-4}$ in classic settings.
+* Start with proven optimizer settings before tuning advanced schedules.
+* Monitor classification and box regression losses separately to diagnose imbalance.
 
-* Faster R-CNN originally used **alternating training** (train RPN, then detector, then fine-tune jointly).
-## R-CNN style per-proposal CNN compute is ~2k forward passes per image, which dominates runtime.
+## Understand training strategy differences
 
-* R-CNN style per-proposal CNN compute is ~2k forward passes per image, which dominates runtime.
+* Early Faster R-CNN recipes often used alternating stages: train RPN, train detector, then joint fine-tuning.
+* Modern implementations typically support more direct end-to-end training, but alternating training remains useful context.
+* Keep proposal quality and detector quality aligned during training to avoid bottlenecks.
+
+## Prioritize compute-efficient architectures in practice
+
+* R-CNN-style per-proposal CNN inference can require around 2k forward passes per image, which is computationally expensive.
+* Fast R-CNN improves speed by sharing one feature map across proposals.
+* Faster R-CNN further improves the pipeline by learning proposals with the RPN instead of external selective search.
