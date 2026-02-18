@@ -1,6 +1,6 @@
 ---
 title: Pre-trained Text Encoders
-published: 2026-02-16
+published: 2026-02-19
 description: "Transformer-based text encoders and their use cases."
 tags: ["Natural Language Processing"]
 category: IOAI ML Notes
@@ -101,15 +101,23 @@ $$
 
 # Practical Notes
 
-## Domain-adaptive pretraining (continued MLM on domain corpus) often gives significant gains.
+## Use domain-adaptive pretraining when domain mismatch is large
 
-* Domain-adaptive pretraining (continued MLM on domain corpus) often gives significant gains.
-## For retrieval, normalize embeddings and use cosine similarity.
+* Continue MLM training on in-domain unlabeled text before downstream fine-tuning.
+* This often improves specialized terminology handling and contextual representations.
+* Monitor for overfitting to narrow corpus style if domain data is limited.
 
-* For retrieval, normalize embeddings and use cosine similarity.
-## For production, quantization and distillation reduce serving cost.
+## Normalize embeddings for retrieval with cosine similarity
 
-* For production, quantization and distillation reduce serving cost.
+* L2-normalize sentence embeddings before indexing and search.
+* Cosine similarity then reflects angular similarity rather than vector magnitude.
+* Keep pooling and normalization consistent between indexing and query pipelines.
+
+## Reduce serving cost with quantization and distillation
+
+* Use quantization to lower memory footprint and improve inference throughput.
+* Distill larger encoders into smaller students to retain most performance at lower latency.
+* Benchmark quality/latency tradeoffs on real production-like workloads before rollout.
 
 
 

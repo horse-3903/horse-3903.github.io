@@ -1,6 +1,6 @@
 ---
 title: Text Classification
-published: 2026-02-16
+published: 2026-02-19
 description: "Common workflows for assigning labels to text."
 tags: ["Natural Language Processing", "Supervised Learning"]
 category: IOAI ML Notes
@@ -69,54 +69,36 @@ $$
 
 ## Step 5: Evaluate and calibrate
 
-* Report appropriate metrics (macro/micro F1, precision, recall, accuracy).
+* Evaluate on validation/test data using task-appropriate criteria.
 * Tune decision thresholds for imbalanced or multi-label tasks.
-
----
-
-# Metrics
-
-## Precision / Recall / F1
-
-$$
-\text{Precision}=\frac{TP}{TP+FP},\quad
-\text{Recall}=\frac{TP}{TP+FN}
-$$
-
-$$
-F_1=2\cdot\frac{\text{Precision}\cdot\text{Recall}}{\text{Precision}+\text{Recall}}
-$$
-
-## Macro vs Micro
-
-* **Macro-F1**: equal weight per class (good for imbalance).
-* **Micro-F1**: aggregates global TP/FP/FN (dominated by frequent classes).
 
 ---
 
 # Practical Notes
 
-## Handle class imbalance carefully.
+## Handle class imbalance carefully
 
-* Handle class imbalance carefully.
-## Use proper train/validation splits.
+* Check class frequencies before training to identify majority/minority skew.
+* Track per-class validation behavior, not only aggregate performance.
+* Prioritize minority-class recall when those errors are costly.
 
-* Use proper train/validation splits.
-## Imbalance fixes: class-weighted loss, focal loss, oversampling minority classes.
+## Use proper train/validation splits
 
-* Imbalance fixes: class-weighted loss, focal loss, oversampling minority classes.
-## Error analysis matters:
+* Split data before tuning to avoid optimistic validation results.
+* Preserve label distribution across splits when possible.
+* Prevent near-duplicate texts from leaking across train and validation/test sets.
 
-* Error analysis matters:
-## inspect confusion matrix,
+## Use imbalance mitigation methods
 
-* inspect confusion matrix,
-## inspect false positives/negatives by class,
+* Apply class-weighted loss to penalize minority-class errors more.
+* Consider focal loss when many easy examples dominate training.
+* Use minority oversampling carefully to improve recall without overfitting.
 
-* inspect false positives/negatives by class,
-## inspect tokenization issues and domain-specific vocabulary gaps.
+## Run targeted error analysis
 
-* inspect tokenization issues and domain-specific vocabulary gaps.
+* Inspect the confusion matrix to find systematic class confusions.
+* Review false positives and false negatives by class to identify failure modes.
+* Check tokenization and domain vocabulary coverage for missing signal.
 
 
 

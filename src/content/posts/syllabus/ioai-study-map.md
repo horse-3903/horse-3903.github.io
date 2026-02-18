@@ -1,6 +1,6 @@
 ---
 title: IOAI Syllabus Study Map
-published: 2026-02-18
+published: 2026-02-19
 description: "A table of contents for studying the IOAI syllabus across the notes."
 tags: ["Syllabus", "Study Guide"]
 category: IOAI ML Notes
@@ -64,6 +64,7 @@ pinned: true
 
 - [X] [Linear Regression](/posts/classical-ml/linear-regression/)
 - [X] [Logistic Regression](/posts/classical-ml/logistic-regression/)
+- [X] [Naive Bayes](/posts/classical-ml/naive-bayes/)
 - [X] [K-Nearest Neighbours](/posts/classical-ml/k-nearest-neighbours/)
 - [X] [Decision Tree](/posts/classical-ml/decision-tree/)
 - [X] [Support Vector Machines](/posts/classical-ml/svm/)
@@ -75,8 +76,13 @@ pinned: true
 
 ## Data Science
 
-- [X] [Data Science Fundamentals](/posts/classical-ml/data-science/)
+- [X] [Data Science Fundamentals](/posts/data-science/fundamentals/)
+- [X] [Evaluation Metrics](/posts/data-science/evaluation-metrics/)
+- [X] [Validation Strategy](/posts/data-science/validation-strategy/)
+- [X] [Feature Engineering](/posts/data-science/feature-engineering/)
+- [X] [Data Processing](/posts/data-science/data-processing/)
 - [X] [Bias-Variance Tradeoff](/posts/classical-ml/bias-variance/)
+- [X] [Cross Validation and K-Fold Cross Validation](/posts/data-science/cross-validation-k-fold/)
 
 ## Dimensionality Reduction
 
@@ -124,6 +130,7 @@ pinned: true
 - [X] [Text Classification](/posts/nlp/text-classification/)
 - [X] [Pre-trained Text Encoders](/posts/nlp/pretrained-text-encoders/)
 - [X] [Language Modelling](/posts/nlp/language-modelling/)
+- [X] [Masked Language Modeling](/posts/nlp/masked-language-modeling/)
 - [X] [Encoder-Decoder Models](/posts/nlp/encoder-decoder-models/)
 - [X] [Pre-trained Language Models](/posts/nlp/pretrained-language-models/)
 - [X] [Pre-trained Audio Encoders](/posts/nlp/pretrained-audio-encoders/)

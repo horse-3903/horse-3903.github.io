@@ -1,6 +1,6 @@
 ---
 title: Attention and Transformers
-published: 2026-02-18
+published: 2026-02-19
 description: "Attention mechanisms and transformer architectures for sequence modelling."
 tags: ["Neural Network", "Deep Learning"]
 category: IOAI ML Notes
@@ -70,6 +70,68 @@ $$
 
 * $h$ is number of heads.
 * Different heads often specialise (syntax, positional patterns, long dependencies).
+
+---
+
+# KV-Head Design Variants
+
+## Multi-Head Attention (MHA)
+
+* Standard design: each query head has its own key and value projections.
+* If a model uses 8 query heads, it also keeps 8 key heads and 8 value heads.
+* This is expressive, but KV cache memory grows with the full head count.
+* Per head $i$:
+
+$$
+Q_i=XW_i^Q,\quad K_i=XW_i^K,\quad V_i=XW_i^V,\quad
+\text{head}_i=\text{Attn}(Q_i,K_i,V_i)
+$$
+
+* Examples: GPT-3, Llama 1, Phi-1, Phi-2.
+
+## Multi-Query Attention (MQA)
+
+* Uses many query heads but shares one key head and one value head across them.
+* This greatly reduces KV cache size and speeds decoding.
+* Tradeoff: quality can drop slightly compared with full MHA in some settings.
+* Shared KV:
+
+$$
+Q_i=XW_i^Q,\quad K=XW^K,\quad V=XW^V,\quad
+\text{head}_i=\text{Attn}(Q_i,K,V)
+$$
+
+* Example: Falcon.
+
+## Grouped-Query Attention (GQA)
+
+* Middle ground between MHA and MQA.
+* Query heads are split into groups, and each group shares one key/value head pair.
+* Reduces memory pressure while usually preserving more quality than MQA.
+* For group mapping $g(i)$:
+
+$$
+Q_i=XW_i^Q,\quad K_{g}=XW_{g}^K,\quad V_{g}=XW_{g}^V,\quad
+\text{head}_i=\text{Attn}(Q_i,K_{g(i)},V_{g(i)})
+$$
+
+* Examples: Llama 3, Mistral 7B.
+
+## Multi-head Latent Attention (MLA)
+
+* Uses a latent-space compression approach for KV representations.
+* Designed to further reduce memory and compute cost during decoding.
+* One common abstraction:
+
+$$
+Z=XW^{KV}_{\downarrow},\quad K=ZW^{K}_{\uparrow},\quad V=ZW^{V}_{\uparrow}
+$$
+
+$$
+Q_i=XW_i^Q,\quad \text{head}_i=\text{Attn}(Q_i,K,V)
+$$
+
+* Example: DeepSeek-V3.
 
 ---
 
