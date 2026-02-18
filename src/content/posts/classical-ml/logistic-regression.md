@@ -1,6 +1,6 @@
 ---
 title: Logistic Regression
-published: 2026-02-16
+published: 2026-02-19
 description: "A comprehensive guide to Logistic Regression — exploring how it transforms Linear Regression into a powerful tool for binary and multi-class classification."
 tags: ["Classical Machine Learning", "Supervised Learning"]
 category: IOAI ML Notes

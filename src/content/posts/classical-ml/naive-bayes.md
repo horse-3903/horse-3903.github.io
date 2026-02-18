@@ -1,6 +1,6 @@
 ---
 title: Naive Bayes
-published: 2026-02-18
+published: 2026-02-19
 description: "A comprehensive guide to Naive Bayes - exploring probabilistic classification with Bayes' theorem under conditional independence assumptions."
 tags: ["Classical Machine Learning", "Supervised Learning"]
 category: IOAI ML Notes

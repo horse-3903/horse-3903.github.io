@@ -1,6 +1,6 @@
 ---
 title: "Neural Networks: Perceptron and Training Basics"
-published: 2026-02-16
+published: 2026-02-19
 description: "Perceptron fundamentals, optimisation, backpropagation, activations, and loss functions."
 tags: ["Neural Networks", "Deep Learning"]
 category: IOAI ML Notes

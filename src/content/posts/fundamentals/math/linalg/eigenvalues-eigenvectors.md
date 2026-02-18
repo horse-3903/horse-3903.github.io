@@ -1,6 +1,6 @@
 ---
 title: Eigenvalues and Eigenvectors
-published: 2026-02-16
+published: 2026-02-19
 description: "A practical guide to eigenvalues and eigenvectors: intuition, computation, diagonalisation, and why they matter in ML."
 tags: ["Mathematics Fundamentals"]
 category: IOAI ML Notes
@@ -73,7 +73,7 @@ Corresponding eigenvectors (up to scaling):
 * Eigenvectors are special directions that remain on the same line.
 * Eigenvalues tell how much stretching/compression occurs along those directions.
 
-![](../../../assets/eigenvalues-eigenvectors/eigen-geometric-intuition.png)
+![](../../../../assets/eigenvalues-eigenvectors/eigen-geometric-intuition.png)
 
 ---
 

@@ -1,6 +1,6 @@
 ---
 title: Ensemble Methods
-published: 2026-02-16
+published: 2026-02-19
 description: "A comprehensive guide to ensemble learning — exploring how combining multiple models improves accuracy, robustness, and generalisation."
 tags: ["Classical Machine Learning", "Supervised Learning"]
 category: IOAI ML Notes

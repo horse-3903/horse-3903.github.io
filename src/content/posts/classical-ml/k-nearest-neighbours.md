@@ -1,6 +1,6 @@
 ---
 title: K-Nearest Neighbours
-published: 2026-02-16
+published: 2026-02-19
 description: "A comprehensive guide to K-Nearest Neighbours — exploring how local similarity drives instance-based learning."
 tags: ["Classical Machine Learning", "Supervised Learning"]
 category: IOAI ML Notes

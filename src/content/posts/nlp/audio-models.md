@@ -1,6 +1,6 @@
 ---
 title: Audio Models
-published: 2026-02-18
+published: 2026-02-19
 description: "Task-specific audio model families for recognition, understanding, and generation."
 tags: ["Audio Processing", "Natural Language Processing", "Deep Learning"]
 category: IOAI ML Notes

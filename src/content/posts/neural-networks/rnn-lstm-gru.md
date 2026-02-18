@@ -1,6 +1,6 @@
 ---
 title: RNNs, LSTMs and GRUs
-published: 2026-02-12
+published: 2026-02-19
 updated: 2026-02-04
 description: "Overview of RNNs, LSTMs and GRUs covering RNNs, LSTMs, and GRUs and Outline."
 tags: ["Neural Networks", "RNN", "LSTM", "GRU"]

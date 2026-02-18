@@ -1,6 +1,6 @@
 ---
 title: K-Means Clustering
-published: 2026-02-16
+published: 2026-02-19
 description: "A concise guide to k-means clustering, its objective, and practical usage."
 tags: ["Classical Machine Learning", "Unsupervised Learning"]
 category: IOAI ML Notes

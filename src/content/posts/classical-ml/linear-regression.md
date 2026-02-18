@@ -1,6 +1,6 @@
 ---
 title: Linear Regression
-published: 2026-02-16
+published: 2026-02-19
 description: "A comprehensive guide to Linear Regression — exploring how it models relationships between variables to make accurate continuous predictions."
 tags: ["Classical Machine Learning", "Supervised Learning"]
 category: IOAI ML Notes

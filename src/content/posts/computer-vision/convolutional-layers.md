@@ -1,6 +1,6 @@
 ---
 title: Convolutional Layers
-published: 2026-02-12
+published: 2026-02-19
 description: "Convolution basics and core CNN building blocks."
 tags: ["Computer Vision", "Deep Learning"]
 category: IOAI ML Notes

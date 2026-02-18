@@ -1,6 +1,6 @@
 ---
 title: Data Embeddings
-published: 2026-02-18
+published: 2026-02-19
 description: "Embeddings for text, images, audio and structured data with practical usage notes."
 tags: ["Neural Network", "Deep Learning"]
 category: IOAI ML Notes

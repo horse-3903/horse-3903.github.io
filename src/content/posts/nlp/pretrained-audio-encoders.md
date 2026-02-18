@@ -1,6 +1,6 @@
 ---
 title: Pre-trained Audio Encoders
-published: 2026-02-16
+published: 2026-02-19
 description: "Self-supervised and supervised audio encoders for speech and general audio tasks."
 tags: ["Audio Processing", "Deep Learning"]
 category: IOAI ML Notes

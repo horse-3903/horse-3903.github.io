@@ -1,6 +1,6 @@
 ---
 title: Determinant and Invertibility
-published: 2026-02-16
+published: 2026-02-19
 description: "Math fundamentals note for IOAI ML preparation."
 tags: ["Mathematics Fundamentals", "Linear Algebra"]
 category: IOAI ML Notes
@@ -20,7 +20,7 @@ access: public
 
 ## What Determinant Means
 
-![](../../../assets/determinant-and-invertibility/area-parallelogram-determinant.svg)
+![](../../../../assets/determinant-and-invertibility/area-parallelogram-determinant.svg)
 
 * Think of a matrix $A$ as a transformation of space.
 * $\lvert \det(A) \rvert$ tells how much $A$ scales area (in 2D) or volume (in 3D).
@@ -37,7 +37,7 @@ access: public
 
 ## What Invertibility Means
 
-![](../../../assets/determinant-and-invertibility/singular-vs-nonsingular-systems.png)
+![](../../../../assets/determinant-and-invertibility/singular-vs-nonsingular-systems.png)
 
 * $A$ is invertible if every output comes from exactly one input.
 * Equivalent statements:

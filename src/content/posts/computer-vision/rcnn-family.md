@@ -1,6 +1,6 @@
 ---
 title: R-CNN, Fast R-CNN, and Faster R-CNN
-published: 2026-02-16
+published: 2026-02-19
 description: "Region-based CNN detectors and how they evolved from R-CNN to Faster R-CNN."
 tags: ["Computer Vision", "Deep Learning"]
 category: IOAI ML Notes

@@ -1,6 +1,6 @@
 ---
 title: CNN Tasks
-published: 2026-02-15
+published: 2026-02-19
 description: "Core CNN-based vision tasks and common model families."
 tags: ["Computer Vision", "Deep Learning"]
 category: IOAI ML Notes

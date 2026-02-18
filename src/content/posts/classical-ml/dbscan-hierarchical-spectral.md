@@ -1,6 +1,6 @@
 ---
 title: DBSCAN, Hierarchical & Spectral Clustering
-published: 2026-02-16
+published: 2026-02-19
 description: "A concise guide to density-based, hierarchical, and spectral clustering."
 tags: ["Classical Machine Learning", "Unsupervised Learning"]
 category: IOAI ML Notes

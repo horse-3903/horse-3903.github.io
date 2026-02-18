@@ -1,6 +1,6 @@
 ---
 title: Multi-Layer Perceptrons (MLP)
-published: 2026-02-12
+published: 2026-02-19
 description: "Core concepts, architecture, and training notes for multi-layer perceptrons."
 tags: ["Neural Network", "Deep Learning"]
 category: IOAI ML Notes

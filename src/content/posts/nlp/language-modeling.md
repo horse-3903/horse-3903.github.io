@@ -1,6 +1,6 @@
 ---
 title: Language Modelling
-published: 2026-02-18
+published: 2026-02-19
 description: "Modelling token sequences for generation and prediction."
 tags: ["Natural Language Processing"]
 category: IOAI ML Notes

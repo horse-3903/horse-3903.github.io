@@ -1,6 +1,6 @@
 ---
 title: Pooling, Batch Norm, and Layer Norm
-published: 2026-02-16
+published: 2026-02-19
 description: "Pooling plus batch and layer normalisation fundamentals."
 tags: ["Neural Network", "Deep Learning"]
 category: IOAI ML Notes

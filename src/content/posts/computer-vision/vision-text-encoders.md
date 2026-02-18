@@ -1,6 +1,6 @@
 ---
 title: Vision-Text Encoders
-published: 2026-02-16
+published: 2026-02-19
 description: "Joint vision-language embedding models."
 tags: ["Computer Vision", "Natural Language Processing"]
 category: IOAI ML Notes

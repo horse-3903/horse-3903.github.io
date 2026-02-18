@@ -1,6 +1,6 @@
 ---
 title: Weight Initialisation
-published: 2026-02-12
+published: 2026-02-19
 description: "Weight initialisation schemes and practical guidelines for stable training."
 tags: ["Neural Network", "Deep Learning"]
 category: IOAI ML Notes

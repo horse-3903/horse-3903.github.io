@@ -1,6 +1,6 @@
 ---
 title: L1 and L2 Regularisation
-published: 2026-02-16
+published: 2026-02-19
 description: "A comprehensive guide to L1 and L2 Regularisation — exploring how LASSO and Ridge improve generalisation."
 tags: ["Classical Machine Learning", "Supervised Learning"]
 category: IOAI ML Notes

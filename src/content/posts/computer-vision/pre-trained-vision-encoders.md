@@ -1,6 +1,6 @@
 ---
 title: Pre-trained Vision Encoders
-published: 2026-02-18
+published: 2026-02-19
 description: "Common vision backbones and how to use them for transfer learning."
 tags: ["Computer Vision", "Deep Learning"]
 category: IOAI ML Notes
