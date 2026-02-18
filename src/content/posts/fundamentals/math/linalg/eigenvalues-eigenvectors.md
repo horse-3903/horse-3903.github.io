@@ -109,7 +109,7 @@ with orthonormal $Q$.
 
 This is the basis of PCA and many optimisation results.
 
-![](../../../assets/eigenvalues-eigenvectors/symmetric-orthogonal-eigenvectors.png)
+![](../../../../assets/eigenvalues-eigenvectors/symmetric-orthogonal-eigenvectors.png)
 
 ---
 
