@@ -148,9 +148,9 @@ pinned: true
 - [X] [Text Classification](/posts/nlp/text-classification/)
 - [X] [Pre-trained Text Encoders](/posts/nlp/pretrained-text-encoders/)
 
-## Language Modeling and Seq2Seq
+## Machine Translation and Seq2Seq
 
-- [X] [Language Modelling](/posts/nlp/language-modelling/)
+- [X] [Machine Translation](/posts/nlp/machine-translation/)
 - [X] [Masked Language Modeling](/posts/nlp/masked-language-modeling/)
 - [X] [Encoder-Decoder Models](/posts/nlp/encoder-decoder-models/)
 - [X] [Pre-trained Language Models](/posts/nlp/pretrained-language-models/)

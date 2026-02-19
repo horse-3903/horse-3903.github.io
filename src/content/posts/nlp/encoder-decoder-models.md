@@ -24,8 +24,8 @@ access: restricted
 * Encoder builds a latent representation.
 * Decoder generates the target sequence.
 * Decoder uses both:
-* causal self-attention over previous target tokens,
-* cross-attention over encoder outputs.
+  * Causal self-attention over previous target tokens,
+  * Cross-attention over encoder outputs.
 
 $$
 P(y_{1:T}\mid x)=\prod_{t=1}^{T}P(y_t\mid y_{<t},x)
