@@ -64,6 +64,10 @@ $$
 
 # Pooling Strategies
 
+* Pooling converts token-level embeddings (one vector per token) into a single fixed-size vector for the whole sequence.
+* This sentence-level vector is what classification and retrieval heads usually consume.
+* Different pooling rules keep different information, which can change downstream performance.
+
 * **[CLS] pooling**: use first token representation.
 * **Mean pooling**: average token embeddings over non-padding tokens.
 * **Max pooling**: take per-dimension max over tokens.

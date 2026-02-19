@@ -15,10 +15,10 @@ access: restricted
 # Overview
 
 * Audio models handle speech recognition, audio understanding, and speech/audio generation.
-* Choice of model depends on output type:
-* text output (ASR),
-* class/embedding output (classification, retrieval),
-* waveform output (TTS, vocoders, generative audio).
+* Choice of model depends on output type: 
+  * Text output (ASR)
+  * Class/embedding output (classification, retrieval)
+  * Waveform output (TTS, vocoders, generative audio).
 
 ---
 
@@ -37,6 +37,7 @@ $$
 $$
 
 * $x$ is acoustic input and $y$ is transcript.
+* A **frame** is a short time slice of audio features (for example, ~10-25 ms) produced after windowing the waveform.
 * CTC sums over valid alignments between frames and tokens.
 
 ## Typical ASR Pipeline
@@ -149,12 +150,14 @@ $$
 
 # Practical Notes
 
-## Match sample rate and frontend to pretrained checkpoint assumptions.
+### Preprocessing Consistency
 
-* In practice, match sample rate and frontend to pretrained checkpoint assumptions.
-## Domain mismatch (accent, channel, background noise) can dominate errors.
+* Match sample rate and frontend settings to pretrained checkpoint assumptions.
 
-* In practice, domain mismatch (accent, channel, background noise) can dominate errors.
-## Evaluate by domain slice, not only aggregate metrics.
+### Domain Robustness
 
-* In practice, evaluate by domain slice, not only aggregate metrics.
+* Domain mismatch (accent, channel, background noise) can dominate real-world errors.
+
+### Evaluation Strategy
+
+* Evaluate by domain slice, not only aggregate metrics.
