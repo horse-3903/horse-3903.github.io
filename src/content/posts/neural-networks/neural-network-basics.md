@@ -47,15 +47,10 @@ $$
 
 ## Practical Notes
 
-### Forms the intuition for multilayer networks.
-
-* In practice, forms the intuition for multilayer networks.
-### Introduces learned weights, bias terms, and linear separability.
-
-* In practice, introduces learned weights, bias terms, and linear separability.
-### The perceptron learning rule updates weights on mistakes, while modern networks use gradient-based updates.
-
-* In practice, the perceptron learning rule updates weights on mistakes, while modern networks use gradient-based updates.
+### Foundations
+* Forms the intuition for multilayer networks.
+* Introduces learned weights, bias terms, and linear separability.
+* The perceptron learning rule updates weights on mistakes, while modern networks use gradient-based updates.
 
 ---
 
@@ -68,15 +63,13 @@ $$
 
 ## Practical Notes
 
-### Batch size affects stability and noise.
+### Optimization Dynamics
+* Batch size affects stability and noise.
+* Momentum or adaptive methods can speed up convergence.
 
-* In practice, batch size affects stability and noise.
-### Momentum or adaptive methods can speed up convergence.
+### Update Rule
+* In general, the update rule is:
 
-* In practice, momentum or adaptive methods can speed up convergence.
-### In general, the update rule is:
-
-* In practice, in general, the update rule is:.
 $$
 w_{t+1} = w_t - \eta \nabla_w L(w_t)
 $$
@@ -130,18 +123,11 @@ $$
 
 ## Practical Notes
 
-### Requires differentiable activation functions.
-
-* In practice, requires differentiable activation functions.
-### Makes training deep networks computationally feasible.
-
-* In practice, makes training deep networks computationally feasible.
-### Cache intermediate activations to reuse during gradient computation.
-
-* In practice, cache intermediate activations to reuse during gradient computation.
-### Gradients flow from loss to output layer, then to hidden layers, then to inputs.
-
-* In practice, gradients flow from loss to output layer, then to hidden layers, then to inputs.
+### Backpropagation
+* Requires differentiable activation functions.
+* Makes training deep networks computationally feasible.
+* Cache intermediate activations to reuse during gradient computation.
+* Gradients flow from loss to output layer, then to hidden layers, then to inputs.
 
 ## Example Neural Network
 
@@ -169,12 +155,9 @@ $$
 
 ## Practical Notes
 
-### Choice affects convergence speed and stability.
-
-* In practice, choice affects convergence speed and stability.
-### Modern defaults often start with ReLU-like activations.
-
-* In practice, modern defaults often start with ReLU-like activations.
+### Activation Choice
+* Choice affects convergence speed and stability.
+* Modern defaults often start with ReLU-like activations.
 
 ## ReLU
 
@@ -202,12 +185,9 @@ $$
 
 ## Practical Notes
 
-### Scaling and label encoding affect loss behaviour.
-
-* In practice, scaling and label encoding affect loss behaviour.
-### Monitour both loss curves and task metrics during training.
-
-* In practice, monitour both loss curves and task metrics during training.
+### Loss Selection
+* Scaling and label encoding affect loss behaviour.
+* Monitor both loss curves and task metrics during training.
 
 ## Regression
 

@@ -511,18 +511,13 @@ $$
 
 ## Practical Notes
 
-### Control depth and minimum leaf sises to manage variance.
+### Regularization
+* Control depth and minimum leaf sizes to manage variance.
+* Use cross-validation to pick pruning or depth settings.
 
-* In practice, control depth and minimum leaf sises to manage variance.
-### Use cross-validation to pick pruning or depth settings.
-
-* In practice, use cross-validation to pick pruning or depth settings.
-### Handle class imbalance with class weights or balanced sampling.
-
-* In practice, handle class imbalance with class weights or balanced sampling.
-### Prune for generalisation, not just training accuracy.
-
-* In practice, prune for generalisation, not just training accuracy.
+### Data Imbalance and Generalization
+* Handle class imbalance with class weights or balanced sampling.
+* Prune for generalisation, not just training accuracy.
 
 
 

@@ -379,18 +379,13 @@ $$
 
 ## Practical Notes
 
-### Use cross-validation or out-of-bag estimates to tune ensembles.
+### Tuning and Diversity
+* Use cross-validation or out-of-bag estimates to tune ensembles.
+* Keep base models diverse to avoid correlated errors.
 
-* In practice, use cross-validation or out-of-bag estimates to tune ensembles.
-### Keep base models diverse to avoid correlated errors.
-
-* In practice, keep base models diverse to avoid correlated errors.
-### Monitor calibration; averaging can still be miscalibrated.
-
-* In practice, monitor calibration; averaging can still be miscalibrated.
-### Apply early stopping for boosting to control overfitting.
-
-* In practice, apply early stopping for boosting to control overfitting.
+### Reliability and Overfitting
+* Monitor calibration; averaging can still be miscalibrated.
+* Apply early stopping for boosting to control overfitting.
 
 
 

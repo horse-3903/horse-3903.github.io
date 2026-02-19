@@ -121,18 +121,13 @@ $$
 
 ## Practical Notes
 
-### **Standardise features** before applying regularisation.
+### Preprocessing and Diagnostics
+* **Standardise features** before applying regularisation.
+* Inspect **residuals** for heteroscedasticity and bias.
 
-* In practice, standardise features before applying regularisation.
-### Inspect **residuals** for heteroscedasticity and bias.
-
-* In practice, inspect residuals for heteroscedasticity and bias.
-### Use **Ridge or LASSO** when there are many correlated features.
-
-* In practice, use Ridge or LASSO when there are many correlated features.
-### Add **interaction terms** only when they are justified by domain knowledge.
-
-* In practice, add interaction terms only when they are justified by domain knowledge.
+### Regularization and Features
+* Use **Ridge or LASSO** when there are many correlated features.
+* Add **interaction terms** only when they are justified by domain knowledge.
 
 
 

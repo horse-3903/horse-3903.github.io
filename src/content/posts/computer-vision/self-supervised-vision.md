@@ -185,20 +185,13 @@ $$
 
 # Practical Notes
 
-## Requires large, diverse datasets.
+### Data and Compute
+* Requires large, diverse datasets.
+* Contrastive methods are compute-heavy due to multiple views per image.
+* Masked image modeling scales well with ViT and large datasets.
 
-* In practice, requires large, diverse datasets.
-## Contrastive methods are compute-heavy due to multiple views per image.
-
-* In practice, contrastive methods are compute-heavy due to multiple views per image.
-## Masked image modeling scales well with ViT and large datasets.
-
-* In practice, masked image modeling scales well with ViT and large datasets.
-## Often used before supervised fine-tuning.
-
-* In practice, often used before supervised fine-tuning.
-## Linear probing is the fastest way to compare SSL methods fairly.
-
-* In practice, linear probing is the fastest way to compare SSL methods fairly.
+### Evaluation and Transfer
+* Often used before supervised fine-tuning.
+* Linear probing is the fastest way to compare SSL methods fairly.
 
 

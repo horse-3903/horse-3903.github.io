@@ -182,18 +182,15 @@ access: public
 
 ## Practical Notes
 
-### **Fit PCA on the training set only**, then transform validation and test sets.
+### Data Leakage Prevention
+* **Fit PCA on the training set only**, then transform validation and test sets.
 
-* In practice, fit PCA on the training set only, then transform validation and test sets.
-### **Standardise features** before computing components.
+### Preprocessing and Selection
+* **Standardise features** before computing components.
+* Choose component count via **explained variance** or cross-validation.
 
-* In practice, standardise features before computing components.
-### Choose component count via **explained variance** or cross-validation.
-
-* In practice, choose component count via explained variance or cross-validation.
-### Inspect **loadings** to understand what each component captures.
-
-* In practice, inspect loadings to understand what each component captures.
+### Interpretation
+* Inspect **loadings** to understand what each component captures.
 
 
 

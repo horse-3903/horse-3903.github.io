@@ -262,18 +262,15 @@ $$
 
 ## Practical Notes
 
-### Standardise all features before applying L1 or L2 penalties.
+### Preprocessing
+* Standardise all features before applying L1 or L2 penalties.
 
-* In practice, standardise all features before applying L1 or L2 penalties.
-### Tune $\lambda$ via cross-validation, not by training loss.
+### Model Selection
+* Tune $\lambda$ via cross-validation, not by training loss.
+* Use Elastic Net when you want sparsity with grouped features.
 
-* In practice, tune $\lambda$ via cross-validation, not by training loss.
-### Use Elastic Net when you want sparsity with grouped features.
-
-* In practice, use Elastic Net when you want sparsity with grouped features.
-### Track coefficient paths to understand shrinkage effects.
-
-* In practice, track coefficient paths to understand shrinkage effects.
+### Interpretation
+* Track coefficient paths to understand shrinkage effects.
 
 
 

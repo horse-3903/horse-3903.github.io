@@ -78,6 +78,11 @@ $$
 ## RMSprop
 * Fixes Adagrad’s aggressive decay with an **exponential moving average**.
 * Works well for **non‑stationary objectives**.
+* Function of $r_t$:
+  * $r_t$ tracks the **recent second moment** (recent average of squared gradients) for each parameter.
+  * Large $r_t$ means gradients were recently large, so RMSProp **reduces** that parameter's effective step size.
+  * Small $r_t$ means gradients were recently small, so RMSProp allows a **larger** effective step size.
+  * This stabilizes updates and prevents one parameter with large gradients from dominating training.
 * Update rule:
 $$
 r_t = \rho r_{t-1} + (1-\rho) g_t^2
@@ -93,9 +98,11 @@ $$
 $$
 m_t = \beta_1 m_{t-1} + (1-\beta_1) g_t
 $$
+* $m_t$ is the **first moment** estimate (EMA of gradients, i.e., mean direction).
 $$
 v_t = \beta_2 v_{t-1} + (1-\beta_2) g_t^2
 $$
+* $v_t$ is the **second moment** estimate (EMA of squared gradients, i.e., gradient magnitude).
 $$
 \theta_{t+1} = \theta_t - \eta \frac{\hat{m}_t}{\sqrt{\hat{v}}_t + \epsilon}
 $$

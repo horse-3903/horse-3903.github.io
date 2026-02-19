@@ -258,19 +258,16 @@ $$
 
 ## Practical Notes
 
-### Standardise features before training.
-
-* In practice, standardise features before training.
-### Tune $C$ and kernel parameters with cross-validation.
-
-* In practice, tune $C$ and kernel parameters with cross-validation.
+### Preprocessing and Tuning
+* Standardise features before training.
+* Tune $C$ and kernel parameters with cross-validation.
 * For RBF SVM, the most important kernel parameter is $\gamma$.
-### Prefer linear SVMs for large, sparse feature spaces.
 
-* In practice, prefer linear SVMs for large, sparse feature spaces.
-### Calibrate probabilities with Platt scaling if required.
+### Model Choice
+* Prefer linear SVMs for large, sparse feature spaces.
 
-* In practice, calibrate probabilities with Platt scaling if required.
+### Probability Outputs
+* Calibrate probabilities with Platt scaling if required.
 
 
 

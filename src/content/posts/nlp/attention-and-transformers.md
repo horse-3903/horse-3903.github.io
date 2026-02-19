@@ -210,13 +210,10 @@ $$
 
 # Practical Notes
 
-## Attention heads and depth matter more than single-layer width for many tasks.
+### Architecture and Context
+* Attention heads and depth matter more than single-layer width for many tasks.
+* Longer context improves tasks with long dependencies but raises cost.
 
-* In practice, attention heads and depth matter more than single-layer width for many tasks.
-## Longer context improves tasks with long dependencies but raises cost.
-
-* In practice, longer context improves tasks with long dependencies but raises cost.
-## Prompt/instruction format strongly affects decoder-model behavior at inference.
-
-* In practice, prompt/instruction format strongly affects decoder-model behavior at inference.
+### Inference Behavior
+* Prompt/instruction format strongly affects decoder-model behavior at inference.
 

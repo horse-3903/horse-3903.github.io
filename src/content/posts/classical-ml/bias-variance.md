@@ -102,12 +102,11 @@ $$
 
 # Practical Notes
 
-## Bagging typically reduces variance compared to a single decision tree in the provided examples.
+### Variance Reduction
+* Bagging typically reduces variance compared to a single decision tree in the provided examples.
 
-* In practice, bagging typically reduces variance compared to a single decision tree in the provided examples.
-## For 0-1 loss, if bias is 1, increasing variance can reduce loss (a counterintuitive edge case).
-
-* In practice, for 0-1 loss, if bias is 1, increasing variance can reduce loss (a counterintuitive edge case).
+### 0-1 Loss Caveat
+* For 0-1 loss, if bias is 1, increasing variance can reduce loss (a counterintuitive edge case).
 
 
 

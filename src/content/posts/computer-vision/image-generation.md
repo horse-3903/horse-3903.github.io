@@ -76,6 +76,8 @@ $$
 ### Watch for mode collapse
 
 * Generated samples may lose diversity even when quality appears high.
+* Mode collapse means the generator finds a small set of outputs that reliably fool the discriminator and keeps repeating that pattern.
+* If one "good enough" dog image keeps fooling $D$, $G$ may stop learning other dogs and keep producing near-duplicates.
 
 ### Track quality with standard metrics
 
@@ -146,6 +148,12 @@ $$
 
 ## Guidance and Samplers
 
+### Classifier Guidance (Older Approach)
+
+* Before CFG, diffusion models used an external classifier $p_\phi(c\mid x_t)$ to guide sampling toward class $c$.
+* The reverse update adds a classifier gradient term that pushes samples toward higher class probability.
+* This improves condition fidelity but needs a separate noisy-image classifier and can reduce sample diversity.
+
 ### Classifier-free guidance (CFG)
 
 * During training, randomly drop the condition $c$ some fraction of the time so the same model learns both conditioned and unconditioned predictions.
@@ -174,6 +182,12 @@ x_{t-1} =
 $$
 
 * Setting $\sigma_t=0$ (equivalently $\eta=0$) gives deterministic sampling; larger $\eta$ adds stochasticity and diversity.
+
+### Inpainting
+
+* Inpainting generates missing or edited regions while preserving unmasked context.
+* Provide the original image and a binary mask; the model denoises mainly inside masked areas and keeps known pixels fixed.
+* This is useful for object removal, region editing, and prompt-based local modifications.
 
 ## Practical Notes
 

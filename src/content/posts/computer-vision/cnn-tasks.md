@@ -69,30 +69,22 @@ $$
 \lambda_{\text{obj}}\mathcal{L}_{\text{obj}}+
 \lambda_{\text{cls}}\mathcal{L}_{\text{cls}}
 $$
-* $\mathcal{L}_{\text{YOLO}}$ is total YOLO training loss.
-* $\mathcal{L}_{\text{box}}$, $\mathcal{L}_{\text{obj}}$, and $\mathcal{L}_{\text{cls}}$ are box, objectness, and class losses.
-* $\lambda_{\text{box}}$, $\lambda_{\text{obj}}$, and $\lambda_{\text{cls}}$ weight each loss term.
+* Where: box/objectness/class losses are weighted by $\lambda_{\text{box}}, \lambda_{\text{obj}}, \lambda_{\text{cls}}$.
 
 $$
 \mathcal{L}_{\text{box}}=\sum_{i\in \text{Pos}}\left(1-\text{IoU}(b_i,\hat{b}_i)\right)
 $$
-* $\text{Pos}$ is the set of positive anchors (matched to objects).
-* $b_i$ is the predicted box for anchor $i$, and $\hat{b}_i$ is the ground-truth box.
-* $\text{IoU}(b_i,\hat{b}_i)$ is overlap quality; higher IoU gives lower loss.
+* Where: $\text{Pos}$ are matched positive anchors; higher IoU gives lower box loss.
 
 $$
 \mathcal{L}_{\text{obj}}=-\sum_i \left[y_i\log p_i+(1-y_i)\log(1-p_i)\right]
 $$
-* $y_i \in \{0,1\}$ is the objectness label for anchor $i$.
-* $p_i$ is the predicted probability that anchor $i$ contains an object.
-* The expression is binary cross-entropy over all anchors.
+* Binary cross-entropy over object/background labels ($y_i$) and objectness predictions ($p_i$).
 
 $$
 \mathcal{L}_{\text{cls}}=-\sum_{i\in \text{Pos}}\sum_{c=1}^{C} y_{i,c}\log \hat{p}_{i,c}
 $$
-* $C$ is the number of classes.
-* $y_{i,c}$ is the one-hot class label for positive anchor $i$ and class $c$.
-* $\hat{p}_{i,c}$ is the predicted class probability for class $c$ at anchor $i$.
+* Cross-entropy on class predictions for positive anchors only.
 
 ### Step 4: Run Post-Processing
 
@@ -102,11 +94,7 @@ $$
 $$
 \text{IoU}(A,B)=\frac{|A\cap B|}{|A\cup B|}
 $$
-* $A$ is a predicted box and $B$ is a reference box (often ground truth or another prediction).
-* $|A\cap B|$ is intersection area; $|A\cup B|$ is union area.
-* IoU ranges from $0$ (no overlap) to $1$ (perfect overlap).
-
-* IoU close to $1$ means strong overlap; IoU close to $0$ means little overlap.
+* IoU ranges from 0 (no overlap) to 1 (perfect overlap).
 * Apply Non-Maximum Suppression (NMS) to remove duplicate detections:
   * Sort boxes by confidence score.
   * Keep the highest-score box and suppress lower-score boxes that overlap it too much.
@@ -115,9 +103,7 @@ $$
 $$
 \text{suppress } b_j \text{ if } \text{IoU}(b_i,b_j)>\tau_{\text{nms}} \text{ and } s_i>s_j
 $$
-* $b_i$ and $b_j$ are candidate predicted boxes.
-* $s_i$ and $s_j$ are their confidence scores.
-* $\tau_{\text{nms}}$ is the NMS IoU threshold used to drop duplicate boxes.
+* Keep higher-score box $b_i$ and suppress overlapping lower-score boxes above threshold $\tau_{\text{nms}}$.
 
 ### Step 5: Evaluate and Deploy
 
@@ -149,18 +135,13 @@ $$
 $$
 \mathcal{L}_{\text{SSD}}=\frac{1}{N}\left(\mathcal{L}_{\text{cls}}+\alpha \mathcal{L}_{\text{loc}}\right)
 $$
-* $\mathcal{L}_{\text{SSD}}$ is total SSD loss.
-* $\mathcal{L}_{\text{cls}}$ is classification loss and $\mathcal{L}_{\text{loc}}$ is localization loss.
-* $N$ is the number of matched positive anchors for normalization.
-* $\alpha$ balances localization against classification.
+* Where: $N$ is number of matched positives, and $\alpha$ balances localization vs classification.
 
 $$
 \mathcal{L}_{\text{loc}}=\sum_{i\in \text{Pos}} \space \sum_{m\in\{c_x,c_y,w,h\}}
 \text{SmoothL1}\!\left(t_i^m-\hat{t}_i^m\right)
 $$
-* $m\in\{c_x,c_y,w,h\}$ iterates over box center and size coordinates.
-* $t_i^m$ is predicted offset and $\hat{t}_i^m$ is target offset for anchor $i$.
-* $\text{SmoothL1}$ is a robust regression loss less sensitive to outliers than L2.
+* SmoothL1 regression over box center/size offsets for positive anchors.
 
 ### Step 4: Apply Hard Negative Mining
 
@@ -171,9 +152,7 @@ $$
 $$
 \frac{N_{\text{neg}}}{N_{\text{pos}}}\le 3
 $$
-* $N_{\text{neg}}$ is the number of selected negative anchors.
-* $N_{\text{pos}}$ is the number of positive anchors.
-* The inequality enforces at most a 3:1 negative-to-positive ratio.
+* At most 3 negatives per positive anchor during hard negative mining.
 
 ### Step 5: Decode and Filter Predictions
 
@@ -208,12 +187,7 @@ $$
 \lambda_2\left(1-\text{GIoU}(b_i,\hat{b}_{\sigma(i)})\right)
 \right]
 $$
-* $\sigma$ is a matching between predictions and ground-truth objects.
-* $\hat{\sigma}$ is the optimal one-to-one assignment found by Hungarian matching.
-* $\hat{p}_{\sigma(i)}(c_i)$ is predicted probability of the true class $c_i$ for matched prediction $\sigma(i)$.
-* $\|b_i-\hat{b}_{\sigma(i)}\|_1$ is L1 box distance.
-* $\text{GIoU}$ is generalized IoU for box overlap quality.
-* $\lambda_1$ and $\lambda_2$ weight localization terms in the matching cost.
+* Matching cost combines class confidence, L1 box distance, and GIoU overlap.
 
 ### Step 4: Optimize Set Prediction Loss
 
@@ -227,11 +201,7 @@ $$
 \lambda_1\mathcal{L}_{L1}+
 \lambda_2\mathcal{L}_{\text{GIoU}}
 $$
-* $\mathcal{L}_{\text{DETR}}$ is total DETR training loss.
-* $\mathcal{L}_{\text{cls}}$ is classification loss including the no-object class.
-* $\mathcal{L}_{L1}$ is coordinate regression loss.
-* $\mathcal{L}_{\text{GIoU}}$ is overlap-based regression loss.
-* $\lambda_1$ and $\lambda_2$ set the relative weight of box losses.
+* Set prediction loss = class loss (with no-object) + weighted L1/GIoU box losses.
 
 ### Step 5: Inference without NMS
 
@@ -248,6 +218,20 @@ $$
 * Output: mask $H \times W$ (semantic) or per-instance masks (instance segmentation).
 * Train with pixel-wise losses (cross-entropy, Dice, or combined loss).
 * Evaluate with IoU (Jaccard), Dice score, and pixel accuracy.
+
+## Semantic vs Instance Segmentation
+
+### Semantic Segmentation
+
+* Assigns a class label to every pixel.
+* Pixels from different objects of the same class share one label region.
+* Example: all person pixels are labeled "person" without separating person A vs person B.
+
+### Instance Segmentation
+
+* Assigns both class and instance identity to pixels.
+* Different objects of the same class get separate masks.
+* Example: each person in the scene gets its own mask (person 1, person 2, ...).
 
 ## U-Net
 
@@ -277,19 +261,13 @@ $$
 \lambda_{\text{ce}}\mathcal{L}_{\text{CE}}+
 \lambda_{\text{dice}}\mathcal{L}_{\text{Dice}}
 $$
-* $\mathcal{L}_{\text{seg}}$ is total segmentation loss.
-* $\mathcal{L}_{\text{CE}}$ is pixel-wise cross-entropy.
-* $\mathcal{L}_{\text{Dice}}$ emphasizes region overlap quality.
-* $\lambda_{\text{ce}}$ and $\lambda_{\text{dice}}$ weight the two terms.
+* Combined segmentation loss: pixel-wise CE + weighted Dice overlap loss.
 
 $$
 \mathcal{L}_{\text{Dice}}=
 1-\frac{2\sum_i p_i y_i+\epsilon}{\sum_i p_i+\sum_i y_i+\epsilon}
 $$
-* $p_i$ is predicted probability (or soft mask value) at pixel $i$.
-* $y_i$ is ground-truth mask value at pixel $i$.
-* $\epsilon$ is a small constant for numerical stability.
-* The fraction is soft Dice overlap; subtracting from $1$ turns it into a minimization loss.
+* $p_i$ and $y_i$ are predicted and ground-truth mask values; $\epsilon$ stabilizes division.
 
 ### Step 5: Post-Process Masks
 

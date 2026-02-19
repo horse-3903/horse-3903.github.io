@@ -101,15 +101,14 @@ $$
 
 # Practical Notes
 
-## Beam size improves quality but increases latency.
+### Decoding Tradeoffs
+* Beam size improves quality but increases latency.
 
-* In practice, beam size improves quality but increases latency.
-## Exposure bias can appear because training uses teacher forcing but inference uses model outputs.
+### Training-Inference Mismatch
+* Exposure bias can appear because training uses teacher forcing but inference uses model outputs.
 
-* In practice, exposure bias can appear because training uses teacher forcing but inference uses model outputs.
-## For long inputs, memory can be a bottleneck due to attention complexity.
-
-* In practice, for long inputs, memory can be a bottleneck due to attention complexity.
+### Long-Context Cost
+* For long inputs, memory can be a bottleneck due to attention complexity.
 
 
 

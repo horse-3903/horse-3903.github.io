@@ -63,24 +63,35 @@ $$
 
 ## Objective Function
 
-* Minimise the sum of squared distances:
+* Minimise the sum of squared distances (also called **WCSS**, within-cluster sum of squares):
 $$
 \min_{\{\mu_1,\dots,\mu_k\}} \sum_{i=1}^{n} \min_{j \in \{1,\dots,k\}} \|x_i - \mu_j\|^2
 $$
+* Caveat: WCSS always decreases as $k$ increases, so lower WCSS alone does **not** mean a better or more meaningful clustering.
+
+## Elbow Method
+
+* Fit k-means for a range of $k$ values (for example $k=1$ to $k=10$).
+* Compute WCSS for each $k$.
+* Plot WCSS vs $k$ and choose the "elbow": the point where adding more clusters yields diminishing improvement.
+* Use this as a heuristic, then validate with task context or other metrics (for example silhouette score).
 
 ## Practical Notes
 
-### Sensitive to **initialisation**; use **k-means++** for stability.
+### Initialization
+* K-means is sensitive to starting centers; prefer k-means++ and multiple restarts.
 
-* In practice, sensitive to initialisation; use k-means++ for stability.
-### Requires choosing $k$ (use **elbow** or **silhouette** methods).
+### Choosing $k$
+* Use elbow and/or silhouette methods instead of fixing $k$ arbitrarily.
 
-* In practice, requires choosing $k$ (use elbow or silhouette methods).
-### Struggles with **non-spherical** or **unequal density** clusters.
+### Cluster Shape Assumptions
+* K-means works best for compact, roughly spherical, similar-density clusters.
+* It can fail on elongated, overlapping, or highly imbalanced clusters.
 
-* In practice, struggles with non-spherical or unequal density clusters.
-### Scale features before clustering to avoid dominance by large‑scale dimensions.
+### Feature Scaling
+* Scale features before clustering so high-variance dimensions do not dominate Euclidean distance.
 
-* In practice, scale features before clustering to avoid dominance by large‑scale dimensions.
+### Outliers
+* Means are sensitive to outliers; extreme points can pull cluster centers.
 
 

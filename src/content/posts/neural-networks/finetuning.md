@@ -1,6 +1,6 @@
 ---
 title: Fine-tuning
-published: 2026-02-12
+published: 2026-02-19
 description: "Fine-tuning strategies for adapting pretrained models to specific tasks."
 tags: ["Neural Network", "Deep Learning"]
 category: IOAI ML Notes
@@ -47,9 +47,10 @@ access: restricted
 * Sufficient compute and memory.
 
 ## Tips
-* Use smaller learning rates for stability.
+* Use a low learning rate (often 5-10x lower than training from scratch) to avoid destroying pretrained features.
 * Consider layer‑wise learning rates (lower for early layers).
-* Monitour validation to avoid overfitting.
+* Monitor validation to avoid overfitting.
+* Catastrophic forgetting risk is higher with aggressive updates, especially on small or narrow-domain datasets.
 
 ---
 
@@ -83,7 +84,9 @@ access: restricted
 
 ## Step 3: Train
 * Use warmup and decay schedules.
-* Monitour loss curves and early stop if needed.
+* Keep learning rate conservative and reduce it further if validation drops suddenly.
+* Monitor loss curves and early stop if needed.
+* To reduce catastrophic forgetting, freeze lower layers first or use PEFT (for example LoRA/adapters) before full unfreezing.
 
 ## Step 4: Evaluate and deploy
 * Compare against the base model.

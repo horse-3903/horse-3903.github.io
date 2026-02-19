@@ -492,6 +492,40 @@ $$
   * Can be prompt-sensitive.
 * **When to use**: retrieval, open-vocabulary classification, multimodal tasks.
 
+## CLIP (Step-by-Step)
+
+### Step 1: Build image-text pairs
+* Collect paired data $(I_i, T_i)$ where each image has a matching caption/text.
+* In each batch, matched pairs are positives; non-matching pairs act as negatives.
+
+### Step 2: Encode each modality
+* Pass image $I_i$ through an image encoder (CNN or ViT) to get vector $u_i$.
+* Pass text $T_i$ through a text encoder (Transformer) to get vector $v_i$.
+
+### Step 3: Project into shared space
+* Map both outputs to the same embedding dimension with learned projection heads.
+* L2-normalize vectors so cosine similarity is a dot product:
+$$
+\tilde{u}_i=\frac{u_i}{\|u_i\|},\quad \tilde{v}_i=\frac{v_i}{\|v_i\|}
+$$
+
+### Step 4: Compute similarity matrix
+* For a batch of size $N$, compute all image-text similarities:
+$$
+s_{ij}=\frac{\tilde{u}_i^\top \tilde{v}_j}{\tau}
+$$
+* $\tau$ is a temperature parameter controlling softmax sharpness.
+
+### Step 5: Optimize contrastive loss
+* Train with symmetric contrastive objectives:
+  * image-to-text: image $i$ should match text $i$.
+  * text-to-image: text $i$ should match image $i$.
+* This pulls matched pairs together and pushes mismatched pairs apart.
+
+### Step 6: Use for inference
+* **Zero-shot classification**: encode class prompts and pick the class with highest similarity to image embedding.
+* **Retrieval**: nearest-neighbor search between image and text embeddings in shared space.
+
 ## Self-Supervised Vision Embeddings
 * **Idea**: learn embeddings without labels using pretext tasks.
 * **Methods**:

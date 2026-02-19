@@ -157,39 +157,22 @@ $$
 
 # Practical Notes
 
-## Enables zero-shot classification.
+### Common Uses
+* Enables zero-shot classification.
+* Useful for retrieval and captioning pipelines.
 
-* In practice, enables zero-shot classification.
-## Useful for retrieval and captioning pipelines.
+### Prompting and Retrieval
+* Prompt engineering matters: template choice can change zero-shot accuracy.
+* Multiple prompt ensembling (average class prompt embeddings) often improves results.
+* For retrieval at scale, index normalized embeddings with ANN search (for example, FAISS/HNSW).
 
-* In practice, useful for retrieval and captioning pipelines.
-## Prompt engineering matters: template choice can change zero-shot accuracy.
+### Metrics
+* Zero-shot classification: top-1/top-5 accuracy.
+* Retrieval: Recall@K and mean reciprocal rank.
 
-* In practice, prompt engineering matters: template choice can change zero-shot accuracy.
-## Multiple prompt ensembling (average class prompt embeddings) often improves results.
-
-* In practice, multiple prompt ensembling (average class prompt embeddings) often improves results.
-## For retrieval at scale, index normalized embeddings with ANN search (for example, FAISS/HNSW).
-
-* In practice, for retrieval at scale, index normalized embeddings with ANN search (for example, FAISS/HNSW).
-## Common metrics:
-
-* In practice, common metrics:.
-## Zero-shot classification: top-1/top-5 accuracy.
-
-* In practice, zero-shot classification: top-1/top-5 accuracy.
-## Retrieval: Recall@K and mean reciprocal rank.
-
-* In practice, retrieval: Recall@K and mean reciprocal rank.
-## Known limitations:
-
-* In practice, known limitations:.
-## Sensitive to web-data bias and prompt wording.
-
-* In practice, sensitive to web-data bias and prompt wording.
-## Struggles with fine-grained counting or OCR-heavy scenes without task adaptation.
-
-* In practice, struggles with fine-grained counting or OCR-heavy scenes without task adaptation.
+### Limitations
+* Sensitive to web-data bias and prompt wording.
+* Struggles with fine-grained counting or OCR-heavy scenes without task adaptation.
 
 
 

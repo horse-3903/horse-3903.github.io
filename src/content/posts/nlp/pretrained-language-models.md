@@ -103,15 +103,12 @@ access: public
 
 # Practical Notes
 
-## Choose based on latency, cost, and data constraints.
+### Model Selection
+* Choose based on latency, cost, and data constraints.
 
-* In practice, choose based on latency, cost, and data constraints.
-## Always evaluate on a held-out task set with failure-case slices.
-
-* In practice, always evaluate on a held-out task set with failure-case slices.
-## Track regression across model/version changes.
-
-* In practice, track regression across model/version changes.
+### Evaluation Discipline
+* Always evaluate on a held-out task set with failure-case slices.
+* Track regression across model/version changes.
 
 
 
