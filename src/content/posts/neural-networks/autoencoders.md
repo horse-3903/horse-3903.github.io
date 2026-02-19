@@ -69,74 +69,153 @@ $$
 
 # Practical Notes
 
-## **Undercomplete** autoencoders (small $k$) encourage compact, informative codes.
+### Bottleneck Size
+* Undercomplete autoencoders (small $k$) encourage compact, informative codes.
+* Overcomplete autoencoders usually need regularization (for example sparsity or dropout) to avoid identity mapping.
 
-* In practice, undercomplete autoencoders (small $k$) encourage compact, informative codes.
-## **Overcomplete** autoencoders need regularisation (e.g. sparsity, dropout) to avoid trivial identity mapping.
+### Evaluation
+* Strong reconstruction does not always imply useful representations for downstream tasks.
+* Validate latent quality with task-relevant metrics, not only reconstruction loss.
 
-* In practice, overcomplete autoencoders need regularisation (e.g. sparsity, dropout) to avoid trivial identity mapping.
-## Reconstruction quality can be high even when downstream representations are weak, so validate with task metrics.
-
-* In practice, reconstruction quality can be high even when downstream representations are weak, so validate with task metrics.
-## For images, convolutional encoders/decoders usually outperform fully connected ones.
-
-* In practice, for images, convolutional encoders/decoders usually outperform fully connected ones.
+### Architecture Choice
+* For image data, convolutional encoders/decoders usually outperform fully connected architectures.
+* Match the architecture to data structure (spatial, sequential, tabular) for better representations.
 
 ---
 
 # Types of Autoencoders
 
-### Undercomplete
+## Undercomplete
+### Core Mechanism
 * Bottleneck $k \ll d$ forces compression.
-* Good for dimensionality reduction and compact representations.
 * Encoder must discard redundant features and keep only information needed for reconstruction.
-* Typically uses a stack of linear layers with non-linearities to learn a low-dimensional manifold.
 
-### Overcomplete
-* Bottleneck $k \ge d$ can copy inputs.
-* Needs regularisation to avoid identity mapping.
-* Encoder can learn a high-capacity representation, so constraints (sparsity, noise, weight decay) are required.
-* Without constraints, the encoder-decoder pair can approximate an identity function.
+### Strengths
+* Good for dimensionality reduction and compact representations.
+* Often learns a useful low-dimensional manifold with simple MLP/CNN blocks.
 
-### Sparse
-* Add sparsity penalty (e.g. $\ell_1$ on $z$, KL constraint).
-* Encourages only a few active units per example.
-* Encoder learns a distributed code where most latent units are near zero for any given input.
-* Sparsity makes the representation more interpretable and robust to irrelevant features.
+### Limitations
+* Strong compression can remove fine details.
+* May underfit if the bottleneck is too narrow.
 
-### Denoising
+## Overcomplete
+### Core Mechanism
+* Bottleneck $k \ge d$ gives high latent capacity.
+* Without constraints, the encoder-decoder pair can approximate identity mapping.
+
+### Strengths
+* Can preserve more detail than strict bottlenecks.
+* Useful when paired with strong regularization.
+
+### Limitations
+* Needs regularization (sparsity, noise, weight decay, dropout) to avoid trivial copying.
+* Representation quality can look good by reconstruction but be weak for downstream tasks.
+
+## Sparse
+### Core Mechanism
+* Add sparsity penalty (for example $\ell_1$ on $z$ or KL sparsity constraints).
+* Encourages only a few active latent units per sample.
+
+### Strengths
+* More interpretable latent codes.
+* Better robustness to irrelevant features.
+
+### Limitations
+* Overly strong sparsity can hurt reconstruction quality.
+* Requires tuning sparsity weight carefully.
+
+## Denoising
+### Core Mechanism
 * Corrupt input $\tilde{x}$ and reconstruct clean $x$.
-* Improves robustness to noise and missing values.
-* Encoder learns features that are stable under input perturbations.
-* Corruption can be Gaussian noise, masking, or salt-and-pepper noise.
+* Common corruption: Gaussian noise, masking, salt-and-pepper noise.
 
-### Contractive
-* Penalise encoder sensitivity (Jacobian norm).
-* Learns locally invariant features.
-* Encoder is pushed to map nearby inputs to similar latents.
-* Works like a smoothness constraint on $f_\theta$.
+### Strengths
+* Learns features stable under perturbations.
+* Improves robustness to noisy or partially missing inputs.
 
-### Variational (VAE)
-* Learn a distribution over $z$ with KL regularisation.
+### Limitations
+* Performance depends on corruption type and strength.
+* Mismatch between training corruption and real noise hurts transfer.
+
+## Contractive
+### Core Mechanism
+* Penalize encoder sensitivity using a Jacobian norm term.
+* Pushes nearby inputs to map to nearby latent codes.
+
+### Strengths
+* Learns locally invariant, smooth features.
+* Can improve robustness around the data manifold.
+
+### Limitations
+* Jacobian penalties add compute cost.
+* Too much contraction can collapse useful variation.
+
+## Variational (VAE)
+### Core Mechanism
+* Learn a latent distribution $q_\theta(z \mid x)$ with KL regularization toward a prior $p(z)$.
+* Encoder outputs $\mu(x)$ and $\sigma(x)$; sample with reparameterization.
+
+### Reparameterization Trick
+* In a VAE, direct sampling blocks standard backpropagation through stochastic nodes.
+* Rewrite sampling as:
+
+$$
+z = \mu(x) + \sigma(x) \odot \epsilon, \quad \epsilon \sim \mathcal{N}(0, I)
+$$
+
+* Randomness is isolated in $\epsilon$, while $\mu(x)$ and $\sigma(x)$ stay differentiable.
+* In practice, the encoder outputs $\mu(x)$ and $\log \sigma^2(x)$, with $\sigma(x)=\exp\!\left(\frac{1}{2}\log \sigma^2(x)\right)$.
+* This enables low-variance gradient estimates and practical VAE training.
+
+$$
+\mathcal{L}_{\text{VAE}} =
+\mathbb{E}_{q_\theta(z \mid x)}\!\left[\log p_\phi(x \mid z)\right]
+- D_{\mathrm{KL}}\!\left(q_\theta(z \mid x)\,\|\,p(z)\right)
+$$
+
+### Strengths
 * Enables sampling and generation.
-* Encoder outputs $\mu(x)$ and $\sigma(x)$ for a Gaussian $q_\theta(z \mid x)$.
-* Sample $z = \mu + \sigma \odot \epsilon$ using the reparameterization trick.
-* KL term shapes the latent space toward a known prior (e.g. $\mathcal{N}(0, I)$).
+* Latent space is smoother and more structured than deterministic AEs.
 
-### Convolutional
-* Use conv layers for spatial data.
-* Preserves locality and scales to images.
-* Encoder uses strided convolutions or pooling to reduce spatial resolution.
-* Latent code captures hierarchical spatial features (edges, textures, objects).
+### Limitations
+* Reconstructions can be blurrier than deterministic models.
+* KL-reconstruction balance can be hard to tune (posterior collapse risk).
 
-### Sequence
-* Use RNN/Transformer encoder-decoder.
-* Works for text and time series.
-* Encoder compresses a variable-length sequence into a fixed-size state or a set of token embeddings.
-* Attention-based encoders preserve long-range dependencies better than plain RNNs.
+## Convolutional
+### Core Mechanism
+* Use convolutional encoders/decoders for spatial data.
+* Downsample with strided convolutions or pooling, then decode back.
 
-### Adversarial (AAE)
-* Match latent distribution with a discriminator.
-* KL replaced by adversarial training.
-* Encoder is trained to fool the discriminator so $z$ matches a target prior.
-* Reconstruction loss and adversarial loss jointly shape the encoder output.
+### Strengths
+* Preserves locality and scales well to images.
+* Learns hierarchical features (edges, textures, objects).
+
+### Limitations
+* Can lose global context without attention or large receptive fields.
+* Deconvolution artifacts can affect output quality.
+
+## Sequence
+### Core Mechanism
+* Use RNN or Transformer encoder-decoder for sequential inputs.
+* Encode variable-length sequences into latent states or token embeddings.
+
+### Strengths
+* Works well for text, speech, and time series.
+* Attention-based variants preserve long-range dependencies better than plain RNNs.
+
+### Limitations
+* Sequence compression can discard fine temporal/token details.
+* Training can be memory-heavy for long contexts.
+
+## Adversarial (AAE)
+### Core Mechanism
+* Match latent distribution to a target prior with a discriminator.
+* Replace explicit KL with adversarial latent regularization.
+
+### Strengths
+* Flexible prior matching and often sharper samples.
+* Combines reconstruction quality with generative latent structure.
+
+### Limitations
+* Inherits adversarial training instability.
+* Requires balancing reconstruction and discriminator objectives.

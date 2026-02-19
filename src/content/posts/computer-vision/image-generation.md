@@ -85,17 +85,33 @@ $$
 
 # Diffusion Models
 
+![](../../assets/image-generation/diffusion.png)
+
 ## Core Idea
+
+### Denoising Process
 
 * Learn to denoise from random noise to a data sample.
 * Forward process gradually adds Gaussian noise to images.
 * Reverse process learns to remove noise step-by-step.
 
+### Markov Formulation
+
 $$
 q(x_t \mid x_{t-1}) = \mathcal{N}\!\left(\sqrt{1-\beta_t}\,x_{t-1}, \beta_t I\right)
 $$
 
+* The diffusion process is a Markov chain: each state depends only on the previous state, i.e., $q(x_t \mid x_{t-1})$.
 * Here, $x_{t-1}$ is the sample at the previous step, $x_t$ is the noisier sample at step $t$, and $\beta_t$ is the step-$t$ noise variance.
+
+### Model Components
+
+* In most modern diffusion models, the denoiser is a **U-Net** that predicts noise at each timestep.
+* In latent diffusion (for example Stable Diffusion), a **VAE** encodes images into latent space before diffusion and decodes latents back to pixels after denoising.
+
+### Text Conditioning
+
+* Text-conditioned models commonly use a **CLIP** text encoder to convert the prompt into embeddings used to condition the U-Net (typically via cross-attention).
 
 ## Step-by-Step Diffusion Training
 
@@ -130,7 +146,9 @@ $$
 
 ## Guidance and Samplers
 
-* **Classifier-free guidance (CFG)** improves condition alignment:
+### Classifier-free guidance (CFG)
+
+* During training, randomly drop the condition $c$ some fraction of the time so the same model learns both conditioned and unconditioned predictions.
 
 $$
 \hat{\epsilon}=
@@ -138,8 +156,24 @@ $$
 w\left(\epsilon_\theta(x_t,t,c)-\epsilon_\theta(x_t,t,\varnothing)\right)
 $$
 
+* At inference, run the model twice (conditioned and unconditioned) and combine them with guidance scale $w$.
 * $\varnothing$ denotes unconditioned input, and $w$ is guidance scale; larger values strengthen condition fidelity but can reduce diversity.
 * Common samplers: DDPM, DDIM, and DPM-Solver variants.
+
+### DDIM (Denoising Diffusion Implicit Models)
+
+* DDIM uses a non-Markovian reverse process that can sample with fewer steps than DDPM.
+* It can be deterministic ($\eta=0$), which makes generation faster and more consistent for the same seed.
+* A common DDIM update is:
+
+$$
+x_{t-1} =
+\sqrt{\bar{\alpha}_{t-1}}\,\hat{x}_0 +
+\sqrt{1-\bar{\alpha}_{t-1}-\sigma_t^2}\,\hat{\epsilon}_\theta +
+\sigma_t z,\quad z\sim\mathcal{N}(0,I)
+$$
+
+* Setting $\sigma_t=0$ (equivalently $\eta=0$) gives deterministic sampling; larger $\eta$ adds stochasticity and diversity.
 
 ## Practical Notes
 
