@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="760" viewBox="0 0 760 760" role="img" aria-labelledby="title desc">
+  <title id="title">Best response plot for Chicken game</title>
+  <desc id="desc">Square plot of p on x-axis and r on y-axis with BR1(r) and BR2(p) in different colors.</desc>
+
+  <rect x="0" y="0" width="760" height="760" fill="#ffffff" />
+
+  <!-- Plot frame -->
+  <rect x="120" y="80" width="560" height="560" fill="#ffffff" stroke="#111111" stroke-width="2" />
+
+  <!-- Axes -->
+  <line x1="120" y1="640" x2="680" y2="640" stroke="#111111" stroke-width="2" />
+  <line x1="120" y1="640" x2="120" y2="80" stroke="#111111" stroke-width="2" />
+
+  <!-- Ticks -->
+  <line x1="120" y1="640" x2="120" y2="648" stroke="#111111" stroke-width="2" />
+  <line x1="400" y1="640" x2="400" y2="648" stroke="#111111" stroke-width="2" />
+  <line x1="680" y1="640" x2="680" y2="648" stroke="#111111" stroke-width="2" />
+
+  <line x1="112" y1="640" x2="120" y2="640" stroke="#111111" stroke-width="2" />
+  <line x1="112" y1="360" x2="120" y2="360" stroke="#111111" stroke-width="2" />
+  <line x1="112" y1="80" x2="120" y2="80" stroke="#111111" stroke-width="2" />
+
+  <!-- Tick labels -->
+  <text x="120" y="672" text-anchor="middle" font-size="20" fill="#111111">0</text>
+  <text x="400" y="672" text-anchor="middle" font-size="20" fill="#111111">1/2</text>
+  <text x="680" y="672" text-anchor="middle" font-size="20" fill="#111111">1</text>
+
+  <text x="96" y="646" text-anchor="end" font-size="20" fill="#111111">0</text>
+  <text x="96" y="366" text-anchor="end" font-size="20" fill="#111111">1/2</text>
+  <text x="96" y="86" text-anchor="end" font-size="20" fill="#111111">1</text>
+
+  <!-- Axis labels -->
+  <text x="400" y="724" text-anchor="middle" font-size="28" fill="#111111" font-style="italic">p</text>
+  <text x="56" y="360" text-anchor="middle" font-size="28" fill="#111111" font-style="italic" transform="rotate(-90 56 360)">r</text>
+
+  <!-- BR_1(r): p=1 if r<1/2; p=0 if r>1/2; p in [0,1] if r=1/2 -->
+  <line x1="680" y1="640" x2="680" y2="360" stroke="#d32f2f" stroke-width="6" />
+  <line x1="120" y1="360" x2="120" y2="80" stroke="#d32f2f" stroke-width="6" />
+  <line x1="120" y1="360" x2="680" y2="360" stroke="#d32f2f" stroke-width="6" />
+
+  <!-- BR_2(p): r=1 if p<1/2; r=0 if p>1/2; r in [0,1] if p=1/2 -->
+  <line x1="120" y1="80" x2="400" y2="80" stroke="#1976d2" stroke-width="6" />
+  <line x1="400" y1="640" x2="680" y2="640" stroke="#1976d2" stroke-width="6" />
+  <line x1="400" y1="640" x2="400" y2="80" stroke="#1976d2" stroke-width="6" />
+
+  <!-- Legend -->
+  <rect x="430" y="100" width="230" height="92" fill="#ffffff" stroke="#cccccc" stroke-width="1" />
+  <line x1="448" y1="128" x2="492" y2="128" stroke="#d32f2f" stroke-width="6" />
+  <text x="504" y="134" font-size="20" fill="#111111" font-style="italic">BR_1(r)</text>
+
+  <line x1="448" y1="164" x2="492" y2="164" stroke="#1976d2" stroke-width="6" />
+  <text x="504" y="170" font-size="20" fill="#111111" font-style="italic">BR_2(p)</text>
+</svg>
