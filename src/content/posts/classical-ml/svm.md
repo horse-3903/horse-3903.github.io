@@ -102,7 +102,7 @@ $$
 $$
 
 * Maximising the margin $ \gamma $ is equivalent to: 
-  * Minimising the denominatour $ \sqrt{w_1^2 + w_2^2 + \cdots + w_p^2} $
+  * Minimising the denominator $ \sqrt{w_1^2 + w_2^2 + \cdots + w_p^2} $
   * Minimising the squared norm $ w_1^2 + w_2^2 + \cdots + w_p^2 $
 
 ### 4. Primal Optimisation Problem
@@ -137,7 +137,7 @@ $$
 
 ### 6. Finding Partial Derivatives
 
-* Now, we optimise this Langrangian by differentiating with respect to $ w_1, \dots, w_p, b, \lambda $
+* Now, we optimise this Lagrangian by differentiating with respect to $ w_1, \dots, w_p, b, \lambda $
 
 * Finding the partial derivative of $ \mathcal L $ with respect to $ w_i $ : 
 $$
@@ -244,7 +244,7 @@ $$
 
 ## When to Use SVMs
 
-* When you need a strong baseline for medium-sised datasets.
+* When you need a strong baseline for medium-sized datasets.
 * When data is high-dimensional and sparse (linear SVM).
 * When margin-based robustness is valuable.
 * When nonlinear boundaries can be captured with kernels.

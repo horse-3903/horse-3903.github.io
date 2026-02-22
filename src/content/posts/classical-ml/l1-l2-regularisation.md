@@ -15,7 +15,7 @@ access: public
 # Introduction
 
 ## Limitations of Linear Regression
-* The standard implementatioon of linear regression does not guarantee **generalisation** of the model
+* The standard implementation of linear regression does not guarantee **generalisation** of the model
 * It is limited to the calculation of **empirical Error (MSE)** without:
   * **Controlling the norm** of the weight vector
   * **Regularisation** of the model
@@ -31,8 +31,8 @@ $$
 $$
 
 * Where: 
-  * $ w $ is the weight matrix,
-  * $ L(w) $ is the empirical loss from the weight matrix,
+  * $ w $ is the weight vector,
+  * $ L(w) $ is the empirical loss,
   * $ R(w) $ is the regularised loss from the regularisation function.
 
 ---
@@ -77,8 +77,8 @@ $$
 $$
 
 * Meaning:
-* **Stable algorithms** generalise better  
-* **Unstable algorithms** overfit by being too sensitive to small perturbations
+  * **Stable algorithms** generalise better  
+  * **Unstable algorithms** overfit by being too sensitive to small perturbations
 
 ## Why Regularisation Improves Stability
 
@@ -102,20 +102,20 @@ $$
 
 ## Overview
 
-* **LASSO (Least Absolute Shrinkage and Selection Operatour)** regression uses a regularisation rule which is defined as 
+* **LASSO (Least Absolute Shrinkage and Selection Operator)** regression uses a regularisation rule which is defined as 
 
 $$
-R(w) = \lambda ||w||
+R(w) = \lambda ||w||_1 = \lambda \sum_{i=1}^{d} |w_i|
 $$
 
 * Where:
   * $ \lambda $ is a scalar where $ \lambda > 0 $,
-  * $ ||w|| = \sum^{d}_{i=1} |w_i| $ is the $ l_1 $ norm.
+  * $ ||w||_1 $ is the $ l_1 $ norm.
 
 * Applying the learning rule with linear regression and mean-squared Error (MSE) loss:
 
 $$
-J(w) = \lambda||w||^2 \space + \space \frac{1}{m} \sum_{i=1}^{N}\frac{1}{2}(w_i x_i - y_i)^2
+J(w) = \frac{1}{m} \sum_{i=1}^{m}\frac{1}{2}(w^\top x_i - y_i)^2 + \lambda||w||_1
 $$
 
 ## Features of L1 Regression
@@ -147,8 +147,8 @@ $$
 $$
 
 * Since the L1 norm cannot be differentiated at 0:
-* L1 minimisation has **no closed-form solution**
-* It must use **iterative algorithms**
+  * L1 minimisation has **no closed-form solution**
+  * It must use **iterative algorithms**
 
 ---
 
@@ -157,17 +157,17 @@ $$
 * **Ridge regression** makes use of one of the simplest regularisation rules, which is defined as 
 
 $$
-R(w) = \lambda ||w||^2
+R(w) = \lambda ||w||_2^2 = \lambda \sum_{i=1}^{d} w_i^2
 $$
 
 * Where:
   * $ \lambda $ is a scalar where $ \lambda > 0 $,
-  * $ ||w|| = \sqrt{\sum^{d}_{i=1} w_i^2}$ is the $ l_2 $ norm.
+  * $ ||w||_2 = \sqrt{\sum^{d}_{i=1} w_i^2}$ is the $ l_2 $ norm.
 
 * Applying the learning rule with linear regression and mean-squared Error (MSE) loss:
 
 $$
-J(w) = \lambda||w||^2 \space + \space \frac{1}{m} \sum_{i=1}^{N}\frac{1}{2}(w_i x_i - y_i)^2
+J(w) = \frac{1}{m} \sum_{i=1}^{m}\frac{1}{2}(w^\top x_i - y_i)^2 + \lambda||w||_2^2
 $$
 
 ## Features of L2 Regression
@@ -185,12 +185,12 @@ $$
 * Calculating the gradient of the cost function $ J \space w.r.t. \space w $.
 
 $$
-J(w) = \lambda||w||^2 \space + \space \frac{1}{m} \sum_{i=1}^{N}\frac{1}{2}(w_i x_i - y_i)^2
+J(w) = \frac{1}{m} \sum_{i=1}^{m}\frac{1}{2}(w^\top x_i - y_i)^2 + \lambda||w||_2^2
 $$
 
 * Where:
-  * $ R(w) = \lambda||w||^2 $ is the regulariser, 
-  * $ L(w) = \frac{1}{m} \sum_{i=1}^{N}\frac{1}{2}(w_i x_i - y_i)^2 $ is the MSE loss function.
+  * $ R(w) = \lambda||w||_2^2 $ is the regulariser, 
+  * $ L(w) = \frac{1}{m} \sum_{i=1}^{m}\frac{1}{2}(w^\top x_i - y_i)^2 $ is the MSE loss function.
 
 ### Gradient of L2 Norm
 
@@ -242,7 +242,7 @@ $$
 * The sharp corners of the L1 diamond make it more likely to hit axes, producing exact zeros (sparsity).
 * The smooth L2 circle shrinks weights continuously, usually keeping them non-zero.
 
-![](../../assets/l1-l2/l1l2.png)
+![L1 vs L2 constraint geometry](../../assets/l1-l2/l1l2.png)
 
 # L1 and L2 Regularisation In Practice
 
