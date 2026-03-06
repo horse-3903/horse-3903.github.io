@@ -29,3 +29,4 @@ pinned: true
 ## [Session 4](/posts/h3-game-theory/session-4/)
 ## [Session 5](/posts/h3-game-theory/session-5/)
 ## [Session 6](/posts/h3-game-theory/session-6/)
+## [Session 7](/posts/h3-game-theory/session-7/)

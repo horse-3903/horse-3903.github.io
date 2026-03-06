@@ -16,6 +16,7 @@ pinned: true
 - [X] [Matplotlib and Seaborn for Visualisation](/posts/fundamentals/programming/matplotlib-seaborn/)
 - [X] [Scikit-Learn for ML](/posts/fundamentals/programming/scikit-learn/)
 - [X] [PyTorch Basics](/posts/fundamentals/programming/pytorch-basics/)
+- [X] [Common PyTorch nn Blocks](/posts/fundamentals/programming/pytorch-common-nn-blocks/)
 - [X] [PyTorch Tensor Manipulation](/posts/fundamentals/programming/pytorch-tensor-manipulation/)
 - [X] [Training Models on CPU and GPU](/posts/fundamentals/programming/pytorch-training-cpu-gpu/)
 
