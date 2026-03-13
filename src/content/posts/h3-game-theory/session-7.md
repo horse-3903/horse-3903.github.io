@@ -200,7 +200,3 @@ V(C_1 C) = 4 + \delta V(C_1 C) \\
 V(C_1 C) = \frac{4}{1 - \delta}
 $$
 
-* In history 2, if players stick to grim-trigger, P1 earns (moving forward)
-$$
-
-$$
