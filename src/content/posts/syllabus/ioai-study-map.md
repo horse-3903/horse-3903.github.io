@@ -162,4 +162,5 @@ pinned: true
 - [X] [Audio Models](/posts/nlp/audio-models)
 
 
-
+# Ending notes 
+`IRS{rafael_chong_chong_chong}`
