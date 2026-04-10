@@ -345,4 +345,4 @@ $$
 ### Conclusion (Favourable cases / Possible cases)
 $$
 P(2A \space | \space \{2A, 2B\}) = \frac{\alpha \cdot 1}{\alpha \cdot 1 + (1 - \alpha) \cdot q}
-$$
+$$  

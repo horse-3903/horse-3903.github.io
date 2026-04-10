@@ -30,3 +30,6 @@ pinned: true
 ## [Session 5](/posts/h3-game-theory/session-5/)
 ## [Session 6](/posts/h3-game-theory/session-6/)
 ## [Session 7](/posts/h3-game-theory/session-7/)
+## [Session 8](/posts/h3-game-theory/session-8/)
+## [Session 9](/posts/h3-game-theory/session-9/)
+## [Session 10](/posts/h3-game-theory/session-10/)
