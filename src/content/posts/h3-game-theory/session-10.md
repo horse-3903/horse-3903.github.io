@@ -134,15 +134,15 @@ $$
 $$
 
 ## First Price Sealed Auction
-* Suppose your value for the object is $ \$ 5 $ and the other bidder's values are $\{ \$4, \$3, \$3, \$2, \$1 \}$
+* Suppose your value for the object is \$5 and the other bidder's values are \$4, \$3, \$3, \$2, and \$1
 * These numbers are common knowledge
 
 ### Strategy
 * Bidding your value is a weakly dominant strategy
-* Thus, bid the second highest price $ \$ 4 $
+* Thus, bid the second highest price, \$4
 
 ## First Price Sealed Auction (Imperfect Information)
-* Suppose your value for the object is $ \$ 5 $ and the other bidder's values are $ b \in [0, 5]$
+* Suppose your value for the object is \$5 and the other bidder's values satisfy $b \in [0, 5]$
 * These numbers are not common knowledge
 
 ### Strategy
