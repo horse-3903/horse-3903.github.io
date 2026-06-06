@@ -1,0 +1,859 @@
+<!DOCTYPE html><html lang="en"> <head><meta charset="utf-8"><link rel="icon" type="image/svg+xml" href="/favicon.svg"><meta name="viewport" content="width=device-width"><meta name="description" content="Embeddings for text, images, audio and structured data with practical usage notes."><meta property="og:type" content="article"><meta property="og:title" content="Data Embeddings — horse3903"><meta property="og:description" content="Embeddings for text, images, audio and structured data with practical usage notes."><meta property="og:image" content="https://horse-3903.github.io/og-image.png"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="Data Embeddings — horse3903"><meta name="twitter:image" content="https://horse-3903.github.io/og-image.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet"><!-- KaTeX (served locally, version matches rehype-katex dependency) --><link rel="stylesheet" href="/katex/katex.min.css"><title>Data Embeddings — horse3903</title><link rel="stylesheet" href="/_astro/_slug_.DRP4rX40.css">
+<style>#back-arrow{position:fixed;left:1.25rem;top:4rem;color:var(--text-muted);opacity:.4;transition:opacity .2s ease,color .2s ease;z-index:40;display:flex;align-items:center;justify-content:center;width:1.75rem;height:1.75rem;border-radius:50%;background:var(--surface);border:1px solid var(--border);text-decoration:none}#back-arrow:hover{opacity:1;color:var(--text)}.dot-grid{position:absolute;inset:0;background-image:radial-gradient(circle,rgba(255,255,255,.08) 1px,transparent 1px);background-size:32px 32px;mask-image:radial-gradient(ellipse 80% 60% at 50% 0%,black 0%,transparent 80%);pointer-events:none}.prose-dark{color:#a1a1aa;line-height:1.85;font-size:.9rem}.prose-dark h1,.prose-dark h2,.prose-dark h3,.prose-dark h4{color:#fafafa;font-weight:700;margin-top:2.25rem;margin-bottom:.75rem;line-height:1.3}.prose-dark h1{font-size:1.55rem}.prose-dark h2{font-size:1.25rem;padding-bottom:.4rem;border-bottom:1px solid rgba(255,255,255,.06)}.prose-dark h3{font-size:1.08rem}.prose-dark h4{font-size:1rem}.prose-dark p{margin-bottom:1.2rem}.prose-dark a{color:var(--accent);text-decoration:underline;text-underline-offset:3px}.prose-dark a:hover{opacity:.8}.prose-dark strong{color:#e4e4e7}.prose-dark em{color:#8b8b9a;font-style:italic}.prose-dark hr{border:none;border-top:1px solid rgba(255,255,255,.07);margin:2rem 0}.prose-dark code{background:#18181b;border:1px solid rgba(255,255,255,.08);padding:.15em .4em;border-radius:5px;font-size:.82em;color:#bfdbfe}.prose-dark pre{background:#111113;border:1px solid rgba(255,255,255,.07);padding:1.2rem 1.4rem;border-radius:12px;overflow-x:auto;margin:1.5rem 0}.prose-dark pre code{background:none;border:none;padding:0;color:#e4e4e7;font-size:.83rem}.prose-dark ul,.prose-dark ol{padding-left:1.5rem;margin-bottom:1.2rem}.prose-dark ul{list-style-type:disc}.prose-dark ol{list-style-type:decimal}.prose-dark li{margin-bottom:.4rem}.prose-dark blockquote{border-left:3px solid var(--accent);padding:.5rem 1rem;background:#3b82f60f;border-radius:0 8px 8px 0;color:#71717a;margin:1.5rem 0;font-style:italic}.prose-dark table{width:100%;border-collapse:collapse;margin-bottom:1.5rem;font-size:.875rem}.prose-dark th,.prose-dark td{border:1px solid rgba(255,255,255,.07);padding:.5rem .75rem;text-align:left}.prose-dark th{background:#18181b;color:#fafafa;font-weight:600}.prose-dark tr:nth-child(2n) td{background:#ffffff05}.prose-dark img{border-radius:10px;max-width:100%;margin:1.5rem auto;display:block;border:1px solid rgba(255,255,255,.07);background:#fff;padding:1rem}.katex{color:#e4e4e7;font-size:1em}.katex-display{overflow-x:auto;overflow-y:hidden;padding:1.5rem 1.75rem;margin:1.75rem 0;background:#111113;border:1px solid rgba(255,255,255,.07);border-radius:10px}.katex-display>.katex{color:#e4e4e7;font-size:1.35em}
+#nav-toggle[data-astro-cid-3ef6ksr2]{font-family:inherit;font-size:.85rem;color:var(--accent);background:none;border:none;cursor:pointer;padding:.25rem .2rem;line-height:1;flex-shrink:0;transition:color .2s ease,opacity .2s ease;user-select:none;opacity:.7}#nav-toggle[data-astro-cid-3ef6ksr2]:hover{opacity:1}#nav-links[data-astro-cid-3ef6ksr2]{list-style:none;padding-top:0;padding-bottom:0;margin:0;white-space:nowrap}#nav-links-wrapper[data-astro-cid-3ef6ksr2]{max-width:9999px;opacity:1;transition:max-width .35s ease,opacity .25s ease}#nav-links-wrapper[data-astro-cid-3ef6ksr2].nav-collapsed{max-width:0;opacity:0;pointer-events:none}.nav-link[data-astro-cid-3ef6ksr2]{transition:color .2s ease;position:relative;text-decoration:none}.nav-link[data-astro-cid-3ef6ksr2]:after{content:"";position:absolute;left:0;bottom:-2px;width:0;height:1px;background:var(--accent);transition:width .25s ease}.nav-link[data-astro-cid-3ef6ksr2]:hover{color:var(--text)!important}.nav-link[data-astro-cid-3ef6ksr2]:hover:after{width:100%}
+</style></head> <body> <!-- Background: dark + noise + track accent glow --> <div class="fixed inset-0 -z-10" style="background: var(--bg);"> <div class="noise-layer"></div> <!-- Track-specific radial glow in top-right --> <div style="position:absolute;top:-10%;right:-5%;width:55%;height:60%;background:radial-gradient(ellipse,#3b82f614 0%,transparent 65%);pointer-events:none;"></div> <!-- Subtle dot grid --> <div class="dot-grid"></div> </div> <header id="header" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300" data-astro-cid-3ef6ksr2> <nav class="max-w-6xl mx-auto px-4 sm:px-8 py-4 flex items-center justify-center overflow-x-auto" data-astro-cid-3ef6ksr2> <ul class="flex items-center gap-6 sm:gap-8 whitespace-nowrap" data-astro-cid-3ef6ksr2> <li class="flex items-center" data-astro-cid-3ef6ksr2> <a href="/" class="nav-link text-sm" style="color: var(--text-secondary);" data-astro-cid-3ef6ksr2>Home</a> <button id="nav-toggle" aria-label="Toggle navigation" aria-expanded="true" class="ml-2 hidden md:inline-flex" data-astro-cid-3ef6ksr2> <span id="nav-arrow" data-astro-cid-3ef6ksr2>∷</span> </button> <div id="nav-links-wrapper" class="overflow-hidden hidden md:block nav-collapsed" data-astro-cid-3ef6ksr2> <ul id="nav-links" class="flex items-center gap-8 pl-8" data-astro-cid-3ef6ksr2> <li data-astro-cid-3ef6ksr2><a href="/#about" class="nav-link text-sm" style="color: var(--text-secondary);" data-astro-cid-3ef6ksr2>About</a></li> <li data-astro-cid-3ef6ksr2><a href="/#projects" class="nav-link text-sm" style="color: var(--text-secondary);" data-astro-cid-3ef6ksr2>Projects</a></li> <li data-astro-cid-3ef6ksr2><a href="/#publications" class="nav-link text-sm" style="color: var(--text-secondary);" data-astro-cid-3ef6ksr2>Publications</a></li> <li data-astro-cid-3ef6ksr2><a href="/#experience" class="nav-link text-sm" style="color: var(--text-secondary);" data-astro-cid-3ef6ksr2>Experience</a></li> <li data-astro-cid-3ef6ksr2><a href="/#education" class="nav-link text-sm" style="color: var(--text-secondary);" data-astro-cid-3ef6ksr2>Education</a></li> <li data-astro-cid-3ef6ksr2><a href="/#honors" class="nav-link text-sm" style="color: var(--text-secondary);" data-astro-cid-3ef6ksr2>Honors</a></li> </ul> </div> </li> <li data-astro-cid-3ef6ksr2><a href="/blog" class="nav-link text-sm" style="color: var(--text-secondary);" data-astro-cid-3ef6ksr2>Blog</a></li> <li data-astro-cid-3ef6ksr2><a href="/blog/archive" class="nav-link text-sm" style="color: var(--text-secondary);" data-astro-cid-3ef6ksr2>Archive</a></li> <li data-astro-cid-3ef6ksr2><a href="/signal" class="nav-link text-sm" style="color: var(--text-secondary);" data-astro-cid-3ef6ksr2>Signal</a></li> </ul> </nav> </header> <script type="module">const e=document.getElementById("header"),t=document.getElementById("nav-toggle"),n=document.getElementById("nav-links-wrapper");document.getElementById("nav-arrow");const a=window.location.pathname==="/";let o=a;function r(l){o=l,o?(n.classList.remove("nav-collapsed"),t.style.opacity="0.7",t.setAttribute("aria-expanded","true")):(n.classList.add("nav-collapsed"),t.style.opacity="0.35",t.setAttribute("aria-expanded","false"))}a?(n.style.transition="none",r(!0),requestAnimationFrame(()=>{n.style.transition=""})):t.style.opacity="0.35";t?.addEventListener("click",()=>r(!o));window.addEventListener("scroll",()=>{e&&(window.scrollY>80?(e.style.backgroundColor="rgba(9,9,11,0.85)",e.style.backdropFilter="blur(12px)",e.style.borderBottom="1px solid rgba(255,255,255,0.06)"):(e.style.backgroundColor="transparent",e.style.backdropFilter="none",e.style.borderBottom="none"))});</script>  <a href="/blog" id="back-arrow" aria-label="Back to Blog"> <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"> <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"></path> </svg> </a> <main class="max-w-3xl mx-auto px-6 pt-24 pb-16"> <!-- Post header --> <div class="mb-12" data-reveal> <div class="flex flex-wrap gap-2 mb-5"> <span class="text-xs font-mono px-2.5 py-1 rounded-md" style="background: #3b82f614; color: #3b82f6; border: 1px solid #3b82f630;">IOAI ML Notes</span> <span class="px-2.5 py-1 text-xs rounded-md" style="background: var(--surface); color: var(--text-muted); border: 1px solid var(--border);">Neural Network</span><span class="px-2.5 py-1 text-xs rounded-md" style="background: var(--surface); color: var(--text-muted); border: 1px solid var(--border);">Deep Learning</span> </div> <h1 class="text-2xl sm:text-3xl font-bold leading-tight mb-4" style="color: var(--text);"> Data Embeddings </h1> <p class="text-sm leading-relaxed mb-5" style="color: var(--text-secondary);">Embeddings for text, images, audio and structured data with practical usage notes.</p> <div class="flex items-center gap-4 text-xs" style="color: var(--text-muted);"> <time>19 February 2026</time>  </div> <div class="h-px mt-8" style="background: linear-gradient(to right, #3b82f650, transparent);"></div> </div> <!-- Content --> <article class="prose-dark"> <h1 id="syllabus-map">Syllabus Map</h1>
+<ul>
+<li>Study map: <a href="/blog/syllabus/ioai-study-map">Syllabus Study Map</a></li>
+</ul>
+<hr>
+<h1 id="overview">Overview</h1>
+<ul>
+<li>Embeddings map discrete or high-dimensional inputs into dense vectors that capture <strong>similarity</strong> and <strong>structure</strong>.</li>
+<li>Good embeddings make <strong>downstream learning easier</strong> by placing related items closer in vector space.</li>
+<li>This note summarises embeddings for <strong>text, images, audio, and structured data</strong>, plus practical tips.</li>
+</ul>
+<hr>
+<h1 id="core-idea">Core Idea</h1>
+<ul>
+<li>An embedding is a learnable function <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>f</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>→</mo><msup><mi mathvariant="double-struck">R</mi><mi>d</mi></msup></mrow><annotation encoding="application/x-tex">f(x) \rightarrow \mathbb{R}^d</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.1076em;">f</span><span class="mopen">(</span><span class="mord mathnormal">x</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">→</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.8491em;"></span><span class="mord"><span class="mord mathbb">R</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8491em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">d</span></span></span></span></span></span></span></span></span></span></span>.</li>
+<li>Similar inputs should have <strong>nearby vectors</strong> (cosine similarity or dot product).</li>
+<li>Embeddings are usually <strong>trained jointly</strong> with a task or via <strong>self-supervision</strong>.</li>
+</ul>
+<hr>
+<h1 id="sparse-vs-dense-embeddings">Sparse vs Dense Embeddings</h1>
+<h2 id="sparse-embeddings">Sparse Embeddings</h2>
+<ul>
+<li>Most dimensions are zero; only a small subset are non-zero.</li>
+<li>Common examples: one-hot vectors, bag-of-words, and TF-IDF.</li>
+<li>Usually high-dimensional, such as vocabulary-sized vectors.</li>
+<li>Easy to interpret because each dimension maps to a specific token/feature.</li>
+</ul>
+<span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>x</mi><mo>∈</mo><msup><mi mathvariant="double-struck">R</mi><mi>V</mi></msup><mo separator="true">,</mo><mspace width="1em"></mspace><mi mathvariant="normal">∥</mi><mi>x</mi><msub><mi mathvariant="normal">∥</mi><mn>0</mn></msub><mo>≪</mo><mi>V</mi></mrow><annotation encoding="application/x-tex">x \in \mathbb{R}^V,\quad \|x\|_0 \ll V</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.5782em;vertical-align:-0.0391em;"></span><span class="mord mathnormal">x</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">∈</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1.1413em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord mathbb">R</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8913em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.2222em;">V</span></span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:1em;"></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord">∥</span><span class="mord mathnormal">x</span><span class="mord"><span class="mord">∥</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">0</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">≪</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.2222em;">V</span></span></span></span></span>
+<h2 id="dense-embeddings">Dense Embeddings</h2>
+<ul>
+<li>Most dimensions contain non-zero values.</li>
+<li>Common examples: Word2Vec, GloVe, BERT token embeddings, CLIP embeddings.</li>
+<li>Usually lower-dimensional, such as <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>d</mi><mo>=</mo><mn>128</mn></mrow><annotation encoding="application/x-tex">d=128</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6944em;"></span><span class="mord mathnormal">d</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">128</span></span></span></span> to <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>d</mi><mo>=</mo><mn>4096</mn></mrow><annotation encoding="application/x-tex">d=4096</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6944em;"></span><span class="mord mathnormal">d</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">4096</span></span></span></span>.</li>
+<li>Harder to interpret directly, but better at capturing semantic similarity.</li>
+</ul>
+<span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>z</mi><mo>=</mo><mi>f</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo separator="true">,</mo><mspace width="1em"></mspace><mi>z</mi><mo>∈</mo><msup><mi mathvariant="double-struck">R</mi><mi>d</mi></msup><mo separator="true">,</mo><mspace width="1em"></mspace><mi>d</mi><mo>≪</mo><mi>V</mi></mrow><annotation encoding="application/x-tex">z = f(x),\quad z \in \mathbb{R}^d,\quad d \ll V</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal" style="margin-right:0.044em;">z</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.1076em;">f</span><span class="mopen">(</span><span class="mord mathnormal">x</span><span class="mclose">)</span><span class="mpunct">,</span><span class="mspace" style="margin-right:1em;"></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal" style="margin-right:0.044em;">z</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">∈</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1.0935em;vertical-align:-0.1944em;"></span><span class="mord"><span class="mord mathbb">R</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8991em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">d</span></span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:1em;"></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal">d</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">≪</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.2222em;">V</span></span></span></span></span>
+<h2 id="key-tradeoffs">Key Tradeoffs</h2>
+<ul>
+<li><strong>Interpretability</strong>:
+<ul>
+<li>Sparse vectors are more human-readable.</li>
+<li>Dense vectors are less interpretable but often more expressive.</li>
+</ul>
+</li>
+<li><strong>Memory and compute</strong>:
+<ul>
+<li>Sparse vectors can be memory-heavy at very large vocab sizes.</li>
+<li>Dense vectors are compact and efficient for neural models.</li>
+</ul>
+</li>
+<li><strong>Generalisation</strong>:
+<ul>
+<li>Sparse methods treat tokens as mostly independent.</li>
+<li>Dense methods share statistical strength across similar tokens/items.</li>
+</ul>
+</li>
+<li><strong>Best use cases</strong>:
+<ul>
+<li>Sparse: classical IR/search baselines, small-data linear models.</li>
+<li>Dense: semantic search, transfer learning, deep learning pipelines.</li>
+</ul>
+</li>
+</ul>
+<h2 id="practical-rule">Practical Rule</h2>
+<ul>
+<li>Start with sparse features (for example TF-IDF) for a fast baseline.</li>
+<li>Move to dense embeddings when you need semantic similarity, transfer, or multimodal alignment.</li>
+</ul>
+<hr>
+<h1 id="text-embeddings">Text Embeddings</h1>
+<h2 id="tokenisation-matters">Tokenisation matters</h2>
+<ul>
+<li><strong>Word-level</strong>: simple but large vocab and OOV issues.</li>
+<li><strong>Subword</strong> (BPE/WordPiece): handles OOV and morphology.</li>
+<li><strong>Character</strong>: robust but longer sequences.</li>
+</ul>
+<h2 id="static-vs-contextual">Static vs Contextual</h2>
+<ul>
+<li><strong>Static</strong> (Word2Vec, GloVe, fastText): one vector per token.</li>
+<li><strong>Contextual</strong> (BERT, GPT-style): token vector depends on surrounding words.</li>
+</ul>
+<h2 id="training-objectives">Training objectives</h2>
+<ul>
+<li><strong>Skip-gram / CBOW</strong>: predict context words.</li>
+<li><strong>Masked language modelling</strong>: predict masked tokens.</li>
+<li><strong>Contrastive</strong>: pull positives together, push negatives apart.</li>
+</ul>
+<h2 id="practical-notes">Practical Notes</h2>
+<h3 id="default-to-cosine-similarity-for-semantic-comparisons">Default to cosine similarity for semantic comparisons</h3>
+<ul>
+<li>Cosine similarity is usually a strong first choice for embedding search and clustering.</li>
+</ul>
+<h3 id="normalize-before-cross-batch-dot-product-comparisons">Normalize before cross-batch dot-product comparisons</h3>
+<ul>
+<li>L2-normalization helps keep similarity scores stable across batches.</li>
+</ul>
+<h3 id="use-mean-pooling-as-a-sentence-level-baseline">Use mean pooling as a sentence-level baseline</h3>
+<ul>
+<li>Averaging token embeddings is a simple and often competitive first approach.</li>
+</ul>
+<hr>
+<h2 id="bpe-byte-pair-encoding">BPE (Byte-Pair Encoding)</h2>
+<p><img  loading="lazy" decoding="async" fetchpriority="auto" width="1243" height="534" src="/_astro/bpe.QkXtutIF_Z1sqams.webp" ></p>
+<h3 id="core-idea-1">Core Idea</h3>
+<ul>
+<li>Start with characters, then repeatedly merge the most frequent adjacent pairs.</li>
+<li><strong>Why it works</strong>: frequent word fragments become subwords, so rare words can be built from pieces.</li>
+</ul>
+<h3 id="steps">Steps</h3>
+<h4 id="step-1-initialise-the-vocabulary">Step 1: Initialise the vocabulary</h4>
+<ul>
+<li>Build an initial vocabulary of <strong>characters</strong> plus a word boundary marker.</li>
+<li>Represent each word as a sequence of characters.</li>
+</ul>
+<h4 id="step-2-count-symbol-pairs">Step 2: Count symbol pairs</h4>
+<ul>
+<li>Scan the corpus and count all <strong>adjacent symbol pairs</strong>.</li>
+<li>Track the most frequent pairs across the full corpus.</li>
+</ul>
+<h4 id="step-3-merge-the-best-pair">Step 3: Merge the best pair</h4>
+<ul>
+<li>Merge the <strong>most frequent pair</strong> into a new symbol.</li>
+<li>Add the new symbol to the vocabulary.</li>
+</ul>
+<h4 id="step-4-update-the-corpus">Step 4: Update the corpus</h4>
+<ul>
+<li>Replace all occurrences of the merged pair.</li>
+<li>Recompute adjacent pairs on the updated corpus.</li>
+</ul>
+<h4 id="step-5-repeat-until-target-size">Step 5: Repeat until target size</h4>
+<ul>
+<li>Loop steps 2–4 until you hit the vocabulary budget.</li>
+<li>Stop early if no merges are beneficial.</li>
+</ul>
+<h4 id="step-6-tokenise-new-text">Step 6: Tokenise new text</h4>
+<ul>
+<li>Apply the learned merges in order.</li>
+<li>Produce a sequence of subword tokens.</li>
+</ul>
+<h3 id="strengths-and-weaknesses">Strengths and Weaknesses</h3>
+<ul>
+<li><strong>Strengths</strong>:
+<ul>
+<li>Controls vocabulary size.</li>
+<li>Handles OOV by breaking into subwords.</li>
+</ul>
+</li>
+<li><strong>Weaknesses</strong>:
+<ul>
+<li>Not probabilistic; merges are frequency-based only.</li>
+<li>Can split words in unintuitive ways (e.g., <code>im|port|ant</code>).</li>
+</ul>
+</li>
+<li><strong>When to use</strong>: strong default for modern NLP and LLM tokenisers.</li>
+</ul>
+<h2 id="wordpiece">WordPiece</h2>
+<p><img  loading="lazy" decoding="async" fetchpriority="auto" width="640" height="230" src="/_astro/wordpiece.DlCgHWF1_1jDP6Y.webp" ></p>
+<h3 id="core-idea-2">Core Idea</h3>
+<ul>
+<li>Like BPE but merges maximise <strong>likelihood</strong> of the training data.</li>
+<li><strong>Why it works</strong>: likelihood-driven merges favour subwords that explain the corpus well, so frequent patterns become stable tokens while rare words still decompose cleanly.</li>
+</ul>
+<h3 id="steps-1">Steps</h3>
+<h4 id="step-1-initialise-the-vocabulary-1">Step 1: Initialise the vocabulary</h4>
+<ul>
+<li>Start with <strong>characters</strong> and word boundary markers.</li>
+<li>Represent each word as a sequence of characters.</li>
+</ul>
+<h4 id="step-2-score-segmentations">Step 2: Score segmentations</h4>
+<ul>
+<li>Train a simple language model to score candidate segmentations.</li>
+<li>Estimate likelihood for current token splits.</li>
+</ul>
+<h4 id="step-3-propose-new-subwords">Step 3: Propose new subwords</h4>
+<ul>
+<li>Consider adding candidate subwords.</li>
+<li>Measure <strong>likelihood improvement</strong> for each candidate.</li>
+</ul>
+<h4 id="step-4-add-the-best-candidate">Step 4: Add the best candidate</h4>
+<ul>
+<li>Add the subword that yields the <strong>largest likelihood gain</strong>.</li>
+<li>Update the vocabulary.</li>
+</ul>
+<h4 id="step-5-re-tokenise-the-corpus">Step 5: Re-tokenise the corpus</h4>
+<ul>
+<li>Re-segment the corpus with the updated vocabulary.</li>
+<li>Recompute statistics for the next iteration.</li>
+</ul>
+<h4 id="step-6-repeat-until-target-size">Step 6: Repeat until target size</h4>
+<ul>
+<li>Continue steps 2–5 until you hit the vocabulary budget.</li>
+<li>Stop early if gains are negligible.</li>
+</ul>
+<h4 id="step-7-tokenise-new-text">Step 7: Tokenise new text</h4>
+<ul>
+<li>Apply <strong>longest-match-first</strong> subword matching.</li>
+<li>Produce token sequences for the model.</li>
+</ul>
+<h3 id="strengths-and-weaknesses-1">Strengths and Weaknesses</h3>
+<ul>
+<li><strong>Strengths</strong>:
+<ul>
+<li>Often yields more linguistically coherent subwords.</li>
+<li>Common in BERT-family tokenisers.</li>
+</ul>
+</li>
+<li><strong>Weaknesses</strong>:
+<ul>
+<li>Training is a bit more complex than BPE.</li>
+</ul>
+</li>
+<li><strong>When to use</strong>: transformer models where stable, reusable tokenisers matter.</li>
+</ul>
+<h2 id="tf-idf">TF-IDF</h2>
+<h3 id="core-idea-3">Core Idea</h3>
+<ul>
+<li>Sparse vector for a document based on word frequency scaled by rarity.</li>
+<li><strong>Why it works</strong>: common words get down-weighted and informative, rare terms are emphasised, making documents easier to separate.</li>
+</ul>
+<h3 id="steps-2">Steps</h3>
+<h4 id="step-1-build-the-vocabulary">Step 1: Build the vocabulary</h4>
+<ul>
+<li>Extract terms from the corpus.</li>
+<li>Optionally remove stopwords or apply stemming.</li>
+</ul>
+<h4 id="step-2-compute-term-frequency">Step 2: Compute term frequency</h4>
+<ul>
+<li>For each document <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>d</mi></mrow><annotation encoding="application/x-tex">d</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6944em;"></span><span class="mord mathnormal">d</span></span></span></span>, compute</li>
+</ul>
+<span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mtext>tf</mtext><mo stretchy="false">(</mo><mi>t</mi><mo separator="true">,</mo><mi>d</mi><mo stretchy="false">)</mo><mo>=</mo><mrow><mo fence="true">{</mo><mtable rowspacing="0.36em" columnalign="left left" columnspacing="1em"><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mrow><mn>1</mn><mo>+</mo><mi>lg</mi><mo>⁡</mo><mtext>count</mtext><mo stretchy="false">(</mo><mi>t</mi><mo separator="true">,</mo><mi>d</mi><mo stretchy="false">)</mo></mrow></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="false"><mrow><mtext>if count</mtext><mo stretchy="false">(</mo><mi>t</mi><mo separator="true">,</mo><mi>d</mi><mo stretchy="false">)</mo><mo>></mo><mn>0</mn></mrow></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mn>0</mn></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="false"><mtext>otherwise</mtext></mstyle></mtd></mtr></mtable></mrow></mrow><annotation encoding="application/x-tex">\text{tf}(t, d) =
+\begin{cases}
+1 + \lg \text{count}(t, d) &#x26; \text{if } \text{count}(t, d) > 0 \\
+0 &#x26; \text{otherwise}
+\end{cases}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord text"><span class="mord">tf</span></span><span class="mopen">(</span><span class="mord mathnormal">t</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal">d</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:3em;vertical-align:-1.25em;"></span><span class="minner"><span class="mopen delimcenter" style="top:0em;"><span class="delimsizing size4">{</span></span><span class="mord"><span class="mtable"><span class="col-align-l"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.69em;"><span style="top:-3.69em;"><span class="pstrut" style="height:3.008em;"></span><span class="mord"><span class="mord">1</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mop">l<span style="margin-right:0.0139em;">g</span></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord text"><span class="mord">count</span></span><span class="mopen">(</span><span class="mord mathnormal">t</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal">d</span><span class="mclose">)</span></span></span><span style="top:-2.25em;"><span class="pstrut" style="height:3.008em;"></span><span class="mord"><span class="mord">0</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.19em;"><span></span></span></span></span></span><span class="arraycolsep" style="width:1em;"></span><span class="col-align-l"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.69em;"><span style="top:-3.69em;"><span class="pstrut" style="height:3.008em;"></span><span class="mord"><span class="mord text"><span class="mord">if </span></span><span class="mord text"><span class="mord">count</span></span><span class="mopen">(</span><span class="mord mathnormal">t</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal">d</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mord">0</span></span></span><span style="top:-2.25em;"><span class="pstrut" style="height:3.008em;"></span><span class="mord"><span class="mord text"><span class="mord">otherwise</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.19em;"><span></span></span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span></span>
+<ul>
+<li>Use raw counts or log-scaled counts.</li>
+<li><strong>Term frequency (TF)</strong>:
+<ul>
+<li>Captures how frequent a term is within a document.</li>
+<li>Higher TF suggests the term is more informative about that document.</li>
+</ul>
+</li>
+</ul>
+<h4 id="step-3-compute-document-frequency">Step 3: Compute document frequency</h4>
+<ul>
+<li>Count how many documents contain each term <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>t</mi></mrow><annotation encoding="application/x-tex">t</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6151em;"></span><span class="mord mathnormal">t</span></span></span></span>.</li>
+<li>Store <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mtext>df</mtext><mo stretchy="false">(</mo><mi>t</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">\text{df}(t)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord text"><span class="mord">df</span></span><span class="mopen">(</span><span class="mord mathnormal">t</span><span class="mclose">)</span></span></span></span> for the full corpus.</li>
+<li><strong>Document frequency (DF)</strong>:
+<ul>
+<li><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mtext>df</mtext><mo stretchy="false">(</mo><mi>t</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">\text{df}(t)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord text"><span class="mord">df</span></span><span class="mopen">(</span><span class="mord mathnormal">t</span><span class="mclose">)</span></span></span></span> is the number of documents containing term <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>t</mi></mrow><annotation encoding="application/x-tex">t</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6151em;"></span><span class="mord mathnormal">t</span></span></span></span>.</li>
+<li>Rare terms (low <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mtext>df</mtext></mrow><annotation encoding="application/x-tex">\text{df}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6944em;"></span><span class="mord text"><span class="mord">df</span></span></span></span></span>) help discriminate documents.</li>
+</ul>
+</li>
+</ul>
+<h4 id="step-4-compute-inverse-document-frequency">Step 4: Compute inverse document frequency</h4>
+<ul>
+<li><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mtext>idf</mtext><mo stretchy="false">(</mo><mi>t</mi><mo stretchy="false">)</mo><mo>=</mo><mi>log</mi><mo>⁡</mo><mfrac><mi>N</mi><mrow><mtext>df</mtext><mo stretchy="false">(</mo><mi>t</mi><mo stretchy="false">)</mo><mo>+</mo><mn>1</mn></mrow></mfrac></mrow><annotation encoding="application/x-tex">\text{idf}(t) = \log\frac{N}{\text{df}(t) + 1}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord text"><span class="mord">idf</span></span><span class="mopen">(</span><span class="mord mathnormal">t</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1.3923em;vertical-align:-0.52em;"></span><span class="mop">lo<span style="margin-right:0.0139em;">g</span></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.8723em;"><span style="top:-2.655em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord text mtight"><span class="mord mtight">df</span></span><span class="mopen mtight">(</span><span class="mord mathnormal mtight">t</span><span class="mclose mtight">)</span><span class="mbin mtight">+</span><span class="mord mtight">1</span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.394em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.109em;">N</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.52em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span>.</li>
+<li>Use smoothing to avoid division by zero.</li>
+<li><strong>Inverse document frequency (IDF)</strong>:
+<ul>
+<li>Terms appearing in every document get weight near 0.</li>
+<li>This helps for discrimination based on unique-ness</li>
+</ul>
+</li>
+</ul>
+<h4 id="step-5-build-tf-idf-vectors">Step 5: Build TF-IDF vectors</h4>
+<ul>
+<li><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mtext>tfidf</mtext><mo stretchy="false">(</mo><mi>t</mi><mo separator="true">,</mo><mi>d</mi><mo stretchy="false">)</mo><mo>=</mo><mtext>tf</mtext><mo stretchy="false">(</mo><mi>t</mi><mo separator="true">,</mo><mi>d</mi><mo stretchy="false">)</mo><mo>⋅</mo><mtext>idf</mtext><mo stretchy="false">(</mo><mi>t</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">\text{tfidf}(t, d) = \text{tf}(t, d)\cdot \text{idf}(t)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord text"><span class="mord">tfidf</span></span><span class="mopen">(</span><span class="mord mathnormal">t</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal">d</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord text"><span class="mord">tf</span></span><span class="mopen">(</span><span class="mord mathnormal">t</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal">d</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">⋅</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord text"><span class="mord">idf</span></span><span class="mopen">(</span><span class="mord mathnormal">t</span><span class="mclose">)</span></span></span></span>.</li>
+<li>Assemble a sparse vector per document.</li>
+</ul>
+<h4 id="step-6-normalise-optional">Step 6: Normalise (optional)</h4>
+<ul>
+<li>L2-normalise vectors for cosine similarity.</li>
+<li>Keep raw values for some classifiers.</li>
+</ul>
+<h3 id="strengths-and-weaknesses-2">Strengths and Weaknesses</h3>
+<ul>
+<li><strong>What it captures</strong>: salience of words that are frequent in a document but rare overall.</li>
+<li><strong>Strengths</strong>:
+<ul>
+<li>Fast, interpretable, strong baseline for retrieval and classification.</li>
+</ul>
+</li>
+<li><strong>Weaknesses</strong>:
+<ul>
+<li>Ignores word order and context.</li>
+<li>High-dimensional and sparse.</li>
+</ul>
+</li>
+<li><strong>When to use</strong>: small/medium corpora, classical IR, or quick baselines.</li>
+</ul>
+<h2 id="word2vec">Word2Vec</h2>
+<p><img  loading="lazy" decoding="async" fetchpriority="auto" width="2204" height="1296" src="/_astro/word2vec.CZKTgzGm_ZDQRHO.webp" ></p>
+<h3 id="core-idea-4">Core Idea</h3>
+<ul>
+<li>Learn dense word vectors from local context.</li>
+</ul>
+<h3 id="steps-cbow">Steps (CBOW)</h3>
+<h4 id="step-1-build-training-pairs">Step 1: Build training pairs</h4>
+<ul>
+<li>Slide a fixed window over text.</li>
+<li>Use the <strong>context words</strong> as input and the centre word as target.</li>
+</ul>
+<h4 id="step-2-predict-the-centre-word">Step 2: Predict the centre word</h4>
+<ul>
+<li>Compute scores for all vocab terms.</li>
+<li>Apply a softmax to get probabilities.</li>
+</ul>
+<h4 id="step-3-update-embeddings">Step 3: Update embeddings</h4>
+<ul>
+<li>Increase the probability of the true centre word.</li>
+<li>Decrease probabilities for incorrect words.</li>
+</ul>
+<h3 id="steps-skip-gram">Steps (Skip-gram)</h3>
+<h4 id="step-1-build-training-pairs-1">Step 1: Build training pairs</h4>
+<ul>
+<li>Slide a fixed window over text.</li>
+<li>Use the <strong>centre word</strong> as input and each context word as target.</li>
+</ul>
+<h4 id="step-2-predict-context-words">Step 2: Predict context words</h4>
+<ul>
+<li>Compute scores for context words.</li>
+<li>Optimise the sum of log-probabilities.</li>
+<li><strong>Training tricks</strong>:
+<ul>
+<li><strong>Negative sampling</strong> replaces full softmax with a few negative examples.</li>
+<li><strong>Subsampling</strong> frequent words improves rare word quality.</li>
+</ul>
+</li>
+</ul>
+<h3 id="strengths-and-weaknesses-3">Strengths and Weaknesses</h3>
+<ul>
+<li><strong>Strengths</strong>:
+<ul>
+<li>Captures semantic similarity and analogies.</li>
+</ul>
+</li>
+<li><strong>Weaknesses</strong>:
+<ul>
+<li>One vector per word (no context).</li>
+<li>Struggles with polysemy.</li>
+</ul>
+</li>
+<li><strong>When to use</strong>: quick static embeddings or as a baseline.</li>
+</ul>
+<h2 id="bert-contextual-embeddings">BERT (Contextual Embeddings)</h2>
+<h3 id="core-idea-5">Core Idea</h3>
+<ul>
+<li>Bidirectional transformer trained with masked language modelling.</li>
+<li><strong>Why it works</strong>: each token attends to both left and right context, yielding richer representations.</li>
+</ul>
+<h3 id="steps-pretraining">Steps (pretraining)</h3>
+<h4 id="pretraining-step-1-prepare-inputs">Pretraining Step 1: Prepare inputs</h4>
+<ul>
+<li>Tokenise with WordPiece.</li>
+<li>Add special tokens (<code>[CLS]</code>, <code>[SEP]</code>) and segment IDs.</li>
+</ul>
+<h4 id="pretraining-step-2-apply-masking">Pretraining Step 2: Apply masking</h4>
+<ul>
+<li>Randomly mask a subset of tokens (e.g., 15%).</li>
+<li>Replace some with <code>[MASK]</code>, some with random tokens.</li>
+</ul>
+<h4 id="pretraining-step-3-encode-with-the-transformer">Pretraining Step 3: Encode with the transformer</h4>
+<ul>
+<li>Feed the sequence into a <strong>bidirectional transformer</strong>.</li>
+<li>Produce contextual hidden states for all positions.</li>
+</ul>
+<h4 id="pretraining-step-4-predict-masked-tokens">Pretraining Step 4: Predict masked tokens</h4>
+<ul>
+<li>Use final hidden states to predict original tokens.</li>
+<li>Compute masked language modelling loss.</li>
+</ul>
+<h4 id="pretraining-step-5-optional-nsp-objective">Pretraining Step 5: Optional NSP objective</h4>
+<ul>
+<li>Predict whether sentence B follows sentence A.</li>
+<li>Used in original BERT, removed in later variants.</li>
+</ul>
+<h4 id="pretraining-step-6-optimise">Pretraining Step 6: Optimise</h4>
+<ul>
+<li>Update all weights to minimise total pretraining loss.</li>
+</ul>
+<h3 id="steps-finetuning">Steps (finetuning)</h3>
+<h4 id="finetuning-step-1-add-a-task-head">Finetuning Step 1: Add a task head</h4>
+<ul>
+<li>Classification, span prediction, or tagging head.</li>
+<li>Use <code>[CLS]</code> or token-level embeddings as inputs.</li>
+</ul>
+<h4 id="finetuning-step-2-train-on-task-data">Finetuning Step 2: Train on task data</h4>
+<ul>
+<li>Feed labelled data through the model.</li>
+<li>Backpropagate task loss through all layers.</li>
+</ul>
+<h4 id="finetuning-step-3-tune-for-the-task">Finetuning Step 3: Tune for the task</h4>
+<ul>
+<li>Use a smaller learning rate and fewer epochs.</li>
+<li>Optionally freeze lower layers for stability.</li>
+</ul>
+<h3 id="strengths-and-weaknesses-4">Strengths and Weaknesses</h3>
+<ul>
+<li><strong>Output</strong>: each token embedding depends on its <strong>full context</strong>.</li>
+<li><strong>Strengths</strong>:
+<ul>
+<li>Strong transfer performance; good for classification, QA, NER.</li>
+</ul>
+</li>
+<li><strong>Weaknesses</strong>:
+<ul>
+<li>Heavier compute and memory.</li>
+<li>Masked objective does not exactly match generation.</li>
+</ul>
+</li>
+<li><strong>When to use</strong>: contextual tasks where nuance matters and compute is available.</li>
+</ul>
+<h2 id="gpt-style-autoregressive-encodings">GPT-Style (Autoregressive) Encodings</h2>
+<h3 id="core-idea-6">Core Idea</h3>
+<ul>
+<li>Unidirectional transformer trained to predict the next token.</li>
+<li><strong>Why it works</strong>: next-token prediction forces the model to build rich, contextual representations.</li>
+</ul>
+<h3 id="steps-pretraining-1">Steps (pretraining)</h3>
+<h4 id="pretraining-step-1-prepare-inputs-1">Pretraining Step 1: Prepare inputs</h4>
+<ul>
+<li>Tokenise text and build a causal attention mask.</li>
+<li>Use a fixed context window.</li>
+</ul>
+<h4 id="pretraining-step-2-predict-next-tokens">Pretraining Step 2: Predict next tokens</h4>
+<ul>
+<li>For each position, predict the following token.</li>
+<li>Compute cross-entropy loss over the vocabulary.</li>
+</ul>
+<h4 id="pretraining-step-3-optimise">Pretraining Step 3: Optimise</h4>
+<ul>
+<li>Update all weights to minimise next-token loss.</li>
+</ul>
+<h3 id="steps-finetuning-1">Steps (finetuning)</h3>
+<h4 id="finetuning-step-1-add-task-formatting">Finetuning Step 1: Add task formatting</h4>
+<ul>
+<li>Format prompts with instructions/examples.</li>
+<li>Optionally add a task head for classification.</li>
+</ul>
+<h4 id="finetuning-step-2-train-on-task-data-1">Finetuning Step 2: Train on task data</h4>
+<ul>
+<li>Optimise either supervised loss or instruction-tuned loss.</li>
+</ul>
+<h3 id="strengths-and-weaknesses-5">Strengths and Weaknesses</h3>
+<ul>
+<li><strong>Output</strong>: each token embedding depends on <strong>left context</strong> only.</li>
+<li><strong>Strengths</strong>:
+<ul>
+<li>Strong for generation and long-form text.</li>
+<li>Scales well with data and compute.</li>
+</ul>
+</li>
+<li><strong>Weaknesses</strong>:
+<ul>
+<li>No right context at training time.</li>
+<li>Can be sensitive to prompting.</li>
+</ul>
+</li>
+<li><strong>When to use</strong>: generation, summarisation, open-ended tasks.</li>
+</ul>
+<hr>
+<h1 id="positional-embeddings">Positional Embeddings</h1>
+<ul>
+<li>Models without recurrence need <strong>position information</strong>.</li>
+</ul>
+<h2 id="why-positions-matter">Why positions matter</h2>
+<ul>
+<li>Self-attention is <strong>permutation-invariant</strong>: without positions, token order is lost.</li>
+<li>Position signals let the model distinguish “dog bites man” from “man bites dog”.</li>
+</ul>
+<h2 id="absolute-learned-positions">Absolute (Learned) Positions</h2>
+<ul>
+<li><strong>Idea</strong>: A lookup table where each index is a position embedding.</li>
+<li><strong>How it works</strong>:
+<ul>
+<li>Add or concatenate position vectors to token embeddings.</li>
+<li>Train position vectors jointly with the model.</li>
+</ul>
+</li>
+<li><strong>Pros</strong>: Simple and effective for fixed-length inputs.</li>
+<li><strong>Cons</strong>: Does not extrapolate well beyond training length.</li>
+</ul>
+<h2 id="sinusoidal-positions">Sinusoidal Positions</h2>
+<p><img  loading="lazy" decoding="async" fetchpriority="auto" width="816" height="848" src="/_astro/sinusoidal.aWAOOvIy_vwBc4.webp" ></p>
+<ul>
+<li><strong>Idea</strong>: Deterministic sine/cosine functions with different frequencies.</li>
+<li><strong>How it works</strong>:
+<ul>
+<li><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mtext>PE</mtext><mrow><mo stretchy="false">(</mo><mi>p</mi><mi>o</mi><mi>s</mi><mo separator="true">,</mo><mn>2</mn><mi>i</mi><mo stretchy="false">)</mo></mrow></msub><mo>=</mo><mi>sin</mi><mo>⁡</mo><mo stretchy="false">(</mo><mi>p</mi><mi>o</mi><mi>s</mi><mi mathvariant="normal">/</mi><msup><mn>10000</mn><mrow><mn>2</mn><mi>i</mi><mi mathvariant="normal">/</mi><mi>d</mi></mrow></msup><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">\text{PE}_{(pos,2i)} = \sin(pos / 10000^{2i/d})</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.0385em;vertical-align:-0.3552em;"></span><span class="mord"><span class="mord text"><span class="mord">PE</span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3448em;"><span style="top:-2.5198em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mopen mtight">(</span><span class="mord mathnormal mtight">p</span><span class="mord mathnormal mtight">os</span><span class="mpunct mtight">,</span><span class="mord mtight">2</span><span class="mord mathnormal mtight">i</span><span class="mclose mtight">)</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.3552em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1.138em;vertical-align:-0.25em;"></span><span class="mop">sin</span><span class="mopen">(</span><span class="mord mathnormal">p</span><span class="mord mathnormal">os</span><span class="mord">/1000</span><span class="mord"><span class="mord">0</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.888em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">2</span><span class="mord mathnormal mtight">i</span><span class="mord mtight">/</span><span class="mord mathnormal mtight">d</span></span></span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span></li>
+<li><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mtext>PE</mtext><mrow><mo stretchy="false">(</mo><mi>p</mi><mi>o</mi><mi>s</mi><mo separator="true">,</mo><mn>2</mn><mi>i</mi><mo>+</mo><mn>1</mn><mo stretchy="false">)</mo></mrow></msub><mo>=</mo><mi>cos</mi><mo>⁡</mo><mo stretchy="false">(</mo><mi>p</mi><mi>o</mi><mi>s</mi><mi mathvariant="normal">/</mi><msup><mn>10000</mn><mrow><mn>2</mn><mi>i</mi><mi mathvariant="normal">/</mi><mi>d</mi></mrow></msup><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">\text{PE}_{(pos,2i+1)} = \cos(pos / 10000^{2i/d})</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.0385em;vertical-align:-0.3552em;"></span><span class="mord"><span class="mord text"><span class="mord">PE</span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3448em;"><span style="top:-2.5198em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mopen mtight">(</span><span class="mord mathnormal mtight">p</span><span class="mord mathnormal mtight">os</span><span class="mpunct mtight">,</span><span class="mord mtight">2</span><span class="mord mathnormal mtight">i</span><span class="mbin mtight">+</span><span class="mord mtight">1</span><span class="mclose mtight">)</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.3552em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1.138em;vertical-align:-0.25em;"></span><span class="mop">cos</span><span class="mopen">(</span><span class="mord mathnormal">p</span><span class="mord mathnormal">os</span><span class="mord">/1000</span><span class="mord"><span class="mord">0</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.888em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">2</span><span class="mord mathnormal mtight">i</span><span class="mord mtight">/</span><span class="mord mathnormal mtight">d</span></span></span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span></li>
+</ul>
+</li>
+<li><strong>Pros</strong>: No extra parameters; can extrapolate to longer sequences.</li>
+<li><strong>Cons</strong>: Slightly less flexible than learned embeddings.</li>
+</ul>
+<h2 id="relative-positions">Relative Positions</h2>
+<ul>
+<li><strong>Idea</strong>: Encode <strong>distance</strong> between tokens instead of absolute index.</li>
+<li><strong>How it works</strong>:
+<ul>
+<li>Modify attention scores based on relative offsets.</li>
+<li>Bias attention toward nearer or specific relative positions.</li>
+</ul>
+</li>
+<li><strong>Pros</strong>: Generalises better to longer inputs; captures local patterns.</li>
+<li><strong>Cons</strong>: More complex to implement; adds compute.</li>
+</ul>
+<h2 id="rotary-positional-encoding-rope">Rotary Positional Encoding (RoPE)</h2>
+<p><img  loading="lazy" decoding="async" fetchpriority="auto" width="1517" height="747" src="/_astro/rotary.CtbYb_qx_Z14mc8G.webp" ></p>
+<ul>
+<li><strong>Idea</strong>: rotate query/key vectors by a position-dependent angle.</li>
+<li><strong>Why it works</strong>: turns relative position into a rotation in vector space.</li>
+<li><strong>Pros</strong>: Strong performance and extrapolation in practice.</li>
+<li><strong>Cons</strong>: More specialised; can be sensitive to scaling choices.</li>
+<li><strong>1D RoPE (for text)</strong>:
+<ul>
+<li>Rotate each 2D pair in the embedding using the token position.</li>
+<li>Use different frequencies per pair.</li>
+<li><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>ω</mi></mrow><annotation encoding="application/x-tex">\omega</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal" style="margin-right:0.0359em;">ω</span></span></span></span> is a <strong>fixed frequency</strong>, not a trained parameter.</li>
+<li>Each pair gets a different <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>ω</mi></mrow><annotation encoding="application/x-tex">\omega</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal" style="margin-right:0.0359em;">ω</span></span></span></span> (often a geometric progression).</li>
+</ul>
+</li>
+</ul>
+<span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msub><mtext>RoPE</mtext><mrow><mn>1</mn><mi>D</mi></mrow></msub><mo stretchy="false">(</mo><mi>q</mi><mo stretchy="false">)</mo><mo>=</mo><mi>R</mi><mo stretchy="false">(</mo><msub><mi>θ</mi><mrow><mi>p</mi><mi>o</mi><mi>s</mi></mrow></msub><mo stretchy="false">)</mo><mi>q</mi></mrow><annotation encoding="application/x-tex">\text{RoPE}_{1D}(q) = R(\theta_{pos}) q</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord text"><span class="mord">RoPE</span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3283em;"><span style="top:-2.55em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">1</span><span class="mord mathnormal mtight" style="margin-right:0.0278em;">D</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.0359em;">q</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1.0361em;vertical-align:-0.2861em;"></span><span class="mord mathnormal" style="margin-right:0.0077em;">R</span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0278em;">θ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:-0.0278em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">p</span><span class="mord mathnormal mtight">os</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span><span class="mclose">)</span><span class="mord mathnormal" style="margin-right:0.0359em;">q</span></span></span></span></span>
+<span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>R</mi><mo stretchy="false">(</mo><mi>θ</mi><mo stretchy="false">)</mo><mo>=</mo><mrow><mo fence="true">[</mo><mtable rowspacing="0.16em" columnalign="center center" columnspacing="1em"><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mrow><mi>cos</mi><mo>⁡</mo><mi>θ</mi></mrow></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="false"><mrow><mo>−</mo><mi>sin</mi><mo>⁡</mo><mi>θ</mi></mrow></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mrow><mi>sin</mi><mo>⁡</mo><mi>θ</mi></mrow></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="false"><mrow><mi>cos</mi><mo>⁡</mo><mi>θ</mi></mrow></mstyle></mtd></mtr></mtable><mo fence="true">]</mo></mrow><mo separator="true">,</mo><mspace width="1em"></mspace><msub><mi>θ</mi><mrow><mi>p</mi><mi>o</mi><mi>s</mi></mrow></msub><mo>=</mo><mi>p</mi><mi>o</mi><mi>s</mi><mo>⋅</mo><mi>ω</mi></mrow><annotation encoding="application/x-tex">R(\theta)=
+\begin{bmatrix}
+\cos\theta &#x26; -\sin\theta \\
+\sin\theta &#x26; \cos\theta
+\end{bmatrix},
+\quad
+\theta_{pos} = pos \cdot \omega</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.0077em;">R</span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.0278em;">θ</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:2.4em;vertical-align:-0.95em;"></span><span class="minner"><span class="mopen delimcenter" style="top:0em;"><span class="delimsizing size3">[</span></span><span class="mord"><span class="mtable"><span class="col-align-c"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.45em;"><span style="top:-3.61em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mop">cos</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal" style="margin-right:0.0278em;">θ</span></span></span><span style="top:-2.41em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mop">sin</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal" style="margin-right:0.0278em;">θ</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.95em;"><span></span></span></span></span></span><span class="arraycolsep" style="width:0.5em;"></span><span class="arraycolsep" style="width:0.5em;"></span><span class="col-align-c"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.45em;"><span style="top:-3.61em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">−</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mop">sin</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal" style="margin-right:0.0278em;">θ</span></span></span><span style="top:-2.41em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mop">cos</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal" style="margin-right:0.0278em;">θ</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.95em;"><span></span></span></span></span></span></span></span><span class="mclose delimcenter" style="top:0em;"><span class="delimsizing size3">]</span></span></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mpunct">,</span><span class="mspace" style="margin-right:1em;"></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0278em;">θ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:-0.0278em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">p</span><span class="mord mathnormal mtight">os</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6389em;vertical-align:-0.1944em;"></span><span class="mord mathnormal">p</span><span class="mord mathnormal">os</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">⋅</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal" style="margin-right:0.0359em;">ω</span></span></span></span></span>
+<h2 id="practical-notes-1">Practical Notes</h2>
+<h3 id="choose-add-vs-concat-based-on-model-budget">Choose add vs concat based on model budget</h3>
+<ul>
+<li>Adding positional signals keeps dimensionality fixed, while concatenation increases it.</li>
+</ul>
+<h3 id="use-learned-2d-positions-for-vit-patch-tokens">Use learned 2D positions for ViT patch tokens</h3>
+<ul>
+<li>Learned 2D positional embeddings are a common and effective default in vision transformers.</li>
+</ul>
+<h3 id="prefer-relative-or-rope-style-methods-for-long-context">Prefer relative or RoPE-style methods for long context</h3>
+<ul>
+<li>Relative/rotary schemes usually extrapolate better than basic absolute embeddings.</li>
+</ul>
+<hr>
+<h1 id="image-embeddings">Image Embeddings</h1>
+<h2 id="common-approaches">Common approaches</h2>
+<ul>
+<li><strong>CNN features</strong>: global average pooled activations.</li>
+<li><strong>Vision Transformers</strong>: patch embedding + positional embeddings.</li>
+<li><strong>CLIP-style</strong>: map images and text into a shared space.</li>
+</ul>
+<h2 id="cnn-feature-embeddings">CNN Feature Embeddings</h2>
+<ul>
+<li><strong>Idea</strong>: use intermediate or pooled CNN activations as image vectors.</li>
+<li><strong>How it works</strong>:
+<ul>
+<li>Pass image through a pretrained CNN.</li>
+<li>Take the last conv block features and apply global average pooling.</li>
+</ul>
+</li>
+<li><strong>See also</strong>: <a href="/blog/computer-vision/pre-trained-vision-encoders">Pre-trained Vision Encoders</a></li>
+<li><strong>Strengths</strong>:
+<ul>
+<li>Strong for textures and local patterns.</li>
+<li>Works well with limited data via transfer learning.</li>
+</ul>
+</li>
+<li><strong>Weaknesses</strong>:
+<ul>
+<li>Limited global context vs transformers.</li>
+</ul>
+</li>
+<li><strong>When to use</strong>: fast baselines, small datasets, edge deployment.</li>
+</ul>
+<h2 id="vision-transformer-vit-patch-embeddings">Vision Transformer (ViT) Patch Embeddings</h2>
+<ul>
+<li><strong>Idea</strong>: split image into patches and treat each as a token.</li>
+<li><strong>How it works</strong>:
+<ul>
+<li>Flatten <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>P</mi><mo>×</mo><mi>P</mi></mrow><annotation encoding="application/x-tex">P \times P</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7667em;vertical-align:-0.0833em;"></span><span class="mord mathnormal" style="margin-right:0.1389em;">P</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.1389em;">P</span></span></span></span> patches into vectors.</li>
+<li>Project to embedding dimension and add positional embeddings.</li>
+<li>Use the <code>[CLS]</code> token (or pooled tokens) as the image embedding.</li>
+</ul>
+</li>
+<li><strong>See also</strong>: <a href="/blog/computer-vision/pre-trained-vision-encoders">Pre-trained Vision Encoders</a></li>
+<li><strong>Strengths</strong>:
+<ul>
+<li>Captures global context well.</li>
+<li>Scales with data and compute.</li>
+</ul>
+</li>
+<li><strong>Weaknesses</strong>:
+<ul>
+<li>Data-hungry without pretraining.</li>
+</ul>
+</li>
+<li><strong>When to use</strong>: large datasets or strong pretrained backbones.</li>
+</ul>
+<h2 id="clip-style-multimodal-embeddings">CLIP-Style Multimodal Embeddings</h2>
+<ul>
+<li><strong>Idea</strong>: train image and text encoders to align in a shared space.</li>
+<li><strong>How it works</strong>:
+<ul>
+<li>Encode images and captions.</li>
+<li>Use contrastive loss to pull matching pairs together.</li>
+</ul>
+</li>
+<li><strong>Strengths</strong>:
+<ul>
+<li>Zero-shot classification and retrieval.</li>
+<li>Flexible across domains with text prompts.</li>
+</ul>
+</li>
+<li><strong>Weaknesses</strong>:
+<ul>
+<li>Can be prompt-sensitive.</li>
+</ul>
+</li>
+<li><strong>When to use</strong>: retrieval, open-vocabulary classification, multimodal tasks.</li>
+</ul>
+<h2 id="clip-step-by-step">CLIP (Step-by-Step)</h2>
+<h3 id="step-1-build-image-text-pairs">Step 1: Build image-text pairs</h3>
+<ul>
+<li>Collect paired data <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false">(</mo><msub><mi>I</mi><mi>i</mi></msub><mo separator="true">,</mo><msub><mi>T</mi><mi>i</mi></msub><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">(I_i, T_i)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0785em;">I</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:-0.0785em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.1389em;">T</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:-0.1389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span> where each image has a matching caption/text.</li>
+<li>In each batch, matched pairs are positives; non-matching pairs act as negatives.</li>
+</ul>
+<h3 id="step-2-encode-each-modality">Step 2: Encode each modality</h3>
+<ul>
+<li>Pass image <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>I</mi><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">I_i</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0785em;">I</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:-0.0785em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> through an image encoder (CNN or ViT) to get vector <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>u</mi><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">u_i</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.5806em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal">u</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>.</li>
+<li>Pass text <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>T</mi><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">T_i</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.1389em;">T</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:-0.1389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> through a text encoder (Transformer) to get vector <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>v</mi><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">v_i</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.5806em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0359em;">v</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:-0.0359em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>.</li>
+</ul>
+<h3 id="step-3-project-into-shared-space">Step 3: Project into shared space</h3>
+<ul>
+<li>Map both outputs to the same embedding dimension with learned projection heads.</li>
+<li>L2-normalize vectors so cosine similarity is a dot product:</li>
+</ul>
+<span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msub><mover accent="true"><mi>u</mi><mo>~</mo></mover><mi>i</mi></msub><mo>=</mo><mfrac><msub><mi>u</mi><mi>i</mi></msub><mrow><mi mathvariant="normal">∥</mi><msub><mi>u</mi><mi>i</mi></msub><mi mathvariant="normal">∥</mi></mrow></mfrac><mo separator="true">,</mo><mspace width="1em"></mspace><msub><mover accent="true"><mi>v</mi><mo>~</mo></mover><mi>i</mi></msub><mo>=</mo><mfrac><msub><mi>v</mi><mi>i</mi></msub><mrow><mi mathvariant="normal">∥</mi><msub><mi>v</mi><mi>i</mi></msub><mi mathvariant="normal">∥</mi></mrow></mfrac></mrow><annotation encoding="application/x-tex">\tilde{u}_i=\frac{u_i}{\|u_i\|},\quad \tilde{v}_i=\frac{v_i}{\|v_i\|}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8179em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord accent"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.6679em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord mathnormal">u</span></span><span style="top:-3.35em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.2222em;"><span class="mord">~</span></span></span></span></span></span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:2.0436em;vertical-align:-0.936em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.1076em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">∥</span><span class="mord"><span class="mord mathnormal">u</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord">∥</span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"><span class="mord mathnormal">u</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.936em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:1em;"></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord accent"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.6679em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord mathnormal" style="margin-right:0.0359em;">v</span></span><span style="top:-3.35em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.2222em;"><span class="mord">~</span></span></span></span></span></span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:-0.0359em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:2.0436em;vertical-align:-0.936em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.1076em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">∥</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0359em;">v</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:-0.0359em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord">∥</span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"><span class="mord mathnormal" style="margin-right:0.0359em;">v</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:-0.0359em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.936em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span></span>
+<h3 id="step-4-compute-similarity-matrix">Step 4: Compute similarity matrix</h3>
+<ul>
+<li>For a batch of size <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>N</mi></mrow><annotation encoding="application/x-tex">N</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.109em;">N</span></span></span></span>, compute all image-text similarities:</li>
+</ul>
+<span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msub><mi>s</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo>=</mo><mfrac><mrow><msubsup><mover accent="true"><mi>u</mi><mo>~</mo></mover><mi>i</mi><mi mathvariant="normal">⊤</mi></msubsup><msub><mover accent="true"><mi>v</mi><mo>~</mo></mover><mi>j</mi></msub></mrow><mi>τ</mi></mfrac></mrow><annotation encoding="application/x-tex">s_{ij}=\frac{\tilde{u}_i^\top \tilde{v}_j}{\tau}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7167em;vertical-align:-0.2861em;"></span><span class="mord"><span class="mord mathnormal">s</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.0572em;">ij</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:2.2121em;vertical-align:-0.686em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.5261em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.1132em;">τ</span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"><span class="mord accent"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.6679em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord mathnormal">u</span></span><span style="top:-3.35em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.2222em;"><span class="mord">~</span></span></span></span></span></span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.8491em;"><span style="top:-2.4413em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">⊤</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2587em;"><span></span></span></span></span></span></span><span class="mord"><span class="mord accent"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.6679em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord mathnormal" style="margin-right:0.0359em;">v</span></span><span style="top:-3.35em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.2222em;"><span class="mord">~</span></span></span></span></span></span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:-0.0359em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.0572em;">j</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.686em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span></span>
+<ul>
+<li><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>τ</mi></mrow><annotation encoding="application/x-tex">\tau</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal" style="margin-right:0.1132em;">τ</span></span></span></span> is a temperature parameter controlling softmax sharpness.</li>
+</ul>
+<h3 id="step-5-optimize-contrastive-loss">Step 5: Optimize contrastive loss</h3>
+<ul>
+<li>Train with symmetric contrastive objectives:
+<ul>
+<li>image-to-text: image <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>i</mi></mrow><annotation encoding="application/x-tex">i</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6595em;"></span><span class="mord mathnormal">i</span></span></span></span> should match text <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>i</mi></mrow><annotation encoding="application/x-tex">i</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6595em;"></span><span class="mord mathnormal">i</span></span></span></span>.</li>
+<li>text-to-image: text <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>i</mi></mrow><annotation encoding="application/x-tex">i</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6595em;"></span><span class="mord mathnormal">i</span></span></span></span> should match image <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>i</mi></mrow><annotation encoding="application/x-tex">i</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6595em;"></span><span class="mord mathnormal">i</span></span></span></span>.</li>
+</ul>
+</li>
+<li>This pulls matched pairs together and pushes mismatched pairs apart.</li>
+</ul>
+<h3 id="step-6-use-for-inference">Step 6: Use for inference</h3>
+<ul>
+<li><strong>Zero-shot classification</strong>: encode class prompts and pick the class with highest similarity to image embedding.</li>
+<li><strong>Retrieval</strong>: nearest-neighbor search between image and text embeddings in shared space.</li>
+</ul>
+<h2 id="self-supervised-vision-embeddings">Self-Supervised Vision Embeddings</h2>
+<ul>
+<li><strong>Idea</strong>: learn embeddings without labels using pretext tasks.</li>
+<li><strong>Methods</strong>:
+<ul>
+<li>Contrastive (SimCLR, MoCo).</li>
+<li>Masked image modelling (MAE, BEiT).</li>
+</ul>
+</li>
+<li><strong>Strengths</strong>:
+<ul>
+<li>Strong transfer performance.</li>
+<li>Reduces reliance on labels.</li>
+</ul>
+</li>
+<li><strong>When to use</strong>: label-scarce domains or foundation model pretraining.</li>
+</ul>
+<h2 id="practical-notes-2">Practical Notes</h2>
+<h3 id="start-with-linear-probing-for-transfer-setup">Start with linear probing for transfer setup</h3>
+<ul>
+<li>Pretrained image encoders often perform strongly with a lightweight linear head.</li>
+</ul>
+<h3 id="normalize-embeddings-for-retrieval">Normalize embeddings for retrieval</h3>
+<ul>
+<li>L2-normalization is typically required for stable nearest-neighbor similarity search.</li>
+</ul>
+<hr>
+<h1 id="audio-embeddings">Audio Embeddings</h1>
+<h2 id="what-the-model-sees-representations">What the model sees (representations)</h2>
+<ul>
+<li><strong>Raw waveform</strong>: 1D signal at 16k/44.1k Hz. Preserves phase and fine timing.</li>
+<li><strong>Spectrograms</strong>: 2D time-frequency grids via STFT.</li>
+<li><strong>Log-mel spectrograms</strong>: compress frequency with mel filters and log amplitude. Strong default.</li>
+<li><strong>MFCCs</strong>: decorrelated log-mel features; often used in classical pipelines.</li>
+</ul>
+<h2 id="typical-pipeline">Typical pipeline</h2>
+<ul>
+<li>Frame the waveform into overlapping windows (e.g., 25 ms with 10 ms hop).</li>
+<li>Convert to frequency domain (STFT) and apply mel filterbank.</li>
+<li>Log-scale and optionally mean-variance normalise.</li>
+<li>Feed to encoder and pool to a fixed-length embedding.</li>
+</ul>
+<h2 id="encoder-families">Encoder families</h2>
+<ul>
+<li><strong>CNNs over spectrograms</strong>:
+<ul>
+<li>Treat time-frequency as an image.</li>
+<li>Convolutions learn local patterns like harmonics and onsets.</li>
+<li>Pooling reduces time/frequency resolution to build invariance.</li>
+</ul>
+</li>
+<li><strong>CRNNs (CNN + RNN)</strong>:
+<ul>
+<li>CNN extracts local features, RNN aggregates temporal dynamics.</li>
+<li>Good when sequence order matters (speech, music phrases).</li>
+</ul>
+</li>
+<li><strong>Transformers</strong>:
+<ul>
+<li>Use patching or strided convs to create tokens.</li>
+<li>Self-attention captures long-range temporal structure.</li>
+</ul>
+</li>
+<li><strong>Waveform models</strong>:
+<ul>
+<li>1D conv stacks or transformer encoders on raw audio.</li>
+<li>Avoids hand-crafted features but needs more data.</li>
+</ul>
+</li>
+</ul>
+<h2 id="training-objectives-how-embeddings-are-learned">Training objectives (how embeddings are learned)</h2>
+<ul>
+<li><strong>Supervised</strong>: classify speaker, instrument, genre, scene, keyword.
+<ul>
+<li>Embedding is taken from a pre-logit layer for transfer.</li>
+</ul>
+</li>
+<li><strong>Contrastive</strong>:
+<ul>
+<li>Pull together different augmentations of the same clip.</li>
+<li>Push apart unrelated clips in a batch (InfoNCE-style).</li>
+</ul>
+</li>
+<li><strong>Self-supervised predictive</strong>:
+<ul>
+<li>Predict future frames or masked segments.</li>
+<li>Forces the model to capture temporal structure.</li>
+</ul>
+</li>
+<li><strong>Metric learning</strong>:
+<ul>
+<li>Triplet loss for speaker verification or audio search.</li>
+</ul>
+</li>
+</ul>
+<h2 id="pooling-to-a-fixed-vector">Pooling to a fixed vector</h2>
+<ul>
+<li><strong>Mean / max pooling</strong> over time: fast and effective baseline.</li>
+<li><strong>Attention pooling</strong>: learn weights for important frames.</li>
+<li><strong>NetVLAD / statistic pooling</strong>: aggregate with richer summary stats.</li>
+<li>Pooling choice controls whether embeddings capture <strong>global content</strong> or <strong>salient moments</strong>.</li>
+</ul>
+<h2 id="augmentations-that-matter">Augmentations that matter</h2>
+<ul>
+<li><strong>Time shift / crop</strong>: robustness to alignment.</li>
+<li><strong>Additive noise / reverb</strong>: robustness to environment.</li>
+<li><strong>Time stretch / pitch shift</strong>: invariance to tempo or pitch.</li>
+<li><strong>SpecAugment</strong>: time/frequency masking on spectrograms.</li>
+</ul>
+<h2 id="practical-notes-3">Practical Notes</h2>
+<h3 id="use-a-strong-audio-front-end-baseline-first">Use a strong audio front-end baseline first</h3>
+<ul>
+<li>Log-mel spectrograms at 16 kHz with 64-128 mel bins are a reliable default.</li>
+</ul>
+<h3 id="keep-normalization-policy-consistent">Keep normalization policy consistent</h3>
+<ul>
+<li>Per-clip or per-dataset normalization can work, but train/inference mismatch hurts transfer.</li>
+</ul>
+<h3 id="match-embedding-post-processing-to-objective">Match embedding post-processing to objective</h3>
+<ul>
+<li>Retrieval usually benefits from L2-normalized vectors; classification can work with raw embeddings.</li>
+</ul>
+<h3 id="watch-for-shortcut-features">Watch for shortcut features</h3>
+<ul>
+<li>Background noise and microphone artifacts can leak label information and inflate metrics.</li>
+</ul>
+<h3 id="evaluate-robustness-under-domain-shift">Evaluate robustness under domain shift</h3>
+<ul>
+<li>Include out-of-domain and noisy benchmarks, not only in-domain test splits.</li>
+</ul>
+<hr>
+<h1 id="structured-data-embeddings">Structured Data Embeddings</h1>
+<h2 id="categorical-features">Categorical features</h2>
+<ul>
+<li>Use <strong>embedding tables</strong> instead of one-hot for large vocabularies.</li>
+<li>Rare categories can be bucketed into <code>UNK</code>.</li>
+</ul>
+<h2 id="numerical-features">Numerical features</h2>
+<ul>
+<li>Standardise inputs before feeding into MLPs.</li>
+<li>Optionally embed via <strong>piecewise linear</strong> or <strong>bucket embeddings</strong>.</li>
+</ul>
+<h2 id="mixed-data">Mixed data</h2>
+<ul>
+<li>Concatenate numerical features with categorical embeddings.</li>
+<li>Use <strong>feature crossing</strong> only when necessary to reduce complexity.</li>
+</ul>
+<hr>
+<h1 id="graph-embeddings-brief">Graph Embeddings (Brief)</h1>
+<ul>
+<li>Node embeddings via <strong>message passing</strong> (GCN, GAT).</li>
+<li>Graph-level embeddings via <strong>pooling</strong> (mean, sum, attention).</li>
+<li>Contrastive objectives work well for self-supervised graph learning.</li>
+</ul>
+<hr>
+<h1 id="how-to-choose-embedding-size">How To Choose Embedding Size</h1>
+<ul>
+<li>Too small: underfits, loses nuance.</li>
+<li>Too large: overfits, slower, harder to regularise.</li>
+<li><strong>Rules of thumb</strong>:
+<ul>
+<li>Small vocab (&#x3C;1k): 16–64 dims.</li>
+<li>Medium (1k–100k): 64–256 dims.</li>
+<li>Large (>100k): 256–1024 dims.</li>
+</ul>
+</li>
+<li>Validate with <strong>downstream performance</strong> and <strong>memory budget</strong>.</li>
+</ul>
+<hr>
+<h1 id="practical-tips">Practical Tips</h1>
+<ul>
+<li><strong>Normalise</strong> for retrieval tasks; keep raw for classification unless needed.</li>
+<li>For nearest-neighbour search, use <strong>approximate</strong> indexes (FAISS, HNSW).</li>
+<li><strong>Freeze vs finetune</strong>: freeze when data is small, finetune when domain shifts.</li>
+<li>Monitor for <strong>embedding collapse</strong> (all vectors become similar).</li>
+</ul>
+<hr>
+<h1 id="pytorch-examples">PyTorch Examples</h1>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="py"><code><span class="line"><span style="color:#F97583">import</span><span style="color:#E1E4E8"> torch</span></span>
+<span class="line"><span style="color:#F97583">import</span><span style="color:#E1E4E8"> torch.nn </span><span style="color:#F97583">as</span><span style="color:#E1E4E8"> nn</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D"># Token embeddings</span></span>
+<span class="line"><span style="color:#E1E4E8">tok_emb </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> nn.Embedding(</span><span style="color:#FFAB70">num_embeddings</span><span style="color:#F97583">=</span><span style="color:#79B8FF">30000</span><span style="color:#E1E4E8">, </span><span style="color:#FFAB70">embedding_dim</span><span style="color:#F97583">=</span><span style="color:#79B8FF">256</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D"># Positional embeddings (learned)</span></span>
+<span class="line"><span style="color:#E1E4E8">pos_emb </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> nn.Embedding(</span><span style="color:#FFAB70">num_embeddings</span><span style="color:#F97583">=</span><span style="color:#79B8FF">512</span><span style="color:#E1E4E8">, </span><span style="color:#FFAB70">embedding_dim</span><span style="color:#F97583">=</span><span style="color:#79B8FF">256</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D"># Categorical feature embedding</span></span>
+<span class="line"><span style="color:#E1E4E8">city_emb </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> nn.Embedding(</span><span style="color:#FFAB70">num_embeddings</span><span style="color:#F97583">=</span><span style="color:#79B8FF">1000</span><span style="color:#E1E4E8">, </span><span style="color:#FFAB70">embedding_dim</span><span style="color:#F97583">=</span><span style="color:#79B8FF">32</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D"># Simple sentence embedding: mean pooling</span></span>
+<span class="line"><span style="color:#E1E4E8">tokens </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> torch.randint(</span><span style="color:#79B8FF">0</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">30000</span><span style="color:#E1E4E8">, (</span><span style="color:#79B8FF">8</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">32</span><span style="color:#E1E4E8">))  </span><span style="color:#6A737D"># batch, seq</span></span>
+<span class="line"><span style="color:#E1E4E8">emb </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> tok_emb(tokens)</span></span>
+<span class="line"><span style="color:#E1E4E8">sent_emb </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> emb.mean(</span><span style="color:#FFAB70">dim</span><span style="color:#F97583">=</span><span style="color:#79B8FF">1</span><span style="color:#E1E4E8">)</span></span></code></pre> </article> <!-- Footer nav --> <div class="mt-16 pt-8" style="border-top: 1px solid var(--border);"> <a href="/blog" class="text-sm transition-colors hover:opacity-70" style="color: var(--text-muted);">← Back to Blog</a> </div> </main> <script type="module">const t=new IntersectionObserver(e=>e.forEach(r=>{r.isIntersecting&&(r.target.classList.add("visible"),t.unobserve(r.target))}),{threshold:.08});document.querySelectorAll("[data-reveal], [data-reveal-group]").forEach(e=>t.observe(e));</script> </body> </html> 

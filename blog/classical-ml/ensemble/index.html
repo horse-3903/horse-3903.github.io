@@ -1,0 +1,418 @@
+<!DOCTYPE html><html lang="en"> <head><meta charset="utf-8"><link rel="icon" type="image/svg+xml" href="/favicon.svg"><meta name="viewport" content="width=device-width"><meta name="description" content="A comprehensive guide to ensemble learning — exploring how combining multiple models improves accuracy, robustness, and generalisation."><meta property="og:type" content="article"><meta property="og:title" content="Ensemble Methods — horse3903"><meta property="og:description" content="A comprehensive guide to ensemble learning — exploring how combining multiple models improves accuracy, robustness, and generalisation."><meta property="og:image" content="https://horse-3903.github.io/og-image.png"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="Ensemble Methods — horse3903"><meta name="twitter:image" content="https://horse-3903.github.io/og-image.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet"><!-- KaTeX (served locally, version matches rehype-katex dependency) --><link rel="stylesheet" href="/katex/katex.min.css"><title>Ensemble Methods — horse3903</title><link rel="stylesheet" href="/_astro/_slug_.DRP4rX40.css">
+<style>#back-arrow{position:fixed;left:1.25rem;top:4rem;color:var(--text-muted);opacity:.4;transition:opacity .2s ease,color .2s ease;z-index:40;display:flex;align-items:center;justify-content:center;width:1.75rem;height:1.75rem;border-radius:50%;background:var(--surface);border:1px solid var(--border);text-decoration:none}#back-arrow:hover{opacity:1;color:var(--text)}.dot-grid{position:absolute;inset:0;background-image:radial-gradient(circle,rgba(255,255,255,.08) 1px,transparent 1px);background-size:32px 32px;mask-image:radial-gradient(ellipse 80% 60% at 50% 0%,black 0%,transparent 80%);pointer-events:none}.prose-dark{color:#a1a1aa;line-height:1.85;font-size:.9rem}.prose-dark h1,.prose-dark h2,.prose-dark h3,.prose-dark h4{color:#fafafa;font-weight:700;margin-top:2.25rem;margin-bottom:.75rem;line-height:1.3}.prose-dark h1{font-size:1.55rem}.prose-dark h2{font-size:1.25rem;padding-bottom:.4rem;border-bottom:1px solid rgba(255,255,255,.06)}.prose-dark h3{font-size:1.08rem}.prose-dark h4{font-size:1rem}.prose-dark p{margin-bottom:1.2rem}.prose-dark a{color:var(--accent);text-decoration:underline;text-underline-offset:3px}.prose-dark a:hover{opacity:.8}.prose-dark strong{color:#e4e4e7}.prose-dark em{color:#8b8b9a;font-style:italic}.prose-dark hr{border:none;border-top:1px solid rgba(255,255,255,.07);margin:2rem 0}.prose-dark code{background:#18181b;border:1px solid rgba(255,255,255,.08);padding:.15em .4em;border-radius:5px;font-size:.82em;color:#bfdbfe}.prose-dark pre{background:#111113;border:1px solid rgba(255,255,255,.07);padding:1.2rem 1.4rem;border-radius:12px;overflow-x:auto;margin:1.5rem 0}.prose-dark pre code{background:none;border:none;padding:0;color:#e4e4e7;font-size:.83rem}.prose-dark ul,.prose-dark ol{padding-left:1.5rem;margin-bottom:1.2rem}.prose-dark ul{list-style-type:disc}.prose-dark ol{list-style-type:decimal}.prose-dark li{margin-bottom:.4rem}.prose-dark blockquote{border-left:3px solid var(--accent);padding:.5rem 1rem;background:#3b82f60f;border-radius:0 8px 8px 0;color:#71717a;margin:1.5rem 0;font-style:italic}.prose-dark table{width:100%;border-collapse:collapse;margin-bottom:1.5rem;font-size:.875rem}.prose-dark th,.prose-dark td{border:1px solid rgba(255,255,255,.07);padding:.5rem .75rem;text-align:left}.prose-dark th{background:#18181b;color:#fafafa;font-weight:600}.prose-dark tr:nth-child(2n) td{background:#ffffff05}.prose-dark img{border-radius:10px;max-width:100%;margin:1.5rem auto;display:block;border:1px solid rgba(255,255,255,.07);background:#fff;padding:1rem}.katex{color:#e4e4e7;font-size:1em}.katex-display{overflow-x:auto;overflow-y:hidden;padding:1.5rem 1.75rem;margin:1.75rem 0;background:#111113;border:1px solid rgba(255,255,255,.07);border-radius:10px}.katex-display>.katex{color:#e4e4e7;font-size:1.35em}
+#nav-toggle[data-astro-cid-3ef6ksr2]{font-family:inherit;font-size:.85rem;color:var(--accent);background:none;border:none;cursor:pointer;padding:.25rem .2rem;line-height:1;flex-shrink:0;transition:color .2s ease,opacity .2s ease;user-select:none;opacity:.7}#nav-toggle[data-astro-cid-3ef6ksr2]:hover{opacity:1}#nav-links[data-astro-cid-3ef6ksr2]{list-style:none;padding-top:0;padding-bottom:0;margin:0;white-space:nowrap}#nav-links-wrapper[data-astro-cid-3ef6ksr2]{max-width:9999px;opacity:1;transition:max-width .35s ease,opacity .25s ease}#nav-links-wrapper[data-astro-cid-3ef6ksr2].nav-collapsed{max-width:0;opacity:0;pointer-events:none}.nav-link[data-astro-cid-3ef6ksr2]{transition:color .2s ease;position:relative;text-decoration:none}.nav-link[data-astro-cid-3ef6ksr2]:after{content:"";position:absolute;left:0;bottom:-2px;width:0;height:1px;background:var(--accent);transition:width .25s ease}.nav-link[data-astro-cid-3ef6ksr2]:hover{color:var(--text)!important}.nav-link[data-astro-cid-3ef6ksr2]:hover:after{width:100%}
+</style></head> <body> <!-- Background: dark + noise + track accent glow --> <div class="fixed inset-0 -z-10" style="background: var(--bg);"> <div class="noise-layer"></div> <!-- Track-specific radial glow in top-right --> <div style="position:absolute;top:-10%;right:-5%;width:55%;height:60%;background:radial-gradient(ellipse,#3b82f614 0%,transparent 65%);pointer-events:none;"></div> <!-- Subtle dot grid --> <div class="dot-grid"></div> </div> <header id="header" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300" data-astro-cid-3ef6ksr2> <nav class="max-w-6xl mx-auto px-4 sm:px-8 py-4 flex items-center justify-center overflow-x-auto" data-astro-cid-3ef6ksr2> <ul class="flex items-center gap-6 sm:gap-8 whitespace-nowrap" data-astro-cid-3ef6ksr2> <li class="flex items-center" data-astro-cid-3ef6ksr2> <a href="/" class="nav-link text-sm" style="color: var(--text-secondary);" data-astro-cid-3ef6ksr2>Home</a> <button id="nav-toggle" aria-label="Toggle navigation" aria-expanded="true" class="ml-2 hidden md:inline-flex" data-astro-cid-3ef6ksr2> <span id="nav-arrow" data-astro-cid-3ef6ksr2>∷</span> </button> <div id="nav-links-wrapper" class="overflow-hidden hidden md:block nav-collapsed" data-astro-cid-3ef6ksr2> <ul id="nav-links" class="flex items-center gap-8 pl-8" data-astro-cid-3ef6ksr2> <li data-astro-cid-3ef6ksr2><a href="/#about" class="nav-link text-sm" style="color: var(--text-secondary);" data-astro-cid-3ef6ksr2>About</a></li> <li data-astro-cid-3ef6ksr2><a href="/#projects" class="nav-link text-sm" style="color: var(--text-secondary);" data-astro-cid-3ef6ksr2>Projects</a></li> <li data-astro-cid-3ef6ksr2><a href="/#publications" class="nav-link text-sm" style="color: var(--text-secondary);" data-astro-cid-3ef6ksr2>Publications</a></li> <li data-astro-cid-3ef6ksr2><a href="/#experience" class="nav-link text-sm" style="color: var(--text-secondary);" data-astro-cid-3ef6ksr2>Experience</a></li> <li data-astro-cid-3ef6ksr2><a href="/#education" class="nav-link text-sm" style="color: var(--text-secondary);" data-astro-cid-3ef6ksr2>Education</a></li> <li data-astro-cid-3ef6ksr2><a href="/#honors" class="nav-link text-sm" style="color: var(--text-secondary);" data-astro-cid-3ef6ksr2>Honors</a></li> </ul> </div> </li> <li data-astro-cid-3ef6ksr2><a href="/blog" class="nav-link text-sm" style="color: var(--text-secondary);" data-astro-cid-3ef6ksr2>Blog</a></li> <li data-astro-cid-3ef6ksr2><a href="/blog/archive" class="nav-link text-sm" style="color: var(--text-secondary);" data-astro-cid-3ef6ksr2>Archive</a></li> <li data-astro-cid-3ef6ksr2><a href="/signal" class="nav-link text-sm" style="color: var(--text-secondary);" data-astro-cid-3ef6ksr2>Signal</a></li> </ul> </nav> </header> <script type="module">const e=document.getElementById("header"),t=document.getElementById("nav-toggle"),n=document.getElementById("nav-links-wrapper");document.getElementById("nav-arrow");const a=window.location.pathname==="/";let o=a;function r(l){o=l,o?(n.classList.remove("nav-collapsed"),t.style.opacity="0.7",t.setAttribute("aria-expanded","true")):(n.classList.add("nav-collapsed"),t.style.opacity="0.35",t.setAttribute("aria-expanded","false"))}a?(n.style.transition="none",r(!0),requestAnimationFrame(()=>{n.style.transition=""})):t.style.opacity="0.35";t?.addEventListener("click",()=>r(!o));window.addEventListener("scroll",()=>{e&&(window.scrollY>80?(e.style.backgroundColor="rgba(9,9,11,0.85)",e.style.backdropFilter="blur(12px)",e.style.borderBottom="1px solid rgba(255,255,255,0.06)"):(e.style.backgroundColor="transparent",e.style.backdropFilter="none",e.style.borderBottom="none"))});</script>  <a href="/blog" id="back-arrow" aria-label="Back to Blog"> <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"> <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"></path> </svg> </a> <main class="max-w-3xl mx-auto px-6 pt-24 pb-16"> <!-- Post header --> <div class="mb-12" data-reveal> <div class="flex flex-wrap gap-2 mb-5"> <span class="text-xs font-mono px-2.5 py-1 rounded-md" style="background: #3b82f614; color: #3b82f6; border: 1px solid #3b82f630;">IOAI ML Notes</span> <span class="px-2.5 py-1 text-xs rounded-md" style="background: var(--surface); color: var(--text-muted); border: 1px solid var(--border);">Classical Machine Learning</span><span class="px-2.5 py-1 text-xs rounded-md" style="background: var(--surface); color: var(--text-muted); border: 1px solid var(--border);">Supervised Learning</span> </div> <h1 class="text-2xl sm:text-3xl font-bold leading-tight mb-4" style="color: var(--text);"> Ensemble Methods </h1> <p class="text-sm leading-relaxed mb-5" style="color: var(--text-secondary);">A comprehensive guide to ensemble learning — exploring how combining multiple models improves accuracy, robustness, and generalisation.</p> <div class="flex items-center gap-4 text-xs" style="color: var(--text-muted);"> <time>19 February 2026</time>  </div> <div class="h-px mt-8" style="background: linear-gradient(to right, #3b82f650, transparent);"></div> </div> <!-- Content --> <article class="prose-dark"> <h1 id="syllabus-map">Syllabus Map</h1>
+<ul>
+<li>Study map: <a href="/blog/syllabus/ioai-study-map">Syllabus Study Map</a></li>
+</ul>
+<hr>
+<h1 id="overview">Overview</h1>
+<ul>
+<li><strong>Ensemble methods</strong> in machine learning combine multiple individual models (weak learners) to create a single more accurate predictive model.</li>
+<li>This usually works as it averages out individual model errors.</li>
+<li>Ensemble methods are typically used when data is:
+<ul>
+<li>Noisy,</li>
+<li>Complex or</li>
+<li>Very diverse</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h1 id="motivation-for-ensemble-learning">Motivation for Ensemble Learning</h1>
+<h2 id="why-single-models-fail">Why Single Models Fail</h2>
+<ul>
+<li>Single models are prone to inaccuracies on diverse data, including issues like:
+<ul>
+<li>Overfitting</li>
+<li>Underfitting</li>
+<li>Sensitivity to noise</li>
+<li>Sensitivity to data splits</li>
+</ul>
+</li>
+</ul>
+<h2 id="error-decomposition">Error Decomposition</h2>
+<ul>
+<li><strong>Prediction Error</strong> measures how far model predictions are from the true labels.</li>
+<li><strong>Generalisation Error</strong>  measures the expected Error on unseen data.</li>
+<li><strong>Total expected Error</strong> can be decomposed to Bias² + Variance + Irreducible Noise.
+<ul>
+<li><em>Bias</em>: Underfitting due to simplistic assumptions.</li>
+<li><em>Variance</em>: Overfitting due to hypersensitivity to data.</li>
+<li><em>Irreducible noise</em>: Randomness in data.</li>
+</ul>
+</li>
+<li>Ensemble methods solve this by :
+<ul>
+<li>Averaging multiple models to reduce variance.</li>
+<li>Sequential correction to reduce bias.</li>
+<li>Improving model diversity to reduce correlated errors.</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h1 id="general-ensemble-framework">General Ensemble Framework</h1>
+<h2 id="base-learners">Base Learners</h2>
+<p><img  loading="lazy" decoding="async" fetchpriority="auto" width="710" height="313" src="/_astro/image1.BDX78IyC_Z2tC90k.webp" ></p>
+<ul>
+<li>Weak learners are simple models that have low complexity and accuracy on their own.</li>
+<li>Examples of these include:
+<ul>
+<li><em>Decision Trees</em></li>
+<li><em>Linear Models</em></li>
+<li><em>k-Nearest Neighbours</em></li>
+</ul>
+</li>
+<li>Ensembles tend to yield better results when there is a significant diversity among the models.</li>
+<li><strong>Random algorithms</strong> (like random decision trees) can be used to <strong>produce a stronger ensemble</strong> than very <strong>deliberate algorithms</strong> (like entropy-reducing decision trees).</li>
+</ul>
+<h2 id="combining-predictions">Combining Predictions</h2>
+<p><img  loading="lazy" decoding="async" fetchpriority="auto" width="712" height="384" src="/_astro/image2.C2CnMuXZ_Z1de7Kk.webp" ></p>
+<ul>
+<li>After collectivising these weak learners, we have to combine their predictions in a meaningful way to improve the model’s combined performance.</li>
+<li>This can be done through:
+<ul>
+<li><strong>Majority voting</strong>: Consensus of models to decide on the class label</li>
+<li><strong>Weighted voting</strong>: Best choice of class label based on the significance of each model</li>
+<li><strong>Averaging</strong>: Obtaining the mean of results for a continuous value</li>
+<li><strong>Probability Aggregation</strong>: Best result based on the confidence of each model</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h1 id="bagging-bootstrap-aggregation-and-pasting">Bagging (Bootstrap Aggregation) and Pasting</h1>
+<h2 id="core-idea">Core Idea</h2>
+<ul>
+<li>Bagging uses the same training algorithm for every predictor.</li>
+<li>However, it trains them on different random subsets of the training set.</li>
+<li>When sampling is performed with replacement, this method is called <em>bagging</em>.</li>
+<li>When sampling is performed without replacement, it is called <em>pasting</em>.</li>
+</ul>
+<h2 id="why-bagging-works">Why Bagging Works</h2>
+<ul>
+<li>Each individual learner has a lower variance than if it were trained on the entire dataset.</li>
+<li>Aggregation thus allows the ensemble to <strong>improve variance</strong> by making averaging random errors and prevent overfitting.</li>
+<li>This in turn helps models be more stable by <strong>reducing sensitivity</strong> to noisy training data.</li>
+</ul>
+<h2 id="algorithm-outline">Algorithm Outline</h2>
+<p><img  loading="lazy" decoding="async" fetchpriority="auto" width="706" height="364" src="/_astro/image3.Bhu6uvMM_ZeNDWq.webp" ></p>
+<ol>
+<li>A training set is split into random subsets for training.</li>
+<li>Weak learners are trained using these random subsets of data.</li>
+<li>A prediction for a new instance is made by simply aggregating the predictions of all predictors.
+<ul>
+<li>For classifiers, this is done by the statistical mode.</li>
+<li>For regressors, this is done by the statistical mean.</li>
+</ul>
+</li>
+</ol>
+<h2 id="out-of-bag-evaluation">Out-of-Bag Evaluation</h2>
+<ul>
+<li>With bagging, some instances may be sampled several times , while others may not be sampled at all.</li>
+<li>By obtaining the out-of-bag dataset, an estimate of model performance on unseen training data, which should be comparable to the test set</li>
+</ul>
+<h2 id="random-patching-and-random-subspaces">Random Patching and Random Subspaces</h2>
+<h3 id="random-subspaces">Random Subspaces</h3>
+<ul>
+<li>Each model is trained on all data points, but they can only see a random subset of features.</li>
+<li>This prevents dominance of features in affecting performance.</li>
+</ul>
+<h3 id="random-patching">Random Patching</h3>
+<ul>
+<li>Combines both:
+<ul>
+<li>Random sampling of data points</li>
+<li>Random sampling of features</li>
+</ul>
+</li>
+<li>Each model sees a different subset of samples and features.</li>
+</ul>
+<hr>
+<h1 id="random-forests">Random Forests</h1>
+<h2 id="motivation">Motivation</h2>
+<ul>
+<li>Bagging does not adequately address the issue of correlation between trees.</li>
+<li>When datasets have <strong>strong features</strong>, the decision trees will choose those features as top-level splits.</li>
+<li>This results in highly correlated trees, which diminishes the variance-decreasing ability of bagging.</li>
+<li>This causes <strong>overfitting</strong> and worse model performance for deep trees</li>
+</ul>
+<h2 id="core-principles">Core Principles</h2>
+<ul>
+<li>Random Forests combines both:
+<ul>
+<li>Random sampling of data points</li>
+<li>Random sampling of features</li>
+</ul>
+</li>
+<li>Each model sees a different subset of samples and features.</li>
+</ul>
+<h2 id="algorithm-overview">Algorithm Overview</h2>
+<ol>
+<li>For each tree in the forest, a random subset of the original training data is selected with replacement.</li>
+<li>At each node during the tree-building process, only a random subset of features is considered for the best split.</li>
+<li>A decision tree is grown on each unique data and feature subset until a stopping criterion.</li>
+<li>A prediction for a new instance is made by simply aggregating the predictions of all predictors.
+<ul>
+<li>For classifiers, this is done by the statistical mode.</li>
+<li>For regressors, this is done by the statistical mean.</li>
+</ul>
+</li>
+</ol>
+<h2 id="extra-trees">Extra-Trees</h2>
+<ul>
+<li>Building on the random forest algorithm, it is possible to make trees even more random</li>
+<li>This is done by using <strong>random thresholds</strong> for each feature rather than searching for the best possible thresholds</li>
+<li>Refer to the <a href="/blog/classical-ml/decision-tree">Decision Tree</a> notes to learn more about the node structure.</li>
+<li>This trades <strong>more bias</strong> for a <strong>lower variance</strong> in the models.</li>
+</ul>
+<hr>
+<h1 id="boosting">Boosting</h1>
+<h2 id="core-idea-1">Core Idea</h2>
+<ul>
+<li>Boosting focuses on <strong>sequential learning</strong>, where multiple weak models are trained one after another to form a strong model.</li>
+<li>Each model tries to correct for the errors of the predecessors by adjusting weights of the samples.</li>
+</ul>
+<h2 id="why-boosting-works">Why Boosting Works</h2>
+<p><img  loading="lazy" decoding="async" fetchpriority="auto" width="722" height="430" src="/_astro/image4.NgKpR2cG_1Wmap9.webp" ></p>
+<ul>
+<li>Boosting reduces bias by correcting for errors from previous iterations of the model.</li>
+<li>This also builds complex decision boundaries through additive modelling.</li>
+</ul>
+<hr>
+<h2 id="adaboost">AdaBoost</h2>
+<h3 id="key-concepts">Key Concepts</h3>
+<ul>
+<li>AdaBoost works by paying more attention to the training instances that the predecessor misclassified.</li>
+<li>This results in new predictors focusing more and more on  hard cases in the samples.</li>
+</ul>
+<h3 id="algorithm-outline-1">Algorithm Outline</h3>
+<ol>
+<li>Initialise equal sample weights and train a first weak classifier.</li>
+<li>Compute the classifier’s weighted error and assign it a model weight.</li>
+<li>Increase weights of misclassified samples, decrease weights of correctly classified samples, then normalise.</li>
+<li>Train the next weak classifier on the reweighted data and repeat steps 2-3 for multiple rounds.</li>
+<li>Make the final prediction using a weighted majority vote of all weak classifiers.</li>
+</ol>
+<h3 id="intuition">Intuition</h3>
+<ul>
+<li>Mistakes made by predecessor models get more attention (higher weight) while retraining.</li>
+<li>This means that the model can progressively correct its mistakes.</li>
+<li>However, this makes it sensitive to noisy labels and outliers.</li>
+</ul>
+<h3 id="in-depth-algorithm">In-Depth Algorithm</h3>
+<h4 id="step-1-instantiation-and-setting-weights">Step 1: Instantiation and Setting Weights</h4>
+<ul>
+<li>Each instance weight <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>w</mi><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">w_i</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.5806em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0269em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:-0.0269em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> is set to <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn><mi mathvariant="normal">/</mi><mi>m</mi></mrow><annotation encoding="application/x-tex">1/m</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">1/</span><span class="mord mathnormal">m</span></span></span></span>.</li>
+<li>The model is trained on the samples.</li>
+</ul>
+<h4 id="step-2-calculate-weighted-error-rate">Step 2: Calculate Weighted Error Rate</h4>
+<ul>
+<li>The weighted Error rate <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>r</mi><mi>j</mi></msub></mrow><annotation encoding="application/x-tex">r_j</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7167em;vertical-align:-0.2861em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0278em;">r</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:-0.0278em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.0572em;">j</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span></span></span></span> is computed on the training set for model <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>j</mi></mrow><annotation encoding="application/x-tex">j</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.854em;vertical-align:-0.1944em;"></span><span class="mord mathnormal" style="margin-right:0.0572em;">j</span></span></span></span>.</li>
+</ul>
+<span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msub><mi>r</mi><mi>j</mi></msub><mo>=</mo><mfrac><mrow><munderover><mo>∑</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mi>m</mi></munderover><msub><mi>w</mi><mi>i</mi></msub><mtext>  s.t. </mtext><msub><mover accent="true"><mi>y</mi><mo>^</mo></mover><mrow><mi>i</mi><mo separator="true">,</mo><mi>j</mi></mrow></msub><mo mathvariant="normal">≠</mo><msub><mi>y</mi><mi>i</mi></msub></mrow><mrow><munderover><mo>∑</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mi>m</mi></munderover><msub><mi>w</mi><mi>i</mi></msub></mrow></mfrac></mrow><annotation encoding="application/x-tex">r_j = \frac{\sum^{m}_{i=1} w_i \space \text{ s.t. } \hat{y}_{i,j} \ne y_i}{\sum^{m}_{i=1} w_i}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7167em;vertical-align:-0.2861em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0278em;">r</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:-0.0278em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.0572em;">j</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:2.488em;vertical-align:-0.994em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.494em;"><span style="top:-2.3057em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mop"><span class="mop op-symbol small-op" style="position:relative;top:0em;">∑</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.8043em;"><span style="top:-2.4003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">i</span><span class="mrel mtight">=</span><span class="mord mtight">1</span></span></span></span><span style="top:-3.2029em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">m</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2997em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0269em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:-0.0269em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.6897em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mop"><span class="mop op-symbol small-op" style="position:relative;top:0em;">∑</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.8043em;"><span style="top:-2.4003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">i</span><span class="mrel mtight">=</span><span class="mord mtight">1</span></span></span></span><span style="top:-3.2029em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">m</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2997em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0269em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:-0.0269em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace"> </span><span class="mord text"><span class="mord"> s.t. </span></span><span class="mord"><span class="mord accent"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.6944em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord mathnormal" style="margin-right:0.0359em;">y</span></span><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.1944em;"><span class="mord">^</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.1944em;"><span></span></span></span></span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:-0.0359em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">i</span><span class="mpunct mtight">,</span><span class="mord mathnormal mtight" style="margin-right:0.0572em;">j</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel"><span class="mrel"><span class="mord vbox"><span class="thinbox"><span class="rlap"><span class="strut" style="height:0.8889em;vertical-align:-0.1944em;"></span><span class="inner"><span class="mord"><span class="mrel"></span></span></span><span class="fix"></span></span></span></span></span><span class="mspace nobreak"></span><span class="mrel">=</span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0359em;">y</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:-0.0359em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.994em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span></span>
+<h4 id="step-3-calculate-the-predictors-weight">Step 3: Calculate the Predictor’s Weight</h4>
+<ul>
+<li>The weight <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>a</mi><mi>j</mi></msub></mrow><annotation encoding="application/x-tex">a_j</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7167em;vertical-align:-0.2861em;"></span><span class="mord"><span class="mord mathnormal">a</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.0572em;">j</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span></span></span></span> of the predictor <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>j</mi></mrow><annotation encoding="application/x-tex">j</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.854em;vertical-align:-0.1944em;"></span><span class="mord mathnormal" style="margin-right:0.0572em;">j</span></span></span></span> will be calculated to assess its performance.
+<ul>
+<li>The more accurate the predictor is, the higher its weight will be.</li>
+<li>If it is just guessing randomly, then its weight will be close to zero.</li>
+<li>However, if it is most often wrong, then its weight will be negative.</li>
+</ul>
+</li>
+</ul>
+<span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msub><mi>α</mi><mi>j</mi></msub><mo>=</mo><mfrac><mn>1</mn><mn>2</mn></mfrac><mi>η</mi><mi>log</mi><mo>⁡</mo><mfrac><mrow><mn>1</mn><mo>−</mo><msub><mi>r</mi><mi>j</mi></msub></mrow><msub><mi>r</mi><mi>j</mi></msub></mfrac></mrow><annotation encoding="application/x-tex">\alpha_j = \frac{1}{2} \eta \log \frac{1 - r_j}{r_j}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7167em;vertical-align:-0.2861em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0037em;">α</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:-0.0037em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.0572em;">j</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:2.2935em;vertical-align:-0.9721em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.3214em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">2</span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.686em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mord mathnormal" style="margin-right:0.0359em;">η</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mop">lo<span style="margin-right:0.0139em;">g</span></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.3214em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"><span class="mord mathnormal" style="margin-right:0.0278em;">r</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:-0.0278em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.0572em;">j</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">1</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0278em;">r</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:-0.0278em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.0572em;">j</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.9721em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span></span>
+<h4 id="step-4-update-the-weights-of-the-samples">Step 4: Update the Weights of the Samples</h4>
+<ul>
+<li>The instance weights of the misclassified instances
+are boosted for predictor <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>j</mi></mrow><annotation encoding="application/x-tex">j</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.854em;vertical-align:-0.1944em;"></span><span class="mord mathnormal" style="margin-right:0.0572em;">j</span></span></span></span>.</li>
+</ul>
+<span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msub><mi>w</mi><mi>i</mi></msub><mrow><mo fence="true">{</mo><mtable rowspacing="0.36em" columnalign="left left" columnspacing="1em"><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mrow><msub><mi>w</mi><mi>i</mi></msub><mi>exp</mi><mo>⁡</mo><mo stretchy="false">(</mo><mo>−</mo><msub><mi>α</mi><mi>j</mi></msub><mo stretchy="false">)</mo><mspace width="1em"></mspace><mtext>if </mtext><msub><mover accent="true"><mi>y</mi><mo>^</mo></mover><mi>i</mi></msub><mo>=</mo><msub><mi>y</mi><mi>i</mi></msub></mrow></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mrow><msub><mi>w</mi><mi>i</mi></msub><mi>exp</mi><mo>⁡</mo><mo stretchy="false">(</mo><msub><mi>α</mi><mi>j</mi></msub><mo stretchy="false">)</mo><mtext>   </mtext><mspace width="1em"></mspace><mtext>if </mtext><msub><mover accent="true"><mi>y</mi><mo>^</mo></mover><mi>i</mi></msub><mo mathvariant="normal">≠</mo><msub><mi>y</mi><mi>i</mi></msub></mrow></mstyle></mtd></mtr></mtable></mrow><mi mathvariant="normal">∀</mi><mi>i</mi><mo>∈</mo><mo stretchy="false">{</mo><mn>1</mn><mo separator="true">,</mo><mn>2</mn><mo separator="true">,</mo><mn>3</mn><mo separator="true">,</mo><mi mathvariant="normal">.</mi><mi mathvariant="normal">.</mi><mi mathvariant="normal">.</mi><mo separator="true">,</mo><mi>m</mi><mo stretchy="false">}</mo></mrow><annotation encoding="application/x-tex">w_i 
+
+\begin{cases}
+w_i \exp(-\alpha_j) \quad \text{if } \hat y_i = y_i \\
+w_i \exp(\alpha_j) \space \space \space \quad \text{if } \hat y_i \ne y_i
+\end{cases} 
+
+\forall i \in \{1, 2, 3, ..., m\}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:3em;vertical-align:-1.25em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0269em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:-0.0269em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="minner"><span class="mopen delimcenter" style="top:0em;"><span class="delimsizing size4">{</span></span><span class="mord"><span class="mtable"><span class="col-align-l"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.69em;"><span style="top:-3.69em;"><span class="pstrut" style="height:3.008em;"></span><span class="mord"><span class="mord"><span class="mord mathnormal" style="margin-right:0.0269em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:-0.0269em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mop">exp</span><span class="mopen">(</span><span class="mord">−</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0037em;">α</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:-0.0037em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.0572em;">j</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span><span class="mclose">)</span><span class="mspace" style="margin-right:1em;"></span><span class="mord text"><span class="mord">if </span></span><span class="mord"><span class="mord accent"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.6944em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord mathnormal" style="margin-right:0.0359em;">y</span></span><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.1944em;"><span class="mord">^</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.1944em;"><span></span></span></span></span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:-0.0359em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0359em;">y</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:-0.0359em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span><span style="top:-2.25em;"><span class="pstrut" style="height:3.008em;"></span><span class="mord"><span class="mord"><span class="mord mathnormal" style="margin-right:0.0269em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:-0.0269em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mop">exp</span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0037em;">α</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:-0.0037em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.0572em;">j</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span><span class="mclose">)</span><span class="mspace"> </span><span class="mspace"> </span><span class="mspace"> </span><span class="mspace" style="margin-right:1em;"></span><span class="mord text"><span class="mord">if </span></span><span class="mord"><span class="mord accent"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.6944em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord mathnormal" style="margin-right:0.0359em;">y</span></span><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.1944em;"><span class="mord">^</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.1944em;"><span></span></span></span></span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:-0.0359em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel"><span class="mrel"><span class="mord vbox"><span class="thinbox"><span class="rlap"><span class="strut" style="height:0.8889em;vertical-align:-0.1944em;"></span><span class="inner"><span class="mord"><span class="mrel"></span></span></span><span class="fix"></span></span></span></span></span><span class="mspace nobreak"></span><span class="mrel">=</span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0359em;">y</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:-0.0359em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.19em;"><span></span></span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord">∀</span><span class="mord mathnormal">i</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">∈</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">{</span><span class="mord">1</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord">2</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord">3</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord">...</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal">m</span><span class="mclose">}</span></span></span></span></span>
+<ul>
+<li>The new weights are normalised.</li>
+</ul>
+<span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msub><mi>w</mi><mi>i</mi></msub><mo>←</mo><mfrac><msub><mi>w</mi><mi>i</mi></msub><mrow><munderover><mo>∑</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mi>m</mi></munderover><msub><mi>w</mi><mi>i</mi></msub></mrow></mfrac><mi mathvariant="normal">∀</mi><mi>i</mi><mo>∈</mo><mo stretchy="false">{</mo><mn>1</mn><mo separator="true">,</mo><mn>2</mn><mo separator="true">,</mo><mn>3</mn><mo separator="true">,</mo><mi mathvariant="normal">.</mi><mi mathvariant="normal">.</mi><mi mathvariant="normal">.</mi><mo separator="true">,</mo><mi>m</mi><mo stretchy="false">}</mo></mrow><annotation encoding="application/x-tex">w_i \leftarrow \frac{w_i}{\sum^{m}_{i=1}w_i}
+
+\forall i \in \{1, 2, 3, ..., m\}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.5806em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0269em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:-0.0269em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">←</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:2.1016em;vertical-align:-0.994em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.1076em;"><span style="top:-2.3057em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mop"><span class="mop op-symbol small-op" style="position:relative;top:0em;">∑</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.8043em;"><span style="top:-2.4003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">i</span><span class="mrel mtight">=</span><span class="mord mtight">1</span></span></span></span><span style="top:-3.2029em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">m</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2997em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0269em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:-0.0269em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"><span class="mord mathnormal" style="margin-right:0.0269em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:-0.0269em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.994em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mord">∀</span><span class="mord mathnormal">i</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">∈</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">{</span><span class="mord">1</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord">2</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord">3</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord">...</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal">m</span><span class="mclose">}</span></span></span></span></span>
+<h4 id="step-5-make-predictions">Step 5: Make Predictions</h4>
+<ul>
+<li>AdaBoost computes the predictions of all the predictors and weighs them using the predictor weights <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>α</mi><mi>j</mi></msub></mrow><annotation encoding="application/x-tex">\alpha_j</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7167em;vertical-align:-0.2861em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0037em;">α</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:-0.0037em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.0572em;">j</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span></span></span></span>.</li>
+</ul>
+<span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mover accent="true"><mi>y</mi><mo>^</mo></mover><mo>=</mo><munder><mrow><mi mathvariant="normal">arg max</mi><mo>⁡</mo></mrow><mi>k</mi></munder><munderover><mo>∑</mo><mrow><mi>j</mi><mo>=</mo><mn>1</mn><mo separator="true">,</mo><mtext> </mtext><msub><mover accent="true"><mi>y</mi><mo>^</mo></mover><mi>j</mi></msub><mo>=</mo><mi>k</mi></mrow><mi>N</mi></munderover><msub><mi>α</mi><mi>j</mi></msub></mrow><annotation encoding="application/x-tex">\hat y = \argmax_k \sum^{N}_{j=1, \space \hat y_j = k} \alpha_j</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8889em;vertical-align:-0.1944em;"></span><span class="mord accent"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.6944em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord mathnormal" style="margin-right:0.0359em;">y</span></span><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.1944em;"><span class="mord">^</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.1944em;"><span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:3.3278em;vertical-align:-1.4994em;"></span><span class="mop op-limits"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.4306em;"><span style="top:-2.1535em;margin-left:0em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.0315em;">k</span></span></span><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span><span class="mop"><span class="mord mathrm" style="margin-right:0.0139em;">arg</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathrm">max</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.9465em;"><span></span></span></span></span></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mop op-limits"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.8283em;"><span style="top:-1.8479em;margin-left:0em;"><span class="pstrut" style="height:3.05em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.0572em;">j</span><span class="mrel mtight">=</span><span class="mord mtight">1</span><span class="mpunct mtight">,</span><span class="mspace mtight"><span class="mtight"> </span></span><span class="mord mtight"><span class="mord accent mtight"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.6944em;"><span style="top:-2.7em;"><span class="pstrut" style="height:2.7em;"></span><span class="mord mathnormal mtight" style="margin-right:0.0359em;">y</span></span><span style="top:-2.7em;"><span class="pstrut" style="height:2.7em;"></span><span class="accent-body" style="left:-0.1944em;"><span class="mord mtight">^</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.1944em;"><span></span></span></span></span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3281em;"><span style="top:-2.357em;margin-left:-0.0359em;margin-right:0.0714em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mathnormal mtight" style="margin-right:0.0572em;">j</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2819em;"><span></span></span></span></span></span></span><span class="mrel mtight">=</span><span class="mord mathnormal mtight" style="margin-right:0.0315em;">k</span></span></span></span><span style="top:-3.05em;"><span class="pstrut" style="height:3.05em;"></span><span><span class="mop op-symbol large-op">∑</span></span></span><span style="top:-4.3em;margin-left:0em;"><span class="pstrut" style="height:3.05em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.109em;">N</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.4994em;"><span></span></span></span></span></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0037em;">α</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:-0.0037em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.0572em;">j</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span></span></span></span></span>
+<hr>
+<h2 id="gradient-boosting">Gradient Boosting</h2>
+<h3 id="core-idea-2">Core Idea</h3>
+<ul>
+<li>Like AdaBoost, Gradient Boosting works by sequentially adding predictors to correct its predecessors.</li>
+<li>However, it fits each new predictor to the <strong>residual errors</strong> (loss) of the current model.</li>
+</ul>
+<h3 id="algorithm-outline-2">Algorithm Outline</h3>
+<ol>
+<li>Initialise the model with a constant prediction that minimises the loss.</li>
+<li>Compute the negative gradient (residuals) of the loss with respect to the current predictions.</li>
+<li>Fit a new weak learner to these residuals.</li>
+<li>Scale the learner by a step size and add it to the ensemble.</li>
+<li>Repeat steps 2–4 for the desired number of iterations.</li>
+</ol>
+<h3 id="loss-functions">Loss Functions</h3>
+<ul>
+<li><strong>Mean Squared Error</strong> loss for regressors.</li>
+<li><strong>Negative Log-Likelihood</strong> for classifiers.</li>
+</ul>
+<h3 id="how-xgboost-handles-missing-values">How XGBoost Handles Missing Values</h3>
+<ul>
+<li>XGBoost handles missing values <strong>natively</strong>, so you usually do not need separate imputation.</li>
+<li>During training, for each split, it learns a <strong>default direction</strong> (left or right) for samples with missing feature values.</li>
+<li>It chooses the default direction that gives the <strong>best gain</strong> in the objective.</li>
+<li>During inference, if a feature value is missing, the sample follows that learned default branch.</li>
+<li>This lets XGBoost treat missingness as potentially informative rather than only as missing data noise.</li>
+</ul>
+<hr>
+<h1 id="stacking">Stacking</h1>
+<h2 id="core-idea-3">Core Idea</h2>
+<p><img  loading="lazy" decoding="async" fetchpriority="auto" width="710" height="391" src="/_astro/image5.DSV74VEI_Z1nbgXa.webp" ></p>
+<ul>
+<li>Stacking is an ensemble method that uses <strong>meta-learning</strong>.</li>
+<li>Instead of simple averaging or voting, it trains a <strong>meta-model</strong> to combine base model predictions.</li>
+<li>The meta-model learns how to weight and combine different models optimally.</li>
+<li>Works best when base models are very different (high diversity).</li>
+</ul>
+<hr>
+<h2 id="architecture">Architecture</h2>
+<ul>
+<li>
+<p><strong>Base learners (Level-0 models)</strong>:</p>
+<ul>
+<li>Different algorithms (e.g. trees, SVMs, kNN, linear models).</li>
+<li>Each trained on the original dataset.</li>
+<li>Each outputs predictions.</li>
+</ul>
+</li>
+<li>
+<p><strong>Meta-model (Level-1 model)</strong>:</p>
+<ul>
+<li>Takes predictions of base learners as input features.</li>
+<li>Learns how to combine them.</li>
+<li>Produces final prediction.</li>
+</ul>
+</li>
+<li>
+<p>Often uses cross-validation to avoid data leakage.</p>
+</li>
+</ul>
+<hr>
+<h2 id="why-stacking-works">Why Stacking Works</h2>
+<ul>
+<li>Different models capture different patterns in the data.</li>
+<li>Some models perform better in certain regions of the feature space.</li>
+<li>The meta-model learns:
+<ul>
+<li>Which models to trust more</li>
+<li>Under what conditions</li>
+</ul>
+</li>
+<li>Can reduce both bias and variance.</li>
+<li>More flexible than bagging or boosting.</li>
+</ul>
+<hr>
+<h2 id="blending-vs-stacking">Blending vs Stacking</h2>
+<ul>
+<li>Both combine multiple base learners using a meta-model.</li>
+<li>Main difference lies in <strong>how the meta-model is trained</strong>.</li>
+</ul>
+<h3 id="blending">Blending</h3>
+<ul>
+<li>Uses a hold-out validation set.</li>
+<li>Base models are trained on training set.</li>
+<li>Meta-model is trained on predictions from validation set.</li>
+<li>Simpler, but wastes data.</li>
+</ul>
+<h3 id="stacking-1">Stacking</h3>
+<ul>
+<li>Uses cross-validation.</li>
+<li>Base models generate out-of-fold predictions.</li>
+<li>Meta-model is trained on all data.</li>
+<li>More data-efficient but more complex.</li>
+</ul>
+<hr>
+<h1 id="biasvariance-tradeoff-in-ensembles">Bias–Variance Tradeoff in Ensembles</h1>
+<h2 id="how-bagging-affects-bias--variance">How Bagging Affects Bias &#x26; Variance</h2>
+<ul>
+<li>Bagging mainly reduces <strong>variance</strong>.</li>
+<li>Each model overfits differently.</li>
+<li>Averaging predictions cancels out noise.</li>
+<li>Does not significantly reduce bias.</li>
+<li>Works best for:
+<ul>
+<li>High-variance models (e.g. decision trees).</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h2 id="how-boosting-affects-bias--variance">How Boosting Affects Bias &#x26; Variance</h2>
+<ul>
+<li>Boosting mainly reduces <strong>bias</strong>.</li>
+<li>Sequential learning allows complex patterns to be learned.</li>
+<li>Can fit complicated decision boundaries.</li>
+<li>However:
+<ul>
+<li>Can increase variance.</li>
+<li>Sensitive to noisy labels and outliers.</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h2 id="how-stacking-affects-both">How Stacking Affects Both</h2>
+<ul>
+<li>Stacking can reduce <strong>both bias and variance</strong>.</li>
+<li>Depends heavily on:
+<ul>
+<li>Choice of base models</li>
+<li>Choice of meta-model</li>
+</ul>
+</li>
+<li>If base models are diverse:
+<ul>
+<li>Bias is reduced</li>
+<li>Variance is reduced</li>
+</ul>
+</li>
+<li>If base models are similar:
+<ul>
+<li>Benefits are limited.</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h1 id="ensemble-methods-in-practice">Ensemble Methods In Practice</h1>
+<h2 id="when-to-use-ensemble-methods">When to Use Ensemble Methods</h2>
+<ul>
+<li>When single models underperform and you can afford extra compute.</li>
+<li>When base learners have complementary Error patterns.</li>
+<li>When variance reduction or bias reduction is a primary goal.</li>
+<li>When you need strong performance on tabular data.</li>
+</ul>
+<h2 id="when-not-to-use-ensemble-methods">When Not to Use Ensemble Methods</h2>
+<ul>
+<li>When training data is very small and overfitting risk is high.</li>
+<li>When model debugging and traceability are critical.</li>
+<li>When you need real-time updates or streaming inference.</li>
+<li>When deployment size and latency budgets are tight.</li>
+</ul>
+<h2 id="practical-notes">Practical Notes</h2>
+<h3 id="tuning-and-diversity">Tuning and Diversity</h3>
+<ul>
+<li>Use cross-validation or out-of-bag estimates to tune ensembles.</li>
+<li>Keep base models diverse to avoid correlated errors.</li>
+</ul>
+<h3 id="reliability-and-overfitting">Reliability and Overfitting</h3>
+<ul>
+<li>Monitor calibration; averaging can still be miscalibrated.</li>
+<li>Apply early stopping for boosting to control overfitting.</li>
+</ul> </article> <!-- Footer nav --> <div class="mt-16 pt-8" style="border-top: 1px solid var(--border);"> <a href="/blog" class="text-sm transition-colors hover:opacity-70" style="color: var(--text-muted);">← Back to Blog</a> </div> </main> <script type="module">const t=new IntersectionObserver(e=>e.forEach(r=>{r.isIntersecting&&(r.target.classList.add("visible"),t.unobserve(r.target))}),{threshold:.08});document.querySelectorAll("[data-reveal], [data-reveal-group]").forEach(e=>t.observe(e));</script> </body> </html> 
