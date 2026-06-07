@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>APF 3D Navigator — NTU UAV Research</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #0d1117; --surface: #161b22; --border: #30363d;
+    --text: #e6edf3; --muted: #8b949e;
+    --accent: #58a6ff; --green: #3fb950; --red: #f85149;
+    --orange: #d29922; --purple: #a371f7;
+  }
+  html, body { width: 100%; height: 100%; overflow: hidden; background: var(--bg); }
+  #c { position: fixed; inset: 0; display: block; width: 100% !important; height: 100% !important; }
+  #ui {
+    position: fixed; top: 0; right: 0; bottom: 0;
+    width: 260px;
+    background: rgba(13,17,23,0.88);
+    backdrop-filter: blur(10px);
+    border-left: 1px solid var(--border);
+    display: flex; flex-direction: column;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-size: 12px; color: var(--text);
+    overflow-y: auto;
+    padding: 16px 14px 24px;
+    gap: 14px;
+  }
+  #ui h1 {
+    font-size: 14px; font-weight: 600;
+    border-bottom: 1px solid var(--border); padding-bottom: 10px;
+    line-height: 1.4;
+  }
+  #ui h1 small { display: block; color: var(--muted); font-weight: 400; font-size: 10px; margin-top: 2px; }
+  .sec { display: flex; flex-direction: column; gap: 8px; }
+  .sec-label {
+    font-size: 10px; font-weight: 600; letter-spacing: .07em;
+    text-transform: uppercase; color: var(--muted);
+  }
+  .param { display: flex; flex-direction: column; gap: 3px; }
+  .param .row { display: flex; justify-content: space-between; }
+  .param .row .val { color: var(--accent); font-family: monospace; }
+  input[type=range] { width: 100%; accent-color: var(--accent); cursor: pointer; }
+  .btn { width: 100%; padding: 7px; border-radius: 5px; border: 1px solid var(--border);
+    font-size: 12px; font-weight: 500; cursor: pointer; transition: opacity .15s; }
+  .btn:hover { opacity: .85; }
+  .btn-primary { background: var(--accent); color: #000; border-color: var(--accent); }
+  .btn-secondary { background: transparent; color: var(--muted); }
+  .btn-danger { background: transparent; color: var(--red); border-color: var(--red); }
+  .btn-small {
+    padding: 2px 7px; font-size: 10px; cursor: pointer;
+    background: transparent; border: 1px solid var(--border);
+    border-radius: 4px; color: var(--muted);
+  }
+  .btn-small:hover { color: var(--text); border-color: var(--text); }
+  .sec-label-row { display: flex; justify-content: space-between; align-items: center; }
+  .obs-row {
+    background: rgba(22,27,34,0.6); border: 1px solid var(--border);
+    border-radius: 5px; padding: 7px; display: flex; flex-direction: column; gap: 5px;
+  }
+  .obs-row .obs-head { display: flex; justify-content: space-between; align-items: center;
+    font-size: 11px; color: var(--orange); font-weight: 500; }
+  .obs-row .obs-head button { background: none; border: none; color: var(--muted);
+    cursor: pointer; font-size: 14px; line-height: 1; padding: 0 2px; }
+  .obs-row .obs-head button:hover { color: var(--red); }
+  .coords { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; }
+  .coord-field { display: flex; flex-direction: column; gap: 2px; }
+  .coord-field label { font-size: 9px; color: var(--muted); text-transform: uppercase; }
+  .coord-field input {
+    background: var(--bg); border: 1px solid var(--border); border-radius: 3px;
+    color: var(--text); font-size: 11px; padding: 3px 5px; width: 100%;
+    font-family: monospace;
+  }
+  .coord-field input:focus { outline: none; border-color: var(--accent); }
+  .nav-row { display: grid; grid-template-columns: 44px 1fr 1fr 1fr; gap: 4px; align-items: center; }
+  .nav-row .nav-label { font-size: 10px; color: var(--muted); }
+  .nav-row input {
+    background: var(--bg); border: 1px solid var(--border); border-radius: 3px;
+    color: var(--text); font-size: 11px; padding: 3px 4px; font-family: monospace;
+    width: 100%;
+  }
+  .nav-row input:focus { outline: none; border-color: var(--accent); }
+  .stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+  .stat { background: var(--bg); border: 1px solid var(--border); border-radius: 4px; padding: 7px 8px; }
+  .stat .sl { font-size: 9px; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; }
+  .stat .sv { font-size: 15px; font-weight: 600; font-family: monospace; margin-top: 1px; }
+  .sv.ok   { color: var(--green); }  .sv.warn { color: var(--orange); }  .sv.err { color: var(--red); }
+  #loading {
+    position: fixed; inset: 0; right: 260px;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--muted); font-family: monospace; font-size: 13px;
+    pointer-events: none; background: var(--bg);
+    transition: opacity .4s;
+  }
+  #hint {
+    position: fixed; bottom: 12px; left: 12px;
+    font-size: 10px; color: var(--muted);
+    font-family: -apple-system, sans-serif;
+    pointer-events: none;
+    line-height: 1.6;
+  }
+</style>
+</head>
+<body>
+
+<canvas id="c"></canvas>
+
+<div id="loading">Initialising Three.js scene…</div>
+
+<div id="ui">
+  <h1>APF 3D Navigator<small>NTU UAV Research · DJI Tello · ZoeDepth</small></h1>
+
+  <div class="sec">
+    <div class="sec-label">APF Parameters</div>
+    <div class="param">
+      <div class="row"><span>Attraction k<sub>a</sub></span><span class="val" id="va">30</span></div>
+      <input type="range" id="ka" min="1" max="80" value="30" step="1">
+    </div>
+    <div class="param">
+      <div class="row"><span>Repulsion k<sub>r</sub></span><span class="val" id="vr">10</span></div>
+      <input type="range" id="kr" min="1" max="60" value="10" step="1">
+    </div>
+    <div class="param">
+      <div class="row"><span>Influence ρ₀ (m)</span><span class="val" id="vp">0.50</span></div>
+      <input type="range" id="rho" min="0.1" max="2.5" value="0.5" step="0.05">
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="sec-label-row">
+      <span class="sec-label">Obstacles</span>
+      <button class="btn-small" id="btn-add">+ Add</button>
+    </div>
+    <div id="obs-list"></div>
+  </div>
+
+  <div class="sec">
+    <div class="sec-label">Navigation</div>
+    <div class="nav-row">
+      <span class="nav-label" style="color:var(--green)">Start</span>
+      <input type="number" id="sx" value="6.17" step="0.1">
+      <input type="number" id="sy" value="2.19" step="0.1">
+      <input type="number" id="sz" value="-2.15" step="0.1">
+    </div>
+    <div class="nav-row" style="margin-top:4px">
+      <span class="nav-label" style="color:var(--red)">Target</span>
+      <input type="number" id="tx" value="-0.30" step="0.1">
+      <input type="number" id="ty" value="1.75" step="0.1">
+      <input type="number" id="tz" value="-2.00" step="0.1">
+    </div>
+    <div style="font-size:9px;color:var(--muted);margin-top:2px">
+      Coordinate frame: X forward · Y lateral · Z negative=up
+    </div>
+  </div>
+
+  <div class="sec">
+    <button class="btn btn-primary" id="btn-sim">▶ Simulate</button>
+    <button class="btn btn-secondary" id="btn-reset" style="margin-top:6px">Reset scene</button>
+  </div>
+
+  <div class="sec">
+    <div class="sec-label">Results</div>
+    <div class="stat-grid">
+      <div class="stat"><div class="sl">Status</div><div class="sv" id="rs">—</div></div>
+      <div class="stat"><div class="sl">Steps</div><div class="sv" id="rstep">—</div></div>
+      <div class="stat"><div class="sl">Path (m)</div><div class="sv" id="rpath">—</div></div>
+      <div class="stat"><div class="sl">Min clear</div><div class="sv" id="rclear">—</div></div>
+    </div>
+  </div>
+</div>
+
+<div id="hint">
+  Drag to orbit &nbsp;·&nbsp; Scroll to zoom &nbsp;·&nbsp; Right-drag to pan
+</div>
+
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+  }
+}
+</script>
+
+<script type="module">
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+
+// ─────────────────────────────────────────────────────────────────────────────
+// World-space constants
+// ─────────────────────────────────────────────────────────────────────────────
+const X_BOUNDS = [-0.5, 7.0];
+const Y_BOUNDS = [-0.5, 4.5];
+const Z_BOUNDS = [-3.75, -0.5];
+
+// World → Three.js: X stays, Y lateral → Z axis, Z negative-up → Y
+function w2t(wx, wy, wz) { return new THREE.Vector3(wx, -wz, wy); }
+
+// ─────────────────────────────────────────────────────────────────────────────
+// State
+// ─────────────────────────────────────────────────────────────────────────────
+let obstacles = [
+  { x: 3.0, y: 2.8, z: -2.1, r: 0.38 },
+  { x: 4.5, y: 1.4, z: -2.1, r: 0.38 },
+  { x: 5.8, y: 2.5, z: -2.1, r: 0.38 },
+];
+
+let trajPoints   = [];
+let animFrame    = null;
+let droneSphere  = null;
+let trajLine     = null;
+let startSphere  = null;
+let targetSphere = null;
+const obsMeshes  = [];
+const infMeshes  = [];
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Three.js setup
+// ─────────────────────────────────────────────────────────────────────────────
+const canvas   = document.getElementById('c');
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
+renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+renderer.shadowMap.enabled = true;
+
+const scene  = new THREE.Scene();
+scene.background = new THREE.Color(0x0a0e15);
+scene.fog = new THREE.FogExp2(0x0a0e15, 0.012);
+
+const camera = new THREE.PerspectiveCamera(55, 1, 0.1, 200);
+const sceneCenter = w2t(3.25, 2.0, -2.125);
+camera.position.set(14, 8, -3);
+camera.lookAt(sceneCenter);
+
+const controls = new OrbitControls(camera, canvas);
+controls.target.copy(sceneCenter);
+controls.enableDamping = true;
+controls.dampingFactor = 0.08;
+controls.minDistance = 2;
+controls.maxDistance = 40;
+controls.update();
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Raycasting & 3-D drag
+// ─────────────────────────────────────────────────────────────────────────────
+const raycaster = new THREE.Raycaster();
+const dragPlane  = new THREE.Plane();
+let   dragTarget = null;  // { type:'obs'|'start'|'target', index? }
+
+function ndcFromEvent(e) {
+  const rect = canvas.getBoundingClientRect();
+  return new THREE.Vector2(
+     ((e.clientX - rect.left) / rect.width)  * 2 - 1,
+    -((e.clientY - rect.top)  / rect.height) * 2 + 1,
+  );
+}
+
+function draggableMeshes() {
+  const list = [...obsMeshes];
+  if (startSphere)  list.push(startSphere.mesh);
+  if (targetSphere) list.push(targetSphere.mesh);
+  return list;
+}
+
+canvas.addEventListener('pointerdown', e => {
+  if (e.button !== 0) return;
+  raycaster.setFromCamera(ndcFromEvent(e), camera);
+  const hits = raycaster.intersectObjects(draggableMeshes());
+  if (!hits.length) return;
+
+  const obj = hits[0].object;
+  dragPlane.setFromNormalAndCoplanarPoint(new THREE.Vector3(0, 1, 0), obj.position);
+
+  const obsIdx = obsMeshes.indexOf(obj);
+  if      (obsIdx >= 0)                              dragTarget = { type: 'obs', index: obsIdx };
+  else if (startSphere  && obj === startSphere.mesh) dragTarget = { type: 'start' };
+  else if (targetSphere && obj === targetSphere.mesh) dragTarget = { type: 'target' };
+
+  if (dragTarget) {
+    controls.enabled = false;
+    canvas.style.cursor = 'grabbing';
+    e.stopPropagation();
+  }
+});
+
+canvas.addEventListener('pointermove', e => {
+  if (!dragTarget) {
+    raycaster.setFromCamera(ndcFromEvent(e), camera);
+    canvas.style.cursor = raycaster.intersectObjects(draggableMeshes()).length ? 'grab' : 'default';
+    return;
+  }
+
+  raycaster.setFromCamera(ndcFromEvent(e), camera);
+  const pt = new THREE.Vector3();
+  if (!raycaster.ray.intersectPlane(dragPlane, pt)) return;
+
+  // Inverse of w2t: wx=pt.x, wy=pt.z, wz=-pt.y
+  const wx = Math.max(X_BOUNDS[0], Math.min(X_BOUNDS[1], pt.x));
+  const wy = Math.max(Y_BOUNDS[0], Math.min(Y_BOUNDS[1], pt.z));
+
+  if (dragTarget.type === 'obs') {
+    const o = obstacles[dragTarget.index];
+    o.x = Math.round(wx * 100) / 100;
+    o.y = Math.round(wy * 100) / 100;
+    rebuildObstacleMeshes();
+    // Update panel inputs in-place (avoid full DOM rebuild during drag)
+    document.querySelectorAll(`#obs-list input[data-idx="${dragTarget.index}"]`).forEach(inp => {
+      if (inp.dataset.key === 'x') inp.value = o.x;
+      if (inp.dataset.key === 'y') inp.value = o.y;
+    });
+  } else if (dragTarget.type === 'start') {
+    document.getElementById('sx').value = Math.round(wx * 100) / 100;
+    document.getElementById('sy').value = Math.round(wy * 100) / 100;
+    rebuildMarkers();
+  } else if (dragTarget.type === 'target') {
+    document.getElementById('tx').value = Math.round(wx * 100) / 100;
+    document.getElementById('ty').value = Math.round(wy * 100) / 100;
+    rebuildMarkers();
+  }
+  simulateQuick();
+});
+
+canvas.addEventListener('pointerup',    () => { dragTarget = null; controls.enabled = true; canvas.style.cursor = 'default'; });
+canvas.addEventListener('pointerleave', () => { dragTarget = null; controls.enabled = true; });
+
+// Lights
+scene.add(new THREE.AmbientLight(0x304060, 1.2));
+const sun = new THREE.DirectionalLight(0xc8d8ff, 1.4);
+sun.position.set(8, 12, -4);
+sun.castShadow = true;
+scene.add(sun);
+const fill = new THREE.DirectionalLight(0x203050, 0.5);
+fill.position.set(-6, 2, 8);
+scene.add(fill);
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Static scene objects
+// ─────────────────────────────────────────────────────────────────────────────
+
+// Grid at lab floor (world z=0 ≈ ground below drone)
+const grid = new THREE.GridHelper(20, 40, 0x1a2535, 0x111921);
+grid.position.set(3.25, 0, 2.0);
+scene.add(grid);
+
+// Flight bounds wireframe box
+{
+  const size = new THREE.Vector3(
+    X_BOUNDS[1] - X_BOUNDS[0],
+    Z_BOUNDS[0] - Z_BOUNDS[1],   // -z range becomes y height
+    Y_BOUNDS[1] - Y_BOUNDS[0],
+  );
+  const center = w2t(
+    (X_BOUNDS[0] + X_BOUNDS[1]) / 2,
+    (Y_BOUNDS[0] + Y_BOUNDS[1]) / 2,
+    (Z_BOUNDS[0] + Z_BOUNDS[1]) / 2,
+  );
+  const boxGeo = new THREE.BoxGeometry(size.x, size.y, size.z);
+  const boxEdges = new THREE.EdgesGeometry(boxGeo);
+  const boxMat = new THREE.LineBasicMaterial({ color: 0x1e3a5f, transparent: true, opacity: 0.6 });
+  const boxLines = new THREE.LineSegments(boxEdges, boxMat);
+  boxLines.position.copy(center);
+  scene.add(boxLines);
+
+  // Floor plane of flight space (at max altitude, world z=Z_BOUNDS[0])
+  const planeGeo = new THREE.PlaneGeometry(size.x, size.z);
+  const planeMat = new THREE.MeshBasicMaterial({
+    color: 0x0d1f35, transparent: true, opacity: 0.25, side: THREE.DoubleSide
+  });
+  const plane = new THREE.Mesh(planeGeo, planeMat);
+  plane.rotation.x = -Math.PI / 2;
+  plane.position.copy(w2t(
+    (X_BOUNDS[0] + X_BOUNDS[1]) / 2,
+    (Y_BOUNDS[0] + Y_BOUNDS[1]) / 2,
+    Z_BOUNDS[0],
+  ));
+  scene.add(plane);
+}
+
+// Axis arrows (X=red, Y=green, Z=blue in THREE space)
+{
+  const axLen = 1.0;
+  const origin = w2t(X_BOUNDS[0], Y_BOUNDS[0], Z_BOUNDS[1]);
+  const arrowX = new THREE.ArrowHelper(new THREE.Vector3(1,0,0), origin, axLen, 0xf85149, 0.15, 0.08);
+  const arrowY = new THREE.ArrowHelper(new THREE.Vector3(0,1,0), origin, axLen, 0x3fb950, 0.15, 0.08);
+  const arrowZ = new THREE.ArrowHelper(new THREE.Vector3(0,0,1), origin, axLen, 0x58a6ff, 0.15, 0.08);
+  scene.add(arrowX, arrowY, arrowZ);
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Dynamic markers (start / target / drone)
+// ─────────────────────────────────────────────────────────────────────────────
+function makeMarker(color, radius = 0.14) {
+  const geo = new THREE.SphereGeometry(radius, 16, 12);
+  const mat = new THREE.MeshPhongMaterial({ color, emissive: color, emissiveIntensity: 0.4 });
+  return new THREE.Mesh(geo, mat);
+}
+
+function makeRing(color, pos) {
+  const geo = new THREE.TorusGeometry(0.25, 0.025, 8, 32);
+  const mat = new THREE.MeshBasicMaterial({ color });
+  const ring = new THREE.Mesh(geo, mat);
+  ring.position.copy(pos);
+  ring.lookAt(pos.clone().add(new THREE.Vector3(0,1,0)));
+  return ring;
+}
+
+function rebuildMarkers() {
+  if (startSphere)  { scene.remove(startSphere.group); }
+  if (targetSphere) { scene.remove(targetSphere.group); }
+
+  const sv = readVec('sx','sy','sz');
+  const tv = readVec('tx','ty','tz');
+  const sp = w2t(sv.x, sv.y, sv.z);
+  const tp = w2t(tv.x, tv.y, tv.z);
+
+  const sg = new THREE.Group();
+  const sm = makeMarker(0x3fb950);
+  sm.position.copy(sp);
+  sg.add(sm, makeRing(0x3fb950, sp));
+  scene.add(sg);
+  startSphere = { group: sg, mesh: sm };
+
+  const tg = new THREE.Group();
+  const tm = makeMarker(0xf85149);
+  tm.position.copy(tp);
+  tg.add(tm, makeRing(0xf85149, tp));
+  scene.add(tg);
+  targetSphere = { group: tg, mesh: tm };
+
+  // Drone sphere (hidden until simulation)
+  if (!droneSphere) {
+    droneSphere = makeMarker(0xa371f7, 0.12);
+    droneSphere.visible = false;
+    scene.add(droneSphere);
+  }
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Obstacle meshes
+// ─────────────────────────────────────────────────────────────────────────────
+function rebuildObstacleMeshes() {
+  obsMeshes.forEach(m => scene.remove(m));
+  infMeshes.forEach(m => scene.remove(m));
+  obsMeshes.length = 0;
+  infMeshes.length = 0;
+
+  const rho = parseFloat(document.getElementById('rho').value);
+  obstacles.forEach(o => {
+    // Solid sphere
+    const geo = new THREE.SphereGeometry(o.r, 20, 14);
+    const mat = new THREE.MeshPhongMaterial({
+      color: 0xd29922, emissive: 0x7a3010, emissiveIntensity: 0.3,
+      transparent: true, opacity: 0.92,
+    });
+    const mesh = new THREE.Mesh(geo, mat);
+    mesh.position.copy(w2t(o.x, o.y, o.z));
+    mesh.castShadow = true;
+    scene.add(mesh);
+    obsMeshes.push(mesh);
+
+    // Influence zone wireframe
+    const igeo = new THREE.SphereGeometry(rho, 16, 10);
+    const imat = new THREE.MeshBasicMaterial({
+      color: 0xd29922, wireframe: true, transparent: true, opacity: 0.08
+    });
+    const imesh = new THREE.Mesh(igeo, imat);
+    imesh.position.copy(w2t(o.x, o.y, o.z));
+    scene.add(imesh);
+    infMeshes.push(imesh);
+  });
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Trajectory line
+// ─────────────────────────────────────────────────────────────────────────────
+function drawTrajectory(pts) {
+  if (trajLine) scene.remove(trajLine);
+  if (pts.length < 2) return;
+
+  const positions = [];
+  for (const p of pts) {
+    const v = w2t(p[0], p[1], p[2]);
+    positions.push(v.x, v.y, v.z);
+  }
+  const geo = new THREE.BufferGeometry();
+  geo.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
+  const mat = new THREE.LineBasicMaterial({ color: 0x58a6ff, linewidth: 2 });
+  trajLine = new THREE.Line(geo, mat);
+  scene.add(trajLine);
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// APF simulation (client-side fallback — mirrors task/apf.py)
+// ─────────────────────────────────────────────────────────────────────────────
+function wallF(coord, lo, hi, dw, kr) {
+  let f = 0;
+  const dLo = coord - lo, dHi = hi - coord;
+  if (dLo > 0 && dLo < dw) f += kr * ((1/dLo) - (1/dw)) / (dLo*dLo);
+  if (dHi > 0 && dHi < dw) f -= kr * ((1/dHi) - (1/dw)) / (dHi*dHi);
+  return f;
+}
+
+function apfSim(sx, sy, sz, tx, ty, tz, obs, ka, kr, rho) {
+  let cx=sx, cy=sy, cz=sz;
+  const traj = [[cx,cy,cz]];
+  const SCALE=0.003, MAX_CMD=30, ARRIVAL=0.3, MAX_STEPS=1200;
+  let pathLen=0, minClear=Infinity, converged=false;
+
+  for (let i=0; i<MAX_STEPS; i++) {
+    const dx=tx-cx, dy=ty-cy, dz=tz-cz;
+    const dist=Math.sqrt(dx*dx+dy*dy+dz*dz);
+    if (dist<=ARRIVAL) { converged=true; break; }
+    const kaE = dist<1.0 ? Math.max(10, ka*dist) : ka;
+    let fax=kaE*dx, fay=kaE*dy, faz=kaE*dz;
+    let frx=0, fry=0, frz=0;
+
+    for (const o of obs) {
+      const ex=cx-o.x, ey=cy-o.y, ez=cz-o.z;
+      const dObs=Math.max(Math.sqrt(ex*ex+ey*ey+ez*ez)-o.r, 1e-6);
+      if (dObs<rho) {
+        const mag=kr*((1/dObs)-(1/rho))/(dObs*dObs);
+        const len=Math.sqrt(ex*ex+ey*ey+ez*ez)||1e-9;
+        frx+=mag*ex/len; fry+=mag*ey/len; frz+=mag*ez/len;
+      }
+      const cl=Math.max(Math.sqrt(ex*ex+ey*ey+ez*ez)-o.r, 0);
+      if (cl<minClear) minClear=cl;
+    }
+    frx+=wallF(cx,X_BOUNDS[0],X_BOUNDS[1],0.5,kr);
+    fry+=wallF(cy,Y_BOUNDS[0],Y_BOUNDS[1],0.5,kr);
+    frz+=wallF(cz,Z_BOUNDS[0],Z_BOUNDS[1],0.5,kr);
+
+    const clamp=(v)=>Math.max(-MAX_CMD,Math.min(MAX_CMD,v/dist))*SCALE;
+    const nx=Math.max(X_BOUNDS[0],Math.min(X_BOUNDS[1], cx+clamp(fax+frx)));
+    const ny=Math.max(Y_BOUNDS[0],Math.min(Y_BOUNDS[1], cy+clamp(fay+fry)));
+    const nz=Math.max(Z_BOUNDS[0],Math.min(Z_BOUNDS[1], cz+clamp(faz+frz)));
+    pathLen+=Math.sqrt((nx-cx)**2+(ny-cy)**2+(nz-cz)**2);
+    cx=nx; cy=ny; cz=nz;
+    traj.push([cx,cy,cz]);
+  }
+  return { traj, converged, steps:traj.length-1,
+    pathLen:Math.round(pathLen*1000)/1000,
+    minClear: obs.length>0 ? Math.round(minClear*1000)/1000 : null };
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Drone animation
+// ─────────────────────────────────────────────────────────────────────────────
+function animateDrone(pts) {
+  if (animFrame) cancelAnimationFrame(animFrame);
+  if (!pts.length) return;
+
+  droneSphere.visible = true;
+  let idx = 0;
+  let last = 0;
+
+  function step(ts) {
+    if (ts - last > 16) {  // ~60fps
+      if (idx < pts.length) {
+        const p = pts[idx];
+        droneSphere.position.copy(w2t(p[0], p[1], p[2]));
+        idx++;
+      }
+      last = ts;
+    }
+    if (idx < pts.length) {
+      animFrame = requestAnimationFrame(step);
+    }
+  }
+  animFrame = requestAnimationFrame(step);
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// UI helpers
+// ─────────────────────────────────────────────────────────────────────────────
+function readVec(xId, yId, zId) {
+  return {
+    x: parseFloat(document.getElementById(xId).value),
+    y: parseFloat(document.getElementById(yId).value),
+    z: parseFloat(document.getElementById(zId).value),
+  };
+}
+
+function setStats(result) {
+  const rs = document.getElementById('rs');
+  rs.textContent = result.converged ? 'Converged' : 'Timeout';
+  rs.className = 'sv ' + (result.converged ? 'ok' : 'err');
+  document.getElementById('rstep').textContent  = result.steps;
+  document.getElementById('rpath').textContent  = result.pathLen.toFixed(2);
+  const rc = document.getElementById('rclear');
+  if (result.minClear !== null) {
+    rc.textContent = result.minClear.toFixed(2) + 'm';
+    rc.className = 'sv ' + (result.minClear < 0.1 ? 'err' : result.minClear < 0.25 ? 'warn' : 'ok');
+  } else { rc.textContent = 'N/A'; rc.className = 'sv'; }
+}
+
+function clearStats() {
+  ['rs','rstep','rpath','rclear'].forEach(id => {
+    document.getElementById(id).textContent = '—';
+    document.getElementById(id).className = 'sv';
+  });
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Obstacle UI panel
+// ─────────────────────────────────────────────────────────────────────────────
+function renderObsPanel() {
+  const list = document.getElementById('obs-list');
+  list.innerHTML = '';
+  obstacles.forEach((o, i) => {
+    const div = document.createElement('div');
+    div.className = 'obs-row';
+    div.innerHTML = `
+      <div class="obs-head">
+        <span>Obstacle ${i + 1}</span>
+        <button data-idx="${i}" title="Remove">×</button>
+      </div>
+      <div class="coords">
+        <div class="coord-field"><label>X (m)</label>
+          <input type="number" data-idx="${i}" data-key="x" value="${o.x}" step="0.1"></div>
+        <div class="coord-field"><label>Y (m)</label>
+          <input type="number" data-idx="${i}" data-key="y" value="${o.y}" step="0.1"></div>
+        <div class="coord-field"><label>Z (m)</label>
+          <input type="number" data-idx="${i}" data-key="z" value="${o.z}" step="0.1"></div>
+        <div class="coord-field"><label>Radius</label>
+          <input type="number" data-idx="${i}" data-key="r" value="${o.r}" step="0.05"></div>
+      </div>`;
+    list.appendChild(div);
+  });
+
+  list.querySelectorAll('.obs-head button').forEach(btn => {
+    btn.addEventListener('click', () => {
+      obstacles.splice(parseInt(btn.dataset.idx), 1);
+      renderObsPanel();
+      rebuildObstacleMeshes();
+      clearTraj();
+    });
+  });
+
+  list.querySelectorAll('input[data-key]').forEach(inp => {
+    inp.addEventListener('change', () => {
+      const idx = parseInt(inp.dataset.idx);
+      obstacles[idx][inp.dataset.key] = parseFloat(inp.value);
+      rebuildObstacleMeshes();
+      clearTraj();
+    });
+  });
+}
+
+function clearTraj() {
+  if (trajLine) { scene.remove(trajLine); trajLine = null; }
+  if (animFrame) { cancelAnimationFrame(animFrame); animFrame = null; }
+  if (droneSphere) droneSphere.visible = false;
+  clearStats();
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Simulate
+// ─────────────────────────────────────────────────────────────────────────────
+function simulate() {
+  const btn = document.getElementById('btn-sim');
+
+  clearTraj();
+  rebuildMarkers();
+
+  const ka  = parseFloat(document.getElementById('ka').value);
+  const kr  = parseFloat(document.getElementById('kr').value);
+  const rho = parseFloat(document.getElementById('rho').value);
+  const sv  = readVec('sx','sy','sz');
+  const tv  = readVec('tx','ty','tz');
+
+  const result = apfSim(sv.x,sv.y,sv.z, tv.x,tv.y,tv.z, obstacles, ka, kr, rho);
+
+  trajPoints = result.traj;
+  drawTrajectory(trajPoints);
+  animateDrone(trajPoints);
+  setStats(result);
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Reset
+// ─────────────────────────────────────────────────────────────────────────────
+function resetScene() {
+  obstacles = [
+    { x: 3.0, y: 2.8, z: -2.1, r: 0.38 },
+    { x: 4.5, y: 1.4, z: -2.1, r: 0.38 },
+    { x: 5.8, y: 2.5, z: -2.1, r: 0.38 },
+  ];
+  ['sx','sy','sz'].forEach((id,i)=> document.getElementById(id).value=[6.17,2.19,-2.15][i]);
+  ['tx','ty','tz'].forEach((id,i)=> document.getElementById(id).value=[-0.30,1.75,-2.00][i]);
+  document.getElementById('ka').value=30; document.getElementById('va').textContent='30';
+  document.getElementById('kr').value=10; document.getElementById('vr').textContent='10';
+  document.getElementById('rho').value=0.5; document.getElementById('vp').textContent='0.50';
+  renderObsPanel();
+  rebuildObstacleMeshes();
+  rebuildMarkers();
+  clearTraj();
+  camera.position.set(14, 8, -3);
+  controls.target.copy(sceneCenter);
+  controls.update();
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Live simulation (path only — no drone animation)
+// ─────────────────────────────────────────────────────────────────────────────
+function simulateQuick() {
+  if (animFrame) { cancelAnimationFrame(animFrame); animFrame = null; }
+  if (trajLine)  { scene.remove(trajLine); trajLine = null; }
+  if (droneSphere) droneSphere.visible = false;
+
+  const ka  = parseFloat(document.getElementById('ka').value);
+  const kr  = parseFloat(document.getElementById('kr').value);
+  const rho = parseFloat(document.getElementById('rho').value);
+  const sv  = readVec('sx','sy','sz');
+  const tv  = readVec('tx','ty','tz');
+  const result = apfSim(sv.x,sv.y,sv.z, tv.x,tv.y,tv.z, obstacles, ka, kr, rho);
+  trajPoints = result.traj;
+  drawTrajectory(trajPoints);
+  setStats(result);
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Event wiring
+// ─────────────────────────────────────────────────────────────────────────────
+document.getElementById('btn-sim').addEventListener('click', simulate);
+document.getElementById('btn-reset').addEventListener('click', resetScene);
+document.getElementById('btn-add').addEventListener('click', () => {
+  obstacles.push({ x: 3.5, y: 2.0, z: -2.1, r: 0.38 });
+  renderObsPanel(); rebuildObstacleMeshes(); simulateQuick();
+});
+
+// Sliders: update display + live sim on drag
+[['ka','va',0],['kr','vr',0],['rho','vp',2]].forEach(([slId, valId, dec]) => {
+  const sl  = document.getElementById(slId);
+  const val = document.getElementById(valId);
+  sl.addEventListener('input', () => {
+    val.textContent = parseFloat(sl.value).toFixed(dec);
+    rebuildObstacleMeshes();
+    simulateQuick();
+  });
+  // Blender-style drag on the value label
+  val.style.cursor = 'ew-resize';
+  val.title = 'Drag left/right to adjust';
+  let _startX, _startV;
+  val.addEventListener('pointerdown', e => {
+    _startX = e.clientX; _startV = parseFloat(sl.value);
+    val.setPointerCapture(e.pointerId); e.preventDefault();
+  });
+  val.addEventListener('pointermove', e => {
+    if (!e.buttons) return;
+    const range = parseFloat(sl.max) - parseFloat(sl.min);
+    const step  = parseFloat(sl.step) || 1;
+    const raw   = _startV + (e.clientX - _startX) * range / 200;
+    const snapped = Math.round(Math.max(parseFloat(sl.min), Math.min(parseFloat(sl.max), raw)) / step) * step;
+    sl.value = snapped;
+    val.textContent = snapped.toFixed(dec);
+    rebuildObstacleMeshes();
+    simulateQuick();
+  });
+});
+
+['sx','sy','sz','tx','ty','tz'].forEach(id => {
+  document.getElementById(id).addEventListener('change', () => {
+    rebuildMarkers(); simulateQuick();
+  });
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Resize handler
+// ─────────────────────────────────────────────────────────────────────────────
+function onResize() {
+  const w = window.innerWidth - 260;
+  const h = window.innerHeight;
+  renderer.setSize(w, h);
+  camera.aspect = w / h;
+  camera.updateProjectionMatrix();
+}
+window.addEventListener('resize', onResize);
+onResize();
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Render loop
+// ─────────────────────────────────────────────────────────────────────────────
+function render() {
+  requestAnimationFrame(render);
+  controls.update();
+  renderer.render(scene, camera);
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Init
+// ─────────────────────────────────────────────────────────────────────────────
+renderObsPanel();
+rebuildObstacleMeshes();
+rebuildMarkers();
+simulateQuick();
+render();
+document.getElementById('loading').style.opacity = '0';
+setTimeout(() => document.getElementById('loading').style.display = 'none', 500);
+</script>
+</body>
+</html>
