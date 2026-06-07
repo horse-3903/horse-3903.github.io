@@ -211,8 +211,9 @@ let droneSphere  = null;
 let trajLine     = null;
 let startSphere  = null;
 let targetSphere = null;
-const obsMeshes  = [];
-const infMeshes  = [];
+const obsMeshes   = [];
+const infMeshes   = [];
+const labelMeshes = [];
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Three.js setup
@@ -437,14 +438,34 @@ function rebuildMarkers() {
 // ─────────────────────────────────────────────────────────────────────────────
 // Obstacle meshes
 // ─────────────────────────────────────────────────────────────────────────────
+function makeObsLabel(num) {
+  const size = 128;
+  const cv = document.createElement('canvas');
+  cv.width = size; cv.height = size;
+  const ctx = cv.getContext('2d');
+  ctx.clearRect(0, 0, size, size);
+  ctx.fillStyle = '#d29922';
+  ctx.font = `bold ${size * 0.55}px monospace`;
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText(String(num), size / 2, size / 2);
+  const tex = new THREE.CanvasTexture(cv);
+  const mat = new THREE.SpriteMaterial({ map: tex, depthTest: false, transparent: true });
+  const sprite = new THREE.Sprite(mat);
+  sprite.scale.set(0.45, 0.45, 1);
+  return sprite;
+}
+
 function rebuildObstacleMeshes() {
   obsMeshes.forEach(m => scene.remove(m));
   infMeshes.forEach(m => scene.remove(m));
+  labelMeshes.forEach(m => scene.remove(m));
   obsMeshes.length = 0;
   infMeshes.length = 0;
+  labelMeshes.length = 0;
 
   const rho = parseFloat(document.getElementById('rho').value);
-  obstacles.forEach(o => {
+  obstacles.forEach((o, i) => {
     // Solid sphere
     const geo = new THREE.SphereGeometry(o.r, 20, 14);
     const mat = new THREE.MeshPhongMaterial({
@@ -455,6 +476,13 @@ function rebuildObstacleMeshes() {
     mesh.castShadow = true;
     scene.add(mesh);
     obsMeshes.push(mesh);
+
+    // Number label above sphere
+    const label = makeObsLabel(i + 1);
+    const pos = w2t(o.x, o.y, o.z);
+    label.position.set(pos.x, pos.y + o.r + 0.28, pos.z);
+    scene.add(label);
+    labelMeshes.push(label);
 
     // Influence zone wireframe
     const igeo = new THREE.SphereGeometry(rho, 16, 10);
