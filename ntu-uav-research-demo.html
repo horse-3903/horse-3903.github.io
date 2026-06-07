@@ -460,7 +460,7 @@ function rebuildObstacleMeshes() {
     // Influence zone wireframe
     const igeo = new THREE.SphereGeometry(rho, 16, 10);
     const imat = new THREE.MeshBasicMaterial({
-      color: 0xd29922, wireframe: true, transparent: true, opacity: 0.08
+      color: 0xd29922, wireframe: true, transparent: true, opacity: 0.08, depthWrite: false,
     });
     const imesh = new THREE.Mesh(igeo, imat);
     imesh.position.copy(w2t(o.x, o.y, o.z));
