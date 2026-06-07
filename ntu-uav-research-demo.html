@@ -16,7 +16,7 @@
   #c { position: fixed; top: 0; left: 0; display: block; }
   #ui {
     position: fixed; top: 0; right: 0; bottom: 0;
-    width: 260px;
+    width: 320px;
     background: rgba(13,17,23,0.88);
     backdrop-filter: blur(10px);
     border-left: 1px solid var(--border);
@@ -25,7 +25,7 @@
     font-size: 12px; color: var(--text);
     overflow-y: auto;
     padding: 16px 14px 24px;
-    gap: 14px;
+    gap: 12px;
   }
   #ui h1 {
     font-size: 14px; font-weight: 600;
@@ -64,12 +64,13 @@
   .obs-row .obs-head button { background: none; border: none; color: var(--muted);
     cursor: pointer; font-size: 14px; line-height: 1; padding: 0 2px; }
   .obs-row .obs-head button:hover { color: var(--red); }
-  .coords { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; }
+  .top-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .coords { display: grid; grid-template-columns: repeat(4, 1fr); gap: 3px; }
   .coord-field { display: flex; flex-direction: column; gap: 2px; }
-  .coord-field label { font-size: 9px; color: var(--muted); text-transform: uppercase; }
+  .coord-field label { font-size: 8px; color: var(--muted); text-transform: uppercase; }
   .coord-field input {
     background: var(--bg); border: 1px solid var(--border); border-radius: 3px;
-    color: var(--text); font-size: 11px; padding: 3px 5px; width: 100%;
+    color: var(--text); font-size: 10px; padding: 2px 3px; width: 100%;
     font-family: monospace;
   }
   .coord-field input:focus { outline: none; border-color: var(--accent); }
@@ -87,7 +88,7 @@
   .stat .sv { font-size: 15px; font-weight: 600; font-family: monospace; margin-top: 1px; }
   .sv.ok   { color: var(--green); }  .sv.warn { color: var(--orange); }  .sv.err { color: var(--red); }
   #loading {
-    position: fixed; inset: 0; right: 260px;
+    position: fixed; inset: 0; right: 320px;
     display: flex; align-items: center; justify-content: center;
     color: var(--muted); font-family: monospace; font-size: 13px;
     pointer-events: none; background: var(--bg);
@@ -111,28 +112,33 @@
 <div id="ui">
   <h1>APF 3D Navigator<small>NTU UAV Research · DJI Tello · ZoeDepth</small></h1>
 
-  <div class="sec">
-    <div class="sec-label">APF Parameters</div>
-    <div class="param">
-      <div class="row"><span>Attraction k<sub>a</sub></span><span class="val" id="va">30</span></div>
-      <input type="range" id="ka" min="1" max="80" value="30" step="1">
+  <div class="top-grid">
+    <div class="sec">
+      <div class="sec-label">APF Parameters</div>
+      <div class="param">
+        <div class="row"><span>Attraction k<sub>a</sub></span><span class="val" id="va">30</span></div>
+        <input type="range" id="ka" min="1" max="80" value="30" step="1">
+      </div>
+      <div class="param">
+        <div class="row"><span>Repulsion k<sub>r</sub></span><span class="val" id="vr">10</span></div>
+        <input type="range" id="kr" min="1" max="60" value="10" step="1">
+      </div>
+      <div class="param">
+        <div class="row"><span>Influence ρ₀ (m)</span><span class="val" id="vp">0.50</span></div>
+        <input type="range" id="rho" min="0.1" max="2.5" value="0.5" step="0.001">
+      </div>
     </div>
-    <div class="param">
-      <div class="row"><span>Repulsion k<sub>r</sub></span><span class="val" id="vr">10</span></div>
-      <input type="range" id="kr" min="1" max="60" value="10" step="1">
+    <div class="sec">
+      <div class="sec-label">Results</div>
+      <div class="stat-grid">
+        <div class="stat"><div class="sl">Status</div><div class="sv" id="rs">—</div></div>
+        <div class="stat"><div class="sl">Steps</div><div class="sv" id="rstep">—</div></div>
+        <div class="stat"><div class="sl">Path (m)</div><div class="sv" id="rpath">—</div></div>
+        <div class="stat"><div class="sl">Min clear</div><div class="sv" id="rclear">—</div></div>
+      </div>
+      <button class="btn btn-primary" id="btn-sim" style="margin-top:6px">▶ Simulate</button>
+      <button class="btn btn-secondary" id="btn-reset" style="margin-top:4px">Reset scene</button>
     </div>
-    <div class="param">
-      <div class="row"><span>Influence ρ₀ (m)</span><span class="val" id="vp">0.50</span></div>
-      <input type="range" id="rho" min="0.1" max="2.5" value="0.5" step="0.001">
-    </div>
-  </div>
-
-  <div class="sec">
-    <div class="sec-label-row">
-      <span class="sec-label">Obstacles</span>
-      <button class="btn-small" id="btn-add">+ Add</button>
-    </div>
-    <div id="obs-list"></div>
   </div>
 
   <div class="sec">
@@ -155,18 +161,11 @@
   </div>
 
   <div class="sec">
-    <button class="btn btn-primary" id="btn-sim">▶ Simulate</button>
-    <button class="btn btn-secondary" id="btn-reset" style="margin-top:6px">Reset scene</button>
-  </div>
-
-  <div class="sec">
-    <div class="sec-label">Results</div>
-    <div class="stat-grid">
-      <div class="stat"><div class="sl">Status</div><div class="sv" id="rs">—</div></div>
-      <div class="stat"><div class="sl">Steps</div><div class="sv" id="rstep">—</div></div>
-      <div class="stat"><div class="sl">Path (m)</div><div class="sv" id="rpath">—</div></div>
-      <div class="stat"><div class="sl">Min clear</div><div class="sv" id="rclear">—</div></div>
+    <div class="sec-label-row">
+      <span class="sec-label">Obstacles</span>
+      <button class="btn-small" id="btn-add">+ Add</button>
     </div>
+    <div id="obs-list"></div>
   </div>
 </div>
 
@@ -790,7 +789,7 @@ document.getElementById('btn-add').addEventListener('click', () => {
 // Resize handler
 // ─────────────────────────────────────────────────────────────────────────────
 function onResize() {
-  const w = window.innerWidth - 260;
+  const w = window.innerWidth - 320;
   const h = window.innerHeight;
   renderer.setSize(w, h);
   camera.aspect = w / h;
