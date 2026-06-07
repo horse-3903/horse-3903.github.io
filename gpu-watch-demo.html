@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>gpu-watch — interactive demo</title>
+  <title>gpu-watch: interactive demo</title>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -352,7 +352,7 @@
 <!-- ── Header ────────────────────────────────────────────────────────────── -->
 <header>
   <h1>gpu-watch</h1>
-  <p>A lightweight CLI wrapper for long-running GPU jobs — persistent logs, GPU telemetry, metric extraction, and push notifications.</p>
+  <p>A lightweight CLI wrapper for long-running GPU jobs: persistent logs, GPU telemetry, metric extraction, and push notifications.</p>
   <div class="header-links">
     <a class="btn btn-primary" href="https://github.com/horse-3903/gpu-watch" target="_blank">
       ★ GitHub
@@ -380,7 +380,7 @@
               <span class="dot dot-red"></span>
               <span class="dot dot-yellow"></span>
               <span class="dot dot-green"></span>
-              <span class="terminal-title">bash — gpu-watch demo</span>
+              <span class="terminal-title">bash: gpu-watch demo</span>
               <div class="terminal-controls">
                 <button class="btn btn-green btn-sm" id="runBtn" onclick="startDemo()">▶ Run</button>
               </div>
@@ -422,7 +422,7 @@
   <section>
     <h2>Live metric extractor</h2>
     <p class="section-desc">
-      Paste any training log below — the metric extraction logic from
+      Paste any training log below: the metric extraction logic from
       <code style="font-family:var(--font-mono);font-size:0.8em;color:var(--blue)">gpu_watch_metrics.py</code>
       runs directly in your browser via Pyodide (Python compiled to WebAssembly). No server involved.
     </p>
@@ -731,7 +731,7 @@ async function loadPyodideEngine() {
     btn.style.display = 'none';
   } catch (e) {
     status.className = 'pyodide-status error';
-    status.textContent = 'load failed — check console';
+    status.textContent = 'load failed: check console';
     btn.disabled = false;
     console.error(e);
   }

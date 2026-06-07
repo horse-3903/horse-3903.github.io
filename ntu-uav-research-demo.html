@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>APF 3D Navigator — NTU UAV Research</title>
+<title>APF 3D Navigator: NTU UAV Research</title>
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   :root {
@@ -115,10 +115,10 @@
   <div class="sec">
     <div class="sec-label">Results</div>
     <div class="stat-grid">
-      <div class="stat"><div class="sl">Status</div><div class="sv" id="rs">—</div></div>
-      <div class="stat"><div class="sl">Steps</div><div class="sv" id="rstep">—</div></div>
-      <div class="stat"><div class="sl">Path (m)</div><div class="sv" id="rpath">—</div></div>
-      <div class="stat"><div class="sl">Min clear</div><div class="sv" id="rclear">—</div></div>
+      <div class="stat"><div class="sl">Status</div><div class="sv" id="rs">-</div></div>
+      <div class="stat"><div class="sl">Steps</div><div class="sv" id="rstep">-</div></div>
+      <div class="stat"><div class="sl">Path (m)</div><div class="sv" id="rpath">-</div></div>
+      <div class="stat"><div class="sl">Min clear</div><div class="sv" id="rclear">-</div></div>
     </div>
     <button class="btn btn-primary" id="btn-sim" style="margin-top:8px">▶ Simulate</button>
     <button class="btn btn-secondary" id="btn-reset" style="margin-top:5px">Reset scene</button>
@@ -515,7 +515,7 @@ function drawTrajectory(pts) {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// APF simulation (client-side fallback — mirrors task/apf.py)
+// APF simulation (client-side fallback: mirrors task/apf.py)
 // ─────────────────────────────────────────────────────────────────────────────
 function wallF(coord, lo, hi, dw, kr) {
   let f = 0;
@@ -640,7 +640,7 @@ function setStats(result) {
 
 function clearStats() {
   ['rs','rstep','rpath','rclear'].forEach(id => {
-    document.getElementById(id).textContent = '—';
+    document.getElementById(id).textContent = '-';
     document.getElementById(id).className = 'sv';
   });
 }
@@ -747,7 +747,7 @@ function resetScene() {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// Live simulation (path only — no drone animation)
+// Live simulation (path only: no drone animation)
 // ─────────────────────────────────────────────────────────────────────────────
 function simulateQuick() {
   if (animFrame) { cancelAnimationFrame(animFrame); animFrame = null; }

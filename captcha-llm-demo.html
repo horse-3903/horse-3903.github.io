@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>captcha-llm — interactive demo</title>
+  <title>captcha-llm: interactive demo</title>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -389,14 +389,14 @@
   <!-- ── Section 1: Interactive ─────────────────────────────────────────── -->
   <section>
     <h2>Try the CAPTCHA yourself</h2>
-    <p class="section-desc">Read the ASCII art and type what you see. State-of-the-art multimodal LLMs averaged &lt;56% character similarity — you should find this trivial.</p>
+    <p class="section-desc">Read the ASCII art and type what you see. State-of-the-art multimodal LLMs averaged &lt;56% character similarity: you should find this trivial.</p>
 
     <div class="terminal-wrap">
       <div class="terminal-bar">
         <span class="dot dot-red"></span>
         <span class="dot dot-yellow"></span>
         <span class="dot dot-green"></span>
-        <span class="terminal-title">ASCII CAPTCHA — interactive</span>
+        <span class="terminal-title">ASCII CAPTCHA: interactive</span>
         <div class="terminal-controls">
           <select id="fontSel" disabled>
             <option value="Standard">Standard</option>
@@ -423,14 +423,14 @@
     <div class="stats-bar">
       <div class="stat-chip">attempts <span class="val" id="statAttempts">0</span></div>
       <div class="stat-chip">solved <span class="val" id="statSolved">0</span></div>
-      <div class="stat-chip">your accuracy <span class="val" id="statAccuracy">—</span></div>
+      <div class="stat-chip">your accuracy <span class="val" id="statAccuracy">-</span></div>
       <div class="stat-chip highlight">best AI (image) <span class="val">0.16%</span></div>
     </div>
   </section>
 
   <!-- ── Section 2: Accuracy table ─────────────────────────────────────── -->
   <section>
-    <h2>Paper results — ASCII CAPTCHA (250 samples per model)</h2>
+    <h2>Paper results: ASCII CAPTCHA (250 samples per model)</h2>
     <p class="section-desc">Full accuracy requires an exact string match. Text similarity uses Python's SequenceMatcher ratio. No model achieved full accuracy on text input.</p>
 
     <div class="table-wrap">
@@ -528,7 +528,7 @@
         </tbody>
       </table>
       <div class="table-note">
-        † Gemini 3 Flash Preview (image) achieved 1 correct answer across all 628 samples (250 per model, 2 modalities), giving 0.16% exact accuracy — the only non-zero result.
+        † Gemini 3 Flash Preview (image) achieved 1 correct answer across all 628 samples (250 per model, 2 modalities), giving 0.16% exact accuracy: the only non-zero result.
         DeepSeek v3.2-exp averaged 84.49s per response, still achieving 0% accuracy.
       </div>
     </div>
@@ -546,7 +546,7 @@
 
   <!-- ── Section 4: Audio CAPTCHA summary ──────────────────────────────── -->
   <section>
-    <h2>Audio CAPTCHA — overlapping speech</h2>
+    <h2>Audio CAPTCHA: overlapping speech</h2>
     <p class="section-desc">CommonsenseQA 5-choice questions synthesised via XTTS-v2 TTS, then augmented with four noise conditions. Random baseline is 20% (5-choice).</p>
     <div class="table-wrap">
       <table class="acc-table">
@@ -592,7 +592,7 @@
       </table>
       <div class="table-note">
         Under combined overlapping speech, all models approach the random 20% baseline.
-        GPT Audio Mini reaches exactly 20% under Gaussian noise — indistinguishable from random guessing.
+        GPT Audio Mini reaches exactly 20% under Gaussian noise: indistinguishable from random guessing.
         100 samples per noise condition.
       </div>
     </div>
@@ -601,14 +601,14 @@
   <!-- ── Section 5: Why it works ───────────────────────────────────────── -->
   <section>
     <h2>Why ASCII art defeats frontier LLMs</h2>
-    <p class="section-desc">Two orthogonal failure modes — one for vision models, one for text models — both rooted in deep mismatches with how LLMs process information.</p>
+    <p class="section-desc">Two orthogonal failure modes: one for vision models, one for text models: both rooted in deep mismatches with how LLMs process information.</p>
     <div class="features">
-      <span class="feature-pill"><strong>Gestalt mismatch</strong> — Vision models detect local textures; humans ignore individual characters and perceive the global shape they form</span>
-      <span class="feature-pill"><strong>Tokenization breaks alignment</strong> — BPE tokenises a 2D grid as a 1D stream; vertical structure across rows is destroyed</span>
-      <span class="feature-pill"><strong>No training signal</strong> — ASCII art reading is rare in pre-training data; there is no learned perceptual shortcut to exploit</span>
-      <span class="feature-pill"><strong>Cost-of-attack asymmetry</strong> — 145s of reasoning for 1 char correct means solving at scale is economically non-viable</span>
-      <span class="feature-pill"><strong>Instant generation</strong> — 0.011s per sample; CAPTCHA generation is ~10,000× cheaper than solving</span>
-      <span class="feature-pill"><strong>50+ fonts</strong> — Each font is a distinct visual encoding; models cannot specialise on one</span>
+      <span class="feature-pill"><strong>Gestalt mismatch</strong>: Vision models detect local textures; humans ignore individual characters and perceive the global shape they form</span>
+      <span class="feature-pill"><strong>Tokenization breaks alignment</strong>: BPE tokenises a 2D grid as a 1D stream; vertical structure across rows is destroyed</span>
+      <span class="feature-pill"><strong>No training signal</strong>: ASCII art reading is rare in pre-training data; there is no learned perceptual shortcut to exploit</span>
+      <span class="feature-pill"><strong>Cost-of-attack asymmetry</strong>: 145s of reasoning for 1 char correct means solving at scale is economically non-viable</span>
+      <span class="feature-pill"><strong>Instant generation</strong>: 0.011s per sample; CAPTCHA generation is ~10,000× cheaper than solving</span>
+      <span class="feature-pill"><strong>50+ fonts</strong>: Each font is a distinct visual encoding; models cannot specialise on one</span>
     </div>
   </section>
 
@@ -658,7 +658,7 @@ const FAILURES = [
     mode: 'image input',
     resp: 'NEXV5',
     sim: 60,
-    note: 'Best model overall — still wrong on full string',
+    note: 'Best model overall: still wrong on full string',
   },
   {
     text: 'GHOST',
@@ -667,7 +667,7 @@ const FAILURES = [
     mode: 'image input',
     resp: 'GH0ST',
     sim: 80,
-    note: '145s of reasoning — O vs 0 ambiguity unresolved',
+    note: '145s of reasoning: O vs 0 ambiguity unresolved',
   },
 ];
 
@@ -688,7 +688,7 @@ figlet.preloadFonts(FONTS, () => {
 setTimeout(() => {
   if (!fontsReady) {
     document.getElementById('captchaDisplay').textContent = '⚠ Font CDN unavailable. Open the demo directly in a browser.';
-    document.getElementById('failureGrid').innerHTML = '<div style="color:var(--muted);font-size:0.8rem;padding:12px;font-family:var(--font-mono)">Font CDN unavailable — open demo directly to load fonts.</div>';
+    document.getElementById('failureGrid').innerHTML = '<div style="color:var(--muted);font-size:0.8rem;padding:12px;font-family:var(--font-mono)">Font CDN unavailable: open demo directly to load fonts.</div>';
   }
 }, 15000);
 
@@ -757,10 +757,10 @@ function checkAnswer() {
   if (isExact) {
     solved++;
     msg.classList.add('correct');
-    msg.textContent = `✓ Correct! "${correct}" — you solved what no frontier AI could.`;
+    msg.textContent = `✓ Correct! "${correct}": you solved what no frontier AI could.`;
   } else if (sim >= 0.6) {
     msg.classList.add('close');
-    msg.textContent = `~ Close — you got ${simPct}% similarity. Correct: "${correct}". Best AI managed 55.48%.`;
+    msg.textContent = `~ Close: you got ${simPct}% similarity. Correct: "${correct}". Best AI managed 55.48%.`;
   } else {
     msg.classList.add('wrong');
     msg.textContent = `✗ Not quite (${simPct}% similarity). Correct: "${correct}". Try again or press New.`;
@@ -777,7 +777,7 @@ function updateStats() {
   document.getElementById('statAttempts').textContent = attempts;
   document.getElementById('statSolved').textContent   = solved;
   document.getElementById('statAccuracy').textContent = attempts
-    ? Math.round((solved / attempts) * 100) + '%' : '—';
+    ? Math.round((solved / attempts) * 100) + '%' : '-';
 }
 
 // ── Font selector change ───────────────────────────────────────────────────
@@ -821,7 +821,7 @@ function renderFailures() {
             <span class="failure-label">correct:</span>
             <span class="failure-val-right">${f.text}</span>
           </div>
-          <div class="failure-sim">${f.sim}% similarity — ${f.note}</div>
+          <div class="failure-sim">${f.sim}% similarity: ${f.note}</div>
         </div>
       `;
       grid.appendChild(card);
