@@ -123,7 +123,7 @@
     </div>
     <div class="param">
       <div class="row"><span>Influence ρ₀ (m)</span><span class="val" id="vp">0.50</span></div>
-      <input type="range" id="rho" min="0.1" max="2.5" value="0.5" step="0.05">
+      <input type="range" id="rho" min="0.1" max="2.5" value="0.5" step="0.001">
     </div>
   </div>
 
@@ -139,15 +139,15 @@
     <div class="sec-label">Navigation</div>
     <div class="nav-row">
       <span class="nav-label" style="color:var(--green)">Start</span>
-      <input type="number" id="sx" value="6.17" step="0.1">
-      <input type="number" id="sy" value="2.19" step="0.1">
-      <input type="number" id="sz" value="-2.15" step="0.1">
+      <input type="number" id="sx" value="6.17" step="0.001">
+      <input type="number" id="sy" value="2.19" step="0.001">
+      <input type="number" id="sz" value="-2.15" step="0.001">
     </div>
     <div class="nav-row" style="margin-top:4px">
       <span class="nav-label" style="color:var(--red)">Target</span>
-      <input type="number" id="tx" value="-0.30" step="0.1">
-      <input type="number" id="ty" value="1.75" step="0.1">
-      <input type="number" id="tz" value="-2.00" step="0.1">
+      <input type="number" id="tx" value="-0.30" step="0.001">
+      <input type="number" id="ty" value="1.75" step="0.001">
+      <input type="number" id="tz" value="-2.00" step="0.001">
     </div>
     <div style="font-size:9px;color:var(--muted);margin-top:2px">
       Coordinate frame: X forward · Y lateral · Z negative=up
@@ -582,13 +582,11 @@ function addScrub(inp, onUpdate) {
   });
   inp.addEventListener('pointermove', e => {
     if (!e.buttons) return;
-    const step     = parseFloat(inp.step) || 1;
-    const dy       = startY - e.clientY;          // up = increase
-    const raw      = startVal + Math.round(dy / 2) * step;
-    const minV     = inp.min !== '' ? parseFloat(inp.min) : -Infinity;
-    const maxV     = inp.max !== '' ? parseFloat(inp.max) :  Infinity;
-    const decimals = (step.toString().split('.')[1] || '').length;
-    inp.value = Math.max(minV, Math.min(maxV, raw)).toFixed(decimals);
+    const dy   = startY - e.clientY;          // up = increase
+    const raw  = startVal + dy * 0.01;        // 1px = 0.01
+    const minV = inp.min !== '' ? parseFloat(inp.min) : -Infinity;
+    const maxV = inp.max !== '' ? parseFloat(inp.max) :  Infinity;
+    inp.value  = Math.max(minV, Math.min(maxV, raw)).toFixed(3);
     onUpdate();
   });
 }
@@ -637,13 +635,13 @@ function renderObsPanel() {
       </div>
       <div class="coords">
         <div class="coord-field"><label>X (m)</label>
-          <input type="number" data-idx="${i}" data-key="x" value="${o.x}" step="0.1"></div>
+          <input type="number" data-idx="${i}" data-key="x" value="${o.x}" step="0.001"></div>
         <div class="coord-field"><label>Y (m)</label>
-          <input type="number" data-idx="${i}" data-key="y" value="${o.y}" step="0.1"></div>
+          <input type="number" data-idx="${i}" data-key="y" value="${o.y}" step="0.001"></div>
         <div class="coord-field"><label>Z (m)</label>
-          <input type="number" data-idx="${i}" data-key="z" value="${o.z}" step="0.1"></div>
+          <input type="number" data-idx="${i}" data-key="z" value="${o.z}" step="0.001"></div>
         <div class="coord-field"><label>Radius</label>
-          <input type="number" data-idx="${i}" data-key="r" value="${o.r}" step="0.05"></div>
+          <input type="number" data-idx="${i}" data-key="r" value="${o.r}" step="0.001"></div>
       </div>`;
     list.appendChild(div);
   });
