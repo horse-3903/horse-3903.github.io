@@ -450,7 +450,6 @@ function rebuildObstacleMeshes() {
     const geo = new THREE.SphereGeometry(o.r, 20, 14);
     const mat = new THREE.MeshPhongMaterial({
       color: 0xd29922, emissive: 0x7a3010, emissiveIntensity: 0.3,
-      transparent: true, opacity: 0.92,
     });
     const mesh = new THREE.Mesh(geo, mat);
     mesh.position.copy(w2t(o.x, o.y, o.z));
