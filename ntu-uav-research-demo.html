@@ -572,6 +572,28 @@ function animateDrone(pts) {
 // ─────────────────────────────────────────────────────────────────────────────
 // UI helpers
 // ─────────────────────────────────────────────────────────────────────────────
+function addScrub(inp, onUpdate) {
+  inp.style.cursor = 'ns-resize';
+  let startY = 0, startVal = 0;
+  inp.addEventListener('pointerdown', e => {
+    startY   = e.clientY;
+    startVal = parseFloat(inp.value) || 0;
+    inp.setPointerCapture(e.pointerId);
+    e.preventDefault();
+  });
+  inp.addEventListener('pointermove', e => {
+    if (!e.buttons) return;
+    const step     = parseFloat(inp.step) || 1;
+    const dy       = startY - e.clientY;          // up = increase
+    const raw      = startVal + Math.round(dy / 2) * step;
+    const minV     = inp.min !== '' ? parseFloat(inp.min) : -Infinity;
+    const maxV     = inp.max !== '' ? parseFloat(inp.max) :  Infinity;
+    const decimals = (step.toString().split('.')[1] || '').length;
+    inp.value = Math.max(minV, Math.min(maxV, raw)).toFixed(decimals);
+    onUpdate();
+  });
+}
+
 function readVec(xId, yId, zId) {
   return {
     x: parseFloat(document.getElementById(xId).value),
@@ -637,12 +659,14 @@ function renderObsPanel() {
   });
 
   list.querySelectorAll('input[data-key]').forEach(inp => {
-    inp.addEventListener('change', () => {
+    const update = () => {
       const idx = parseInt(inp.dataset.idx);
       obstacles[idx][inp.dataset.key] = parseFloat(inp.value);
       rebuildObstacleMeshes();
-      clearTraj();
-    });
+      simulateQuick();
+    };
+    inp.addEventListener('change', update);
+    addScrub(inp, update);
   });
 }
 
@@ -759,9 +783,10 @@ document.getElementById('btn-add').addEventListener('click', () => {
 });
 
 ['sx','sy','sz','tx','ty','tz'].forEach(id => {
-  document.getElementById(id).addEventListener('change', () => {
-    rebuildMarkers(); simulateQuick();
-  });
+  const inp = document.getElementById(id);
+  const update = () => { rebuildMarkers(); simulateQuick(); };
+  inp.addEventListener('change', update);
+  addScrub(inp, update);
 });
 
 // ─────────────────────────────────────────────────────────────────────────────
