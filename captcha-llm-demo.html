@@ -626,7 +626,7 @@
 <script src="https://cdn.jsdelivr.net/npm/figlet@1.8.0/lib/figlet.js"></script>
 <script>
 // ── Config ─────────────────────────────────────────────────────────────────
-figlet.defaults({ fontPath: 'https://cdn.jsdelivr.net/npm/figlet@1.8.0/fonts/' });
+figlet.defaults({ fontPath: '/figlet-fonts/' });
 
 const FONTS   = ['Standard', 'Doom', 'Slant', 'Small', 'Banner'];
 const CHARSET = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
@@ -684,13 +684,13 @@ figlet.preloadFonts(FONTS, () => {
   renderFailures();
 });
 
-// Fallback if figlet or CDN fails
+// Fallback if figlet fails to load
 setTimeout(() => {
   if (!fontsReady) {
-    document.getElementById('captchaDisplay').textContent = '⚠ Font CDN unavailable. Open the demo directly in a browser.';
-    document.getElementById('failureGrid').innerHTML = '<div style="color:var(--muted);font-size:0.8rem;padding:12px;font-family:var(--font-mono)">Font CDN unavailable: open demo directly to load fonts.</div>';
+    document.getElementById('captchaDisplay').textContent = 'Failed to load fonts.';
+    document.getElementById('failureGrid').innerHTML = '<div style="color:var(--muted);font-size:0.8rem;padding:12px;font-family:var(--font-mono)">Failed to load fonts.</div>';
   }
-}, 15000);
+}, 10000);
 
 function enableUI() {
   document.getElementById('fontSel').disabled   = false;
