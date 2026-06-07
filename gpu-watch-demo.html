@@ -210,6 +210,7 @@
       opacity: 0.35;
       transition: opacity 0.6s ease;
       min-height: 320px;
+      white-space: pre;
     }
     .file-tree.revealed { opacity: 1; }
     .file-tree .dir  { color: var(--blue); }
@@ -398,20 +399,18 @@
       <!-- Run directory -->
       <div>
         <div class="panel-label">Generated run directory</div>
-        <div class="file-tree" id="fileTree">
-<span class="dir">logs/</span>
-  <span class="dir">└── demo-run_20260607_143210/</span>
-      <span class="file">    ├── train.log</span>          <span class="ann">← full stdout + stderr</span>
-      <span class="file">    ├── gpu.log</span>            <span class="ann">← nvidia-smi snapshots</span>
-      <span class="file">    ├── metrics.log</span>        <span class="ann">← periodic metrics</span>
-      <span class="file">    ├── summary.txt</span>        <span class="ann">← run metadata</span>
-      <span class="file">    ├── exit_code.txt</span>
-      <span class="file">    ├── command.txt</span>
-      <span class="file">    ├── environment.txt</span>    <span class="ann">← hostname, CUDA vars</span>
-      <span class="file">    ├── pip_freeze.txt</span>
-      <span class="file">    ├── nvidia_smi_start.txt</span>
-      <span class="file">    └── nvidia_smi_end.txt</span>
-        </div>
+        <div class="file-tree" id="fileTree"><span class="dir">logs/
+└── demo-run_20260607_143210/</span>
+    ├── <span class="file">train.log</span>          <span class="ann">← full stdout + stderr</span>
+    ├── <span class="file">gpu.log</span>            <span class="ann">← nvidia-smi snapshots</span>
+    ├── <span class="file">metrics.log</span>        <span class="ann">← extracted metrics</span>
+    ├── <span class="file">summary.txt</span>        <span class="ann">← run metadata</span>
+    ├── <span class="file">exit_code.txt</span>
+    ├── <span class="file">command.txt</span>
+    ├── <span class="file">environment.txt</span>    <span class="ann">← hostname, CUDA vars</span>
+    ├── <span class="file">pip_freeze.txt</span>
+    ├── <span class="file">nvidia_smi_start.txt</span>
+    └── <span class="file">nvidia_smi_end.txt</span></div>
         <p style="font-size:0.75rem; color:var(--muted); margin-top:10px;">
           Every run gets its own timestamped directory. Logs persist after the terminal session ends.
         </p>
