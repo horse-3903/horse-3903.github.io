@@ -16,40 +16,40 @@
   #c { position: fixed; top: 0; left: 0; display: block; }
   #ui {
     position: fixed; top: 0; right: 0; bottom: 0;
-    width: 320px;
+    width: 400px;
     background: rgba(13,17,23,0.88);
     backdrop-filter: blur(10px);
     border-left: 1px solid var(--border);
     display: flex; flex-direction: column;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-    font-size: 12px; color: var(--text);
+    font-size: 13px; color: var(--text);
     overflow-y: auto;
-    padding: 16px 14px 24px;
-    gap: 12px;
+    padding: 16px 16px 24px;
+    gap: 13px;
   }
   #ui h1 {
-    font-size: 14px; font-weight: 600;
+    font-size: 16px; font-weight: 600;
     border-bottom: 1px solid var(--border); padding-bottom: 10px;
     line-height: 1.4;
   }
-  #ui h1 small { display: block; color: var(--muted); font-weight: 400; font-size: 10px; margin-top: 2px; }
+  #ui h1 small { display: block; color: var(--muted); font-weight: 400; font-size: 11px; margin-top: 2px; }
   .sec { display: flex; flex-direction: column; gap: 8px; }
   .sec-label {
-    font-size: 10px; font-weight: 600; letter-spacing: .07em;
+    font-size: 11px; font-weight: 600; letter-spacing: .07em;
     text-transform: uppercase; color: var(--muted);
   }
   .param { display: flex; flex-direction: column; gap: 3px; }
   .param .row { display: flex; justify-content: space-between; }
   .param .row .val { color: var(--accent); font-family: monospace; }
   input[type=range] { width: 100%; accent-color: var(--accent); cursor: pointer; }
-  .btn { width: 100%; padding: 7px; border-radius: 5px; border: 1px solid var(--border);
-    font-size: 12px; font-weight: 500; cursor: pointer; transition: opacity .15s; }
+  .btn { width: 100%; padding: 8px; border-radius: 5px; border: 1px solid var(--border);
+    font-size: 13px; font-weight: 500; cursor: pointer; transition: opacity .15s; }
   .btn:hover { opacity: .85; }
   .btn-primary { background: var(--accent); color: #000; border-color: var(--accent); }
   .btn-secondary { background: transparent; color: var(--muted); }
   .btn-danger { background: transparent; color: var(--red); border-color: var(--red); }
   .btn-small {
-    padding: 2px 7px; font-size: 10px; cursor: pointer;
+    padding: 3px 8px; font-size: 11px; cursor: pointer;
     background: transparent; border: 1px solid var(--border);
     border-radius: 4px; color: var(--muted);
   }
@@ -57,38 +57,38 @@
   .sec-label-row { display: flex; justify-content: space-between; align-items: center; }
   .obs-row {
     background: rgba(22,27,34,0.6); border: 1px solid var(--border);
-    border-radius: 5px; padding: 7px; display: flex; flex-direction: column; gap: 5px;
+    border-radius: 5px; padding: 8px; display: flex; flex-direction: column; gap: 6px;
   }
   .obs-row .obs-head { display: flex; justify-content: space-between; align-items: center;
-    font-size: 11px; color: var(--orange); font-weight: 500; }
+    font-size: 12px; color: var(--orange); font-weight: 500; }
   .obs-row .obs-head button { background: none; border: none; color: var(--muted);
-    cursor: pointer; font-size: 14px; line-height: 1; padding: 0 2px; }
+    cursor: pointer; font-size: 15px; line-height: 1; padding: 0 2px; }
   .obs-row .obs-head button:hover { color: var(--red); }
-  .top-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-  .coords { display: grid; grid-template-columns: repeat(4, 1fr); gap: 3px; }
+  .top-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .coords { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; }
   .coord-field { display: flex; flex-direction: column; gap: 2px; }
-  .coord-field label { font-size: 8px; color: var(--muted); text-transform: uppercase; }
+  .coord-field label { font-size: 10px; color: var(--muted); text-transform: uppercase; }
   .coord-field input {
     background: var(--bg); border: 1px solid var(--border); border-radius: 3px;
-    color: var(--text); font-size: 10px; padding: 2px 3px; width: 100%;
+    color: var(--text); font-size: 12px; padding: 3px 4px; width: 100%;
     font-family: monospace;
   }
   .coord-field input:focus { outline: none; border-color: var(--accent); }
-  .nav-row { display: grid; grid-template-columns: 44px 1fr 1fr 1fr; gap: 4px; align-items: center; }
-  .nav-row .nav-label { font-size: 10px; color: var(--muted); }
+  .nav-row { display: grid; grid-template-columns: 48px 1fr 1fr 1fr; gap: 5px; align-items: center; }
+  .nav-row .nav-label { font-size: 11px; color: var(--muted); }
   .nav-row input {
     background: var(--bg); border: 1px solid var(--border); border-radius: 3px;
-    color: var(--text); font-size: 11px; padding: 3px 4px; font-family: monospace;
+    color: var(--text); font-size: 12px; padding: 3px 4px; font-family: monospace;
     width: 100%;
   }
   .nav-row input:focus { outline: none; border-color: var(--accent); }
   .stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
-  .stat { background: var(--bg); border: 1px solid var(--border); border-radius: 4px; padding: 7px 8px; }
-  .stat .sl { font-size: 9px; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; }
-  .stat .sv { font-size: 15px; font-weight: 600; font-family: monospace; margin-top: 1px; }
+  .stat { background: var(--bg); border: 1px solid var(--border); border-radius: 4px; padding: 8px 10px; }
+  .stat .sl { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; }
+  .stat .sv { font-size: 16px; font-weight: 600; font-family: monospace; margin-top: 2px; }
   .sv.ok   { color: var(--green); }  .sv.warn { color: var(--orange); }  .sv.err { color: var(--red); }
   #loading {
-    position: fixed; inset: 0; right: 320px;
+    position: fixed; inset: 0; right: 400px;
     display: flex; align-items: center; justify-content: center;
     color: var(--muted); font-family: monospace; font-size: 13px;
     pointer-events: none; background: var(--bg);
@@ -96,7 +96,7 @@
   }
   #hint {
     position: fixed; bottom: 12px; left: 12px;
-    font-size: 10px; color: var(--muted);
+    font-size: 11px; color: var(--muted);
     font-family: -apple-system, sans-serif;
     pointer-events: none;
     line-height: 1.6;
@@ -817,7 +817,7 @@ document.getElementById('btn-add').addEventListener('click', () => {
 // Resize handler
 // ─────────────────────────────────────────────────────────────────────────────
 function onResize() {
-  const w = window.innerWidth - 320;
+  const w = window.innerWidth - 400;
   const h = window.innerHeight;
   renderer.setSize(w, h);
   camera.aspect = w / h;
