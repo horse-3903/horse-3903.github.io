@@ -1,0 +1,340 @@
+<!DOCTYPE html><html lang="en"> <head><meta charset="utf-8"><link rel="icon" type="image/svg+xml" href="/favicon.svg"><meta name="viewport" content="width=device-width"><meta name="description" content="Full report on the momentum trader sweep experiment. Phase transition confirmed at 35-45% momentum dominance. Spearman rho = +0.977 for peak leverage (p < 10^-60)."><meta property="og:type" content="article"><meta property="og:title" content="Simulation Report: Endogenous Financial Fragility — horse3903"><meta property="og:description" content="Full report on the momentum trader sweep experiment. Phase transition confirmed at 35-45% momentum dominance. Spearman rho = +0.977 for peak leverage (p < 10^-60)."><meta property="og:image" content="https://horse-3903.github.io/og-image.png"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="Simulation Report: Endogenous Financial Fragility — horse3903"><meta name="twitter:image" content="https://horse-3903.github.io/og-image.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet"><!-- KaTeX (served locally, version matches rehype-katex dependency) --><link rel="stylesheet" href="/katex/katex.min.css"><title>Simulation Report: Endogenous Financial Fragility — horse3903</title><link rel="stylesheet" href="/_astro/_slug_.CxjTc_yz.css">
+<style>#back-arrow{position:fixed;left:1.25rem;top:4rem;color:var(--text-muted);opacity:.4;transition:opacity .2s ease,color .2s ease;z-index:40;display:flex;align-items:center;justify-content:center;width:1.75rem;height:1.75rem;border-radius:50%;background:var(--surface);border:1px solid var(--border);text-decoration:none}#back-arrow:hover{opacity:1;color:var(--text)}.dot-grid{position:absolute;inset:0;background-image:radial-gradient(circle,rgba(255,255,255,.08) 1px,transparent 1px);background-size:32px 32px;mask-image:radial-gradient(ellipse 80% 60% at 50% 0%,black 0%,transparent 80%);pointer-events:none}.prose-dark{color:#a1a1aa;line-height:1.85;font-size:.9rem}.prose-dark h1,.prose-dark h2,.prose-dark h3,.prose-dark h4{color:#fafafa;font-weight:700;margin-top:2.25rem;margin-bottom:.75rem;line-height:1.3}.prose-dark h1{font-size:1.55rem}.prose-dark h2{font-size:1.25rem;padding-bottom:.4rem;border-bottom:1px solid rgba(255,255,255,.06)}.prose-dark h3{font-size:1.08rem}.prose-dark h4{font-size:1rem}.prose-dark p{margin-bottom:1.2rem}.prose-dark a{color:var(--accent);text-decoration:underline;text-underline-offset:3px}.prose-dark a:hover{opacity:.8}.prose-dark strong{color:#e4e4e7}.prose-dark em{color:#8b8b9a;font-style:italic}.prose-dark hr{border:none;border-top:1px solid rgba(255,255,255,.07);margin:2rem 0}.prose-dark code{background:#18181b;border:1px solid rgba(255,255,255,.08);padding:.15em .4em;border-radius:5px;font-size:.82em;color:#bfdbfe}.prose-dark pre{background:#111113;border:1px solid rgba(255,255,255,.07);padding:1.2rem 1.4rem;border-radius:12px;overflow-x:auto;margin:1.5rem 0}.prose-dark pre code{background:none;border:none;padding:0;color:#e4e4e7;font-size:.83rem}.prose-dark ul,.prose-dark ol{padding-left:1.5rem;margin-bottom:1.2rem}.prose-dark ul{list-style-type:disc}.prose-dark ol{list-style-type:decimal}.prose-dark li{margin-bottom:.4rem}.prose-dark blockquote{border-left:3px solid var(--accent);padding:.5rem 1rem;background:#3b82f60f;border-radius:0 8px 8px 0;color:#71717a;margin:1.5rem 0;font-style:italic}.prose-dark table{width:100%;border-collapse:collapse;margin-bottom:1.5rem;font-size:.875rem}.prose-dark th,.prose-dark td{border:1px solid rgba(255,255,255,.07);padding:.5rem .75rem;text-align:left}.prose-dark th{background:#18181b;color:#fafafa;font-weight:600}.prose-dark tr:nth-child(2n) td{background:#ffffff05}.prose-dark img{border-radius:10px;max-width:100%;margin:1.5rem auto;display:block;border:1px solid rgba(255,255,255,.07);background:#fff;padding:1rem}.katex{color:#e4e4e7;font-size:1em}.katex-display{overflow-x:auto;overflow-y:hidden;padding:1.5rem 1.75rem;margin:1.75rem 0;background:#111113;border:1px solid rgba(255,255,255,.07);border-radius:10px}.katex-display>.katex{color:#e4e4e7;font-size:1.35em}
+#nav-toggle[data-astro-cid-3ef6ksr2]{font-family:inherit;font-size:.85rem;color:var(--accent);background:none;border:none;cursor:pointer;padding:.25rem .2rem;line-height:1;flex-shrink:0;transition:color .2s ease,opacity .2s ease;user-select:none;opacity:.7}#nav-toggle[data-astro-cid-3ef6ksr2]:hover{opacity:1}#nav-links[data-astro-cid-3ef6ksr2]{list-style:none;padding-top:0;padding-bottom:0;margin:0;white-space:nowrap}#nav-links-wrapper[data-astro-cid-3ef6ksr2]{max-width:9999px;opacity:1;transition:max-width .35s ease,opacity .25s ease}#nav-links-wrapper[data-astro-cid-3ef6ksr2].nav-collapsed{max-width:0;opacity:0;pointer-events:none}.nav-link[data-astro-cid-3ef6ksr2]{transition:color .2s ease;position:relative;text-decoration:none}.nav-link[data-astro-cid-3ef6ksr2]:after{content:"";position:absolute;left:0;bottom:-2px;width:0;height:1px;background:var(--accent);transition:width .25s ease}.nav-link[data-astro-cid-3ef6ksr2]:hover{color:var(--text)!important}.nav-link[data-astro-cid-3ef6ksr2]:hover:after{width:100%}
+</style></head> <body> <!-- Background: dark + noise + track accent glow --> <div class="fixed inset-0 -z-10" style="background: var(--bg);"> <div class="noise-layer"></div> <!-- Track-specific radial glow in top-right --> <div style="position:absolute;top:-10%;right:-5%;width:55%;height:60%;background:radial-gradient(ellipse,#2dd4bf14 0%,transparent 65%);pointer-events:none;"></div> <!-- Subtle dot grid --> <div class="dot-grid"></div> </div> <header id="header" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300" data-astro-cid-3ef6ksr2> <nav class="max-w-6xl mx-auto px-4 sm:px-8 py-4 flex items-center justify-center overflow-x-auto" data-astro-cid-3ef6ksr2> <ul class="flex items-center gap-6 sm:gap-8 whitespace-nowrap" data-astro-cid-3ef6ksr2> <li class="flex items-center" data-astro-cid-3ef6ksr2> <a href="/" class="nav-link text-sm" style="color: var(--text-secondary);" data-astro-cid-3ef6ksr2>Home</a> <button id="nav-toggle" aria-label="Toggle navigation" aria-expanded="true" class="ml-2 hidden md:inline-flex" data-astro-cid-3ef6ksr2> <span id="nav-arrow" data-astro-cid-3ef6ksr2>∷</span> </button> <div id="nav-links-wrapper" class="overflow-hidden hidden md:block nav-collapsed" data-astro-cid-3ef6ksr2> <ul id="nav-links" class="flex items-center gap-8 pl-8" data-astro-cid-3ef6ksr2> <li data-astro-cid-3ef6ksr2><a href="/#about" class="nav-link text-sm" style="color: var(--text-secondary);" data-astro-cid-3ef6ksr2>About</a></li> <li data-astro-cid-3ef6ksr2><a href="/#projects" class="nav-link text-sm" style="color: var(--text-secondary);" data-astro-cid-3ef6ksr2>Projects</a></li> <li data-astro-cid-3ef6ksr2><a href="/#publications" class="nav-link text-sm" style="color: var(--text-secondary);" data-astro-cid-3ef6ksr2>Publications</a></li> <li data-astro-cid-3ef6ksr2><a href="/#experience" class="nav-link text-sm" style="color: var(--text-secondary);" data-astro-cid-3ef6ksr2>Experience</a></li> <li data-astro-cid-3ef6ksr2><a href="/#education" class="nav-link text-sm" style="color: var(--text-secondary);" data-astro-cid-3ef6ksr2>Education</a></li> <li data-astro-cid-3ef6ksr2><a href="/#honors" class="nav-link text-sm" style="color: var(--text-secondary);" data-astro-cid-3ef6ksr2>Honors</a></li> </ul> </div> </li> <li data-astro-cid-3ef6ksr2><a href="/blog" class="nav-link text-sm" style="color: var(--text-secondary);" data-astro-cid-3ef6ksr2>Blog</a></li> <li data-astro-cid-3ef6ksr2><a href="/blog/archive" class="nav-link text-sm" style="color: var(--text-secondary);" data-astro-cid-3ef6ksr2>Archive</a></li> <li data-astro-cid-3ef6ksr2><a href="/signal" class="nav-link text-sm" style="color: var(--text-secondary);" data-astro-cid-3ef6ksr2>Signal</a></li> </ul> </nav> </header> <script type="module">const e=document.getElementById("header"),t=document.getElementById("nav-toggle"),n=document.getElementById("nav-links-wrapper");document.getElementById("nav-arrow");const a=window.location.pathname==="/";let o=a;function r(l){o=l,o?(n.classList.remove("nav-collapsed"),t.style.opacity="0.7",t.setAttribute("aria-expanded","true")):(n.classList.add("nav-collapsed"),t.style.opacity="0.35",t.setAttribute("aria-expanded","false"))}a?(n.style.transition="none",r(!0),requestAnimationFrame(()=>{n.style.transition=""})):t.style.opacity="0.35";t?.addEventListener("click",()=>r(!o));window.addEventListener("scroll",()=>{e&&(window.scrollY>80?(e.style.backgroundColor="rgba(9,9,11,0.85)",e.style.backdropFilter="blur(12px)",e.style.borderBottom="1px solid rgba(255,255,255,0.06)"):(e.style.backgroundColor="transparent",e.style.backdropFilter="none",e.style.borderBottom="none"))});</script>  <a href="/blog" id="back-arrow" aria-label="Back to Blog"> <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"> <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"></path> </svg> </a> <main class="max-w-3xl mx-auto px-6 pt-24 pb-16"> <!-- Post header --> <div class="mb-12" data-reveal> <div class="flex flex-wrap gap-2 mb-5"> <span class="text-xs font-mono px-2.5 py-1 rounded-md" style="background: #2dd4bf14; color: #2dd4bf; border: 1px solid #2dd4bf30;">Minsky Sim</span> <span class="px-2.5 py-1 text-xs rounded-md" style="background: var(--surface); color: var(--text-muted); border: 1px solid var(--border);">Economics</span><span class="px-2.5 py-1 text-xs rounded-md" style="background: var(--surface); color: var(--text-muted); border: 1px solid var(--border);">Simulation</span><span class="px-2.5 py-1 text-xs rounded-md" style="background: var(--surface); color: var(--text-muted); border: 1px solid var(--border);">Statistics</span><span class="px-2.5 py-1 text-xs rounded-md" style="background: var(--surface); color: var(--text-muted); border: 1px solid var(--border);">Finance</span><span class="px-2.5 py-1 text-xs rounded-md" style="background: var(--surface); color: var(--text-muted); border: 1px solid var(--border);">Agent-Based Modelling</span> </div> <h1 class="text-2xl sm:text-3xl font-bold leading-tight mb-4" style="color: var(--text);"> Simulation Report: Endogenous Financial Fragility </h1> <p class="text-sm leading-relaxed mb-5" style="color: var(--text-secondary);">Full report on the momentum trader sweep experiment. Phase transition confirmed at 35-45% momentum dominance. Spearman rho = +0.977 for peak leverage (p &lt; 10^-60).</p> <div class="flex items-center gap-4 text-xs" style="color: var(--text-muted);"> <time>7 June 2026</time>  </div> <div class="h-px mt-8" style="background: linear-gradient(to right, #2dd4bf50, transparent);"></div> </div> <!-- Content --> <article class="prose-dark"> <p><em>Full simulation report for the <a href="/minsky">Minsky Market Sim</a>. See also: <a href="/blog/minsky/theory">Theory Reference</a>.</em></p>
+<p><strong>Rafael Chong</strong>
+Agent-Based Modelling &#x26; Quantitative Finance — Independent Research Project</p>
+<hr>
+<h2 id="abstract">Abstract</h2>
+<p>This report presents an agent-based simulation designed to test Minsky’s Financial Instability Hypothesis (FIH): the proposition that financial stability is self-undermining because rational agents accumulate leverage during calm periods, creating systemic fragility that amplifies small shocks into crises. The simulation features four heterogeneous agent types (fundamental, momentum, noise, and a planned reinforcement learning agent), a log-linear price-impact mechanism, and an explicit balance sheet with debt, interest accrual, margin calls, and forced liquidation. Experiment 2 sweeps the share of momentum traders from 0% to 80% across 10 independent seeds per condition. Results show a sharp phase transition: markets with 30% or fewer momentum traders produce zero crashes across all seeds; above 40% momentum trader dominance, crash frequency rises dramatically (Spearman rho = +0.894, p &#x3C; 10^-32). Peak leverage and maximum drawdown scale monotonically with momentum share (rho = +0.977 and rho = -0.833, respectively, both p &#x3C; 10^-23). These results confirm the Minsky mechanism as an emergent property of agent interaction — no crash is encoded in the model; fragility arises endogenously from individually rational trend-following behaviour.</p>
+<hr>
+<h2 id="1-introduction">1. Introduction</h2>
+<p>Hyman Minsky argued in <em>Stabilizing an Unstable Economy</em> (1986) that market economies are inherently prone to cycles of stability and crisis. His core claim was counterintuitive: prolonged calm is dangerous. When agents observe stability, they rationalise taking on more debt and risk; this demand drives asset prices above fundamental value; the inflated balance sheets become fragile; a small shock triggers forced selling; falling prices trigger more forced selling. The crisis is not caused by an external event — it is the endogenous product of the preceding boom.</p>
+<p>Despite its descriptive power — Minsky’s work gained mainstream attention after the 2008 financial crisis — the FIH is difficult to test empirically. The causal chain from stability to fragility to crash is confounded by concurrent policy changes, technological shocks, and global capital flows. Agent-based modelling (ABM) offers a controlled alternative: build a minimal model with the proposed mechanism, remove confounders by construction, and ask whether the predicted dynamics emerge.</p>
+<p>This project builds such a model. The market begins in a controlled stable equilibrium — price at fundamental value, near-zero volatility, no debt — and evolves entirely from agent interactions. The research questions addressed are:</p>
+<ol>
+<li>Does increasing the share of momentum traders endogenously generate leverage buildup and market crashes?</li>
+<li>Is there a critical threshold of momentum trader dominance above which market stability collapses?</li>
+<li>How does momentum trader dominance affect wealth inequality (Gini coefficient) and risk-adjusted returns (Sharpe ratio)?</li>
+</ol>
+<hr>
+<h2 id="2-model-description">2. Model Description</h2>
+<h3 id="21-market-architecture">2.1 Market Architecture</h3>
+<p>The market runs for T discrete time steps. Each step executes the following sequence:</p>
+<ol>
+<li>Accrue interest on all outstanding agent debt: <code>d_{t+1} = d_t * (1 + r_b)</code></li>
+<li>Each active agent observes market state <code>(P_t, F_t, sigma_t, m_t, L_bar_t)</code> and submits a buy/sell order</li>
+<li>Net demand is aggregated, normalised by active agent count, and passed to the price mechanism</li>
+<li>Price and fundamental value update</li>
+<li>Agents are marked to market; leverage is recalculated</li>
+<li>Agents exceeding <code>L_max</code> receive margin calls and are force-liquidated</li>
+<li>Forced-sell units buffer into the next step as additional sell demand</li>
+<li>Metrics are recorded</li>
+</ol>
+<p>The one-step forced-sell buffer (step 7) is a deliberate design choice: it creates the feedback delay that allows cascade propagation across time steps, modelling realistic broker execution lag.</p>
+<h3 id="22-fundamental-value">2.2 Fundamental Value</h3>
+<p>Fundamental value follows a discrete-time approximation to Geometric Brownian Motion:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>F_{t+1} = F_t * (1 + mu_F + eps_t),   eps_t ~ N(0, sigma_F^2)</span></span></code></pre>
+<p>Parameters: <code>F_0 = 100</code>, <code>mu_F = 0</code>, <code>sigma_F = 0.005</code>. The zero drift ensures any long-run price deviation from fundamental is attributable to agent behaviour, not the drift of F itself.</p>
+<h3 id="23-price-mechanism">2.3 Price Mechanism</h3>
+<p>The price mechanism is a log-linear impact model (Kyle 1985):</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>P_{t+1} = P_t * exp(clip(alpha * D_tilde / lambda + eta_t, -1.5, 1.5))</span></span></code></pre>
+<p>where <code>D_tilde = (buy - sell) / n_active</code> is the per-agent net demand, <code>alpha</code> is price impact, <code>lambda</code> is market liquidity, and <code>eta_t ~ N(0, sigma_eta^2)</code> is baseline noise. The exponent is clipped to ±1.5 to prevent numerical overflow in extreme momentum cascades — this bound allows single-step price moves of up to ±78%, far exceeding any observed market crash, so it does not artificially constrain normal dynamics.</p>
+<h3 id="24-agent-balance-sheet">2.4 Agent Balance Sheet</h3>
+<p>Each agent <code>i</code> holds cash <code>c_i</code>, shares <code>q_i</code>, and debt <code>d_i</code>. Derived quantities:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>Asset exposure:    A_i(P) = P * q_i</span></span>
+<span class="line"><span>Wealth:            W_i(P) = c_i + P*q_i - d_i</span></span>
+<span class="line"><span>Leverage:          L_i(P) = |P*q_i| / max(W_i, eps)</span></span></code></pre>
+<p>Debt arises when an agent buys more than their available cash; cash can go negative. Interest accrues on debt at rate <code>r_b</code> per step. An agent with <code>L_i >= L_max</code> receives a margin call and is forced to sell <code>liquidation_fraction</code> of their position.</p>
+<p><strong>Minsky classification</strong> (per-step, per-agent):</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Category</th><th>Condition</th><th>Interpretation</th></tr></thead><tbody><tr><td>Hedge</td><td>L &#x3C; 1.5</td><td>Income covers debt service</td></tr><tr><td>Speculative</td><td>1.5 &#x3C;= L &#x3C; 3.0</td><td>Income covers interest, not principal</td></tr><tr><td>Ponzi</td><td>L >= 3.0</td><td>Must sell assets or roll debt to survive</td></tr></tbody></table>
+<h3 id="25-agent-types">2.5 Agent Types</h3>
+<p><strong>Fundamental traders</strong> are stabilising. They compute the mispricing signal <code>s = (F - P) / F</code> and target <code>desired_q = kappa_F * s * q_max</code> shares. When price exceeds fundamental, they sell; when below, they buy. Sensitivity <code>kappa_F = 0.5</code>.</p>
+<p><strong>Momentum traders</strong> are destabilising. They observe the rolling return <code>m_t = mean(r_{t-k:t})</code> and target <code>desired_q = kappa_M * m_t * q_max</code>. They buy into rising prices and sell into falling prices, amplifying trends. Sensitivity <code>kappa_M = 2.0</code> in the sweep experiments.</p>
+<p><strong>Noise traders</strong> submit random fractional orders at each step, providing background liquidity and preventing the market from locking into deterministic cycles.</p>
+<p><strong>RL agents</strong> (Phase 4, planned) will observe an 11-dimensional market state and output a target leverage exposure, learning via DQN with experience replay and a target network.</p>
+<hr>
+<h2 id="3-experiment-design">3. Experiment Design</h2>
+<h3 id="31-motivation">3.1 Motivation</h3>
+<p>The Minsky mechanism requires an agent whose trading amplifies rather than dampens price movements. Momentum traders are the natural candidate: they buy when prices rise (pushing prices higher) and sell when prices fall (pushing prices lower). As their population share increases, the feedback loop strengthens.</p>
+<h3 id="32-parameter-sweep">3.2 Parameter Sweep</h3>
+<p><strong>Independent variable</strong>: momentum trader fraction <code>f</code> in {0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8}. Total agents N = 40 throughout. At fraction <code>f</code>, the composition is:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>n_momentum    = round(40 * f)</span></span>
+<span class="line"><span>n_fundamental = round((40 - n_momentum) * 0.6)</span></span>
+<span class="line"><span>n_noise       = (40 - n_momentum) - n_fundamental</span></span></code></pre>
+<p>This preserves the 60/40 fundamental-to-noise ratio among non-momentum agents.</p>
+<p><strong>Fixed parameters</strong>: <code>T = 500</code>, <code>P_0 = F_0 = 100</code>, <code>alpha = 0.015</code>, <code>sigma_eta = 0.009</code>, <code>lambda = 1.0</code>, <code>L_max = 3.0</code>, <code>r_b = 0.0003</code>, <code>initial_cash = 1000</code>.</p>
+<p><strong>Replication</strong>: 10 independent seeds per condition (90 total runs).</p>
+<h3 id="33-dependent-variables">3.3 Dependent Variables</h3>
+<ul>
+<li><code>n_crash_steps</code>: steps where price fell >20% over a 20-step window</li>
+<li><code>max_avg_leverage</code>: peak of the cross-sectional mean leverage</li>
+<li><code>max_drawdown_pct</code>: maximum peak-to-trough price drawdown (%)</li>
+<li><code>total_margin_calls</code>: cumulative forced-liquidation events</li>
+<li><code>total_defaults</code>: agents who exited the market via bankruptcy</li>
+<li><code>final_gini</code>: Gini coefficient of agent wealth at step T</li>
+<li><code>annualised_sharpe</code>: <code>mean(r) / std(r) * sqrt(252)</code></li>
+</ul>
+<h3 id="34-statistical-methods">3.4 Statistical Methods</h3>
+<p>Two tests are applied to each dependent variable:</p>
+<ul>
+<li><strong>Kruskal-Wallis H test</strong>: non-parametric one-way ANOVA testing whether the distribution of the outcome differs across the nine momentum-fraction conditions</li>
+<li><strong>Spearman rank correlation</strong>: tests the monotone relationship between momentum fraction and the outcome across all 90 observations</li>
+</ul>
+<hr>
+<h2 id="4-results">4. Results</h2>
+<h3 id="41-phase-transition-in-crash-frequency">4.1 Phase Transition in Crash Frequency</h3>
+<p><strong>Table 1: Mean crash steps and peak leverage by momentum fraction (N = 10 seeds per condition)</strong></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th align="center">Momentum %</th><th align="center">Crash steps (mean +/- SD)</th><th align="center">Max avg leverage (mean +/- SD)</th><th align="center">Max drawdown (mean +/- SD)</th></tr></thead><tbody><tr><td align="center">0%</td><td align="center">0.0 +/- 0.0</td><td align="center">0.56 +/- 0.05</td><td align="center">-17.6% +/- 5.0%</td></tr><tr><td align="center">10%</td><td align="center">0.0 +/- 0.0</td><td align="center">0.55 +/- 0.06</td><td align="center">-18.5% +/- 3.2%</td></tr><tr><td align="center">20%</td><td align="center">0.0 +/- 0.0</td><td align="center">0.72 +/- 0.06</td><td align="center">-20.3% +/- 8.1%</td></tr><tr><td align="center">30%</td><td align="center">0.0 +/- 0.0</td><td align="center">0.82 +/- 0.07</td><td align="center">-18.2% +/- 4.7%</td></tr><tr><td align="center">40%</td><td align="center">0.6 +/- 1.9</td><td align="center">1.14 +/- 0.17</td><td align="center">-22.7% +/- 5.4%</td></tr><tr><td align="center">50%</td><td align="center">8.3 +/- 7.3</td><td align="center">1.53 +/- 0.16</td><td align="center">-35.6% +/- 17.2%</td></tr><tr><td align="center">60%</td><td align="center">66.4 +/- 29.3</td><td align="center">1.82 +/- 0.07</td><td align="center">-100.0% +/- 0.0%</td></tr><tr><td align="center">70%</td><td align="center">106.6 +/- 15.0</td><td align="center">1.96 +/- 0.04</td><td align="center">-100.0% +/- 0.0%</td></tr><tr><td align="center">80%</td><td align="center">116.9 +/- 11.6</td><td align="center">2.01 +/- 0.07</td><td align="center">-100.0% +/- 0.0%</td></tr></tbody></table>
+<p>The transition is stark. At 30% momentum traders, no crashes occur across all 10 seeds. At 40%, the first crashes appear (in 1 of 10 seeds). At 50%, 9 of 10 seeds produce crashes. At 60% and above, price collapse to near-zero occurs in every single run.</p>
+<p>The SD of crash steps narrows at high fractions — high-momentum regimes are deterministically catastrophic regardless of seed.</p>
+<h3 id="42-statistical-significance">4.2 Statistical Significance</h3>
+<p><strong>Table 2: Kruskal-Wallis and Spearman test results</strong></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Metric</th><th align="center">Spearman rho</th><th align="center">p-value</th><th align="center">Kruskal-Wallis H</th><th align="center">p-value</th></tr></thead><tbody><tr><td>Crash steps</td><td align="center">+0.894</td><td align="center">2.1 x 10^-32</td><td align="center">83.9</td><td align="center">8.1 x 10^-15</td></tr><tr><td>Max avg leverage</td><td align="center"><strong>+0.977</strong></td><td align="center">1.5 x 10^-60</td><td align="center">85.9</td><td align="center">3.1 x 10^-15</td></tr><tr><td>Max drawdown</td><td align="center">-0.833</td><td align="center">2.7 x 10^-24</td><td align="center">69.5</td><td align="center">6.1 x 10^-12</td></tr><tr><td>Total defaults</td><td align="center">+0.797</td><td align="center">5.5 x 10^-21</td><td align="center">86.0</td><td align="center">3.0 x 10^-15</td></tr><tr><td>Final Gini</td><td align="center">-0.860</td><td align="center">1.8 x 10^-27</td><td align="center">72.8</td><td align="center">1.3 x 10^-12</td></tr><tr><td>Annualised Sharpe</td><td align="center">+0.612</td><td align="center">1.4 x 10^-10</td><td align="center">66.5</td><td align="center">2.4 x 10^-11</td></tr><tr><td>Total margin calls</td><td align="center">-0.830</td><td align="center">5.4 x 10^-24</td><td align="center">63.4</td><td align="center">1.0 x 10^-10</td></tr></tbody></table>
+<p>All tested metrics are statistically significant at p &#x3C; 10^-9. The strongest relationship is between momentum fraction and peak leverage (rho = +0.977), consistent with Minsky’s central claim that stability-seeking behaviour (trend-following in rising markets) is the proximate cause of leverage accumulation.</p>
+<h3 id="43-wealth-inequality">4.3 Wealth Inequality</h3>
+<p>The Gini coefficient decreases with momentum fraction (rho = -0.860). This is initially counterintuitive: one might expect high-leverage crashes to redistribute wealth upward.</p>
+<p>The explanation is a race-to-the-bottom dynamic. At 0-30% momentum, fundamental traders accumulate wealth steadily by exploiting mispricing; wealth diverges over T = 500 steps (Gini around 0.50-0.53). At 60-80% momentum, crashes are so frequent and severe that the market periodically wipes out all agents — resetting wealth towards equality. Final Gini at 80% momentum is 0.14, indicating near-equal (universally low) wealth.</p>
+<p>This result highlights that the Gini coefficient alone is insufficient to distinguish between prosperous equality and catastrophic equality.</p>
+<h3 id="44-sharpe-ratio-anomaly">4.4 Sharpe Ratio Anomaly</h3>
+<p>Annualised Sharpe increases with momentum fraction (rho = +0.612), reaching 7.94 at 80% momentum. This is an artefact of how total-collapse-and-recovery dynamics interact with the Sharpe formula.</p>
+<p>At 60%+ momentum, price regularly crashes to near-zero and then recovers as the crash clears the market. The recovery constitutes an extremely large positive return from a very low base. The distribution of returns is bimodal, not approximately normal. The Sharpe ratio, which assumes normality, is inflated by these rebounds.</p>
+<p>This is a known limitation: Sharpe is not a reliable risk measure for return distributions with fat tails and bimodal structure.</p>
+<h3 id="45-margin-calls-vs-defaults">4.5 Margin Calls vs Defaults</h3>
+<p>Total margin calls is negatively correlated with momentum fraction (rho = -0.830), while total defaults is positively correlated (rho = +0.797). These are consistent: at high momentum fractions, price collapses are so swift and severe that agents skip the margin call stage and go directly to default — wealth drops below zero before the margin call mechanism can trigger a partial liquidation.</p>
+<hr>
+<h2 id="5-discussion">5. Discussion</h2>
+<h3 id="51-confirmation-of-the-minsky-mechanism">5.1 Confirmation of the Minsky Mechanism</h3>
+<p>The central finding — that financial instability emerges endogenously from agent-level momentum trading without any exogenous crash mechanism — directly supports the FIH. The model adds a specific, testable claim to Minsky’s narrative: the system undergoes a sharp phase transition at approximately 35-45% momentum trader dominance. Below this threshold, fundamental traders can absorb momentum-driven mispricings; above it, the feedback loop overpowers stabilising forces.</p>
+<p>This is consistent with empirical work documenting that momentum strategies constituted roughly 30-50% of hedge fund strategies in the period leading up to the 2008 crisis (Brunnermeier &#x26; Nagel 2004; Khandani &#x26; Lo 2007).</p>
+<h3 id="52-the-stabilising-role-of-fundamental-traders">5.2 The Stabilising Role of Fundamental Traders</h3>
+<p>The 0-30% stability zone is sustained entirely by fundamental traders counteracting momentum-driven mispricings. When price rises above fundamental value, fundamental traders sell, dampening the move. Their effectiveness depends on the ratio of their capital to the momentum traders’ capital — at 40%+ momentum trader dominance, the fundamental traders (now fewer in number) lack the aggregate buying/selling power to stabilise the market.</p>
+<p>This reflects Shleifer &#x26; Vishny’s (1997) “limits to arbitrage”: arbitrageurs are finite in capital and can be overwhelmed by noise/trend traders.</p>
+<h3 id="53-endogeneity-of-the-crash">5.3 Endogeneity of the Crash</h3>
+<p>Importantly, the crash is not triggered by any exogenous shock in the model. The simulation has no “crisis event” parameter, no sudden fundamental value collapse, and no external intervention. The crash emerges purely from the balance-sheet dynamics of leveraged momentum traders.</p>
+<p>This endogeneity is the key theoretical contribution of the FIH and is reproduced here from first principles.</p>
+<h3 id="54-limitations">5.4 Limitations</h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Limitation</th><th>Impact</th><th>Mitigation</th></tr></thead><tbody><tr><td>No persistent agent identity across crashes</td><td>Affects long-run wealth dynamics but not crash mechanics</td><td></td></tr><tr><td>Symmetric leverage cap (L_max = 3)</td><td>Real markets have heterogeneous margin requirements</td><td>Future: agent-type-specific leverage limits</td></tr><tr><td>No contagion / interbank linkages</td><td>Real crises spread through counterparty exposure</td><td>Future: balance sheet linkages</td></tr><tr><td>Momentum signal = rolling average return</td><td>Captures the qualitative mechanism</td><td></td></tr><tr><td>Sharpe anomaly at extreme fractions</td><td>Inflated Sharpe in high-momentum regimes is a measure artefact</td><td>Use Sortino or Calmar ratio</td></tr><tr><td>Ponzi fraction always zero</td><td>Leverage cap equals Ponzi threshold</td><td>Lower Ponzi threshold or raise L_max</td></tr></tbody></table>
+<hr>
+<h2 id="6-next-steps">6. Next Steps</h2>
+<p><strong>Phase 4 — Reinforcement Learning Environment</strong></p>
+<p>The RL agent will observe an 11-dimensional state and output a target leverage exposure from a discrete action space {-1.0, -0.5, 0.0, 0.5, 1.0, 1.5} x W_i / P_t. Three reward functions will be compared:</p>
+<ul>
+<li><strong>Profit-only</strong>: <code>r_t = Delta_W_i / W_i</code></li>
+<li><strong>Risk-adjusted</strong>: <code>r_t = Delta_W_i / W_i - lambda * L_i^2</code></li>
+<li><strong>System-aware</strong>: <code>r_t = Delta_W_i / W_i - lambda * f_ponzi_t</code></li>
+</ul>
+<p>The core research question: does a profit-maximising RL agent learn to exploit the leverage cycle in a way that amplifies or dampens systemic risk? Do risk-adjusted and system-aware rewards produce different emergent behaviour?</p>
+<p><strong>Phase 6 — Regulatory Interventions</strong></p>
+<p>Test counterfactual policies:</p>
+<ul>
+<li>Hard leverage caps (L_max in {1.5, 2.0, 2.5})</li>
+<li>Mandatory countercyclical margin buffers</li>
+<li>Transaction tax (Tobin tax) reducing momentum profitability</li>
+<li>Circuit breakers (halt trading for k steps after a crash signal)</li>
+</ul>
+<hr>
+<h2 id="7-conclusion">7. Conclusion</h2>
+<p>This simulation demonstrates that Minsky’s Financial Instability Hypothesis is mechanistically credible: a market populated even partly by rational trend-following agents will endogenously generate leverage cycles and crashes without any external shock. The critical finding is a phase transition at approximately 35-45% momentum trader dominance — a quantitative, testable prediction that could guide empirical research and regulatory design.</p>
+<p>The model also highlights two important caveats for interpreting market data. First, the Gini coefficient confounds prosperous and catastrophic equality. Second, the Sharpe ratio is unreliable in markets with bimodal return distributions — precisely the conditions that Minsky’s theory predicts will arise.</p>
+<hr>
+<h2 id="references">References</h2>
+<p>Brunnermeier, M. K. &#x26; Nagel, S. (2004). Hedge funds and the technology bubble. <em>Journal of Finance</em>, 59(5), 2013-2040.</p>
+<p>Khandani, A. E. &#x26; Lo, A. W. (2007). What happened to the quants in August 2007? <em>Journal of Investment Management</em>, 5(4), 5-54.</p>
+<p>Kyle, A. S. (1985). Continuous auctions and insider trading. <em>Econometrica</em>, 53(6), 1315-1335.</p>
+<p>Minsky, H. P. (1986). <em>Stabilizing an Unstable Economy</em>. Yale University Press.</p>
+<p>Minsky, H. P. (1992). The financial instability hypothesis. Levy Economics Institute Working Paper No. 74.</p>
+<p>Mnih, V. et al. (2015). Human-level control through deep reinforcement learning. <em>Nature</em>, 518, 529-533.</p>
+<p>Shleifer, A. &#x26; Vishny, R. (1997). The limits of arbitrage. <em>Journal of Finance</em>, 52(1), 35-55.</p>
+<p>Sutton, R. S. &#x26; Barto, A. G. (2018). <em>Reinforcement Learning: An Introduction</em> (2nd ed.). MIT Press.</p> </article> <!-- Footer nav --> <div class="mt-16 pt-8" style="border-top: 1px solid var(--border);"> <a href="/blog" class="text-sm transition-colors hover:opacity-70" style="color: var(--text-muted);">← Back to Blog</a> </div> </main> <script type="module">const t=new IntersectionObserver(e=>e.forEach(r=>{r.isIntersecting&&(r.target.classList.add("visible"),t.unobserve(r.target))}),{threshold:.08});document.querySelectorAll("[data-reveal], [data-reveal-group]").forEach(e=>t.observe(e));</script> </body> </html> 
