@@ -49,6 +49,12 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://horse-3903.github.io/captcha-llm</loc>
+    <lastmod>2026-06-09</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://horse-3903.github.io/showcase/captcha-llm</loc>
     <lastmod>2026-06-09</lastmod>
     <changefreq>monthly</changefreq>
