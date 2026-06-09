@@ -1,6 +1,8 @@
 # Allow all search engines to crawl the site
 User-agent: *
 Allow: /
+Allow: /sitemap.xml
+Allow: /robots.txt
 Disallow:
 
 # Specific rules for common crawlers
@@ -10,5 +12,5 @@ Allow: /
 User-agent: Bingbot
 Allow: /
 
-# Point to sitemap
+# Sitemap and robots.txt locations
 Sitemap: https://horse-3903.github.io/sitemap.xml
