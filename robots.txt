@@ -1,0 +1,14 @@
+# Allow all search engines to crawl the site
+User-agent: *
+Allow: /
+Disallow:
+
+# Specific rules for common crawlers
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+# Point to sitemap
+Sitemap: https://horse-3903.github.io/sitemap.xml
