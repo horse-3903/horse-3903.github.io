@@ -13,4 +13,4 @@ User-agent: Bingbot
 Allow: /
 
 # Sitemap and robots.txt locations
-Sitemap: https://horse-3903.github.io/sitemap.xml
+Sitemap: https://horse-3903.github.io/sitemap-index.xml
