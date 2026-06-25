@@ -117,19 +117,54 @@ Contents
 <ul>
 <li>Clicking on the link brings you to <a href="https://storage.googleapis.com/zikorablog/index.html">https://storage.googleapis.com/zikorablog/index.html</a></li>
 <li>Looking at the suspiciously placed download button, inspect to see whats being hidden and find another two parts of the flag <code>m1s5ing_1n_</code> and <code>7he_</code> in the Javascript</li>
-<li>Downloading the images, you’ll see that you need a string of numbers
+<li>Downloading the images, you’ll see that you need a string of numbers</li>
+</ul>
+<div style="text-align: center">
+<p><img alt="Coordinates to the Museum" loading="lazy" decoding="async" fetchpriority="auto" width="1780" height="1012" src="/_astro/museum.BS3PPE5Z_Z1m2saD.webp" >
+Coordinates to the <strong>Zhejiang Museum Wulin Branch</strong></p>
+<p><img alt="Reddit saves the day" loading="lazy" decoding="async" fetchpriority="auto" width="930" height="931" src="/_astro/reddit.CI0sxl5O_Z1UXtaC.webp" >
+Reddit says that these 免死金牌 had <strong>333 characters</strong>.</p>
+</div>
 <ul>
 <li><code>333</code>: The Chinese text is coordinates: 30.2773218, 120.1634463, pointing to a museum/object related to an ancient 免死金牌 / 丹书铁券 (“death-sentence escape pass”). The inscription has 333 characters.</li>
-<li><code>4</code>: The map location shown is east of the Nile, so the Nile is to the west from there.</li>
-<li><code>138</code>: The drawing means “pyramids”. The clue asks how many pyramids were “seen”, and the commonly cited count for Egyptian pyramids is 138.</li>
-<li><code>365</code>: The question references the Chinese herbal medicine book《本草纲目》in which the author Li Shizhen tested 365 kinds of herbs while compiling it.</li>
-<li>The final ordering by senses is: Heard <code>333</code> → Touch <code>4</code> → See <code>138</code> → Taste <code>365</code></li>
 </ul>
+<div style="text-align: center">
+<p><img alt="Nile river location" loading="lazy" decoding="async" fetchpriority="auto" width="500" height="534" src="/_astro/nile.5a8Dmruz_sBekn.webp" >
+Location of the Nile River with respect to the map orientation is <strong>West</strong>.</p>
+</div>
+<ul>
+<li><code>4</code>: The map location shown is West of the Nile, but since the image is upside down, the Nile is to the “west” from there.</li>
+</ul>
+<div style="text-align: center">
+<p><img alt="Number of Pyramids" loading="lazy" decoding="async" fetchpriority="auto" width="742" height="386" src="/_astro/pyramids.BXD7toPw_1JSygM.webp" >
+A quick Google search reveals that there are <strong>138 Pyramids</strong> in Egypt.</p>
+</div>
+<ul>
+<li><code>138</code>: The drawing means “pyramids”. The clue asks how many pyramids were “seen”, and the commonly cited count for Egyptian pyramids is 138.</li>
+</ul>
+<div style="text-align: center">
+<p><img alt="Number of Herbs" loading="lazy" decoding="async" fetchpriority="auto" width="823" height="717" src="/_astro/google.Bmwf8vSK_ZYr4eE.webp" >
+Google AI tells us that there the author of 《本草纲目》 tried <strong>365 kinds</strong> of herbs and plants while writing the book.</p>
+</div>
+<ul>
+<li>
+<p><code>365</code>: The question references the Chinese herbal medicine book《本草纲目》in which the author Li Shizhen tested 365 kinds of herbs while compiling it.</p>
 </li>
-<li>Combining it with the other numbers in the main blog and padding with zeroes, you get the Hex key <code>03000802010703030304010308030605</code></li>
-<li>Inspecting again, you find the AES Key in the meta id in Base64 <code>w6VMVC2Kcvp1+2JUjuzdzQ==</code></li>
-<li>This is a AES-CBC Decryption, hop onto <a href="https://gchq.github.io/CyberChef/">Cyberchef</a></li>
-<li>Cyberchef detects it as a Word Document, download the output as a file to obtain the final part of the flag! <code>f1r57_p|4c3}</code></li>
+<li>
+<p>The final ordering by senses is: Heard <code>333</code> → Touch <code>4</code> → See <code>138</code> → Taste <code>365</code></p>
+</li>
+<li>
+<p>Combining it with the other numbers in the main blog and padding with zeroes, you get the Hex key <code>03000802010703030304010308030605</code></p>
+</li>
+<li>
+<p>Inspecting again, you find the AES Key in the meta id in Base64 <code>w6VMVC2Kcvp1+2JUjuzdzQ==</code></p>
+</li>
+<li>
+<p>This is a AES-CBC Decryption, hop onto <a href="https://gchq.github.io/CyberChef/">Cyberchef</a></p>
+</li>
+<li>
+<p>Cyberchef detects it as a Word Document, download the output as a file to obtain the final part of the flag! <code>f1r57_p|4c3}</code></p>
+</li>
 </ul>
 <h1 id="flag">Flag</h1>
 <p><code>sctf{m4yb3_z1k0ra_wa5_nev3r_m1s5ing_1n_7he_f1r57_p|4c3}</code></p> </article> <!-- Footer nav --> <div class="mt-16 pt-8" style="border-top: 1px solid var(--border);"> <a href="/blog" class="text-sm transition-colors hover:opacity-70" style="color: var(--text-muted);">← Back to Blog</a> </div> </main> <script type="module">const t=new IntersectionObserver(e=>e.forEach(r=>{r.isIntersecting&&(r.target.classList.add("visible"),t.unobserve(r.target))}),{threshold:.08});document.querySelectorAll("[data-reveal], [data-reveal-group]").forEach(e=>t.observe(e));</script> </body> </html> 
