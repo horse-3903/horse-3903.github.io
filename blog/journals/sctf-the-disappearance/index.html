@@ -50,8 +50,8 @@ Contents
 <ul>
 <li>Deduce that the ID is part of a Google Drive link</li>
 <li>Test Google Drive formats, namely:</li>
-<li><a href="https://drive.google.com/folders/1-uL5OY6aQbCkz4jw9zqNwW8FgvO1KUY">https://drive.google.com/folders/1-uL5OY6aQbCkz4jw9zqNwW8FgvO1KUY</a>_</li>
-<li><a href="https://drive.google.com/file/d/1-uL5OY6aQbCkz4jw9zqNwW8FgvO1KUY">https://drive.google.com/file/d/1-uL5OY6aQbCkz4jw9zqNwW8FgvO1KUY</a>_</li>
+<li><a href="https://drive.google.com/folders/1-uL5OY6aQbCkz4jw9zqNwW8FgvO1KUY_">https://drive.google.com/folders/1-uL5OY6aQbCkz4jw9zqNwW8FgvO1KUY_</a></li>
+<li><a href="https://drive.google.com/file/d/1-uL5OY6aQbCkz4jw9zqNwW8FgvO1KUY_">https://drive.google.com/file/d/1-uL5OY6aQbCkz4jw9zqNwW8FgvO1KUY_</a></li>
 <li>You’ll be directed to a picture of a snake with two fake arms</li>
 </ul>
 <h2 id="step-5-guessy-steganography">Step 5: Guessy Steganography</h2>
@@ -65,7 +65,7 @@ Contents
 </blockquote>
 <ul>
 <li>Based on hints from the challenge authors (An Yi and Xi), deduce that the bitplane combination is <code>R7,R5,R4,R3,G5,G2,G0,B6,B1</code></li>
-<li>Alternatively, brute force the combinations of bit levels and bit channels with a heuristic English language checker (see naive brute forcing script <a href="/sctf-writeups/the-disappearance/brute-naive" download>here</a>)</li>
+<li>Alternatively, brute force the combinations of bit levels and bit channels with a heuristic English language checker (see naive brute forcing script <a href="/sctf-writeups/the-disappearance/brute-naive.py" download>here</a>)</li>
 <li>You’ll receive a list of three poems from the extraction, and a part of the flag <code>nev3r_</code> after it!</li>
 </ul>
 <h2 id="step-6-poems">Step 6: Poems</h2>
@@ -119,14 +119,14 @@ Contents
 <li>Looking at the suspiciously placed download button, inspect to see whats being hidden and find another two parts of the flag <code>m1s5ing_1n_</code> and <code>7he_</code> in the Javascript</li>
 <li>Downloading the images, you’ll see that you need a string of numbers
 <ul>
-<li>333: The Chinese text is coordinates: 30.2773218, 120.1634463, pointing to a museum/object related to an ancient 免死金牌 / 丹书铁券 (“death-sentence escape pass”). The inscription has 333 characters.</li>
-<li>West / 4: The map location shown is east of the Nile, so the Nile is to the west from there.</li>
-<li>138 pyramids: The drawing means “pyramids”. The clue asks how many pyramids were “seen”, and the commonly cited count for Egyptian pyramids is 138.</li>
-<li>365: The question references the Chinese herbal medicine book《本草纲目》in which the author Li Shizhen tested 365 kinds of herbs while compiling it.</li>
-<li>The final ordering by senses is: Heard 333 → Touch 4 → See 138 → Taste 365</li>
+<li><code>333</code>: The Chinese text is coordinates: 30.2773218, 120.1634463, pointing to a museum/object related to an ancient 免死金牌 / 丹书铁券 (“death-sentence escape pass”). The inscription has 333 characters.</li>
+<li><code>4</code>: The map location shown is east of the Nile, so the Nile is to the west from there.</li>
+<li><code>138</code>: The drawing means “pyramids”. The clue asks how many pyramids were “seen”, and the commonly cited count for Egyptian pyramids is 138.</li>
+<li><code>365</code>: The question references the Chinese herbal medicine book《本草纲目》in which the author Li Shizhen tested 365 kinds of herbs while compiling it.</li>
+<li>The final ordering by senses is: Heard <code>333</code> → Touch <code>4</code> → See <code>138</code> → Taste <code>365</code></li>
 </ul>
 </li>
-<li>Combining it with the other numbers in the main blog, you get the Hex key <code>03000802010703030304010308030605</code></li>
+<li>Combining it with the other numbers in the main blog and padding with zeroes, you get the Hex key <code>03000802010703030304010308030605</code></li>
 <li>Inspecting again, you find the AES Key in the meta id in Base64 <code>w6VMVC2Kcvp1+2JUjuzdzQ==</code></li>
 <li>This is a AES-CBC Decryption, hop onto <a href="https://gchq.github.io/CyberChef/">Cyberchef</a></li>
 <li>Cyberchef detects it as a Word Document, download the output as a file to obtain the final part of the flag! <code>f1r57_p|4c3}</code></li>
