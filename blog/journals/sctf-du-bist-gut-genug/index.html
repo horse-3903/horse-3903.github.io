@@ -43,7 +43,8 @@ Contents
 <span class="line"><span style="color:#E1E4E8">base_logits   </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> base_model.next_char_logits(ctx)</span></span>
 <span class="line"><span style="color:#E1E4E8">residual      </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> (oracle_logits </span><span style="color:#F97583">-</span><span style="color:#E1E4E8"> base_logits).abs().max().item()</span></span></code></pre>
 <ul>
-<li>Generic English inputs have residuals near zero. A specific cluster — variations of a short phrase using four words — will show residuals <strong>orders of magnitude higher</strong>.</li>
+<li>Generic English inputs have residuals near zero.</li>
+<li>A specific cluster (variations of “du bist gut genug”) will show residuals <strong>orders of magnitude higher</strong>.</li>
 <li>These high-residual inputs identify the secret fine-tune domain without knowing the phrase in advance.</li>
 </ul>
 <h2 id="step-2-localize-the-injection-site">Step 2: Localize the injection site</h2>
