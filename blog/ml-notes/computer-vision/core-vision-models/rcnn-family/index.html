@@ -1,0 +1,205 @@
+<!DOCTYPE html><html lang="en"> <head><meta charset="utf-8"><link rel="icon" type="image/svg+xml" href="/favicon.svg"><meta name="viewport" content="width=device-width"><meta name="description" content="Region-based CNN detectors and how they evolved from R-CNN to Faster R-CNN."><meta property="og:type" content="article"><meta property="og:title" content="R-CNN, Fast R-CNN, and Faster R-CNN | horse3903"><meta property="og:description" content="Region-based CNN detectors and how they evolved from R-CNN to Faster R-CNN."><meta property="og:image" content="https://horse-3903.github.io/og-image.png"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="R-CNN, Fast R-CNN, and Faster R-CNN | horse3903"><meta name="twitter:image" content="https://horse-3903.github.io/og-image.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Source+Sans+3:wght@300;400;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet"><!-- KaTeX (served locally, version matches rehype-katex dependency) --><link rel="stylesheet" href="/katex/katex.min.css"><title>R-CNN, Fast R-CNN, and Faster R-CNN | horse3903</title><link rel="stylesheet" href="/_astro/_slug_.xraQFiTc.css">
+<link rel="stylesheet" href="/_astro/_slug_.L_YQsPQg.css">
+<style>#nav-toggle[data-astro-cid-3ef6ksr2]{font-family:inherit;font-size:.85rem;color:var(--accent);background:none;border:none;cursor:pointer;padding:.25rem .2rem;line-height:1;flex-shrink:0;transition:color .2s ease,opacity .2s ease;user-select:none;opacity:.7}#nav-toggle[data-astro-cid-3ef6ksr2]:hover{opacity:1}#nav-links[data-astro-cid-3ef6ksr2]{list-style:none;padding-top:0;padding-bottom:0;margin:0;white-space:nowrap}#nav-links-wrapper[data-astro-cid-3ef6ksr2]{max-width:9999px;opacity:1;transition:max-width .35s ease,opacity .25s ease}#nav-links-wrapper[data-astro-cid-3ef6ksr2].nav-collapsed{max-width:0;opacity:0;pointer-events:none}.nav-link[data-astro-cid-3ef6ksr2]{transition:color .2s ease;position:relative;text-decoration:none}.nav-link[data-astro-cid-3ef6ksr2]:after{content:"";position:absolute;left:0;bottom:-2px;width:0;height:1px;background:var(--accent);transition:width .25s ease}.nav-link[data-astro-cid-3ef6ksr2]:hover{color:var(--text)!important}.nav-link[data-astro-cid-3ef6ksr2]:hover:after{width:100%}
+</style></head> <body> <!-- Background: dark + noise + track accent glow --> <div class="fixed inset-0 -z-10" style="background: var(--bg);"> <div class="noise-layer"></div> <!-- Track-specific radial glow in top-right --> <div style="position:absolute;top:-10%;right:-5%;width:55%;height:60%;background:radial-gradient(ellipse,#c4a88214 0%,transparent 65%);pointer-events:none;"></div> <!-- Subtle dot grid --> <div class="dot-grid"></div> </div> <header id="header" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300" data-astro-cid-3ef6ksr2> <nav class="max-w-6xl mx-auto px-4 sm:px-8 py-4 flex items-center justify-center overflow-x-auto" data-astro-cid-3ef6ksr2> <ul class="flex items-center gap-6 sm:gap-8 whitespace-nowrap" data-astro-cid-3ef6ksr2> <li class="flex items-center" data-astro-cid-3ef6ksr2> <a href="/" class="nav-link text-sm" style="color: var(--text-secondary);" data-astro-cid-3ef6ksr2>Home</a> <button id="nav-toggle" aria-label="Toggle navigation" aria-expanded="true" class="ml-2 hidden md:inline-flex" data-astro-cid-3ef6ksr2> <span id="nav-arrow" data-astro-cid-3ef6ksr2>∷</span> </button> <div id="nav-links-wrapper" class="overflow-hidden hidden md:block nav-collapsed" data-astro-cid-3ef6ksr2> <ul id="nav-links" class="flex items-center gap-8 pl-8" data-astro-cid-3ef6ksr2> <li data-astro-cid-3ef6ksr2><a href="/#about" class="nav-link text-sm" style="color: var(--text-secondary);" data-astro-cid-3ef6ksr2>About</a></li> <li data-astro-cid-3ef6ksr2><a href="/#projects" class="nav-link text-sm" style="color: var(--text-secondary);" data-astro-cid-3ef6ksr2>Projects</a></li> <li data-astro-cid-3ef6ksr2><a href="/#publications" class="nav-link text-sm" style="color: var(--text-secondary);" data-astro-cid-3ef6ksr2>Publications</a></li> <li data-astro-cid-3ef6ksr2><a href="/#experience" class="nav-link text-sm" style="color: var(--text-secondary);" data-astro-cid-3ef6ksr2>Experience</a></li> <li data-astro-cid-3ef6ksr2><a href="/#education" class="nav-link text-sm" style="color: var(--text-secondary);" data-astro-cid-3ef6ksr2>Education</a></li> <li data-astro-cid-3ef6ksr2><a href="/#honors" class="nav-link text-sm" style="color: var(--text-secondary);" data-astro-cid-3ef6ksr2>Honors</a></li> </ul> </div> </li> <li data-astro-cid-3ef6ksr2><a href="/blog" class="nav-link text-sm" style="color: var(--text-secondary);" data-astro-cid-3ef6ksr2>Blog</a></li> <li data-astro-cid-3ef6ksr2><a href="/blog/archive" class="nav-link text-sm" style="color: var(--text-secondary);" data-astro-cid-3ef6ksr2>Archive</a></li> <li data-astro-cid-3ef6ksr2><a href="/showcase" class="nav-link text-sm" style="color: var(--text-secondary);" data-astro-cid-3ef6ksr2>Showcase</a></li> <li data-astro-cid-3ef6ksr2><a href="/signal" class="nav-link text-sm" style="color: var(--text-secondary);" data-astro-cid-3ef6ksr2>Signal</a></li> </ul> </nav> </header> <script type="module">const t=document.getElementById("header"),e=document.getElementById("nav-toggle"),n=document.getElementById("nav-links-wrapper");document.getElementById("nav-arrow");const a=window.location.pathname==="/";let o=a;function s(r){o=r,o?(n.classList.remove("nav-collapsed"),e.style.opacity="0.7",e.setAttribute("aria-expanded","true")):(n.classList.add("nav-collapsed"),e.style.opacity="0.35",e.setAttribute("aria-expanded","false"))}a?(n.style.transition="none",s(!0),requestAnimationFrame(()=>{n.style.transition=""})):e.style.opacity="0.35";e?.addEventListener("click",()=>s(!o));window.addEventListener("scroll",()=>{t&&(window.scrollY>80?(t.style.backgroundColor="rgba(14,13,11,0.92)",t.style.borderBottom="1px solid rgba(235,225,210,0.06)"):(t.style.backgroundColor="transparent",t.style.borderBottom="none"))});</script>  <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon="{&quot;token&quot;: &quot;3ac0613182284c4395e823396b6af7d3&quot;}"></script> <a href="/blog" id="back-arrow" aria-label="Back to Blog"> <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"> <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"></path> </svg> </a> <main class="max-w-3xl mx-auto px-6 pt-24 pb-16"> <!-- Post header --> <div class="mb-12" data-reveal> <div class="flex flex-wrap gap-2 mb-5"> <span class="text-sm font-mono px-2.5 py-1 rounded-md" style="background: #c4a88214; color: #c4a882; border: 1px solid #c4a88230;">ML Notes</span> <span class="px-2.5 py-1 text-sm rounded-md" style="background: var(--surface); color: var(--text-muted); border: 1px solid var(--border);">Computer Vision</span><span class="px-2.5 py-1 text-sm rounded-md" style="background: var(--surface); color: var(--text-muted); border: 1px solid var(--border);">Deep Learning</span> </div> <h1 class="text-3xl sm:text-4xl font-bold leading-tight mb-4" style="color: var(--text);"> R-CNN, Fast R-CNN, and Faster R-CNN </h1> <p class="text-base leading-relaxed mb-5" style="color: var(--text-secondary);">Region-based CNN detectors and how they evolved from R-CNN to Faster R-CNN.</p> <div class="flex items-center gap-4 text-sm" style="color: var(--text-muted);"> <time>19 February 2026</time>  </div> <div class="h-px mt-8" style="background: linear-gradient(to right, #c4a88250, transparent);"></div> </div> <!-- Table of contents --> <details class="toc-box mb-10" style="--toc-accent: #c4a882; --toc-accent-dim: #c4a88214;"> <summary class="toc-summary"> <span class="toc-summary-label"> <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"> <line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="15" y2="12"></line><line x1="3" y1="18" x2="12" y2="18"></line> </svg>
+Contents
+</span> <svg class="toc-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"> <path d="M6 9l6 6 6-6"></path> </svg> </summary> <nav class="toc-nav"> <ol> <li class="toc-d1"> <a href="#overview" class="toc-link">Overview</a> </li><li class="toc-d1"> <a href="#r-cnn" class="toc-link">R-CNN</a> </li><li class="toc-d2"> <a href="#core-idea" class="toc-link">Core idea</a> </li><li class="toc-d2"> <a href="#pipeline" class="toc-link">Pipeline</a> </li><li class="toc-d2"> <a href="#how-selective-search-works-step-by-step" class="toc-link">How Selective Search Works (Step-by-Step)</a> </li><li class="toc-d3"> <a href="#step-1-initial-over-segmentation" class="toc-link">Step 1: Initial over-segmentation</a> </li><li class="toc-d3"> <a href="#step-2-compute-region-similarities" class="toc-link">Step 2: Compute region similarities</a> </li><li class="toc-d3"> <a href="#step-3-greedy-merging" class="toc-link">Step 3: Greedy merging</a> </li><li class="toc-d3"> <a href="#step-4-generate-proposals-at-all-hierarchy-levels" class="toc-link">Step 4: Generate proposals at all hierarchy levels</a> </li><li class="toc-d3"> <a href="#step-5-remove-duplicates" class="toc-link">Step 5: Remove duplicates</a> </li><li class="toc-d3"> <a href="#step-6-hand-off-to-cnn-stage" class="toc-link">Step 6: Hand off to CNN stage</a> </li><li class="toc-d2"> <a href="#key-traits" class="toc-link">Key traits</a> </li><li class="toc-d1"> <a href="#fast-r-cnn" class="toc-link">Fast R-CNN</a> </li><li class="toc-d2"> <a href="#core-idea-1" class="toc-link">Core idea</a> </li><li class="toc-d2"> <a href="#pipeline-1" class="toc-link">Pipeline</a> </li><li class="toc-d2"> <a href="#why-cnn-once-per-image-is-better" class="toc-link">Why “CNN Once Per Image” Is Better</a> </li><li class="toc-d2"> <a href="#key-traits-1" class="toc-link">Key traits</a> </li><li class="toc-d1"> <a href="#faster-r-cnn" class="toc-link">Faster R-CNN</a> </li><li class="toc-d2"> <a href="#core-idea-2" class="toc-link">Core idea</a> </li><li class="toc-d2"> <a href="#pipeline-2" class="toc-link">Pipeline</a> </li><li class="toc-d2"> <a href="#how-rpn-works-step-by-step" class="toc-link">How RPN Works (Step-by-Step)</a> </li><li class="toc-d3"> <a href="#step-1-shared-feature-extraction" class="toc-link">Step 1: Shared feature extraction</a> </li><li class="toc-d3"> <a href="#step-2-dense-anchor-placement" class="toc-link">Step 2: Dense anchor placement</a> </li><li class="toc-d3"> <a href="#step-3-sliding-prediction-heads" class="toc-link">Step 3: Sliding prediction heads</a> </li><li class="toc-d3"> <a href="#step-4-anchor-labeling-training" class="toc-link">Step 4: Anchor labeling (training)</a> </li><li class="toc-d3"> <a href="#step-5-proposal-decoding" class="toc-link">Step 5: Proposal decoding</a> </li><li class="toc-d3"> <a href="#step-6-proposal-filtering" class="toc-link">Step 6: Proposal filtering</a> </li><li class="toc-d3"> <a href="#step-7-hand-off-to-detector" class="toc-link">Step 7: Hand-off to detector</a> </li><li class="toc-d2"> <a href="#key-traits-2" class="toc-link">Key traits</a> </li><li class="toc-d1"> <a href="#mask-r-cnn" class="toc-link">Mask R-CNN</a> </li><li class="toc-d2"> <a href="#core-idea-3" class="toc-link">Core idea</a> </li><li class="toc-d2"> <a href="#pipeline-3" class="toc-link">Pipeline</a> </li><li class="toc-d2"> <a href="#key-traits-3" class="toc-link">Key traits</a> </li><li class="toc-d1"> <a href="#how-they-differ" class="toc-link">How They Differ</a> </li><li class="toc-d1"> <a href="#training-objectives-high-level" class="toc-link">Training Objectives (High Level)</a> </li><li class="toc-d1"> <a href="#when-to-use" class="toc-link">When To Use</a> </li><li class="toc-d1"> <a href="#practical-notes" class="toc-link">Practical Notes</a> </li><li class="toc-d2"> <a href="#use-stable-optimization-defaults-first" class="toc-link">Use stable optimization defaults first</a> </li><li class="toc-d2"> <a href="#understand-training-strategy-differences" class="toc-link">Understand training strategy differences</a> </li><li class="toc-d2"> <a href="#prioritize-compute-efficient-architectures-in-practice" class="toc-link">Prioritize compute-efficient architectures in practice</a> </li> </ol> </nav> </details> <!-- Content --> <article class="prose-dark"> <h1 id="overview">Overview</h1>
+<ul>
+<li>The R-CNN family introduced <strong>region-based</strong> object detection using explicit proposals.</li>
+<li>Each step improved compute reuse and training simplicity.</li>
+<li>The main evolution is: <strong>R-CNN → Fast R-CNN → Faster R-CNN</strong>.</li>
+</ul>
+<hr>
+<h1 id="r-cnn">R-CNN</h1>
+<p><img src="/images/ml-notes/rcnn/rcnn.png" alt=""></p>
+<h2 id="core-idea">Core idea</h2>
+<ul>
+<li>Generate region proposals, then run a CNN on each proposal.</li>
+<li>Classify each region and refine its box.</li>
+</ul>
+<h2 id="pipeline">Pipeline</h2>
+<ul>
+<li><strong>Selective Search</strong> proposes ~2k regions per image.</li>
+<li><strong>Warp + CNN</strong>: each proposal is warped to a fixed size (e.g., 227x227) and fed through a backbone like AlexNet or VGG.</li>
+<li><strong>SVMs</strong>: one-vs-rest linear SVM per class on cached CNN features.</li>
+<li><strong>Box regressor</strong>: class-specific linear regressors refine bounding boxes.</li>
+</ul>
+<h2 id="how-selective-search-works-step-by-step">How Selective Search Works (Step-by-Step)</h2>
+<h3 id="step-1-initial-over-segmentation">Step 1: Initial over-segmentation</h3>
+<ul>
+<li>Split the image into many small regions (superpixels) using color/texture boundaries.</li>
+</ul>
+<h3 id="step-2-compute-region-similarities">Step 2: Compute region similarities</h3>
+<ul>
+<li>Score neighboring regions by hand-crafted similarity cues: color histogram, texture, size, and fill.</li>
+</ul>
+<h3 id="step-3-greedy-merging">Step 3: Greedy merging</h3>
+<ul>
+<li>Repeatedly merge the most similar neighboring region pair.</li>
+<li>After each merge, recompute similarities with new neighbors.</li>
+</ul>
+<h3 id="step-4-generate-proposals-at-all-hierarchy-levels">Step 4: Generate proposals at all hierarchy levels</h3>
+<ul>
+<li>Each merged region defines a candidate object region.</li>
+<li>Convert each candidate region to a bounding box proposal.</li>
+</ul>
+<h3 id="step-5-remove-duplicates">Step 5: Remove duplicates</h3>
+<ul>
+<li>Use simple deduplication and ranking to keep a manageable proposal set (around 2k).</li>
+</ul>
+<h3 id="step-6-hand-off-to-cnn-stage">Step 6: Hand off to CNN stage</h3>
+<ul>
+<li>R-CNN crops/warps each proposal and runs a separate CNN forward pass per proposal.</li>
+</ul>
+<h2 id="key-traits">Key traits</h2>
+<ul>
+<li><strong>Accurate</strong>, but extremely <strong>slow</strong> at inference.</li>
+<li>Multi-stage training: pretrain on ImageNet, fine-tune CNN on detection, then train SVMs + box regressors.</li>
+<li>Heavy disk usage to cache features for all proposals.</li>
+</ul>
+<hr>
+<h1 id="fast-r-cnn">Fast R-CNN</h1>
+<p><img src="/images/ml-notes/rcnn/fast-rcnn.png" alt=""></p>
+<h2 id="core-idea-1">Core idea</h2>
+<ul>
+<li>Run the CNN <strong>once per image</strong>, then classify regions using pooled features.</li>
+<li>Reuse that shared feature map for all proposals instead of recomputing convolution features per region.</li>
+</ul>
+<h2 id="pipeline-1">Pipeline</h2>
+<ul>
+<li><strong>Backbone CNN</strong> produces a shared feature map.</li>
+<li><strong>ROI Pooling</strong> converts each ROI into a fixed 7x7 feature map by quantized spatial binning.</li>
+<li><strong>Single head</strong> outputs class scores (softmax) + box deltas for each ROI.</li>
+</ul>
+<h2 id="why-cnn-once-per-image-is-better">Why “CNN Once Per Image” Is Better</h2>
+<ul>
+<li><strong>R-CNN bottleneck</strong>: if there are ~2k proposals, convolution is run ~2k times per image.</li>
+<li><strong>Fast R-CNN change</strong>: run convolution once on the full image, then slice ROI features from the shared map.</li>
+<li><strong>Computation reuse</strong>: overlapping proposals share most low/mid-level features, so repeated conv work is removed.</li>
+<li><strong>Memory/I-O improvement</strong>: no need to cache per-proposal CNN features to disk.</li>
+<li><strong>Training simplification</strong>: classification and box regression are learned jointly from shared features.</li>
+</ul>
+<h2 id="key-traits-1">Key traits</h2>
+<ul>
+<li>Much faster than R-CNN.</li>
+<li>End-to-end training with a <strong>multi-task loss</strong> (classification + smooth L1 box regression).</li>
+<li>Still depends on <strong>external proposals</strong> (Selective Search).</li>
+</ul>
+<hr>
+<h1 id="faster-r-cnn">Faster R-CNN</h1>
+<p><img src="/images/ml-notes/rcnn/faster-rcnn.png" alt=""></p>
+<h2 id="core-idea-2">Core idea</h2>
+<ul>
+<li>Replace external proposal generation with a <strong>Region Proposal Network (RPN)</strong>.</li>
+</ul>
+<h2 id="pipeline-2">Pipeline</h2>
+<ul>
+<li><strong>Backbone CNN</strong> shared by RPN and detection head.</li>
+<li><strong>RPN</strong>: a 3x3 conv sliding over the feature map predicts objectness + anchor box offsets.</li>
+<li><strong>Anchors</strong>: multiple scales and aspect ratios per location (e.g., 3 scales x 3 ratios).</li>
+<li><strong>ROI Pooling / ROI Align</strong> extracts proposal features (ROI Align removes quantization).</li>
+<li><strong>Detection head</strong> predicts class + refined box.</li>
+</ul>
+<h2 id="how-rpn-works-step-by-step">How RPN Works (Step-by-Step)</h2>
+<h3 id="step-1-shared-feature-extraction">Step 1: Shared feature extraction</h3>
+<ul>
+<li>Pass image through the backbone once to get a convolutional feature map.</li>
+</ul>
+<h3 id="step-2-dense-anchor-placement">Step 2: Dense anchor placement</h3>
+<ul>
+<li>At each spatial location, place <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>k</mi></mrow><annotation encoding="application/x-tex">k</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6944em;"></span><span class="mord mathnormal" style="margin-right:0.0315em;">k</span></span></span></span> anchor boxes with predefined scales and aspect ratios.</li>
+</ul>
+<h3 id="step-3-sliding-prediction-heads">Step 3: Sliding prediction heads</h3>
+<ul>
+<li>A small RPN head predicts for each anchor:
+<ul>
+<li>Objectness score (foreground vs background),</li>
+<li>Box regression offsets <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false">(</mo><mi mathvariant="normal">Δ</mi><mi>x</mi><mo separator="true">,</mo><mi mathvariant="normal">Δ</mi><mi>y</mi><mo separator="true">,</mo><mi mathvariant="normal">Δ</mi><mi>w</mi><mo separator="true">,</mo><mi mathvariant="normal">Δ</mi><mi>h</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">(\Delta x, \Delta y, \Delta w, \Delta h)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord">Δ</span><span class="mord mathnormal">x</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord">Δ</span><span class="mord mathnormal" style="margin-right:0.0359em;">y</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord">Δ</span><span class="mord mathnormal" style="margin-right:0.0269em;">w</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord">Δ</span><span class="mord mathnormal">h</span><span class="mclose">)</span></span></span></span>.</li>
+</ul>
+</li>
+</ul>
+<h3 id="step-4-anchor-labeling-training">Step 4: Anchor labeling (training)</h3>
+<ul>
+<li>Match anchors to ground-truth boxes by IoU thresholds to mark positive/negative anchors.</li>
+<li>Train with combined objectness + box regression loss.</li>
+</ul>
+<h3 id="step-5-proposal-decoding">Step 5: Proposal decoding</h3>
+<ul>
+<li>Convert anchor + predicted offsets into proposal boxes in image coordinates.</li>
+<li>Clip boxes to image boundaries and remove tiny/invalid boxes.</li>
+</ul>
+<h3 id="step-6-proposal-filtering">Step 6: Proposal filtering</h3>
+<ul>
+<li>Rank proposals by objectness, apply NMS, keep top proposals (for example top 300 at inference).</li>
+</ul>
+<h3 id="step-7-hand-off-to-detector">Step 7: Hand-off to detector</h3>
+<ul>
+<li>Send filtered proposals to ROI Pooling/ROI Align and then to the final classification/regression head.</li>
+</ul>
+<h2 id="key-traits-2">Key traits</h2>
+<ul>
+<li>Fully end-to-end and much faster than Fast R-CNN.</li>
+<li>Strong accuracy-speed tradeoff for general detection.</li>
+<li>Typical inference keeps ~300 proposals after NMS (config dependent).</li>
+</ul>
+<hr>
+<h1 id="mask-r-cnn">Mask R-CNN</h1>
+<h2 id="core-idea-3">Core idea</h2>
+<ul>
+<li>Extend Faster R-CNN with a parallel <strong>segmentation mask</strong> prediction branch.</li>
+</ul>
+<h2 id="pipeline-3">Pipeline</h2>
+<ul>
+<li><strong>Backbone + FPN</strong> often used to improve multi-scale features.</li>
+<li><strong>RPN</strong> generates proposals as in Faster R-CNN.</li>
+<li><strong>ROI Align</strong> replaces ROI Pooling to avoid misalignment from quantization.</li>
+<li><strong>Two heads</strong>: class + box regression, and a small FCN mask head that predicts a K x m x m mask per class.</li>
+</ul>
+<h2 id="key-traits-3">Key traits</h2>
+<ul>
+<li>Adds instance segmentation with minimal overhead.</li>
+<li>Mask loss is <strong>per-pixel sigmoid</strong> (not softmax across classes).</li>
+<li>Requires precise ROI alignment for good mask quality.</li>
+</ul>
+<hr>
+<h1 id="how-they-differ">How They Differ</h1>
+<ul>
+<li><strong>R-CNN</strong>: per-region CNN, SVMs, slow.</li>
+<li><strong>Fast R-CNN</strong>: shared CNN, ROI Pooling, still external proposals.</li>
+<li><strong>Faster R-CNN</strong>: shared CNN + built-in RPN proposals.</li>
+<li><strong>Mask R-CNN</strong>: Faster R-CNN + mask head with ROI Align.</li>
+</ul>
+<hr>
+<h1 id="training-objectives-high-level">Training Objectives (High Level)</h1>
+<ul>
+<li><strong>Classification loss</strong>: object class per ROI.</li>
+<li><strong>Box regression loss</strong>: refine bounding box coordinates.</li>
+<li><strong>RPN loss</strong> (Faster R-CNN only): objectness + anchor box offsets.</li>
+</ul>
+<hr>
+<h1 id="when-to-use">When To Use</h1>
+<ul>
+<li><strong>R-CNN</strong>: historical baseline, rarely used now.</li>
+<li><strong>Fast R-CNN</strong>: useful for understanding the progression.</li>
+<li><strong>Faster R-CNN</strong>: strong default for accurate detection.</li>
+</ul>
+<hr>
+<h1 id="practical-notes">Practical Notes</h1>
+<h2 id="use-stable-optimization-defaults-first">Use stable optimization defaults first</h2>
+<ul>
+<li>Fast R-CNN and Faster R-CNN are commonly trained with SGD, momentum around 0.9, and weight decay around <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>5</mn><mo>×</mo><msup><mn>10</mn><mrow><mo>−</mo><mn>4</mn></mrow></msup></mrow><annotation encoding="application/x-tex">5\times10^{-4}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">5</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.8141em;"></span><span class="mord">1</span><span class="mord"><span class="mord">0</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">−</span><span class="mord mtight">4</span></span></span></span></span></span></span></span></span></span></span></span> in classic settings.</li>
+<li>Start with proven optimizer settings before tuning advanced schedules.</li>
+<li>Monitor classification and box regression losses separately to diagnose imbalance.</li>
+</ul>
+<h2 id="understand-training-strategy-differences">Understand training strategy differences</h2>
+<ul>
+<li>Early Faster R-CNN recipes often used alternating stages: train RPN, train detector, then joint fine-tuning.</li>
+<li>Modern implementations typically support more direct end-to-end training, but alternating training remains useful context.</li>
+<li>Keep proposal quality and detector quality aligned during training to avoid bottlenecks.</li>
+</ul>
+<h2 id="prioritize-compute-efficient-architectures-in-practice">Prioritize compute-efficient architectures in practice</h2>
+<ul>
+<li>R-CNN-style per-proposal CNN inference can require around 2k forward passes per image, which is computationally expensive.</li>
+<li>Fast R-CNN improves speed by sharing one feature map across proposals.</li>
+<li>Faster R-CNN further improves the pipeline by learning proposals with the RPN instead of external selective search.</li>
+</ul> </article> <!-- Footer nav --> <div class="mt-16 pt-8" style="border-top: 1px solid var(--border);"> <a href="/blog" class="text-sm transition-colors hover:opacity-70" style="color: var(--text-muted);">← Back to Blog</a> </div> </main> <script type="module">const t=new IntersectionObserver(e=>e.forEach(r=>{r.isIntersecting&&(r.target.classList.add("visible"),t.unobserve(r.target))}),{threshold:.08});document.querySelectorAll("[data-reveal], [data-reveal-group]").forEach(e=>t.observe(e));</script> </body> </html> 
