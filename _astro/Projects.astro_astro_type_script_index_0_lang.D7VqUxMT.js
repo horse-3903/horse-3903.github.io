@@ -1,0 +1,1 @@
+document.querySelectorAll("[data-expand-toggle]").forEach(e=>{e.addEventListener("click",a=>{a.preventDefault(),a.stopPropagation(),e.closest("[data-expand-group]").classList.toggle("expand-open")})});
