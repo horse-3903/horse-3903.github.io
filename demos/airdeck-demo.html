@@ -1,0 +1,950 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<script>
+// Demo build: there is no PC behind this page, so a stand-in socket plays the server and assigns controller 1.
+(function () {
+  function DemoSocket() {
+    var s = this; s.readyState = 0;
+    setTimeout(function () {
+      s.readyState = 1; if (s.onopen) s.onopen({});
+      setTimeout(function () { if (s.onmessage) s.onmessage({ data: JSON.stringify({ t: "slot", n: 1 }) }); }, 150);
+    }, 250);
+  }
+  DemoSocket.prototype.send = function () {};
+  DemoSocket.prototype.close = function () { var s = this; s.readyState = 3; setTimeout(function () { if (s.onclose) s.onclose({}); }, 0); };
+  window.WebSocket = DemoSocket;
+})();
+</script>
+
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Gamepad">
+<meta name="theme-color" content="#000000">
+
+<title>AirDeck browser controller (demo)</title>
+<style>
+:root {
+  --u: 1dvh; --w: 1vw;
+  --bg: #fafafa; --fg: #161616; --muted: #5a5a5a; --panel: #ececf0; --panel-on: #cfcfd6;
+  --border: #c4c4cc; --accent: #161616; --accent-fg: #ffffff; --sheet: #ffffff; --shadow: rgba(0,0,0,.25);
+  --ok: #1a9d4a; --bad: #d03030; --warn: #c98a00; --card: #f2f2f6; --disc: #e2e2e8; --arm: #cfcfd8; --armedge: #8a8a96; --key: #b9b9c6; --keyedge: #7d7d8a; --keyon: #8e8e9c;
+  --gl-wash: 0%; --gl-edge: 45%;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) {
+    --bg: #0a0a0c; --fg: #f1f1f1; --muted: #9a9a9a; --panel: #15151a; --panel-on: #2c2c34;
+    --border: #34343c; --accent: #f5f5f5; --accent-fg: #000000; --sheet: #101014; --shadow: rgba(0,0,0,.6); --card: #17171c; --disc: #0e0e12; --arm: #17171d; --armedge: #34343d; --key: #2a2a32; --keyedge: #4a4a55; --keyon: #6a6a78;
+    --gl-wash: 0%; --gl-edge: 26%;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+    --bg: #0a0a0c; --fg: #f1f1f1; --muted: #9a9a9a; --panel: #15151a; --panel-on: #2c2c34;
+    --border: #34343c; --accent: #f5f5f5; --accent-fg: #000000; --sheet: #101014; --shadow: rgba(0,0,0,.6); --card: #17171c; --disc: #0e0e12; --arm: #17171d; --armedge: #34343d; --key: #2a2a32; --keyedge: #4a4a55; --keyon: #6a6a78;
+    --gl-wash: 0%; --gl-edge: 26%;
+  color-scheme: dark;
+}
+:root[data-theme="light"] { color-scheme: light; }
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; -webkit-touch-callout: none;
+    -webkit-user-select: none; user-select: none; touch-action: none; }
+html, body { margin: 0; height: 100%; background: var(--bg); color: var(--fg); overflow: hidden;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    overscroll-behavior: none; position: fixed; inset: 0; width: 100%; }
+#app { position: fixed; top: 0; bottom: 0; left: max(env(safe-area-inset-left), env(safe-area-inset-right)); right: max(env(safe-area-inset-left), env(safe-area-inset-right)); height: 100vh; height: 100dvh; }
+#app::before { content: ""; position: fixed; inset: 0; pointer-events: none; opacity: 0; transition: opacity .5s;
+    background: color-mix(in srgb, var(--slotc, transparent) var(--gl-wash), transparent);
+    box-shadow: inset 0 0 calc(12 * var(--u)) 0 color-mix(in srgb, var(--slotc, transparent) var(--gl-edge), transparent); }
+html.glow #app::before { opacity: 1; }
+
+.btn, .pill, .stick { background: var(--panel); border: 2px solid var(--border); }
+.btn.on, .pill.on { background: var(--panel-on); border-color: var(--fg); transform: scale(.97); }
+.btn.on svg, .pill.on svg, .btn.on .letter { filter: brightness(1.4); }
+
+/* sticks: a movement ring and a cap that travels inside it */
+.stick { position: absolute; border-radius: 50%; width: calc(30 * var(--u)); height: calc(30 * var(--u)); }
+.stick::before { content: ""; position: absolute; inset: 22%; border-radius: 50%; border: 1px solid var(--border); opacity: .7; pointer-events: none; }
+.stick .knob { position: absolute; left: 50%; top: 50%; width: 44%; height: 44%; margin: -22% 0 0 -22%;
+    border-radius: 50%; background: var(--panel-on); border: 2px solid var(--border); will-change: transform; }
+.stick .knob::after { content: ""; position: absolute; inset: 34%; border-radius: 50%; background: var(--border); }
+.stick.active { border-color: var(--fg); }
+.stick.click { border-color: var(--fg); box-shadow: 0 0 0 calc(.6 * var(--u)) var(--panel-on); }
+.stick.click .knob { background: var(--fg); }
+#ls { left: calc(16% - calc(15 * var(--u))); top: calc(calc(56 * var(--u)) - calc(15 * var(--u))); }
+#rs { left: calc(70% - calc(15 * var(--u))); top: calc(calc(79 * var(--u)) - calc(15 * var(--u))); }
+
+/* d-pad is one cross, face buttons a diamond */
+.cluster { position: absolute; display: grid; grid-template: repeat(3, 1fr) / repeat(3, 1fr); }
+#dpad { display: block; width: calc(30 * var(--u)); height: calc(30 * var(--u)); left: calc(30% - calc(15 * var(--u))); top: calc(calc(79 * var(--u)) - calc(15 * var(--u))); padding: 0;
+    border-radius: 50%; background: transparent; border: 0; overflow: visible; }
+#dpad .dpv { position: absolute; left: 4.1%; top: 4.1%; width: 91.8%; height: 91.8%; pointer-events: none; }
+/* PlayStation mode: the supplied SVG, a round base with four keys; each key is its own button so it lights when pressed */
+#dpadps { position: absolute; width: calc(30 * var(--u)); height: calc(30 * var(--u)); left: calc(30% - calc(15 * var(--u))); top: calc(calc(79 * var(--u)) - calc(15 * var(--u))); }
+#dpadps .dpv { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; transform: scale(.84); }
+#dpadps .btn { position: absolute; width: 38%; height: 38%; border: 0 !important; background: transparent !important;
+    transform: none !important; padding: 0; }
+#dpadps .btn svg { width: 100%; height: 100%; display: block; pointer-events: none; transform: scale(.84); }
+#dpadps .up svg { transform-origin: 50% 106.6%; }
+#dpadps .right svg { transform-origin: -6.6% 50%; }
+#dpadps .down svg { transform-origin: 50% -6.6%; }
+#dpadps .left svg { transform-origin: 106.6% 50%; }
+#dpadps .k { fill: var(--key); stroke: var(--keyedge); stroke-width: 1.2; stroke-linejoin: round; }
+#dpadps .btn.on .k { fill: var(--keyon); }
+#dpadps .up { left: 31%; top: 9.5%; }
+#dpadps .right { left: 52.5%; top: 31%; }
+#dpadps .down { left: 31%; top: 52.5%; }
+#dpadps .left { left: 9.5%; top: 31%; }
+body:not(.xbox) #dpad { display: none; }
+body.xbox #dpadps { display: none; }
+#face { width: calc(32 * var(--u)); height: calc(32 * var(--u)); left: calc(84% - calc(16 * var(--u))); top: calc(calc(56 * var(--u)) - calc(16 * var(--u))); gap: calc(.8 * var(--u)); }
+.cluster .btn { display: flex; align-items: center; justify-content: center; }
+/* a raised plus on a round base: four arms with no outlines, so the cross reads as one piece */
+#dpad .btn { position: absolute; display: block; border: 0; background: transparent; }
+#dpad .btn.on { background: transparent; transform: none; }
+#dpad .hl { fill: transparent; stroke: none; pointer-events: none; }
+#dpad:has(.up.on) .hl.up, #dpad:has(.right.on) .hl.right, #dpad:has(.down.on) .hl.down, #dpad:has(.left.on) .hl.left { fill: rgba(255, 255, 255, .22); }
+#dpad .arrow { display: none; }
+#dpad .up { left: 33%; top: -3%; width: 34%; height: 53%; border-radius: 0; }
+#dpad .down { left: 33%; top: 50%; width: 34%; height: 53%; border-radius: 0; }
+#dpad .left { left: -3%; top: 33%; width: 53%; height: 34%; border-radius: 0; }
+#dpad .right { left: 50%; top: 33%; width: 53%; height: 34%; border-radius: 0; }
+#dpad .dm { position: absolute; width: 6%; height: 6%; background: var(--border); pointer-events: none; clip-path: polygon(50% 0, 100% 100%, 0 100%); }
+#dpad .dm.tl { left: 20%; top: 20%; transform: rotate(-45deg); }
+#dpad .dm.tr { left: 74%; top: 20%; transform: rotate(45deg); }
+#dpad .dm.bl { left: 20%; top: 74%; transform: rotate(-135deg); }
+#dpad .dm.br { left: 74%; top: 74%; transform: rotate(135deg); }
+#face .btn { border-radius: 50%; }
+.cluster .up, .cluster .y { grid-area: 1 / 2; }
+.cluster .left, .cluster .x { grid-area: 2 / 1; }
+.cluster .right, .cluster .b { grid-area: 2 / 3; }
+.cluster .down, .cluster .a { grid-area: 3 / 2; }
+.arrow { width: 0; height: 0; border-style: solid; }
+.up .arrow { border-width: 0 calc(1.5 * var(--u)) calc(2.4 * var(--u)) calc(1.5 * var(--u)); border-color: transparent transparent var(--fg) transparent; }
+.down .arrow { border-width: calc(2.4 * var(--u)) calc(1.5 * var(--u)) 0 calc(1.5 * var(--u)); border-color: var(--fg) transparent transparent transparent; }
+.left .arrow { border-width: calc(1.5 * var(--u)) calc(2.4 * var(--u)) calc(1.5 * var(--u)) 0; border-color: transparent var(--fg) transparent transparent; }
+.right .arrow { border-width: calc(1.5 * var(--u)) 0 calc(1.5 * var(--u)) calc(2.4 * var(--u)); border-color: transparent transparent transparent var(--fg); }
+.glyph { width: 49%; height: 49%; }
+.letter { font-weight: 400; font-size: calc(4.8 * var(--u)); }
+.face-ps, .face-xbox { display: contents; }
+body.xbox .face-ps { display: none; }
+body:not(.xbox) .face-xbox { display: none; }
+
+/* triggers on top, bumpers under them, both in the thumb zone of each hand */
+.pill { position: absolute; display: flex; align-items: center; justify-content: center;
+    border-radius: 999px; font-weight: 700; font-size: calc(3 * var(--u)); color: var(--fg); }
+#l2, #r2 { top: calc(3 * var(--u)); width: calc(16.7 * var(--u)); height: calc(20.8 * var(--u)); border-radius: calc(4.9 * var(--u)) calc(4.9 * var(--u)) calc(1.9 * var(--u)) calc(1.9 * var(--u)); overflow: hidden; }
+#l1, #r1 { top: calc(27 * var(--u)); width: calc(16.7 * var(--u)); height: calc(10 * var(--u)); border-radius: calc(1.8 * var(--u)); font-size: calc(2.6 * var(--u)); }
+#l2, #l1 { left: calc(16% - calc(8.35 * var(--u))); }
+#r2, #r1 { right: calc(16% - calc(8.35 * var(--u))); }
+.ico { height: 56%; width: auto; max-width: 70%; }
+.fill { position: absolute; left: 0; right: 0; bottom: 0; height: 0; background: var(--fg); opacity: .35; pointer-events: none; }
+.tl { position: relative; pointer-events: none; text-align: center; }
+.pct { display: block; font-size: calc(2.2 * var(--u)); font-weight: 600; }
+.zline { position: absolute; left: 0; right: 0; top: 50%; height: 1px; background: var(--border); pointer-events: none; }
+.xbox-label, .ps-label { display: inline; }
+body.xbox .ps-label { display: none; }
+body:not(.xbox) .xbox-label { display: none; }
+
+/* system buttons, small and muted, in the middle */
+#sys { position: absolute; left: 50%; top: calc(46 * var(--u)); transform: translateX(-50%); display: flex; gap: calc(34 * var(--w)); }
+#sys .pill { position: static; width: calc(8.8 * var(--u)); height: calc(8 * var(--u)); border-radius: calc(1.8 * var(--u)); color: var(--muted); }
+
+/* top row: fullscreen, connection status, settings */
+#top { position: absolute; left: 50%; top: calc(2.5 * var(--u)); transform: translateX(-50%); display: flex; align-items: center; gap: calc(1.4 * var(--u)); }
+#top .pill { position: static; width: calc(8 * var(--u)); height: calc(7 * var(--u)); border-radius: calc(1.4 * var(--u)); color: var(--muted); }
+#fsPill { display: none; }
+#fsPill.show { display: flex; }
+#badge { width: calc(14 * var(--u)); height: calc(7 * var(--u)); display: flex; align-items: center; justify-content: center; gap: calc(1.3 * var(--u));
+    border-radius: calc(1.4 * var(--u)); background: var(--panel); border: 2px solid var(--warn); font-size: calc(2.8 * var(--u)); font-weight: 700; cursor: pointer;
+    letter-spacing: .02em; white-space: nowrap; color: var(--muted); }
+#slotText { min-width: calc(3.4 * var(--u)); text-align: center; }
+#confirmWrap { position: fixed; inset: 0; background: rgba(0, 0, 0, .5); display: none; align-items: center; justify-content: center; z-index: 40; }
+#confirmWrap.open { display: flex; animation: cfade .16s ease-out; }
+#confirmBox { background: var(--sheet); border: 1px solid var(--border); border-radius: 16px; padding: 20px; width: min(330px, calc(100vw - 32px));
+    box-shadow: 0 12px 40px rgba(0, 0, 0, .45); text-align: center; animation: cpop .18s ease-out; }
+#confirmBox .cicon { width: 44px; height: 44px; margin: 0 auto 12px; border-radius: 50%; background: rgba(208, 48, 48, .16); color: var(--bad);
+    display: flex; align-items: center; justify-content: center; }
+#confirmBox .cicon svg { width: 22px; height: 22px; }
+#confirmBox .ctitle { font-size: 18px; font-weight: 700; }
+#confirmBox .ctext { font-size: 14px; line-height: 1.4; color: var(--muted); margin-top: 6px; }
+#confirmBox .cbtns { display: flex; gap: 10px; margin-top: 18px; }
+#confirmBox .cbtn { flex: 1; min-height: 44px; border-radius: 12px; font-size: 15px; font-weight: 600; border: 1px solid var(--border);
+    background: var(--panel); color: var(--fg); }
+#confirmBox .cbtn.danger { background: var(--bad); border-color: var(--bad); color: #fff; }
+@keyframes cfade { from { opacity: 0; } to { opacity: 1; } }
+@keyframes cpop { from { opacity: 0; transform: scale(.94); } to { opacity: 1; transform: scale(1); } }
+#badge[data-st="ok"] { border-color: var(--ok); color: var(--ok); }
+#badge[data-st="wait"] { border-color: var(--warn); color: var(--warn); }
+#badge[data-st="bad"] { border-color: var(--bad); color: var(--bad); }
+#badge.press { background: var(--panel-on); }
+#sIcon { display: flex; }
+.sico { width: calc(4.4 * var(--u)); height: calc(4.4 * var(--u)); display: block; flex: none; }
+.sd { width: calc(1.5 * var(--u)); height: calc(1.5 * var(--u)); border-radius: 50%; background: var(--bad); flex: none; box-sizing: border-box; }
+.sd.ok { background: var(--ok); }
+.sd.wait { background: transparent; border: calc(.35 * var(--u)) solid var(--warn); border-right-color: transparent; animation: sdspin .9s linear infinite; }
+@keyframes sdspin { to { transform: rotate(360deg); } }
+
+/* Portrait: the whole controller is turned a quarter turn so it can be used with the phone held sideways */
+@media (orientation: portrait) {
+  :root { --u: 1vw; --w: 1dvh; }
+  #app { left: 0; right: auto; top: 0; bottom: auto; width: 100dvh; height: 100vw; transform-origin: 0 0; transform: translateX(100vw) rotate(90deg); }
+}
+
+/* settings sheet */
+#sheetWrap { position: fixed; inset: 0; background: var(--shadow); display: none; align-items: center;
+    justify-content: center; z-index: 30; }
+#sheetWrap.open { display: flex; }
+#sheet { background: var(--sheet); border: 1px solid var(--border); border-radius: 12px; width: min(680px, 94vw);
+    max-height: calc(94 * var(--u)); overflow-y: auto; padding: 0 20px 18px; touch-action: pan-y; -webkit-overflow-scrolling: touch; overscroll-behavior: contain; }
+#sheetWrap, #sheet, #sheet * { touch-action: pan-y; }
+#sheet input[type=text], #sheet textarea { touch-action: manipulation; }
+.head { position: sticky; top: 0; background: var(--sheet); display: flex; align-items: center; justify-content: space-between; padding: 16px 0 10px; z-index: 2; }
+.head h2 { font-size: 20px; margin: 0; }
+.iconbtn { width: 40px; height: 40px; border-radius: 8px; border: 0; background: transparent; color: var(--fg); display: flex; align-items: center; justify-content: center; }
+.iconbtn svg { width: 22px; height: 22px; }
+.card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 12px 14px; }
+.devrow { display: flex; align-items: center; gap: 12px; }
+.devicon { width: 44px; height: 44px; border-radius: 10px; background: var(--panel); display: flex; align-items: center; justify-content: center; }
+.devicon svg { width: 24px; height: 24px; }
+.devtext { flex: 1; min-width: 0; }
+.devname { font-size: 17px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.devsub { font-size: 13px; color: var(--muted); margin-top: 2px; }
+#nameInput { display: none; width: 100%; padding: 8px 10px; border-radius: 8px; border: 1px solid var(--border);
+    background: var(--panel); color: var(--fg); font-size: 16px; -webkit-user-select: text; user-select: text; }
+.devtext.editing #nameInput { display: block; }
+.devtext.editing .devname { display: none; }
+.statusrow { display: flex; align-items: center; gap: 12px; margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border); min-height: 66px; }
+.statusrow .sd { width: 10px; height: 10px; margin-left: 4px; }
+.statusrow .sd.wait { border-width: 2px; border-right-color: transparent; }
+.stext { flex: 1; min-width: 0; line-height: 1.3; }
+.stext b { display: block; font-size: 15px; font-weight: 700; }
+.stext span { display: block; font-size: 13px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.sbtn { border: 1px solid var(--border); background: transparent; color: var(--fg); font-size: 14px; font-weight: 600; width: 128px; height: 42px;
+    border-radius: 10px; white-space: nowrap; display: flex; align-items: center; justify-content: center; }
+.sbtn.bad { color: #d18a8d; }
+.link { border: 0; background: transparent; color: var(--fg); font-size: 14px; font-weight: 700; padding: 6px 4px; }
+.sec { font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin: 18px 0 6px; }
+.label { font-size: 15px; font-weight: 700; margin: 6px 0; }
+.styles { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+.stylecard { border: 1px solid var(--border); background: var(--card); border-radius: 12px; padding: 14px 8px; box-sizing: border-box; height: 84px; display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 8px; text-align: center; font-size: 15px; line-height: 20px; font-weight: 700; }
+.stylecard.picked { background: var(--panel-on); border-color: var(--fg); }
+.syms { display: flex; justify-content: center; align-items: center; gap: 14px; height: 26px; width: 100%; flex: none; }
+.syms svg { width: 26px; height: 26px; display: block; flex: none; }
+.row { display: flex; align-items: center; justify-content: space-between; gap: 14px; padding: 12px 0; border-top: 1px solid var(--border); font-size: 15px; font-weight: 700; }
+.row:first-of-type { border-top: 0; }
+#themeRow { border-top: 0; margin-top: 4px; }
+#dpadRow { border-top: 0; }
+.row .hint { display: block; color: var(--muted); font-size: 13px; font-weight: 400; margin-top: 2px; }
+.switch { width: 48px; height: 28px; border-radius: 999px; background: var(--panel-on); border: 1px solid var(--border); position: relative; flex: none; }
+.switch i { position: absolute; top: 3px; left: 3px; width: 20px; height: 20px; border-radius: 50%; background: var(--muted); transition: transform .12s; }
+.switch.on { background: var(--accent); border-color: var(--accent); }
+.switch.on i { transform: translateX(20px); background: var(--accent-fg); }
+.sel:focus, .sel:focus-visible { outline: none; border-color: var(--fg); box-shadow: 0 0 0 2px var(--panel-on); }
+.sel { appearance: none; -webkit-appearance: none; padding-right: 36px !important;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%239a9a9a' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat: no-repeat; background-position: right 10px center; background-size: 16px; }
+.sel { min-width: 150px; padding: 10px 12px; border-radius: 10px; border: 1px solid var(--border); background: var(--panel); color: var(--fg); font-size: 15px; touch-action: manipulation; }
+.btn2 { flex: 1; display: flex; align-items: center; justify-content: center; gap: 8px; padding: 12px 14px; border-radius: 10px;
+    border: 1px solid var(--border); background: var(--panel); color: var(--fg); font-size: 15px; font-weight: 600; }
+.btn2 svg { width: 18px; height: 18px; }
+.two { display: flex; gap: 10px; }
+.danger { color: var(--bad); background: transparent; border: 0; width: 100%; padding: 14px; font-size: 16px; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 8px; }
+.foot { margin-top: 14px; border-top: 1px solid var(--border); padding-top: 4px; }
+#ioBox { width: 100%; height: 90px; margin-top: 8px; border-radius: 8px; border: 1px solid var(--border); background: var(--panel);
+    color: var(--fg); font: 12px monospace; padding: 8px; display: none; -webkit-user-select: text; user-select: text; }
+@media (max-height: 460px) { #sheet { padding: 0 16px 12px; } .row { padding: 8px 0; } .head { padding: 10px 0 6px; } .sec { margin: 12px 0 4px; } }
+#toast { position: fixed; left: 50%; top: calc(14 * var(--u)); transform: translateX(-50%); background: var(--accent);
+    color: var(--accent-fg); padding: 8px 14px; border-radius: 6px; font-size: 14px; z-index: 40; display: none; }
+</style>
+</head>
+<body>
+<div id="app">
+  <div class="stick" id="ls"><div class="knob"></div></div>
+  <div class="stick" id="rs"><div class="knob"></div></div>
+
+  <div class="cluster" id="dpad">
+    <svg class="dpv" viewBox="-6 -6 112 112"><circle cx="50" cy="50" r="49.2" fill="var(--disc)" stroke="var(--border)" stroke-width="1.4"/><path d="M33 -0.20A53 53 0 0 1 67 -0.20V33H100.20A53 53 0 0 1 100.20 67H67V100.20A53 53 0 0 1 33 100.20V67H-0.20A53 53 0 0 1 -0.20 33H33Z" fill="var(--arm)" stroke="var(--armedge)" stroke-width="1.6" stroke-linejoin="round"/><path class="hl up" d="M33 -0.2A53 53 0 0 1 67 -0.2V33H33Z"/><path class="hl right" d="M100.2 33A53 53 0 0 1 100.2 67H67V33Z"/><path class="hl down" d="M67 100.2A53 53 0 0 1 33 100.2V67H67Z"/><path class="hl left" d="M-0.2 67A53 53 0 0 1 -0.2 33H33V67Z"/></svg>
+    <div class="btn up" data-b="up"><span class="arrow"></span></div>
+    <div class="btn left" data-b="left"><span class="arrow"></span></div>
+    <div class="btn right" data-b="right"><span class="arrow"></span></div>
+    <div class="btn down" data-b="down"><span class="arrow"></span></div>
+    <i class="dm tl"></i><i class="dm tr"></i><i class="dm bl"></i><i class="dm br"></i>
+  </div>
+
+  <div id="dpadps">
+    <svg class="dpv" viewBox="0 0 100 100"><circle cx="50" cy="50" r="49" fill="var(--disc)" stroke="var(--border)" stroke-width="1.5"/><g fill="var(--border)"><path d="M50 2.5L53.5 7.5Q50 6.2 46.5 7.5Z"/><path d="M50 97.5L53.5 92.5Q50 93.8 46.5 92.5Z"/><path d="M2.5 50L7.5 46.5Q6.2 50 7.5 53.5Z"/><path d="M97.5 50L92.5 46.5Q93.8 50 92.5 53.5Z"/></g></svg>
+    <div class="btn up" data-b="up"><svg viewBox="31 9.5 38 38"><g transform="translate(31 9.5) scale(1.0556)"><path class="k" d="M8 5.6Q8 2.6 11 2.6H25Q28 2.6 28 5.6V24.5L18.7 33.8Q18 34.5 17.3 33.8L8 24.5Z"/></g></svg></div>
+    <div class="btn right" data-b="right"><svg viewBox="52.5 31 38 38"><g transform="translate(52.5 31) scale(1.0556)"><path class="k" d="M8 5.6Q8 2.6 11 2.6H25Q28 2.6 28 5.6V24.5L18.7 33.8Q18 34.5 17.3 33.8L8 24.5Z" transform="rotate(90 18 18)"/></g></svg></div>
+    <div class="btn down" data-b="down"><svg viewBox="31 52.5 38 38"><g transform="translate(31 52.5) scale(1.0556)"><path class="k" d="M8 5.6Q8 2.6 11 2.6H25Q28 2.6 28 5.6V24.5L18.7 33.8Q18 34.5 17.3 33.8L8 24.5Z" transform="rotate(180 18 18)"/></g></svg></div>
+    <div class="btn left" data-b="left"><svg viewBox="9.5 31 38 38"><g transform="translate(9.5 31) scale(1.0556)"><path class="k" d="M8 5.6Q8 2.6 11 2.6H25Q28 2.6 28 5.6V24.5L18.7 33.8Q18 34.5 17.3 33.8L8 24.5Z" transform="rotate(-90 18 18)"/></g></svg></div>
+  </div>
+
+  <div class="cluster" id="face">
+    <div class="face-ps">
+      <div class="btn y" data-b="y"><svg class="glyph" viewBox="0 0 24 24" fill="none" stroke="#1fa37a" stroke-width="2.6" stroke-linejoin="round"><path d="M12 4 L21 19 H3 Z"/></svg></div>
+      <div class="btn x" data-b="x"><svg class="glyph" viewBox="0 0 24 24" fill="none" stroke="#c850a8" stroke-width="2.6" stroke-linejoin="round"><rect x="4.5" y="4.5" width="15" height="15"/></svg></div>
+      <div class="btn b" data-b="b"><svg class="glyph" viewBox="0 0 24 24" fill="none" stroke="#e5394d" stroke-width="2.6"><circle cx="12" cy="12" r="8"/></svg></div>
+      <div class="btn a" data-b="a"><svg class="glyph" viewBox="0 0 24 24" fill="none" stroke="#2f6fe0" stroke-width="2.6" stroke-linecap="round"><path d="M5 5 L19 19 M19 5 L5 19"/></svg></div>
+    </div>
+    <div class="face-xbox">
+      <div class="btn y" data-b="y"><svg class="glyph" viewBox="0 0 24 24" fill="none" stroke="#f5c518" stroke-width="2.6" stroke-linecap="square" stroke-linejoin="miter"><path d="M5.5 4 L12 13 L18.5 4 M12 13 V20.5"/></svg></div>
+      <div class="btn x" data-b="x"><svg class="glyph" viewBox="0 0 24 24" fill="none" stroke="#3e8ef7" stroke-width="2.6" stroke-linecap="square" stroke-linejoin="miter"><path d="M6.3 5.2 L17.7 18.8 M17.7 5.2 L6.3 18.8"/></svg></div>
+      <div class="btn b" data-b="b"><svg class="glyph" viewBox="0 0 24 24" fill="none" stroke="#e5484d" stroke-width="2.6" stroke-linecap="square" stroke-linejoin="miter"><path d="M7 4 V20 M7 4 H12 A4 4 0 0 1 12 12 H7 M7 12 H13 A4 4 0 0 1 13 20 H7"/></svg></div>
+      <div class="btn a" data-b="a"><svg class="glyph" viewBox="0 0 24 24" fill="none" stroke="#30a46c" stroke-width="2.6" stroke-linecap="square" stroke-linejoin="miter"><path d="M4.5 20.5 L12 3.5 L19.5 20.5 M7.8 14.5 H16.2"/></svg></div>
+    </div>
+  </div>
+
+  <div class="pill" id="l1" data-b="l1"><span class="ps-label">L1</span><span class="xbox-label">LB</span></div>
+  <div class="pill" id="r1" data-b="r1"><span class="ps-label">R1</span><span class="xbox-label">RB</span></div>
+  <div class="pill" id="l2" data-t="lt"><div class="fill"></div><span class="tl"><span class="ps-label">L2</span><span class="xbox-label">LT</span><span class="pct"></span></span></div>
+  <div class="pill" id="r2" data-t="rt"><div class="fill"></div><span class="tl"><span class="ps-label">R2</span><span class="xbox-label">RT</span><span class="pct"></span></span></div>
+
+  <div id="sys">
+    <div class="pill" id="view" data-b="view" aria-label="Select"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><rect x="3.5" y="7" width="12" height="12" rx="2"/><path d="M8 7V4.5h12.5V16H18" stroke-linecap="round"/></svg></div>
+      <div class="pill" id="start" data-b="start" aria-label="Start"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M5 7h14M5 12h14M5 17h14"/></svg></div>
+  </div>
+  <div id="top">
+  <div class="pill" id="fsPill" aria-label="Fullscreen"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg></div>
+    <div id="badge" data-st="wait" role="button" aria-label="Toggle connection"><span id="sIcon"></span><span id="slotText">&mdash;</span></div>
+    <div class="pill" id="menuBtn" data-nav="menu" aria-label="Settings"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3.2"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.9.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.9 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.9l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.9.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.9-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.9V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg></div>
+  </div>
+</div>
+
+<div id="toast"></div>
+<div id="confirmWrap"><div id="confirmBox" role="dialog" aria-modal="true">
+  <div class="cicon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3v4M15 3v4M7 7h10v4a5 5 0 0 1-10 0V7zM12 16v5"/><path d="M3 3l18 18"/></svg></div>
+  <div class="ctitle">Disconnect controller?</div>
+  <div class="ctext">Your PC will stop receiving controller input until you reconnect.</div>
+  <div class="cbtns"><button class="cbtn" id="confirmNo">Cancel</button><button class="cbtn danger" id="confirmYes">Confirm</button></div>
+</div></div>
+
+<div id="sheetWrap"><div id="sheet">
+  <div class="head"><h2>Controller settings</h2><button class="iconbtn" id="closeBtn" aria-label="Close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
+
+  <div class="card">
+    <div class="devrow">
+      <div class="devicon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 8h10c3 0 4.5 3 4.5 6.5 0 2.4-1.5 3.2-2.6 2.4-1-.8-1.6-2-3.2-2H8.3c-1.6 0-2.2 1.2-3.2 2-1.1.8-2.6 0-2.6-2.4C2.5 11 4 8 7 8z"/><path d="M7 10.5v3M5.5 12h3"/></svg></div>
+      <div class="devtext" id="devText">
+        <div class="devname" id="devName"></div>
+        <input id="nameInput" type="text" maxlength="24" autocomplete="off">
+        <div class="devsub" id="devSub"></div>
+      </div>
+      <button class="iconbtn" id="editName" aria-label="Rename"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="20" height="20"><path d="M4 20h4L19 9l-4-4L4 16v4zM13.5 6.5l4 4"/></svg></button>
+    </div>
+    <div class="statusrow"><span class="sd wait" id="hDot"></span><div class="stext"><b id="connTitle"></b><span id="connHint"></span></div><button class="sbtn bad" id="disconnBtn">Disconnect</button><button class="sbtn" id="reconnBtn" style="display:none">Reconnect</button></div>
+  </div>
+
+  <div class="sec">Appearance</div>
+  <div class="label">Button style</div>
+  <div class="styles" id="styleSeg">
+    <div class="stylecard" data-v="ps"><div class="syms"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4 L21 19 H3 Z" stroke="#3fb68b"/></svg><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke-width="2.4" stroke-linejoin="round"><rect x="4.5" y="4.5" width="15" height="15" rx="1" stroke="#d96ba6"/></svg><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke-width="2.4"><circle cx="12" cy="12" r="8" stroke="#e5484d"/></svg><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke-width="2.4" stroke-linecap="round"><path d="M5 5 L19 19 M19 5 L5 19" stroke="#3e8ef7"/></svg></div><span>PlayStation</span></div>
+    <div class="stylecard" data-v="xbox"><div class="syms"><svg class="g26" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#f5c518" stroke-width="2.6" stroke-linecap="square" stroke-linejoin="miter"><path d="M5.5 4 L12 13 L18.5 4 M12 13 V20.5"/></svg><svg class="g26" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#3e8ef7" stroke-width="2.6" stroke-linecap="square" stroke-linejoin="miter"><path d="M5 4 L19 20 M19 4 L5 20"/></svg><svg class="g26" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#e5484d" stroke-width="2.6" stroke-linecap="square" stroke-linejoin="miter"><path d="M7 4 V20 M7 4 H12 A4 4 0 0 1 12 12 H7 M7 12 H13 A4 4 0 0 1 13 20 H7"/></svg><svg class="g26" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#30a46c" stroke-width="2.6" stroke-linecap="square" stroke-linejoin="miter"><path d="M4.5 20.5 L12 3.5 L19.5 20.5 M7.8 14.5 H16.2"/></svg></div><span>Xbox</span></div>
+  </div>
+
+  <div class="row" id="dpadRow"><span>D-pad<span class="hint">Multi-press holds several directions at once, including diagonals.</span></span><select id="dpadSel" class="sel"><option value="multi">Multi-press</option><option value="single">One at a time</option></select></div>
+  <div class="row" id="themeRow"><span>Theme<span class="hint">Light, dark or follow the device.</span></span><select id="themeSel" class="sel"><option value="system">System</option><option value="light">Light</option><option value="dark">Dark</option></select></div>
+
+  <div class="sec">Input behaviour</div>
+  <div class="row"><span>Snap to touch<span class="hint">Move the stick immediately to the touch position.</span></span><div class="switch" id="snapSw" role="switch"><i></i></div></div>
+  <div class="row"><span>Vibration<span class="hint" id="vibHint">Haptic feedback when pressing controls.</span></span><div class="switch" id="vibSw" role="switch"><i></i></div></div>
+  <div class="row"><span>Left trigger<span class="hint" id="tlHint"></span></span><select id="trigL" class="sel"></select></div>
+  <div class="row"><span>Right trigger<span class="hint" id="trHint"></span></span><select id="trigR" class="sel"></select></div>
+  <div class="row"><span>Fullscreen<span class="hint" id="fsHint"></span></span><button class="btn2" id="fsBtn" style="flex:none"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg><span id="fsLabel">Enter</span></button></div>
+
+  <div class="sec">Configuration</div>
+  <div class="two"><button class="btn2" id="expBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11M7 11l5 5 5-5M5 20h14"/></svg>Export</button><button class="btn2" id="impBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16V5M7 9l5-5 5 5M5 20h14"/></svg>Import</button></div>
+  <textarea id="ioBox" spellcheck="false" placeholder="Paste exported settings here, then tap Import again"></textarea>
+  <input id="impFile" type="file" accept="application/json,.json" style="display:none">
+</div></div>
+
+<script>
+(function () {
+  "use strict";
+  var BIT = { start: 1, view: 2, a: 4, b: 8, x: 16, y: 32, up: 64, down: 128, left: 256, right: 512, l1: 1024, r1: 2048, l3: 4096, r3: 8192 };
+  var ua = navigator.userAgent || "";
+  var isIOS = /iPhone|iPad|iPod/.test(ua) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+  var store = { get: function (k, d) { try { var v = localStorage.getItem(k); return v === null ? d : v; } catch (e) { return d; } },
+                set: function (k, v) { try { localStorage.setItem(k, v); } catch (e) {} } };
+
+  // ---- device description for the PC ----
+  var devInfo = (function () {
+    var os = "", model = "", browser = "";
+    var m;
+    if (isIOS) {
+      os = (m = ua.match(/OS (\d+)[_.](\d+)/)) ? "iOS " + m[1] + "." + m[2] : "iOS";
+      model = /iPad/.test(ua) || (navigator.platform === "MacIntel") ? "iPad" : "iPhone";
+    } else if ((m = ua.match(/Android ([\d.]+)/))) {
+      os = "Android " + m[1];
+      var mm = ua.match(/Android [\d.]+; ([^;)]+)/);
+      if (mm && mm[1] && mm[1].trim().length > 1 && mm[1].trim() !== "K") model = mm[1].replace(/ Build\/.*/, "").trim();
+    } else if (/Windows/.test(ua)) os = "Windows";
+    else if (/Mac OS X/.test(ua)) os = "macOS";
+    else if (/Linux/.test(ua)) os = "Linux";
+    if ((m = ua.match(/(EdgA|EdgiOS|Edg)\/(\d+)/))) browser = "Edge " + m[2];
+    else if ((m = ua.match(/SamsungBrowser\/(\d+)/))) browser = "Samsung Internet " + m[1];
+    else if ((m = ua.match(/(OPR|OPiOS)\/(\d+)/))) browser = "Opera " + m[2];
+    else if ((m = ua.match(/(Firefox|FxiOS)\/(\d+)/))) browser = "Firefox " + m[2];
+    else if ((m = ua.match(/(Chrome|CriOS)\/(\d+)/))) browser = "Chrome " + m[2];
+    else if ((m = ua.match(/Version\/(\d+)[\d.]*.*Safari/))) browser = "Safari " + m[1];
+    var scr = Math.round(Math.max(screen.width, screen.height)) + "x" + Math.round(Math.min(screen.width, screen.height));
+    var dpr = window.devicePixelRatio ? " @" + (Math.round(window.devicePixelRatio * 100) / 100) + "x" : "";
+    var touch = navigator.maxTouchPoints ? navigator.maxTouchPoints + " touch points" : "";
+    var parts = [];
+    if (model) parts.push(model);
+    if (os) parts.push(os);
+    if (browser) parts.push(browser);
+    return { model: model, os: os, browser: browser, screen: scr + dpr, touch: touch,
+             label: parts.length ? parts.join(", ") : "Web browser", parts: parts };
+  })();
+  function guessModel() { return devInfo.label + (devInfo.screen ? " (" + devInfo.screen + ")" : ""); }
+  function defaultName() { return devInfo.model || (isIOS ? "iPhone" : devInfo.os ? devInfo.os + " device" : "Browser"); }
+  var PAGE_V = "__VGP_V__";
+  var settings = {
+    name: store.get("vgp-name", defaultName()),
+    style: store.get("vgp-style", "ps"),
+    theme: store.get("vgp-theme", "system"),
+    dpad: store.get("vgp-dpad", "multi") === "single" || store.get("vgp-dpad", "multi") === "ortho" ? "single" : "multi",
+    vib: store.get("vgp-vib", "on"),
+    snap: store.get("vgp-snap", "on"),
+    trigL: store.get("vgp-trigL", "digital"),
+    trigR: store.get("vgp-trigR", "digital")
+  };
+  // slide, ramp, force and tilt are implemented but hidden from the menu
+  var OFFERED = ["digital", "drag", "zones"];
+  var TRIG_MODES = [
+    ["digital", "Button", "Plain tap: fully on or off"],
+    ["slide", "Slide track", "Finger height sets the value"],
+    ["drag", "Drag from touch", "Touch anywhere, drag up to press harder"],
+    ["zones", "Two zones", "Lower half 50%, upper half 100%"],
+    ["ramp", "Hold to ramp", "Rises smoothly over 0.3 seconds"],
+    ["force", "Touch pressure", "Needs a screen that reports pressure"],
+    ["tilt", "Tilt while held", "Hold, then tilt the phone"]
+  ];
+  var canVibrate = typeof navigator.vibrate === "function" || isIOS;
+
+  // ---- state ----
+  var held = 0, pendDown = 0, pendUp = 0, dirty = false, lastSend = 0;
+  var ax = { lx: 0, ly: 0, rx: 0, ry: 0, lt: 0, rt: 0 };
+  var ws = null, wantConnection = true, retryTimer = null, slot = 0, refusedUntil = 0;
+  var sentName = "";
+
+  function $(id) { return document.getElementById(id); }
+  // In portrait the controller is rotated 90 degrees clockwise, so screen points map back to its own frame
+  var portrait = window.matchMedia("(orientation: portrait)");
+  function vw() { return document.documentElement.clientWidth; }
+  function P(e) { return portrait.matches ? { x: e.clientY, y: vw() - e.clientX } : { x: e.clientX, y: e.clientY }; }
+  function R(el) {
+    var r = el.getBoundingClientRect();
+    return portrait.matches ? { left: r.top, top: vw() - r.right, width: r.height, height: r.width } : { left: r.left, top: r.top, width: r.width, height: r.height };
+  }
+  function toast(text) {
+    var t = $("toast"); t.textContent = text; t.style.display = "block";
+    clearTimeout(toast.h); toast.h = setTimeout(function () { t.style.display = "none"; }, 2200);
+  }
+
+  // ---- network ----
+  var STATUS_ICONS = {
+    ok: '<svg class="sico" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1.6"><g transform="translate(12 12) rotate(-45)"><rect x="-10.6" y="-3.2" width="8.4" height="6.4" rx="3.2" fill-opacity=".2" /><rect x="2.2" y="-3.2" width="8.4" height="6.4" rx="3.2" fill-opacity=".2" /><rect x="-4.8" y="-1.3" width="9.6" height="2.6" rx="1.3" fill-opacity="1" stroke="none" /></g></svg>',
+    bad: '<svg class="sico" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1.6"><g transform="translate(12 12) rotate(-45)"><rect x="-11.4" y="-3.2" width="8.4" height="6.4" rx="3.2" fill-opacity=".2" /><rect x="3.0" y="-3.2" width="8.4" height="6.4" rx="3.2" fill-opacity=".2" /><rect x="-5.6" y="-1.3" width="4.0" height="2.6" rx="1.1" fill-opacity="1" stroke="none" /><rect x="1.6" y="-1.3" width="4.0" height="2.6" rx="1.1" fill-opacity="1" stroke="none" /></g></svg>',
+    wait: '<svg class="sico" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1.6"><path d="M7.2 4.2C7.2 8.2 10.6 10.2 10.6 12C10.6 13.8 7.2 15.8 7.2 19.8H16.8C16.8 15.8 13.4 13.8 13.4 12C13.4 10.2 16.8 8.2 16.8 4.2Z" fill-opacity=".2" /><rect x="5.5" y="2.2" width="13" height="2" rx="1" fill-opacity=".45" /><rect x="5.5" y="19.8" width="13" height="2" rx="1" fill-opacity=".45" /><path d="M8.7 6.5Q12 7.8 15.3 6.5C14.7 8.8 13 10.1 12.3 11.4H11.7C11 10.1 9.3 8.8 8.7 6.5Z" fill-opacity=".85" stroke="none" /><path d="M8.2 19.1C9.5 18.6 11.1 16.1 12 16.1C12.9 16.1 14.5 18.6 15.8 19.1Z" fill-opacity=".85" stroke="none" /></svg>'
+  };
+  var connKind = "wait";
+  function setStatus(kind, text, hint) {
+    connKind = kind;
+    var st = kind === "ok" ? "ok" : (kind === "wait" || text === "Reconnecting") ? "wait" : "bad";
+    $("sIcon").innerHTML = STATUS_ICONS[st]; $("badge").setAttribute("data-st", st); $("hDot").className = "sd " + st;
+    $("connTitle").textContent = st === "ok" ? "Connected" : st === "wait" ? (text === "Reconnecting" ? "Reconnecting" : "Connecting") : "Disconnected";
+    $("connHint").textContent = st === "ok" ? "Controller " + slot : (st === "bad" && text === "Disconnected") ? "No active connection" : (hint || text);
+    $("badge").title = $("connTitle").textContent;
+    $("disconnBtn").style.display = wantConnection && st !== "bad" ? "" : "none";
+    $("reconnBtn").style.display = wantConnection && st !== "bad" ? "none" : "";
+    renderSlot(); updateMedia(st);
+  }
+  var SLOT_COLORS = ["#E5484D", "#3E8EF7", "#F5C518", "#30A46C", "#F97316", "#A855F7"];
+  function renderSlot() {
+    var on = slot && connKind === "ok", c = on ? SLOT_COLORS[slot - 1] : "";
+    $("slotText").textContent = on ? "P" + slot : "\u2014";
+    $("slotText").style.color = c;
+    if (c) document.documentElement.style.setProperty("--slotc", c);
+    document.documentElement.classList.toggle("glow", !!c);
+  }
+  function connect() {
+    if (!wantConnection || (ws && ws.readyState <= 1)) return;
+    if (Date.now() < refusedUntil) { retryTimer = setTimeout(connect, 1000); return; }
+    setStatus("wait", "Connecting");
+    var proto = location.protocol === "https:" ? "wss://" : "ws://";
+    try { ws = new WebSocket(proto + location.host + "/ws"); } catch (e) { scheduleRetry(); return; }
+    var mine = ws;
+    ws.onopen = function () {
+      if (mine !== ws) return;
+      slot = 0; renderSlot();
+      mine.send(JSON.stringify({ t: "hello", name: settings.name, model: guessModel() }));
+      sentName = settings.name;
+      setStatus("wait", "Waiting for the PC");
+      dirty = true;
+    };
+    ws.onmessage = function (ev) {
+      var m; try { m = JSON.parse(ev.data); } catch (e) { return; }
+      if (m.v && PAGE_V.charAt(0) !== "_" && m.v !== PAGE_V && store.get("vgp-reloaded", "") !== m.v) {
+        store.set("vgp-reloaded", m.v);
+        location.replace(location.pathname + "?v=" + m.v);
+        return;
+      }
+      if (m.t === "slot") { slot = m.n | 0; renderSlot(); setStatus("ok", "P" + slot, "Connected as controller " + slot); }
+      else if (m.t === "refused") {
+        wantConnection = true; refusedUntil = Date.now() + 5000;
+        setStatus("bad", m.why || "Refused by the PC"); toast(m.why || "Refused by the PC");
+      }
+    };
+    ws.onclose = function () {
+      if (mine !== ws) return;
+      slot = 0; renderSlot(); releaseAll(false);
+      if (wantConnection) { if (Date.now() >= refusedUntil) setStatus("wait", "Reconnecting"); scheduleRetry(); }
+      else setStatus("bad", "Disconnected");
+    };
+    ws.onerror = function () {};
+  }
+  function scheduleRetry() { clearTimeout(retryTimer); retryTimer = setTimeout(connect, 1200); }
+  function disconnect() {
+    wantConnection = false; clearTimeout(retryTimer); releaseAll(true);
+    if (ws) { try { ws.close(); } catch (e) {} }
+    setStatus("bad", "Disconnected");
+  }
+  function reconnect() {
+    wantConnection = true; refusedUntil = 0;
+    if (ws) { try { ws.onclose = null; ws.close(); } catch (e) {} ws = null; }
+    slot = 0; renderSlot(); connect();
+  }
+
+  // ---- input state ----
+  // Android uses the Vibration API (short pulses are too faint on many motors); iOS has none, but toggling a
+  // switch control from a touch gives a system tick
+  var hapticLabel = null, vibLog = 0;
+  function buzz(ms, who) {
+    if (!canVibrate || settings.vib !== "on") return;
+    if (typeof navigator.vibrate === "function") {
+      var ok = navigator.vibrate(ms || 30);
+      if (vibLog < 40 && ws && ws.readyState === 1) { vibLog++; ws.send(JSON.stringify({ t: "dbg", msg: "vibrate(" + (ms || 30) + ") " + (who || "?") + " returned " + ok + ", activation " + (navigator.userActivation ? navigator.userActivation.hasBeenActive : "n/a") })); }
+      return;
+    }
+    if (!hapticLabel) {
+      hapticLabel = document.createElement("label");
+      hapticLabel.style.cssText = "position:fixed;left:-99px;top:0;width:1px;height:1px;opacity:0;pointer-events:none";
+      var box = document.createElement("input"); box.type = "checkbox"; box.setAttribute("switch", "");
+      hapticLabel.appendChild(box); document.body.appendChild(hapticLabel);
+    }
+    hapticLabel.click();
+  }
+  function press(name) {
+    if (name === "l2") { ax.lt = 1; } else if (name === "r2") { ax.rt = 1; }
+    else { var bit = BIT[name]; if (!(held & bit)) { held |= bit; pendDown |= bit; } }
+    dirty = true; flush();
+  }
+  function release(name) {
+    if (name === "l2") { ax.lt = 0; } else if (name === "r2") { ax.rt = 0; }
+    else { var bit = BIT[name]; if (held & bit) { held &= ~bit; pendUp |= bit; } }
+    dirty = true; flush();
+  }
+  function releaseAll(sendNow) {
+    pendUp |= held; held = 0; ax.lx = ax.ly = ax.rx = ax.ry = ax.lt = ax.rt = 0; dirty = true;
+    document.querySelectorAll(".on").forEach(function (e) { e.classList.remove("on"); });
+    document.querySelectorAll(".knob").forEach(function (k) { k.style.transform = ""; });
+    document.querySelectorAll(".stick").forEach(function (t) { t._on = false; t.classList.remove("click"); });
+    document.querySelectorAll(".fill").forEach(function (f) { f.style.height = "0"; });
+    if (sendNow) tick(true);
+  }
+  function tick(force) {
+    if (!ws || ws.readyState !== 1) return;
+    var now = Date.now();
+    if (!dirty && !force && now - lastSend < 2000) return;
+    var d = pendDown, u = pendUp;
+    var both = d & u;               // a tap faster than one tick: show the press now, the release next tick
+    pendDown = 0; pendUp = both;
+    u &= ~both;
+    var msg = { t: "state", d: d, u: u,
+      lx: +ax.lx.toFixed(3), ly: +ax.ly.toFixed(3), rx: +ax.rx.toFixed(3), ry: +ax.ry.toFixed(3), lt: ax.lt, rt: ax.rt };
+    try { ws.send(JSON.stringify(msg)); } catch (e) { return; }
+    lastSend = now; dirty = (pendUp !== 0);
+    if (settings.name !== sentName) {
+      ws.send(JSON.stringify({ t: "hello", name: settings.name, model: guessModel() })); sentName = settings.name;
+    }
+  }
+  // Send as soon as something changes instead of waiting for the next timer tick
+  function flush() { if (Date.now() - lastSend >= 4) tick(); }
+  setInterval(tick, 8);
+
+  // ---- buttons ----
+  function bindButton(el) {
+    var name = el.getAttribute("data-b");
+    el.addEventListener("pointerdown", function (e) {
+      if (name === "up" || name === "down" || name === "left" || name === "right") return;
+      e.preventDefault(); try { el.setPointerCapture(e.pointerId); } catch (x) {}
+      el.classList.add("on"); press(name); buzz(0, "btn " + name); firstTouch();
+    });
+    var up = function (e) { if (el.classList.contains("on")) { el.classList.remove("on"); release(name); } };
+    el.addEventListener("pointerup", up); el.addEventListener("pointercancel", up); el.addEventListener("lostpointercapture", up);
+  }
+  document.querySelectorAll("[data-b]").forEach(bindButton);
+
+  // D-pad: every finger on the pad picks its direction from where it is, and the pad holds the union, so two
+  // fingers (or one thumb near a diagonal) press several directions at once. "One at a time" mode keeps a single
+  // finger and a single cardinal direction.
+  ["dpad", "dpadps"].forEach(function (cid) {
+    var el = $(cid), ptrs = {}, DIRS = ["up", "down", "left", "right"];
+    function setDir(name, on) {
+      var is = (held & BIT[name]) !== 0, arm = el.querySelector(".btn." + name);
+      if (on && !is) { press(name); arm.classList.add("on"); buzz(0, "dpad " + name); }
+      else if (!on && is) { release(name); arm.classList.remove("on"); }
+    }
+    function current() { for (var i = 0; i < 4; i++) if ((held & BIT[DIRS[i]]) !== 0) return DIRS[i]; return null; }
+    function pick(e) {
+      var r = R(el), q = P(e), dx = q.x - (r.left + r.width / 2), dy = q.y - (r.top + r.height / 2), d = Math.hypot(dx, dy);
+      var out = {};
+      if (d < r.width * 0.07) return out;
+      if (settings.dpad === "single") {
+        var ax = Math.abs(dx), ay = Math.abs(dy), cur = current(), horiz;
+        if (cur === "left" || cur === "right") horiz = ay <= ax * 1.25;
+        else if (cur === "up" || cur === "down") horiz = ax > ay * 1.25;
+        else horiz = ax > ay;
+        out[horiz ? (dx < 0 ? "left" : "right") : (dy < 0 ? "up" : "down")] = true;
+        return out;
+      }
+      var ux = dx / d, uy = dy / d;
+      if (uy < -0.38) out.up = true; if (uy > 0.38) out.down = true;
+      if (ux < -0.38) out.left = true; if (ux > 0.38) out.right = true;
+      return out;
+    }
+    function apply() {
+      var on = {};
+      Object.keys(ptrs).forEach(function (k) { Object.keys(ptrs[k]).forEach(function (n) { on[n] = true; }); });
+      DIRS.forEach(function (n) { setDir(n, !!on[n]); });
+    }
+    function end(e) { if (!(e.pointerId in ptrs)) return; delete ptrs[e.pointerId]; apply(); }
+    el.addEventListener("pointerdown", function (ev) {
+      if (settings.dpad === "single" && Object.keys(ptrs).length) return;
+      ev.preventDefault();
+      try { el.setPointerCapture(ev.pointerId); } catch (x) {}
+      firstTouch(); ptrs[ev.pointerId] = pick(ev); apply();
+    });
+    el.addEventListener("pointermove", function (ev) { if (ev.pointerId in ptrs) { ev.preventDefault(); ptrs[ev.pointerId] = pick(ev); apply(); } });
+    el.addEventListener("pointerup", end); el.addEventListener("pointercancel", end); el.addEventListener("lostpointercapture", end);
+  });
+
+  // ---- analog triggers ----
+  function bindTrigger(el, key) {
+    var fill = el.querySelector(".fill"), pct = el.querySelector(".pct");
+    var id = null, y0 = 0, top = 0, h = 1, level = 0, raf = 0, tiltOn = false, base = null, sm = [0, 0, 0];
+    function mode() { return settings[key === "lt" ? "trigL" : "trigR"]; }
+    function setv(raw) {
+      var v = raw < 0.05 ? 0 : (raw >= 0.9 ? 1 : raw);
+      if (Math.floor(v * 4) > Math.floor(level * 4) && mode() !== "digital") buzz(18);
+      level = v; ax[key] = v; dirty = true;
+      fill.style.height = (v * 100) + "%";
+      pct.textContent = id !== null && mode() !== "digital" ? Math.round(v * 100) + "%" : "";
+    }
+    function handle(e) {
+      var y = P(e).y - top;
+      switch (mode()) {
+        case "slide": setv(0.1 + 0.9 * Math.min(1, Math.max(0, 1 - y / h))); break;
+        case "drag": setv(0.2 + 0.8 * Math.min(1, Math.max(0, (y0 - P(e).y) / (h * 0.6)))); break;
+        case "zones": setv(y < h / 2 ? 1 : 0.5); break;
+        case "force": setv(Math.min(1, Math.max(0.1, (e.pressure || 0.5) * 1.6))); break;
+      }
+    }
+    function onMotion(ev) {
+      var g = ev.accelerationIncludingGravity; if (!g || g.x == null) return;
+      var a = [g.x, g.y, g.z];
+      for (var i = 0; i < 3; i++) sm[i] += 0.3 * (a[i] - sm[i]);
+      if (!base) base = sm.slice();
+      var dot = sm[0] * base[0] + sm[1] * base[1] + sm[2] * base[2];
+      var na = Math.hypot(sm[0], sm[1], sm[2]), nb = Math.hypot(base[0], base[1], base[2]);
+      if (na < 1e-3 || nb < 1e-3) return;
+      var deg = Math.acos(Math.min(1, Math.max(-1, dot / (na * nb)))) * 180 / Math.PI;
+      setv(deg / 30);
+    }
+    function startTilt() {
+      base = null; sm = [0, 0, 0]; tiltOn = true;
+      var go = function () { if (tiltOn) window.addEventListener("devicemotion", onMotion); };
+      if (window.DeviceMotionEvent && typeof DeviceMotionEvent.requestPermission === "function")
+        DeviceMotionEvent.requestPermission().then(function (r) { if (r === "granted") go(); }).catch(function () {});
+      else go();
+    }
+    function startRamp() {
+      var t0 = performance.now();
+      (function step(now) {
+        if (id === null) return;
+        setv(Math.min(1, (now - t0) / 300));
+        if (level < 1) raf = requestAnimationFrame(step);
+      })(t0);
+    }
+    el.addEventListener("pointerdown", function (e) {
+      if (id !== null) return; e.preventDefault(); id = e.pointerId;
+      try { el.setPointerCapture(id); } catch (x) {}
+      var r = R(el); top = r.top; h = r.height || 1; y0 = P(e).y;
+      el.classList.add("on"); buzz(0, "trig " + key); firstTouch();
+      var m = mode();
+      if (m === "digital") setv(1);
+      else if (m === "ramp") startRamp();
+      else if (m === "tilt") startTilt();
+      else handle(e);
+    });
+    el.addEventListener("pointermove", function (e) { if (e.pointerId === id) { e.preventDefault(); handle(e); } });
+    var end = function (e) {
+      if (e.pointerId !== id) return; id = null; cancelAnimationFrame(raf);
+      tiltOn = false; window.removeEventListener("devicemotion", onMotion);
+      el.classList.remove("on"); level = 1; setv(0);
+    };
+    el.addEventListener("pointerup", end); el.addEventListener("pointercancel", end); el.addEventListener("lostpointercapture", end);
+    if (mode() === "zones") { var z = document.createElement("div"); z.className = "zline"; el.appendChild(z); }
+    el.updateZones = function () {
+      var has = el.querySelector(".zline");
+      if (mode() === "zones" && !has) { var q = document.createElement("div"); q.className = "zline"; el.appendChild(q); }
+      else if (mode() !== "zones" && has) el.removeChild(has);
+    };
+  }
+  bindTrigger($("l2"), "lt");
+  bindTrigger($("r2"), "rt");
+
+  // ---- sticks ----
+  // Long press on a stick holds its click (L3 or R3) until the next long press, a quick double tap clicks once
+  function bindStick(el, set, btn) {
+    var knob = el.querySelector(".knob"), id = null, cx = 0, cy = 0, Rad = 1;
+    var sx = 0, sy = 0, moved = false, hold = 0, downT = 0, lastTap = 0;
+    function toggleClick() {
+      if (el._on) { el._on = false; el.classList.remove("click"); release(btn); }
+      else { el._on = true; el.classList.add("click"); press(btn); buzz(); }
+    }
+    function quickClick() { press(btn); buzz(); setTimeout(function () { release(btn); }, 70); }
+    function move(e) {
+      var q = P(e);
+      if (Math.hypot(q.x - sx, q.y - sy) > 10) { moved = true; clearTimeout(hold); }
+      var dx = (q.x - cx) / Rad, dy = (q.y - cy) / Rad, m = Math.hypot(dx, dy);
+      if (m > 1) { dx /= m; dy /= m; }
+      knob.style.transform = "translate(" + (dx * Rad) + "px," + (dy * Rad) + "px)";
+      set(dx, dy); dirty = true; flush();
+    }
+    el.addEventListener("pointerdown", function (e) {
+      if (id !== null) return; e.preventDefault();
+      if (settings.snap !== "on" && !e.target.classList.contains("knob")) return;
+      id = e.pointerId;
+      try { el.setPointerCapture(id); } catch (x) {}
+      var r = R(el), q0 = P(e); cx = r.left + r.width / 2; cy = r.top + r.height / 2; Rad = r.width * 0.28;
+      sx = q0.x; sy = q0.y; moved = false; downT = Date.now(); clearTimeout(hold);
+      hold = setTimeout(function () { if (id !== null && !moved) toggleClick(); }, 450);
+      el.classList.add("active"); move(e); buzz(0, "stick"); firstTouch();
+    });
+    var onMove = function (e) { if (e.pointerId === id) { e.preventDefault(); move(e); } };
+    el.addEventListener("pointermove", onMove);
+    if ("onpointerrawupdate" in window) el.addEventListener("pointerrawupdate", onMove);
+    var end = function (e) {
+      if (e.pointerId !== id) return; id = null; el.classList.remove("active"); clearTimeout(hold);
+      knob.style.transform = ""; set(0, 0); dirty = true;
+      if (!moved && Date.now() - downT < 250) {
+        if (Date.now() - lastTap < 350) { lastTap = 0; quickClick(); } else lastTap = Date.now();
+      }
+    };
+    el.addEventListener("pointerup", end); el.addEventListener("pointercancel", end); el.addEventListener("lostpointercapture", end);
+  }
+  bindStick($("ls"), function (x, y) { ax.lx = x; ax.ly = y; }, "l3");
+  bindStick($("rs"), function (x, y) { ax.rx = x; ax.ry = y; }, "r3");
+
+  // ---- platform behaviour ----
+  var wake = null;
+  function takeWakeLock() {
+    if (!("wakeLock" in navigator) || wake) return;
+    navigator.wakeLock.request("screen").then(function (l) { wake = l; l.addEventListener("release", function () { wake = null; }); }).catch(function () {});
+  }
+  // A silent looping track makes Chrome treat the page as playing media: it stays alive with the screen off or in
+  // another app, and Android shows a persistent media notification with the connection status
+  var keep = null, keepStarted = false;
+  function silentWav() {
+    var rate = 8000, n = rate * 10, buf = new ArrayBuffer(44 + n * 2), v = new DataView(buf);
+    function str(o, t) { for (var i = 0; i < t.length; i++) v.setUint8(o + i, t.charCodeAt(i)); }
+    str(0, "RIFF"); v.setUint32(4, 36 + n * 2, true); str(8, "WAVEfmt "); v.setUint32(16, 16, true); v.setUint16(20, 1, true);
+    v.setUint16(22, 1, true); v.setUint32(24, rate, true); v.setUint32(28, rate * 2, true); v.setUint16(32, 2, true); v.setUint16(34, 16, true);
+    str(36, "data"); v.setUint32(40, n * 2, true);
+    for (var i = 0; i < n; i++) v.setInt16(44 + i * 2, i % 2 ? 1 : -1, true);
+    return URL.createObjectURL(new Blob([buf], { type: "audio/wav" }));
+  }
+  function startKeepAlive() { return;
+    if (keepStarted) return; keepStarted = true;
+    keep = new Audio(silentWav()); keep.loop = true; keep.volume = 0.05;
+    keep.play().then(function () { updateMedia(connKind === "ok" ? "ok" : connKind === "wait" ? "wait" : "bad"); }).catch(function () { keepStarted = false; });
+    if ("mediaSession" in navigator) {
+      navigator.mediaSession.setActionHandler("play", function () { reconnect(); });
+      // Pausing must not drop the connection: keep the track running so the page stays alive
+      navigator.mediaSession.setActionHandler("pause", function () { if (keep && wantConnection) keep.play().catch(function () {}); });
+    }
+  }
+  function updateMedia(st) {
+    if (!("mediaSession" in navigator) || !keepStarted) return;
+    var title = st === "ok" ? "Connected as P" + slot : st === "wait" ? "Connecting" : "Disconnected";
+    try {
+      navigator.mediaSession.metadata = new MediaMetadata({ title: title, artist: "AirDeck", album: "Tap the status in the controller to disconnect" });
+      navigator.mediaSession.playbackState = wantConnection ? "playing" : "paused";
+    } catch (e) {}
+    if (keep) { if (wantConnection) { if (keep.paused) keep.play().catch(function () {}); } else keep.pause(); }
+  }
+  var hiddenAt = 0;
+  var touched = false;
+  function firstTouch() {
+    if (touched) return; touched = true; takeWakeLock();
+    document.addEventListener("pointerup", function once() { document.removeEventListener("pointerup", once, true); startKeepAlive(); }, true);
+    if (false) {
+      var once = function () { document.removeEventListener("pointerup", once, true); if (!document.fullscreenElement) enterFullscreen(true); };
+      document.addEventListener("pointerup", once, true);
+    }
+  }
+  function updateFsPill() {
+    var standalone = !document.fullscreenElement && window.matchMedia && window.matchMedia("(display-mode: fullscreen), (display-mode: standalone)").matches;
+    var can = !isIOS && !!document.documentElement.requestFullscreen && !standalone;
+    $("fsPill").classList.toggle("show", can);
+    var fs = !!document.fullscreenElement, path = $("fsPill").querySelector("path");
+    path.setAttribute("d", fs ? "M9 4v5H4M15 4v5h5M9 20v-5H4M15 20v-5h5" : "M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5");
+    $("fsPill").setAttribute("aria-label", fs ? "Exit fullscreen" : "Fullscreen");
+  }
+  document.addEventListener("fullscreenchange", updateFsPill);
+  $("fsPill").addEventListener("click", function () { if (document.fullscreenElement) document.exitFullscreen(); else enterFullscreen(false); });
+  function enterFullscreen(quiet) {
+    var el = document.documentElement;
+    var p = el.requestFullscreen ? el.requestFullscreen({ navigationUI: "hide" }) : null;
+    if (p && p.then) p.then(function () { if (screen.orientation && screen.orientation.lock) screen.orientation.lock("landscape").catch(function () {}); }).catch(function () {});
+    else if (!quiet) toast("Use Share, then Add to Home Screen, for fullscreen");
+  }
+  document.addEventListener("visibilitychange", function () {
+    if (document.hidden) { hiddenAt = Date.now(); releaseAll(true); }
+    else {
+      takeWakeLock();
+      // a socket that slept may look open but be dead, so after a real absence start a fresh one
+      if (wantConnection) { if (hiddenAt && Date.now() - hiddenAt > 4000 && !(keep && !keep.paused)) reconnect(); else connect(); }
+    }
+  });
+  window.addEventListener("online", function () { if (wantConnection) reconnect(); });
+  window.addEventListener("pagehide", function () { releaseAll(true); });
+  window.addEventListener("blur", function () { releaseAll(true); });
+  document.addEventListener("touchmove", function (e) { if (!e.target.closest("#sheet")) e.preventDefault(); }, { passive: false });
+  document.addEventListener("gesturestart", function (e) { e.preventDefault(); });
+  document.addEventListener("contextmenu", function (e) { e.preventDefault(); });
+  document.addEventListener("dblclick", function (e) { e.preventDefault(); });
+
+  // ---- menu ----
+  function applyTheme() {
+    var root = document.documentElement;
+    if (settings.theme === "light" || settings.theme === "dark") root.setAttribute("data-theme", settings.theme); else root.removeAttribute("data-theme");
+    $("themeSel").value = settings.theme;
+    $("dpadSel").value = settings.dpad;
+  }
+  function applySettings() {
+    applyTheme();
+    document.body.classList.toggle("xbox", settings.style === "xbox");
+    document.querySelectorAll("#styleSeg .stylecard").forEach(function (d) { d.classList.toggle("picked", d.dataset.v === settings.style); });
+    $("vibSw").classList.toggle("on", settings.vib === "on");
+    $("snapSw").classList.toggle("on", settings.snap === "on");
+    $("vibHint").textContent = canVibrate ? "Haptic feedback when pressing controls." : "Not available on this browser.";
+    $("fsHint").textContent = isIOS ? "iPhone: Share, then Add to Home Screen" : (document.fullscreenElement ? "Showing the browser bars again" : "Hides the browser bars");
+    $("fsLabel").textContent = document.fullscreenElement ? "Exit" : "Enter";
+    [["trigL", "tlHint"], ["trigR", "trHint"]].forEach(function (p) {
+      var sel = $(p[0]);
+      if (!sel.options.length) TRIG_MODES.filter(function (m) { return OFFERED.indexOf(m[0]) >= 0; }).forEach(function (m) { var o = document.createElement("option"); o.value = m[0]; o.textContent = m[1]; sel.appendChild(o); });
+      sel.value = settings[p[0]];
+      var cur = TRIG_MODES.filter(function (m) { return m[0] === settings[p[0]]; })[0];
+      $(p[1]).textContent = cur ? cur[2] : "";
+    });
+    $("l2").updateZones(); $("r2").updateZones();
+    $("nameInput").value = settings.name;
+    $("devName").textContent = settings.name;
+    var osName = (devInfo.os || "").split(" ")[0], browserName = (devInfo.browser || "").split(" ")[0];
+    $("devSub").textContent = [osName, browserName].filter(Boolean).join("  \u00B7  ") || "Web browser";
+  }
+  function exportText() {
+    return JSON.stringify({ vgp: 1, name: settings.name, style: settings.style, vib: settings.vib, snap: settings.snap, trigL: settings.trigL, trigR: settings.trigR }, null, 2);
+  }
+  function importText(t) {
+    var o; try { o = JSON.parse(t); } catch (e) { toast("Not valid settings"); return false; }
+    if (!o || o.vgp !== 1) { toast("Not valid settings"); return false; }
+    if (typeof o.name === "string" && o.name.trim()) { settings.name = o.name.trim().slice(0, 24); store.set("vgp-name", settings.name); dirty = true; }
+    if (o.style === "ps" || o.style === "xbox") { settings.style = o.style; store.set("vgp-style", o.style); }
+    if (o.vib === "on" || o.vib === "off") { settings.vib = o.vib; store.set("vgp-vib", o.vib); }
+    if (o.snap === "on" || o.snap === "off") { settings.snap = o.snap; store.set("vgp-snap", o.snap); }
+    var ids = OFFERED;
+    if (ids.indexOf(o.trigL) >= 0) { settings.trigL = o.trigL; store.set("vgp-trigL", o.trigL); }
+    if (ids.indexOf(o.trigR) >= 0) { settings.trigR = o.trigR; store.set("vgp-trigR", o.trigR); }
+    applySettings(); toast("Settings imported"); return true;
+  }
+  function openMenu() { releaseAll(true); $("devText").classList.remove("editing"); applySettings(); $("sheetWrap").classList.add("open"); }
+  function closeMenu() {
+    var n = $("nameInput").value.trim().slice(0, 24) || defaultName();
+    if (n !== settings.name) { settings.name = n; store.set("vgp-name", n); dirty = true; }
+    $("devText").classList.remove("editing"); applySettings();
+    $("sheetWrap").classList.remove("open");
+  }
+  $("badge").addEventListener("pointerdown", function (e) {
+    e.preventDefault(); firstTouch(); $("badge").classList.add("press");
+    if (!wantConnection) reconnect();
+    else if (connKind === "ok") { releaseAll(true); $("confirmWrap").classList.add("open"); }
+    else { disconnect(); toast("Disconnected. Tap the status to reconnect."); }
+  });
+  $("confirmNo").addEventListener("click", function () { $("confirmWrap").classList.remove("open"); });
+  $("confirmWrap").addEventListener("pointerdown", function (e) { if (e.target === this) this.classList.remove("open"); });
+  $("confirmYes").addEventListener("click", function () { $("confirmWrap").classList.remove("open"); disconnect(); toast("Disconnected. Tap the status to reconnect."); });
+  ["pointerup", "pointercancel", "pointerleave"].forEach(function (n) { $("badge").addEventListener(n, function () { $("badge").classList.remove("press"); }); });
+  $("menuBtn").addEventListener("pointerdown", function (e) { e.preventDefault(); firstTouch(); openMenu(); });
+  $("closeBtn").addEventListener("click", closeMenu);
+  $("sheetWrap").addEventListener("click", function (e) { if (e.target === $("sheetWrap")) closeMenu(); });
+  document.querySelectorAll("#styleSeg .stylecard").forEach(function (d) {
+    d.addEventListener("click", function () { settings.style = d.dataset.v; store.set("vgp-style", settings.style); applySettings(); });
+  });
+  $("dpadSel").addEventListener("change", function () { settings.dpad = this.value; store.set("vgp-dpad", settings.dpad); });
+  $("themeSel").addEventListener("change", function () { settings.theme = this.value; store.set("vgp-theme", settings.theme); applyTheme(); });
+  $("vibSw").addEventListener("click", function () { settings.vib = settings.vib === "on" ? "off" : "on"; store.set("vgp-vib", settings.vib); applySettings(); if (settings.vib === "on") buzz(); });
+  $("snapSw").addEventListener("click", function () { settings.snap = settings.snap === "on" ? "off" : "on"; store.set("vgp-snap", settings.snap); applySettings(); });
+  $("editName").addEventListener("click", function () {
+    var t = $("devText"), on = !t.classList.contains("editing");
+    t.classList.toggle("editing", on);
+    if (on) { $("nameInput").focus(); $("nameInput").select(); } else { closeMenuName(); }
+  });
+  function closeMenuName() {
+    var n = $("nameInput").value.trim().slice(0, 24) || defaultName();
+    if (n !== settings.name) { settings.name = n; store.set("vgp-name", n); dirty = true; }
+    applySettings();
+  }
+  $("nameInput").addEventListener("keydown", function (e) { if (e.key === "Enter") { $("devText").classList.remove("editing"); closeMenuName(); } });
+  ["trigL", "trigR"].forEach(function (k) {
+    $(k).addEventListener("change", function () { settings[k] = this.value; store.set("vgp-" + k, this.value); applySettings(); });
+  });
+  $("expBtn").addEventListener("click", function () {
+    var t = exportText(), box = $("ioBox");
+    try {
+      var blob = new Blob([t], { type: "application/json" }), a = document.createElement("a");
+      a.href = URL.createObjectURL(blob); a.download = "virtual-gamepad-settings.json";
+      document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    } catch (e) {}
+    box.style.display = "block"; box.value = t;
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(t).then(function () { toast("Copied and saved"); }, function () { toast("Saved as a file"); });
+    else toast("Saved as a file");
+  });
+  $("impBtn").addEventListener("click", function () {
+    var box = $("ioBox");
+    if (box.style.display === "block" && box.value.trim().charAt(0) === "{") { if (importText(box.value)) box.style.display = "none"; return; }
+    $("impFile").click();
+    box.style.display = "block"; box.value = ""; box.focus();
+  });
+  $("impFile").addEventListener("change", function () {
+    var f = this.files && this.files[0]; if (!f) return;
+    var r = new FileReader();
+    r.onload = function () { if (importText(String(r.result))) $("ioBox").style.display = "none"; };
+    r.readAsText(f); this.value = "";
+  });
+  $("fsBtn").addEventListener("click", function () { if (document.fullscreenElement) document.exitFullscreen(); else enterFullscreen(false); setTimeout(applySettings, 300); });
+  $("reconnBtn").addEventListener("click", function () { closeMenu(); reconnect(); });
+  $("disconnBtn").addEventListener("click", function () { closeMenu(); disconnect(); toast("Disconnected. Open settings to reconnect."); });
+
+  applySettings(); renderSlot(); updateFsPill(); connect();
+})();
+</script>
+</body>
+</html>
