@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex">
+<title>iPhone haptics test</title>
+<style>
+:root { color-scheme: dark; }
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+body { margin: 0; padding: 16px 16px 64px; background: #0a0a0c; color: #f1f1f1;
+  font: 15px/1.4 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+h1 { font-size: 20px; margin: 0 0 4px; }
+.sub { color: #9a9a9a; margin: 0 0 16px; font-size: 13px; }
+.card { background: #15151a; border: 1px solid #2a2a32; border-radius: 12px; padding: 14px; margin-bottom: 12px; }
+.card h2 { font-size: 15px; margin: 0 0 2px; }
+.card p { margin: 0 0 10px; color: #9a9a9a; font-size: 13px; }
+.row { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; margin-top: 10px; }
+button.r { flex: 1; padding: 10px; border-radius: 8px; border: 1px solid #3a3a44; background: #1d1d24; color: #f1f1f1; font-size: 14px; }
+button.r.on { background: #f1f1f1; color: #000; }
+.log { font: 11px/1.3 ui-monospace, Menlo, monospace; color: #8a8a96; margin-top: 8px; min-height: 15px; word-break: break-all; }
+.pad { position: relative; height: 90px; border-radius: 10px; border: 2px solid #3a3a44; background: #1d1d24; display: flex;
+  align-items: center; justify-content: center; font-weight: 600; user-select: none; -webkit-user-select: none; touch-action: none; overflow: hidden; }
+.pad input { position: absolute; inset: 0; width: 100%; height: 100%; margin: 0; opacity: .02; }
+.pad input[type=range] { -webkit-appearance: none; appearance: none; background: transparent; }
+.vwrap { display: flex; gap: 16px; align-items: center; }
+.vslider { writing-mode: vertical-lr; direction: rtl; height: 140px; }
+select, input[type=date], input[type=time], input[type=color] { font-size: 16px; padding: 8px; border-radius: 8px; background: #1d1d24; color: #f1f1f1; border: 1px solid #3a3a44; }
+#touches { position: sticky; top: 0; z-index: 5; background: #0a0a0cee; padding: 8px 0; margin-bottom: 8px; font-size: 13px; color: #cfcfd6; }
+#out { width: 100%; height: 160px; background: #101014; color: #f1f1f1; border: 1px solid #2a2a32; border-radius: 8px; padding: 8px; font: 12px/1.35 ui-monospace, Menlo, monospace; }
+.copy { width: 100%; padding: 12px; margin-top: 8px; border-radius: 8px; border: 0; background: #f1f1f1; color: #000; font-size: 15px; font-weight: 600; }
+</style>
+</head>
+<body>
+<h1>iPhone haptics test</h1>
+<p class="sub">Touch each control and feel for a tap. After each one, press "Buzzed" or "Nothing". At the bottom, copy the results and send them back.</p>
+<div id="touches">Fingers down: <b id="count">0</b></div>
+
+<div class="card" data-test="plain-switch">
+  <h2>1. Plain switch</h2>
+  <p>Tap it. This is the control I use now for buttons.</p>
+  <label><input type="checkbox" switch> Switch</label>
+  <div class="row"><button class="r" data-v="yes">Buzzed</button><button class="r" data-v="no">Nothing</button></div>
+</div>
+
+<div class="card" data-test="overlay-switch-tap">
+  <h2>2. Invisible switch over a button, tap</h2>
+  <p>Tap the grey box quickly.</p>
+  <div class="pad" data-track>BUTTON<input type="checkbox" switch></div>
+  <div class="log"></div>
+  <div class="row"><button class="r" data-v="yes">Buzzed</button><button class="r" data-v="no">Nothing</button></div>
+</div>
+
+<div class="card" data-test="overlay-switch-slide">
+  <h2>3. Invisible switch, press and slide</h2>
+  <p>Put a finger down, slide around inside the box, then lift. Watch the log: it should show "move", not "cancel".</p>
+  <div class="pad" data-track>SLIDE HERE<input type="checkbox" switch></div>
+  <div class="log"></div>
+  <div class="row"><button class="r" data-v="yes">Buzzed</button><button class="r" data-v="no">Nothing</button></div>
+</div>
+
+<div class="card" data-test="range-visible">
+  <h2>4. Range slider, in whole steps</h2>
+  <p>Drag the thumb slowly from one end to the other.</p>
+  <input type="range" min="0" max="10" step="1" value="0" style="width:100%" id="rs">
+  <div class="log" id="rsLog"></div>
+  <div class="row"><button class="r" data-v="yes">Buzzed</button><button class="r" data-v="no">Nothing</button></div>
+</div>
+
+<div class="card" data-test="range-fine">
+  <h2>5. Range slider, fine steps</h2>
+  <p>Drag the thumb across.</p>
+  <input type="range" min="0" max="100" step="1" value="0" style="width:100%">
+  <div class="row"><button class="r" data-v="yes">Buzzed</button><button class="r" data-v="no">Nothing</button></div>
+</div>
+
+<div class="card" data-test="range-vertical">
+  <h2>6. Vertical range slider</h2>
+  <p>Drag it up and down.</p>
+  <div class="vwrap"><input type="range" class="vslider" min="0" max="10" step="1" value="0" orient="vertical"></div>
+  <div class="row"><button class="r" data-v="yes">Buzzed</button><button class="r" data-v="no">Nothing</button></div>
+</div>
+
+<div class="card" data-test="range-overlay">
+  <h2>7. Invisible range slider over a box</h2>
+  <p>Press anywhere in the box and drag left and right. Value shown below.</p>
+  <div class="pad" data-track>DRAG<input type="range" min="0" max="10" step="1" value="5" id="ro"></div>
+  <div class="log" id="roLog"></div>
+  <div class="row"><button class="r" data-v="yes">Buzzed</button><button class="r" data-v="no">Nothing</button></div>
+</div>
+
+<div class="card" data-test="select">
+  <h2>8. Dropdown</h2>
+  <p>Open it and scroll the wheel.</p>
+  <select><option>One</option><option>Two</option><option>Three</option><option>Four</option><option>Five</option><option>Six</option></select>
+  <div class="row"><button class="r" data-v="yes">Buzzed</button><button class="r" data-v="no">Nothing</button></div>
+</div>
+
+<div class="card" data-test="date-time">
+  <h2>9. Date and time pickers</h2>
+  <p>Open each and scroll.</p>
+  <div class="row" style="margin-top:0"><input type="date"><input type="time"></div>
+  <div class="row"><button class="r" data-v="yes">Buzzed</button><button class="r" data-v="no">Nothing</button></div>
+</div>
+
+<div class="card" data-test="two-fingers">
+  <h2>10. Two fingers on two invisible switches</h2>
+  <p>Hold the left box with one finger, then tap the right box with another. Watch the log for both.</p>
+  <div class="row" style="margin-top:0">
+    <div class="pad" data-track style="flex:1">LEFT<input type="checkbox" switch></div>
+    <div class="pad" data-track style="flex:1">RIGHT<input type="checkbox" switch></div>
+  </div>
+  <div class="log"></div>
+  <div class="row"><button class="r" data-v="yes">Both worked</button><button class="r" data-v="no">One stopped</button></div>
+</div>
+
+<div class="card">
+  <h2>Results</h2>
+  <textarea id="out" readonly></textarea>
+  <button class="copy" id="copy">Copy results</button>
+</div>
+
+<script>
+(function () {
+  var results = {};
+  var out = document.getElementById("out");
+  function render() {
+    var lines = ["iPhone haptics test", navigator.userAgent, ""];
+    document.querySelectorAll("[data-test]").forEach(function (c) {
+      var h = c.querySelector("h2").textContent;
+      lines.push(h + ": " + (results[c.getAttribute("data-test")] || "not tried"));
+    });
+    var logs = [];
+    document.querySelectorAll("[data-track]").forEach(function (p) {
+      var l = p.parentNode.querySelector(".log");
+      if (l && l.textContent) logs.push(l.textContent);
+    });
+    out.value = lines.join("\n");
+  }
+  document.querySelectorAll("[data-test]").forEach(function (card) {
+    card.querySelectorAll("button.r").forEach(function (b) {
+      b.addEventListener("click", function () {
+        results[card.getAttribute("data-test")] = b.getAttribute("data-v") === "yes" ? "BUZZED" : "nothing";
+        card.querySelectorAll("button.r").forEach(function (x) { x.classList.remove("on"); });
+        b.classList.add("on");
+        render();
+      });
+    });
+  });
+
+  // finger count
+  var down = {};
+  var count = document.getElementById("count");
+  function setCount() { count.textContent = Object.keys(down).length; }
+  document.addEventListener("pointerdown", function (e) { down[e.pointerId] = 1; setCount(); }, true);
+  ["pointerup", "pointercancel"].forEach(function (n) {
+    document.addEventListener(n, function (e) { delete down[e.pointerId]; setCount(); }, true);
+  });
+
+  // pointer event log for the touch boxes
+  document.querySelectorAll("[data-track]").forEach(function (pad) {
+    var log = pad.parentNode.querySelector(".log");
+    var st = { down: 0, move: 0, up: 0, cancel: 0 };
+    var name = pad.firstChild.textContent.trim() || "box";
+    function show() {
+      log.textContent = log.textContent.split("\n").filter(function (l) { return l.indexOf(name + ":") !== 0; }).concat([name + ": down " + st.down + ", move " + st.move + ", up " + st.up + ", CANCEL " + st.cancel]).join("\n").trim();
+    }
+    ["pointerdown", "pointermove", "pointerup", "pointercancel"].forEach(function (n) {
+      pad.addEventListener(n, function () {
+        var k = n.replace("pointer", "");
+        st[k]++; show();
+      });
+    });
+  });
+
+  // slider values
+  var rs = document.getElementById("rs"), rsLog = document.getElementById("rsLog");
+  rs.addEventListener("input", function () { rsLog.textContent = "value " + rs.value; });
+  var ro = document.getElementById("ro"), roLog = document.getElementById("roLog");
+  ro.addEventListener("input", function () { roLog.textContent = "value " + ro.value; });
+
+  document.getElementById("copy").addEventListener("click", function () {
+    render();
+    out.select();
+    try { navigator.clipboard.writeText(out.value); } catch (e) { document.execCommand("copy"); }
+    document.getElementById("copy").textContent = "Copied";
+  });
+  render();
+})();
+</script>
+</body>
+</html>
