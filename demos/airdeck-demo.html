@@ -25,7 +25,7 @@
 <meta name="apple-mobile-web-app-title" content="Gamepad">
 <meta name="theme-color" content="#000000">
 
-<title>AirDeck browser controller (demo)</title>
+<title>AirDeck</title>
 <style>
 :root {
   --u: 1dvh; --w: 1vw;
@@ -54,11 +54,14 @@
 html, body { margin: 0; height: 100%; background: var(--bg); color: var(--fg); overflow: hidden;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     overscroll-behavior: none; position: fixed; inset: 0; width: 100%; }
-#app { position: fixed; top: 0; bottom: 0; left: max(env(safe-area-inset-left), env(safe-area-inset-right)); right: max(env(safe-area-inset-left), env(safe-area-inset-right)); height: 100vh; height: 100dvh; }
-#app::before { content: ""; position: fixed; inset: 0; pointer-events: none; opacity: 0; transition: opacity .5s;
+/* The controller is laid out on a fixed 2000 x 900 stage and scaled to fit the screen, so a different
+   screen shrinks it evenly instead of moving things around. --k and --rot are set by the script. */
+#app { position: fixed; left: 50%; top: 50%; width: 2000px; height: 900px; --u: 9px; --w: 20px;
+    transform: translate(-50%, -50%) rotate(var(--rot, 0deg)) scale(var(--k, 1)); transform-origin: 50% 50%; }
+body::before { content: ""; position: fixed; inset: 0; pointer-events: none; opacity: 0; transition: opacity .5s;
     background: color-mix(in srgb, var(--slotc, transparent) var(--gl-wash), transparent);
     box-shadow: inset 0 0 calc(12 * var(--u)) 0 color-mix(in srgb, var(--slotc, transparent) var(--gl-edge), transparent); }
-html.glow #app::before { opacity: 1; }
+html.glow body::before { opacity: 1; }
 
 .btn, .pill, .stick { background: var(--panel); border: 2px solid var(--border); }
 .btn.on, .pill.on { background: var(--panel-on); border-color: var(--fg); transform: scale(.97); }
@@ -157,10 +160,10 @@ body:not(.xbox) .xbox-label { display: none; }
 #top .pill { position: static; width: calc(8 * var(--u)); height: calc(7 * var(--u)); border-radius: calc(1.4 * var(--u)); color: var(--muted); }
 #fsPill { display: none; }
 #fsPill.show { display: flex; }
-#badge { width: calc(14 * var(--u)); height: calc(7 * var(--u)); display: flex; align-items: center; justify-content: center; gap: calc(1.3 * var(--u));
-    border-radius: calc(1.4 * var(--u)); background: var(--panel); border: 2px solid var(--warn); font-size: calc(2.8 * var(--u)); font-weight: 700; cursor: pointer;
+#badge { width: calc(18 * var(--u)); height: calc(7 * var(--u)); display: flex; align-items: center;
+    border-radius: calc(1.4 * var(--u)); background: var(--panel); border: 2px solid var(--border); font-size: calc(2.8 * var(--u)); font-weight: 700; cursor: pointer;
     letter-spacing: .02em; white-space: nowrap; color: var(--muted); }
-#slotText { min-width: calc(3.4 * var(--u)); text-align: center; }
+#slotText { flex: 1; text-align: center; }
 #confirmWrap { position: fixed; inset: 0; background: rgba(0, 0, 0, .5); display: none; align-items: center; justify-content: center; z-index: 40; }
 #confirmWrap.open { display: flex; animation: cfade .16s ease-out; }
 #confirmBox { background: var(--sheet); border: 1px solid var(--border); border-radius: 16px; padding: 20px; width: min(330px, calc(100vw - 32px));
@@ -176,11 +179,14 @@ body:not(.xbox) .xbox-label { display: none; }
 #confirmBox .cbtn.danger { background: var(--bad); border-color: var(--bad); color: #fff; }
 @keyframes cfade { from { opacity: 0; } to { opacity: 1; } }
 @keyframes cpop { from { opacity: 0; transform: scale(.94); } to { opacity: 1; transform: scale(1); } }
-#badge[data-st="ok"] { border-color: var(--ok); color: var(--ok); }
-#badge[data-st="wait"] { border-color: var(--warn); color: var(--warn); }
-#badge[data-st="bad"] { border-color: var(--bad); color: var(--bad); }
+#badge[data-st="ok"] #sIcon { color: var(--ok); }
+#badge[data-st="wait"] #sIcon { color: var(--warn); }
+#badge[data-st="bad"] #sIcon { color: var(--bad); }
+#badge .bsep { width: 1px; height: calc(3.6 * var(--u)); background: var(--border); flex: none; }
+.sico.spin { animation: sspin .9s linear infinite; }
+@keyframes sspin { to { transform: rotate(360deg); } }
 #badge.press { background: var(--panel-on); }
-#sIcon { display: flex; }
+#sIcon { flex: 1; display: flex; justify-content: center; }
 .sico { width: calc(4.4 * var(--u)); height: calc(4.4 * var(--u)); display: block; flex: none; }
 .sd { width: calc(1.5 * var(--u)); height: calc(1.5 * var(--u)); border-radius: 50%; background: var(--bad); flex: none; box-sizing: border-box; }
 .sd.ok { background: var(--ok); }
@@ -190,7 +196,6 @@ body:not(.xbox) .xbox-label { display: none; }
 /* Portrait: the whole controller is turned a quarter turn so it can be used with the phone held sideways */
 @media (orientation: portrait) {
   :root { --u: 1vw; --w: 1dvh; }
-  #app { left: 0; right: auto; top: 0; bottom: auto; width: 100dvh; height: 100vw; transform-origin: 0 0; transform: translateX(100vw) rotate(90deg); }
 }
 
 /* settings sheet */
@@ -309,7 +314,7 @@ body:not(.xbox) .xbox-label { display: none; }
   </div>
   <div id="top">
   <div class="pill" id="fsPill" aria-label="Fullscreen"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg></div>
-    <div id="badge" data-st="wait" role="button" aria-label="Toggle connection"><span id="sIcon"></span><span id="slotText">&mdash;</span></div>
+    <div id="badge" data-st="wait" role="button" aria-label="Toggle connection"><span id="sIcon"></span><span class="bsep"></span><span id="slotText">&mdash;</span></div>
     <div class="pill" id="menuBtn" data-nav="menu" aria-label="Settings"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3.2"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.9.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.9 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.9l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.9.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.9-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.9V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg></div>
   </div>
 </div>
@@ -408,7 +413,7 @@ body:not(.xbox) .xbox-label { display: none; }
     style: store.get("vgp-style", "ps"),
     theme: store.get("vgp-theme", "system"),
     dpad: store.get("vgp-dpad", "multi") === "single" || store.get("vgp-dpad", "multi") === "ortho" ? "single" : "multi",
-    vib: store.get("vgp-vib", "on"),
+    vib: "on",
     snap: store.get("vgp-snap", "on"),
     trigL: store.get("vgp-trigL", "digital"),
     trigR: store.get("vgp-trigR", "digital")
@@ -435,6 +440,20 @@ body:not(.xbox) .xbox-label { display: none; }
   function $(id) { return document.getElementById(id); }
   // In portrait the controller is rotated 90 degrees clockwise, so screen points map back to its own frame
   var portrait = window.matchMedia("(orientation: portrait)");
+  var STAGE_W = 2000, STAGE_H = 900;
+  var safeProbe = document.createElement("div");
+  safeProbe.style.cssText = "position:fixed;left:0;top:0;width:0;height:0;visibility:hidden;padding-left:env(safe-area-inset-left);padding-right:env(safe-area-inset-right)";
+  document.body.appendChild(safeProbe);
+  function fitStage() {
+    var cs = getComputedStyle(safeProbe), pad = Math.max(parseFloat(cs.paddingLeft) || 0, parseFloat(cs.paddingRight) || 0);
+    var aw = window.innerWidth - 2 * pad, ah = window.innerHeight, port = portrait.matches;
+    var k = port ? Math.min(aw / STAGE_H, ah / STAGE_W) : Math.min(aw / STAGE_W, ah / STAGE_H);
+    var root = document.documentElement.style;
+    root.setProperty("--k", k.toFixed(4)); root.setProperty("--rot", port ? "90deg" : "0deg");
+  }
+  window.addEventListener("resize", fitStage); window.addEventListener("orientationchange", fitStage);
+  if (portrait.addEventListener) portrait.addEventListener("change", fitStage);
+  fitStage();
   function vw() { return document.documentElement.clientWidth; }
   function P(e) { return portrait.matches ? { x: e.clientY, y: vw() - e.clientX } : { x: e.clientX, y: e.clientY }; }
   function R(el) {
@@ -449,8 +468,8 @@ body:not(.xbox) .xbox-label { display: none; }
   // ---- network ----
   var STATUS_ICONS = {
     ok: '<svg class="sico" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1.6"><g transform="translate(12 12) rotate(-45)"><rect x="-10.6" y="-3.2" width="8.4" height="6.4" rx="3.2" fill-opacity=".2" /><rect x="2.2" y="-3.2" width="8.4" height="6.4" rx="3.2" fill-opacity=".2" /><rect x="-4.8" y="-1.3" width="9.6" height="2.6" rx="1.3" fill-opacity="1" stroke="none" /></g></svg>',
-    bad: '<svg class="sico" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1.6"><g transform="translate(12 12) rotate(-45)"><rect x="-11.4" y="-3.2" width="8.4" height="6.4" rx="3.2" fill-opacity=".2" /><rect x="3.0" y="-3.2" width="8.4" height="6.4" rx="3.2" fill-opacity=".2" /><rect x="-5.6" y="-1.3" width="4.0" height="2.6" rx="1.1" fill-opacity="1" stroke="none" /><rect x="1.6" y="-1.3" width="4.0" height="2.6" rx="1.1" fill-opacity="1" stroke="none" /></g></svg>',
-    wait: '<svg class="sico" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1.6"><path d="M7.2 4.2C7.2 8.2 10.6 10.2 10.6 12C10.6 13.8 7.2 15.8 7.2 19.8H16.8C16.8 15.8 13.4 13.8 13.4 12C13.4 10.2 16.8 8.2 16.8 4.2Z" fill-opacity=".2" /><rect x="5.5" y="2.2" width="13" height="2" rx="1" fill-opacity=".45" /><rect x="5.5" y="19.8" width="13" height="2" rx="1" fill-opacity=".45" /><path d="M8.7 6.5Q12 7.8 15.3 6.5C14.7 8.8 13 10.1 12.3 11.4H11.7C11 10.1 9.3 8.8 8.7 6.5Z" fill-opacity=".85" stroke="none" /><path d="M8.2 19.1C9.5 18.6 11.1 16.1 12 16.1C12.9 16.1 14.5 18.6 15.8 19.1Z" fill-opacity=".85" stroke="none" /></svg>'
+    bad: '<svg class="sico" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1.6"><g transform="translate(12 12) rotate(-45)"><rect x="-11.4" y="-3.2" width="8.4" height="6.4" rx="3.2" fill-opacity=".2" /><rect x="3.0" y="-3.2" width="8.4" height="6.4" rx="3.2" fill-opacity=".2" /><rect x="-5.6" y="-1.3" width="4.0" height="2.6" rx="1.1" fill-opacity="1" stroke="none" /><rect x="1.6" y="-1.3" width="4.0" height="2.6" rx="1.1" fill-opacity="1" stroke="none" /><path d="M-1.6 -4.6L-2.9 -7M1.6 -4.6L2.9 -7M-1.6 4.6L-2.9 7M1.6 4.6L2.9 7" fill="none" stroke-linecap="round" stroke-width="1.7" /></g></svg>',
+    wait: '<svg class="sico spin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><circle cx="12" cy="12" r="8" stroke-opacity=".22" /><path d="M12 4A8 8 0 0 1 20 12" /></svg>'
   };
   var connKind = "wait";
   function setStatus(kind, text, hint) {
@@ -464,7 +483,7 @@ body:not(.xbox) .xbox-label { display: none; }
     $("reconnBtn").style.display = wantConnection && st !== "bad" ? "none" : "";
     renderSlot(); updateMedia(st);
   }
-  var SLOT_COLORS = ["#E5484D", "#3E8EF7", "#F5C518", "#30A46C", "#F97316", "#A855F7"];
+  var SLOT_COLORS = ["#E5484D", "#3E8EF7", "#F5C518", "#30A46C", "#F97316", "#A855F7", "#14B8A6", "#EC4899"];
   function renderSlot() {
     var on = slot && connKind === "ok", c = on ? SLOT_COLORS[slot - 1] : "";
     $("slotText").textContent = on ? "P" + slot : "\u2014";
@@ -735,7 +754,7 @@ body:not(.xbox) .xbox-label { display: none; }
       var r = R(el), q0 = P(e); cx = r.left + r.width / 2; cy = r.top + r.height / 2; Rad = r.width * 0.28;
       sx = q0.x; sy = q0.y; moved = false; downT = Date.now(); clearTimeout(hold);
       hold = setTimeout(function () { if (id !== null && !moved) toggleClick(); }, 450);
-      el.classList.add("active"); move(e); buzz(0, "stick"); firstTouch();
+      el.classList.add("active"); move(e); firstTouch();
     });
     var onMove = function (e) { if (e.pointerId === id) { e.preventDefault(); move(e); } };
     el.addEventListener("pointermove", onMove);
