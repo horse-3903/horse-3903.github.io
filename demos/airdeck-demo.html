@@ -65,6 +65,7 @@ html.glow body::before { opacity: 1; }
 /* iPhone haptics: a real switch control under the finger gives the system tick. It sits invisibly over each control. */
 .hsw { position: absolute; left: 0; top: 0; width: 100%; height: 100%; margin: 0; padding: 0; opacity: .02; z-index: 20; touch-action: none; }
 body.novib .hsw { display: none; }
+body.swbusy .hsw { pointer-events: none; }
 
 .btn, .pill, .stick { background: var(--panel); border: 2px solid var(--border); }
 .btn.on, .pill.on { background: var(--panel-on); border-color: var(--fg); transform: scale(.97); }
@@ -520,6 +521,7 @@ body:not(.xbox) .xbox-label { display: none; }
         location.replace(location.pathname + "?v=" + m.v);
         return;
       }
+      if (m.t === "rumble") { setRumble(m.l | 0, m.s | 0); return; }
       if (m.t === "slot") { slot = m.n | 0; renderSlot(); setStatus("ok", "P" + slot, "Connected as controller " + slot); }
       else if (m.t === "refused") {
         wantConnection = true; refusedUntil = Date.now() + 5000;
@@ -528,6 +530,7 @@ body:not(.xbox) .xbox-label { display: none; }
     };
     ws.onclose = function () {
       if (mine !== ws) return;
+      setRumble(0, 0);
       slot = 0; renderSlot(); releaseAll(false);
       if (wantConnection) { if (Date.now() >= refusedUntil) setStatus("wait", "Reconnecting"); scheduleRetry(); }
       else setStatus("bad", "Disconnected");
@@ -558,6 +561,19 @@ body:not(.xbox) .xbox-label { display: none; }
       return;
     }
     // iOS: the switch under the finger already gave the tick
+  }
+  // The game rumbling this controller: the Vibration API has no strength, so a weaker rumble is a thinner
+  // on/off pulse train. Android only; iPhone has no vibration at all.
+  var rumbleTimer = 0;
+  function setRumble(large, weak) {
+    clearInterval(rumbleTimer); rumbleTimer = 0;
+    if (typeof navigator.vibrate !== "function") return;
+    var strength = Math.max(large, weak);
+    if (strength <= 0 || settings.vib !== "on") { navigator.vibrate(0); return; }
+    var duty = Math.min(1, Math.max(0.12, strength / 255)), on = Math.max(6, Math.round(40 * duty)), off = 40 - on, pattern = [];
+    if (off < 3) pattern = [1000]; else for (var i = 0; i < 25; i++) pattern.push(on, off);
+    function go() { navigator.vibrate(pattern); }
+    go(); rumbleTimer = setInterval(go, 950);
   }
   function press(name) {
     if (name === "l2") { ax.lt = 1; } else if (name === "r2") { ax.rt = 1; }
@@ -729,7 +745,19 @@ body:not(.xbox) .xbox-label { display: none; }
   bindTrigger($("r2"), "rt");
 
   if (swHaptics) {
-    document.querySelectorAll("[data-b], #l2, #r2").forEach(function (el) {
+    var swDown = {};
+    var swClear = function () { swDown = {}; document.body.classList.remove("swbusy"); };
+    document.addEventListener("pointerdown", function (e) {
+      if (e.target && e.target.classList && e.target.classList.contains("hsw")) { swDown[e.pointerId] = 1; document.body.classList.add("swbusy"); }
+    }, true);
+    var swUp = function (e) { delete swDown[e.pointerId]; if (!Object.keys(swDown).length) document.body.classList.remove("swbusy"); };
+    document.addEventListener("pointerup", swUp, true);
+    document.addEventListener("pointercancel", swUp, true);
+    document.addEventListener("touchend", function (e) { if (e.touches.length === 0) swClear(); }, true);
+    document.addEventListener("visibilitychange", swClear);
+    var DPAD_ARMS = { up: 1, down: 1, left: 1, right: 1 };
+    document.querySelectorAll("[data-b]").forEach(function (el) {
+      if (DPAD_ARMS[el.getAttribute("data-b")]) return;
       if (getComputedStyle(el).position === "static") el.style.position = "relative";
       var box = document.createElement("input");
       box.type = "checkbox"; box.setAttribute("switch", ""); box.className = "hsw";
@@ -874,7 +902,7 @@ body:not(.xbox) .xbox-label { display: none; }
     $("vibSw").classList.toggle("on", settings.vib === "on");
     document.body.classList.toggle("novib", settings.vib !== "on");
     $("snapSw").classList.toggle("on", settings.snap === "on");
-    $("vibHint").textContent = canVibrate ? "Haptic feedback when pressing controls." : "Not available on this browser.";
+    $("vibHint").textContent = !canVibrate ? "Not available on this browser." : (swHaptics ? "Haptic tick on the buttons. iPhone: the first finger only." : "Haptic feedback when pressing controls.");
     $("fsHint").textContent = isIOS ? "iPhone: Share, then Add to Home Screen" : (document.fullscreenElement ? "Showing the browser bars again" : "Hides the browser bars");
     $("fsLabel").textContent = document.fullscreenElement ? "Exit" : "Enter";
     [["trigL", "tlHint"], ["trigR", "trHint"]].forEach(function (p) {
