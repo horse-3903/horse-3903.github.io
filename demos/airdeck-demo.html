@@ -341,7 +341,7 @@ body.edflip #edpanel { right: auto; left: 0; border-left: 0; border-right: 1px s
 #snav { flex: none; width: 196px; padding: 12px; border-right: 1px solid var(--border); overflow-y: auto; }
 #snav button { display: block; width: 100%; text-align: left; border: 0; background: transparent; color: var(--muted); font: inherit; font-size: 14px; font-weight: 500;
     padding: 11px 14px; border-radius: 10px; margin-bottom: 2px; }
-#snav button.on { background: var(--panel-on); color: var(--fg); }
+#snav button.cur { background: var(--panel-on); color: var(--fg); }
 #snav { scrollbar-width: none; }
 #snav::-webkit-scrollbar { display: none; }
 #spanes { flex: 1; min-width: 0; overflow-y: auto; padding: 4px 24px 24px; overscroll-behavior: contain; -webkit-overflow-scrolling: touch;
@@ -349,7 +349,7 @@ body.edflip #edpanel { right: auto; left: 0; border-left: 0; border-right: 1px s
 #spanes::-webkit-scrollbar { width: 5px; }
 #spanes::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
 .spage { display: none; }
-.spage.on { display: block; }
+.spage.cur { display: block; }
 .spage h3 { margin: 18px 0 6px; font-size: 12px; font-weight: 500; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
 .row { display: flex; align-items: center; justify-content: space-between; gap: 16px; min-height: 56px; padding: 12px 0; border-top: 1px solid var(--border); font-size: 15px; font-weight: 500; }
 .row:first-of-type { border-top: 0; }
@@ -495,7 +495,7 @@ body.edflip #edpanel { right: auto; left: 0; border-left: 0; border-right: 1px s
   <div class="head"><h2>Controller settings</h2><button class="iconbtn" id="closeBtn" aria-label="Close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
   <div id="sbody">
     <nav id="snav">
-      <button data-p="device" class="on">Device</button>
+      <button data-p="device" class="cur">Device</button>
       <button data-p="appearance">Appearance</button>
       <button data-p="input">Input</button>
       <button data-p="layouts">Layouts</button>
@@ -504,7 +504,7 @@ body.edflip #edpanel { right: auto; left: 0; border-left: 0; border-right: 1px s
     </nav>
     <div id="spanes">
 
-      <div class="spage on" data-p="device">
+      <div class="spage cur" data-p="device">
         <h3>Device</h3>
         <div class="card">
           <div class="devrow">
@@ -1158,8 +1158,8 @@ body.edflip #edpanel { right: auto; left: 0; border-left: 0; border-right: 1px s
   var sheetPage = "device";
   function showPage(p) {
     sheetPage = p;
-    document.querySelectorAll("#snav button").forEach(function (b) { b.classList.toggle("on", b.dataset.p === p); });
-    document.querySelectorAll(".spage").forEach(function (s) { s.classList.toggle("on", s.dataset.p === p); });
+    document.querySelectorAll("#snav button").forEach(function (b) { b.classList.toggle("cur", b.dataset.p === p); });
+    document.querySelectorAll(".spage").forEach(function (s) { s.classList.toggle("cur", s.dataset.p === p); });
     $("spanes").scrollTop = 0; $("layMenu").classList.remove("open");
   }
   document.querySelectorAll("#snav button").forEach(function (b) { b.addEventListener("click", function () { showPage(b.dataset.p); }); });
@@ -1179,7 +1179,7 @@ body.edflip #edpanel { right: auto; left: 0; border-left: 0; border-right: 1px s
     while (all[to] || to === "Default") to = base + " " + i++;
     all[to] = { buttons: clone(src.buttons), groups: clone(src.groups) }; savePresets(all); active = to; store.set("vgp-active", to); refreshLayouts(); toast("Layout duplicated");
   });
-  function openMenu() { releaseAll(true); $("devText").classList.remove("editing"); applySettings(); $("sheetWrap").classList.add("open"); }
+  function openMenu() { releaseAll(true); showPage("device"); $("devText").classList.remove("editing"); applySettings(); $("sheetWrap").classList.add("open"); }
   function closeMenu() {
     var n = $("nameInput").value.trim().slice(0, 24) || defaultName();
     if (n !== settings.name) { settings.name = n; store.set("vgp-name", n); dirty = true; }
