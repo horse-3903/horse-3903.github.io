@@ -390,6 +390,51 @@ body.edflip #edpanel { right: auto; left: 0; border-left: 0; border-right: 1px s
   .stylecard { padding: 12px 2px 10px; font-size: 13px; }
   .dia { transform: scale(.9); }
 }
+/* the layout library, like the app's Layouts page */
+.lhead { display: flex; align-items: center; gap: 6px; margin: 18px 0 0; }
+.lhead h3 { margin: 0; flex: 1; }
+.lnew { border: 1px solid var(--border); background: var(--panel); color: var(--fg); border-radius: 8px; padding: 8px 12px; font: inherit; font-size: 14px; font-weight: 500; }
+.lrow { display: flex; align-items: center; gap: 12px; padding: 10px 12px 10px 8px; border: 1px solid var(--border); border-radius: 12px; margin-top: 8px; background: var(--card); }
+.lrow.active { border-color: var(--fg); }
+.lrow.drag { opacity: .65; }
+.lh { width: 22px; flex: none; color: var(--muted); display: flex; justify-content: center; align-items: center; cursor: grab; }
+#sheet .lh { touch-action: none; }
+.lh svg { width: 18px; height: 18px; }
+.lrow.fixed { padding-left: 14px; }
+.thumb { position: relative; width: 120px; flex: none; aspect-ratio: 2000 / 900; background: var(--panel); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+.thumb .tb { position: absolute; background: var(--muted); opacity: .6; border-radius: 3px; }
+.thumb .tb.rd { border-radius: 50%; }
+.lt { flex: 1; min-width: 0; }
+.lt b { display: block; font-size: 15px; font-weight: 500; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.lt span { display: block; font-size: 12.5px; color: var(--muted); margin-top: 2px; }
+.lact { display: flex; align-items: center; gap: 2px; flex: none; }
+.lic { width: 36px; height: 36px; border-radius: 8px; border: 0; background: transparent; color: var(--fg); display: flex; align-items: center; justify-content: center; padding: 0; }
+.lic:disabled { opacity: .35; }
+.lic svg { width: 20px; height: 20px; }
+#layMenu { display: none; position: fixed; min-width: 180px; background: var(--sheet); border: 1px solid var(--border); border-radius: 12px; padding: 6px; z-index: 50; box-shadow: 0 10px 30px rgba(0, 0, 0, .4); }
+#layMenu.open { display: block; }
+#layMenu button { display: block; width: 100%; text-align: left; border: 0; background: transparent; color: var(--fg); font: inherit; font-size: 14px; padding: 10px 12px; border-radius: 8px; }
+#layMenu button.warn { color: var(--bad); }
+#layMenu button:disabled { opacity: .4; }
+#dlgWrap { position: fixed; inset: 0; background: rgba(0, 0, 0, .5); display: none; align-items: center; justify-content: center; z-index: 45; }
+#dlgWrap.open { display: flex; animation: cfade .16s ease-out; }
+#dlgBox { background: var(--sheet); border: 1px solid var(--border); border-radius: 16px; padding: 20px; width: min(460px, calc(100vw - 32px)); box-shadow: 0 12px 40px rgba(0, 0, 0, .45); }
+#dlgBox .ctitle { font-size: 18px; font-weight: 600; }
+#dlgBox .ctext { font-size: 14px; line-height: 1.4; color: var(--muted); margin-top: 6px; }
+#dlgInput, #dlgArea { display: none; width: 100%; margin-top: 12px; border: 1px solid var(--border); background: var(--panel); color: var(--fg); border-radius: 10px; padding: 10px 12px; font: inherit; font-size: 15px;
+    -webkit-user-select: text; user-select: text; touch-action: manipulation; }
+#dlgArea { height: 150px; font: 12px monospace; resize: none; }
+#dlgErr { color: var(--bad); font-size: 13px; margin-top: 6px; }
+#dlgBox .cbtns { display: flex; gap: 10px; margin-top: 16px; }
+#dlgBox .cbtn { flex: 1; min-height: 44px; border-radius: 12px; font-size: 15px; font-weight: 600; border: 1px solid var(--border); background: var(--panel); color: var(--fg); }
+#dlgBox .cbtn.go { background: var(--accent); color: var(--accent-fg); border-color: var(--accent); }
+#dlgBox .cbtn.danger { background: var(--bad); border-color: var(--bad); color: #fff; }
+@media (orientation: portrait) { .thumb { width: 96px; } }
+.gsws { display: flex; flex-wrap: wrap; gap: 12px; padding: 2px 0 14px; }
+.gsw { width: 38px; height: 38px; border-radius: 50%; border: 2px solid var(--border); background: var(--c); padding: 0; }
+.gsw.pick { box-shadow: 0 0 0 2px var(--sheet), 0 0 0 4px var(--fg); }
+.gsw.none { background: var(--panel); position: relative; }
+.gsw.none::after { content: ""; position: absolute; left: 7px; right: 7px; top: 50%; height: 2px; background: var(--muted); transform: rotate(-45deg); }
 #toast { position: fixed; left: 50%; top: calc(14 * var(--u)); transform: translateX(-50%); background: var(--accent);
     color: var(--accent-fg); padding: 8px 14px; border-radius: 6px; font-size: 14px; z-index: 40; display: none; }
 </style>
@@ -500,7 +545,6 @@ body.edflip #edpanel { right: auto; left: 0; border-left: 0; border-right: 1px s
       <button data-p="input">Input</button>
       <button data-p="layouts">Layouts</button>
       <button data-p="display">Display</button>
-      <button data-p="config">Configuration</button>
     </nav>
     <div id="spanes">
 
@@ -552,34 +596,29 @@ body.edflip #edpanel { right: auto; left: 0; border-left: 0; border-right: 1px s
       </div>
 
       <div class="spage" data-p="layouts">
-        <h3>Controller layout</h3>
-        <div class="row"><span>Current layout</span><select id="laySel" class="sel"></select></div>
-        <div class="lay-actions">
-          <button class="btn2 primary" id="edBtn">Edit layout</button>
-          <button class="btn2" id="laySave">Save as</button>
-          <div class="menuwrap"><button class="btn2 icon" id="layMore" aria-label="More layout actions"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="5" cy="12" r="1.8"/><circle cx="12" cy="12" r="1.8"/><circle cx="19" cy="12" r="1.8"/></svg></button>
-            <div id="layMenu"><button id="layRename">Rename</button><button id="layDup">Duplicate</button><button id="layReset">Reset to default</button><button id="layDel" class="warn">Delete</button></div></div>
-        </div>
-        <h3>Share layouts</h3>
-        <div class="two"><button class="btn2" id="layExp">Export layout</button><button class="btn2" id="layExpAll">Export all</button><button class="btn2" id="layImp">Import</button></div>
-        <textarea id="layBox" spellcheck="false" placeholder="Paste an exported layout here, then tap Import again"></textarea>
+        <div id="layList"></div>
         <input id="layFile" type="file" accept="application/json,.json" style="display:none">
       </div>
 
       <div class="spage" data-p="display">
         <h3>Display</h3>
         <div class="row"><span>Full screen<span class="hint" id="fsHint"></span></span><button class="btn2" id="fsBtn" style="flex:none"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg><span id="fsLabel">Enter fullscreen</span></button></div>
-      </div>
-
-      <div class="spage" data-p="config">
-        <h3>Configuration</h3>
-        <div class="two"><button class="btn2" id="expBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11M7 11l5 5 5-5M5 20h14"/></svg>Export</button><button class="btn2" id="impBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16V5M7 9l5-5 5 5M5 20h14"/></svg>Import</button></div>
-        <textarea id="ioBox" spellcheck="false" placeholder="Paste exported settings here, then tap Import again"></textarea>
-        <input id="impFile" type="file" accept="application/json,.json" style="display:none">
+        <div class="row" style="border-bottom:0"><span>Edge glow<span class="hint">Colour of the glow around the screen edge</span></span></div>
+        <div class="gsws" id="glowSw"><button class="gsw" data-g="0" style="--c:#E5484D" aria-label="Red" title="Red"></button><button class="gsw" data-g="1" style="--c:#3E8EF7" aria-label="Blue" title="Blue"></button><button class="gsw" data-g="2" style="--c:#F5C518" aria-label="Yellow" title="Yellow"></button><button class="gsw" data-g="3" style="--c:#30A46C" aria-label="Green" title="Green"></button><button class="gsw" data-g="4" style="--c:#F97316" aria-label="Orange" title="Orange"></button><button class="gsw" data-g="5" style="--c:#A855F7" aria-label="Purple" title="Purple"></button><button class="gsw" data-g="6" style="--c:#14B8A6" aria-label="Teal" title="Teal"></button><button class="gsw" data-g="7" style="--c:#EC4899" aria-label="Pink" title="Pink"></button><button class="gsw none" data-g="off" aria-label="No glow" title="No glow"></button></div>
       </div>
 
     </div>
   </div>
+</div></div>
+
+<div id="layMenu"></div>
+<div id="dlgWrap"><div id="dlgBox" role="dialog" aria-modal="true">
+  <div class="ctitle" id="dlgTitle"></div>
+  <div class="ctext" id="dlgText"></div>
+  <input id="dlgInput" type="text" maxlength="30" autocomplete="off">
+  <textarea id="dlgArea" spellcheck="false"></textarea>
+  <div id="dlgErr"></div>
+  <div class="cbtns"><button class="cbtn" id="dlgNo">Cancel</button><button class="cbtn" id="dlgMid" style="display:none"></button><button class="cbtn go" id="dlgYes">OK</button></div>
 </div></div>
 
 <script>
@@ -708,9 +747,19 @@ body.edflip #edpanel { right: auto; left: 0; border-left: 0; border-right: 1px s
     var on = slot && connKind === "ok", c = on ? SLOT_COLORS[slot - 1] : "";
     $("slotText").textContent = on ? "P" + slot : "\u2014";
     $("slotText").style.color = c;
+    var gp = demoGlow();
+    if (gp !== null) c = on && gp >= 0 ? SLOT_COLORS[gp] : "";
     if (c) document.documentElement.style.setProperty("--slotc", c);
     document.documentElement.classList.toggle("glow", !!c);
   }
+  // Demo only: pick the glow colour, or none. Without a choice it follows the player colour.
+  function demoGlow() { var v = store.get("vgp-glow", ""); return v === "off" ? -1 : /^[0-7]$/.test(v) ? +v : null; }
+  function glowUi() {
+    var g = demoGlow(), cur = g === null ? "0" : g < 0 ? "off" : String(g);
+    document.querySelectorAll("#glowSw .gsw").forEach(function (b) { b.classList.toggle("pick", b.dataset.g === cur); });
+  }
+  document.querySelectorAll("#glowSw .gsw").forEach(function (b) { b.addEventListener("click", function () { store.set("vgp-glow", b.dataset.g); glowUi(); renderSlot(); }); });
+  glowUi();
   function connect() {
     if (!wantConnection || (ws && ws.readyState <= 1)) return;
     if (Date.now() < refusedUntil) { retryTimer = setTimeout(connect, 1000); return; }
@@ -1139,46 +1188,15 @@ body.edflip #edpanel { right: auto; left: 0; border-left: 0; border-right: 1px s
     var osName = (devInfo.os || "").split(" ")[0], browserName = (devInfo.browser || "").split(" ")[0];
     $("devSub").textContent = [osName, browserName].filter(Boolean).join("  \u00B7  ") || "Web browser";
   }
-  function exportText() {
-    return JSON.stringify({ vgp: 1, name: settings.name, style: settings.style, vib: settings.vib, snap: settings.snap, trigL: settings.trigL, trigR: settings.trigR }, null, 2);
-  }
-  function importText(t) {
-    var o; try { o = JSON.parse(t); } catch (e) { toast("Not valid settings"); return false; }
-    if (!o || o.vgp !== 1) { toast("Not valid settings"); return false; }
-    if (typeof o.name === "string" && o.name.trim()) { settings.name = o.name.trim().slice(0, 24); store.set("vgp-name", settings.name); dirty = true; }
-    if (o.style === "ps" || o.style === "xbox" || o.style === "ns") { settings.style = o.style; store.set("vgp-style", o.style); }
-    if (o.vib === "on" || o.vib === "off") { settings.vib = o.vib; store.set("vgp-vib", o.vib); }
-    if (o.snap === "on" || o.snap === "off") { settings.snap = o.snap; store.set("vgp-snap", o.snap); }
-    var ids = OFFERED;
-    if (ids.indexOf(o.trigL) >= 0) { settings.trigL = o.trigL; store.set("vgp-trigL", o.trigL); }
-    if (ids.indexOf(o.trigR) >= 0) { settings.trigR = o.trigR; store.set("vgp-trigR", o.trigR); }
-    applySettings(); toast("Settings imported"); return true;
-  }
   // ---- settings pages ----
   var sheetPage = "device";
   function showPage(p) {
     sheetPage = p;
     document.querySelectorAll("#snav button").forEach(function (b) { b.classList.toggle("cur", b.dataset.p === p); });
     document.querySelectorAll(".spage").forEach(function (s) { s.classList.toggle("cur", s.dataset.p === p); });
-    $("spanes").scrollTop = 0; $("layMenu").classList.remove("open");
+    $("spanes").scrollTop = 0; $("layMenu").classList.remove("open"); if (p === "layouts") renderLibrary();
   }
   document.querySelectorAll("#snav button").forEach(function (b) { b.addEventListener("click", function () { showPage(b.dataset.p); }); });
-  $("layMore").addEventListener("click", function (e) { e.stopPropagation(); $("layMenu").classList.toggle("open"); });
-  document.addEventListener("pointerdown", function (e) { if (!e.target.closest || !e.target.closest(".menuwrap")) $("layMenu").classList.remove("open"); }, true);
-  $("layMenu").addEventListener("click", function () { this.classList.remove("open"); });
-  $("layRename").addEventListener("click", function () {
-    var n = $("laySel").value, all = presets();
-    if (!n || !all[n]) { toast("Pick a saved layout first"); return; }
-    var to = (window.prompt("Rename layout", n) || "").trim().slice(0, 30);
-    if (!to || to === n || to === "Default" || all[to]) { if (to && all[to]) toast("That name is taken"); return; }
-    all[to] = all[n]; delete all[n]; savePresets(all); if (active === n) { active = to; store.set("vgp-active", to); } refreshLayouts(); toast("Layout renamed");
-  });
-  $("layDup").addEventListener("click", function () {
-    var n = $("laySel").value, all = presets(), src = n && all[n] ? all[n] : { buttons: clone(cfg), groups: clone(groups) };
-    var base = (n && all[n] ? n : "Layout") + " copy", to = base, i = 2;
-    while (all[to] || to === "Default") to = base + " " + i++;
-    all[to] = { buttons: clone(src.buttons), groups: clone(src.groups) }; savePresets(all); active = to; store.set("vgp-active", to); refreshLayouts(); toast("Layout duplicated");
-  });
   function openMenu() { releaseAll(true); showPage("device"); $("devText").classList.remove("editing"); applySettings(); $("sheetWrap").classList.add("open"); }
   function closeMenu() {
     var n = $("nameInput").value.trim().slice(0, 24) || defaultName();
@@ -1220,30 +1238,6 @@ body.edflip #edpanel { right: auto; left: 0; border-left: 0; border-right: 1px s
   ["trigL", "trigR"].forEach(function (k) {
     $(k).addEventListener("change", function () { settings[k] = this.value; store.set("vgp-" + k, this.value); applySettings(); });
   });
-  $("expBtn").addEventListener("click", function () {
-    var t = exportText(), box = $("ioBox");
-    try {
-      var blob = new Blob([t], { type: "application/json" }), a = document.createElement("a");
-      a.href = URL.createObjectURL(blob); a.download = "virtual-gamepad-settings.json";
-      document.body.appendChild(a); a.click(); document.body.removeChild(a);
-    } catch (e) {}
-    box.style.display = "block"; box.value = t;
-    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(t).then(function () { toast("Copied and saved"); }, function () { toast("Saved as a file"); });
-    else toast("Saved as a file");
-  });
-  $("impBtn").addEventListener("click", function () {
-    var box = $("ioBox");
-    if (box.style.display === "block" && box.value.trim().charAt(0) === "{") { if (importText(box.value)) box.style.display = "none"; return; }
-    $("impFile").click();
-    box.style.display = "block"; box.value = ""; box.focus();
-  });
-  $("impFile").addEventListener("change", function () {
-    var f = this.files && this.files[0]; if (!f) return;
-    var r = new FileReader();
-    r.onload = function () { if (importText(String(r.result))) $("ioBox").style.display = "none"; };
-    r.readAsText(f); this.value = "";
-  });
-
   // ---- layout: the same model as the Android app ----
   // Each control has an anchor, an offset (a multiple of BASE, like the app's baseDp), a size factor, a width and
   // height stretch, and a few options. The stage is 222.2 by 100 units (--u is 9px), BASE is 88.7 of them and the
@@ -1347,13 +1341,20 @@ body.edflip #edpanel { right: auto; left: 0; border-left: 0; border-right: 1px s
     try { var l = readLayout(o); cfg = l.buttons; groups = l.groups || clone(DEFAULT_GROUPS); } catch (e) {}
   })();
   function bundle() { return { version: 2, buttons: cfg, groups: groups }; }
-  function persist() { store.set("vgp-cfg", JSON.stringify(bundle())); }
+  function sameAsDefault() { return ORDER.every(function (id) { return Object.keys(DEFAULTS[id]).every(function (k) { return cfg[id][k] === DEFAULTS[id][k]; }); }); }
+  // Edits go into the saved layout that is in use. Editing the locked Default leaves an unsaved layout.
+  function syncActive() {
+    if (active && active !== "__default") { var all = presets(); if (all[active]) { all[active] = { buttons: clone(cfg), groups: clone(groups) }; savePresets(all); } else active = ""; }
+    else if (active === "__default" && !sameAsDefault()) active = "";
+    store.set("vgp-active", active);
+  }
+  function persist() { syncActive(); store.set("vgp-cfg", JSON.stringify(bundle())); }
   function presets() { var o = loadJson("vgp-presets"); return o || {}; }
   function savePresets(p) { store.set("vgp-presets", JSON.stringify(p)); }
 
   // Where a control ends up, in stage units: anchored inside the padded stage, then moved by its offset
-  function natural(id) {
-    var c = cfg[id], s = c.scale, w, h;
+  function natural(id, m) {
+    var c = (m || cfg)[id], s = c.scale, w, h;
     if (id === "LEFT_ANALOG_STICK" || id === "RIGHT_ANALOG_STICK") w = h = BASE * (0.3429 * s + 0.015);
     else if (id === "DPAD" || id === "FACE_BUTTONS") w = h = 0.45 * BASE * s;
     else if (id === "LEFT_TRIGGER" || id === "RIGHT_TRIGGER") { w = BASE / 6 * s; h = w * (c.triggerMode === "DIGITAL" ? 1.25 : 1.5); }
@@ -1364,8 +1365,8 @@ body.edflip #edpanel { right: auto; left: 0; border-left: 0; border-right: 1px s
     else { h = BASE / 8 * s; w = h * 8 / 7; }
     return { w: w * c.widthScale, h: h * c.heightScale };
   }
-  function place(id) {
-    var c = cfg[id], n = natural(id), a = ANCHORS.indexOf(c.anchor), col = a % 3, row = Math.floor(a / 3);
+  function place(id, m) {
+    var c = (m || cfg)[id], n = natural(id, m), a = ANCHORS.indexOf(c.anchor), col = a % 3, row = Math.floor(a / 3);
     var x0 = col === 0 ? PAD : col === 1 ? (SW - n.w) / 2 : SW - PAD - n.w;
     var y0 = row === 0 ? PAD : row === 1 ? (SH - n.h) / 2 : SH - PAD - n.h;
     return { x: x0 + c.offsetX * BASE, y: y0 + c.offsetY * BASE, w: n.w, h: n.h };
@@ -1426,7 +1427,7 @@ body.edflip #edpanel { right: auto; left: 0; border-left: 0; border-right: 1px s
   var editing = false, selComp = null, selGroup = null, drag = null, guides = null, undoS = [], redoS = [], gestureOpen = false;
   function snapState() { return JSON.stringify({ buttons: cfg, groups: groups }); }
   function pushUndo() { undoS.push(snapState()); if (undoS.length > 80) undoS.shift(); redoS = []; showSel(); }
-  function restore(s) { var o = JSON.parse(s); cfg = o.buttons; groups = o.groups; active = ""; store.set("vgp-active", ""); syncTriggers(true); paint(); persist(); showSel(); refreshLayouts(); applySettings(); }
+  function restore(s) { var o = JSON.parse(s); cfg = o.buttons; groups = o.groups; syncTriggers(true); paint(); persist(); showSel(); refreshLayouts(); applySettings(); }
   function undo() { if (!undoS.length) return; redoS.push(snapState()); restore(undoS.pop()); }
   function redo() { if (!redoS.length) return; undoS.push(snapState()); restore(redoS.pop()); }
   function stageK() { return parseFloat(document.documentElement.style.getPropertyValue("--k")) || 1; }
@@ -1520,13 +1521,13 @@ body.edflip #edpanel { right: auto; left: 0; border-left: 0; border-right: 1px s
   var dragEnd = function (e) {
     if (!editing || !drag || e.pointerId !== drag.pid) return;
     if (!drag.moved && drag.tap) { selComp = drag.tap; selGroup = null; }
-    if (drag.moved) { active = ""; store.set("vgp-active", ""); persist(); refreshLayouts(); }
+    if (drag.moved) { persist(); refreshLayouts(); }
     drag = null; guides = null; showSel();
   };
   document.addEventListener("pointerup", dragEnd, true); document.addEventListener("pointercancel", dragEnd, true);
 
   // Panel controls. A slider drag counts as one undo step.
-  function change(fn) { if (!selComp) return; pushUndo(); fn(cfg[selComp]); active = ""; store.set("vgp-active", ""); paintOne(selComp); persist(); showSel(); refreshLayouts(); }
+  function change(fn) { if (!selComp) return; pushUndo(); fn(cfg[selComp]); paintOne(selComp); persist(); showSel(); refreshLayouts(); }
   function sliderStep(id, apply) {
     var el = $(id);
     el.addEventListener("pointerdown", function () { if (!gestureOpen && selComp) { pushUndo(); gestureOpen = true; } });
@@ -1534,7 +1535,7 @@ body.edflip #edpanel { right: auto; left: 0; border-left: 0; border-right: 1px s
     el.addEventListener("input", function () {
       if (!selComp) return;
       if (!gestureOpen) { pushUndo(); gestureOpen = true; }
-      apply(cfg[selComp], +this.value / 100); active = ""; store.set("vgp-active", ""); paintOne(selComp); persist(); showSel(); refreshLayouts();
+      apply(cfg[selComp], +this.value / 100); paintOne(selComp); persist(); showSel(); refreshLayouts();
     });
   }
   sliderStep("edSize", function (c, v) {
@@ -1570,75 +1571,239 @@ body.edflip #edpanel { right: auto; left: 0; border-left: 0; border-right: 1px s
   $("edUndo").addEventListener("click", undo); $("edRedo").addEventListener("click", redo);
   $("edDone").addEventListener("click", leaveEdit);
   $("edDock").addEventListener("click", function () { document.body.classList.toggle("edflip"); });
-  $("edBtn").addEventListener("click", enterEdit);
 
-  // ---- saved layouts, shared export and import ----
-  function refreshLayouts() {
-    var s = $("laySel"), all = presets();
-    s.innerHTML = "";
-    var cur = document.createElement("option"); cur.value = ""; cur.textContent = "Current layout"; s.appendChild(cur);
-    Object.keys(all).forEach(function (n) { var o = document.createElement("option"); o.value = n; o.textContent = n; s.appendChild(o); });
-    var d = document.createElement("option"); d.value = "__default"; d.textContent = "Default"; s.appendChild(d);
-    s.value = active && (all[active] || active === "__default") ? active : "";
-    $("layDel").disabled = !s.value || s.value === "__default"; $("layRename").disabled = $("layDel").disabled;
+  // ---- the layout library, like the app's Layouts page ----
+  function loadArr(k) { try { var v = JSON.parse(store.get(k, "")); return Array.isArray(v) ? v : []; } catch (e) { return []; } }
+  function order() {
+    var all = presets(), out = loadArr("vgp-order").filter(function (n) { return all[n]; });
+    Object.keys(all).forEach(function (n) { if (out.indexOf(n) < 0) out.push(n); });
+    return out;
   }
-  function useLayout(b, g, name) { cfg = clone(b); groups = g ? clone(g) : groups; active = name || ""; store.set("vgp-active", active); syncTriggers(true); paint(); persist(); showSel(); refreshLayouts(); applySettings(); }
-  $("laySel").addEventListener("change", function () {
-    var n = this.value, all = presets();
-    if (n === "__default") { useLayout(DEFAULTS, DEFAULT_GROUPS, "__default"); toast("Default layout"); }
-    else if (n && all[n]) { useLayout(all[n].buttons, all[n].groups, n); toast("Layout applied"); }
-    $("layDel").disabled = !n || n === "__default"; $("layRename").disabled = $("layDel").disabled;
+  function saveOrder(o) { store.set("vgp-order", JSON.stringify(o)); }
+  function uniqueName(base) { var all = presets(), to = base, i = 2; while (all[to] || to === "Default") to = base + " " + i++; return to; }
+  function checkName(n, except) {
+    var all = presets();
+    if (!n) return "Enter a name";
+    if (n === "Default") return "That name is reserved";
+    if (all[n] && n !== except) return "That name is taken";
+    return "";
+  }
+  function useLayout(b, g, name) { cfg = clone(b); groups = g ? clone(g) : groups; active = name || ""; store.set("vgp-active", active); syncTriggers(true); paint(); persist(); showSel(); renderLibrary(); applySettings(); }
+  function layoutText(b, g) { return JSON.stringify({ version: 2, buttons: b, groups: g }, null, 2); }
+
+  // A small dialog for names, confirmations and text
+  var dlgCb = null;
+  function dialog(o) {
+    $("dlgTitle").textContent = o.title; $("dlgText").textContent = o.text || ""; $("dlgText").style.display = o.text ? "block" : "none";
+    $("dlgInput").style.display = o.input ? "block" : "none"; $("dlgInput").value = o.value || "";
+    $("dlgArea").style.display = o.area ? "block" : "none"; $("dlgArea").value = o.areaValue || ""; $("dlgArea").readOnly = !!o.readOnly;
+    $("dlgYes").textContent = o.yes || "OK"; $("dlgYes").className = "cbtn" + (o.danger ? " danger" : " go");
+    $("dlgNo").textContent = o.no || "Cancel";
+    $("dlgMid").style.display = o.mid ? "block" : "none"; $("dlgMid").textContent = o.mid || "";
+    $("dlgErr").textContent = ""; dlgCb = o; $("dlgWrap").classList.add("open");
+    if (o.input) { $("dlgInput").focus(); $("dlgInput").select(); }
+  }
+  function dlgClose() { $("dlgWrap").classList.remove("open"); dlgCb = null; }
+  function dlgValues() { return { text: $("dlgInput").value.trim().slice(0, 30), area: $("dlgArea").value }; }
+  $("dlgNo").addEventListener("click", dlgClose);
+  $("dlgWrap").addEventListener("pointerdown", function (e) { if (e.target === this) dlgClose(); });
+  $("dlgYes").addEventListener("click", function () {
+    var o = dlgCb; if (!o) return;
+    var r = o.onYes ? o.onYes(dlgValues()) : "";
+    if (typeof r === "string" && r) { $("dlgErr").textContent = r; return; }
+    dlgClose();
   });
-  $("laySave").addEventListener("click", function () {
-    var n = (window.prompt("Name this layout", "") || "").trim().slice(0, 30);
-    if (!n || n === "Default") return;
-    var all = presets(); all[n] = { buttons: clone(cfg), groups: clone(groups) }; savePresets(all); active = n; store.set("vgp-active", n); refreshLayouts(); toast("Layout saved");
-  });
-  $("layDel").addEventListener("click", function () {
-    var n = $("laySel").value, all = presets();
-    if (!n || !all[n]) return;
-    delete all[n]; savePresets(all); active = ""; store.set("vgp-active", ""); refreshLayouts(); toast("Layout deleted");
-  });
-  $("layReset").addEventListener("click", function () { useLayout(DEFAULTS, DEFAULT_GROUPS, "__default"); toast("Layout reset"); });
-  function shareText(t, file) {
-    var box = $("layBox");
-    try {
-      var blob = new Blob([t], { type: "application/json" }), a = document.createElement("a");
-      a.href = URL.createObjectURL(blob); a.download = file; document.body.appendChild(a); a.click(); document.body.removeChild(a);
-    } catch (e) {}
-    box.style.display = "block"; box.value = t;
-    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(t).then(function () { toast("Copied and saved"); }, function () { toast("Saved as a file"); });
-    else toast("Saved as a file");
+  $("dlgMid").addEventListener("click", function () { if (dlgCb && dlgCb.onMid) dlgCb.onMid(dlgValues()); });
+  $("dlgInput").addEventListener("keydown", function (e) { if (e.key === "Enter") $("dlgYes").click(); });
+
+  function applyPreset(n) {
+    var all = presets(), go = function () { if (n === "__default") useLayout(DEFAULTS, DEFAULT_GROUPS, "__default"); else if (all[n]) useLayout(all[n].buttons, all[n].groups, n); toast("Layout applied"); };
+    if (active === "") dialog({ title: "Apply layout?", text: "Your unsaved layout will be replaced.", yes: "Apply", onYes: function () { go(); } }); else go();
+  }
+  function editPreset(n) { if (n !== active) { var all = presets(); if (all[n]) useLayout(all[n].buttons, all[n].groups, n); } setTimeout(enterEdit, 0); }
+  function newLayout() {
+    dialog({ title: "New layout", text: "Starts from the default layout, then opens the editor.", input: true, value: uniqueName("My layout"), yes: "Create",
+      onYes: function (r) {
+        var err = checkName(r.text); if (err) return err;
+        var all = presets(); all[r.text] = { buttons: clone(DEFAULTS), groups: clone(DEFAULT_GROUPS) }; savePresets(all); saveOrder([r.text].concat(order().filter(function (x) { return x !== r.text; })));
+        useLayout(DEFAULTS, DEFAULT_GROUPS, r.text); setTimeout(enterEdit, 0);
+      } });
+  }
+  function saveCurrent() {
+    dialog({ title: "Save layout", text: "Save your current control arrangement.", input: true, value: uniqueName("My layout"), yes: "Save",
+      onYes: function (r) {
+        var err = checkName(r.text); if (err) return err;
+        var all = presets(); all[r.text] = { buttons: clone(cfg), groups: clone(groups) }; savePresets(all); saveOrder([r.text].concat(order().filter(function (x) { return x !== r.text; })));
+        active = r.text; store.set("vgp-active", active); renderLibrary(); toast("Layout saved");
+      } });
+  }
+  function renamePreset(n) {
+    dialog({ title: "Rename layout", input: true, value: n, yes: "Rename",
+      onYes: function (r) {
+        var err = checkName(r.text, n); if (err) return err;
+        if (r.text === n) return "";
+        var all = presets(); all[r.text] = all[n]; delete all[n]; savePresets(all);
+        saveOrder(order().map(function (x) { return x === n ? r.text : x; })); if (active === n) { active = r.text; store.set("vgp-active", active); } renderLibrary(); toast("Layout renamed");
+      } });
+  }
+  function duplicatePreset(n) {
+    var all = presets(), src = n === "__default" ? { buttons: DEFAULTS, groups: DEFAULT_GROUPS } : all[n]; if (!src) return;
+    var to = uniqueName((n === "__default" ? "Default" : n) + " copy");
+    all[to] = { buttons: clone(src.buttons), groups: clone(src.groups) }; savePresets(all); saveOrder([to].concat(order().filter(function (x) { return x !== to; }))); renderLibrary(); toast("Layout duplicated");
+  }
+  function deletePreset(n) {
+    dialog({ title: "Delete layout?", text: n + " will be removed. This cannot be undone.", yes: "Delete", danger: true,
+      onYes: function () {
+        var all = presets(); delete all[n]; savePresets(all); saveOrder(order().filter(function (x) { return x !== n; }));
+        if (active === n) { active = ""; store.set("vgp-active", ""); } renderLibrary(); toast("Layout deleted");
+      } });
+  }
+  function copyText(t) { if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(t).then(function () { toast("Copied"); }, function () { toast("Select the text and copy it"); }); else toast("Select the text and copy it"); }
+  function exportPreset(n) {
+    var all = presets(), src = n === "__default" ? { buttons: DEFAULTS, groups: DEFAULT_GROUPS } : all[n]; if (!src) return;
+    var text = layoutText(src.buttons, src.groups);
+    dialog({ title: "Export " + (n === "__default" ? "Default" : n), text: "Copy this text to back up the layout or move it to another device.", area: true, areaValue: text, readOnly: true, yes: "Done", no: "Close", mid: "Copy", onMid: function () { copyText(text); } });
+  }
+  function exportAll() {
+    var all = presets(), out = {};
+    order().forEach(function (n) { out[n] = { buttons: all[n].buttons, groups: all[n].groups }; });
+    out.Default = { buttons: clone(DEFAULTS), groups: clone(DEFAULT_GROUPS) };
+    var text = JSON.stringify({ version: 2, presets: out }, null, 2);
+    dialog({ title: "Export all layouts", text: "Copy this text to back up your layouts or move them to another device.", area: true, areaValue: text, readOnly: true, yes: "Done", no: "Close", mid: "Copy", onMid: function () { copyText(text); } });
   }
   function importLayoutText(t) {
-    var root; try { root = JSON.parse(t); } catch (e) { toast("Not a valid layout"); return false; }
+    var root; try { root = JSON.parse(t); } catch (e) { return "Not a valid layout"; }
     try {
-      var many = root && root.presets && typeof root.presets === "object", got = readPresets(root, "Imported layout"), names = Object.keys(got), all = presets();
-      if (many) { names.forEach(function (n) { all[n] = { buttons: got[n].buttons, groups: got[n].groups || clone(DEFAULT_GROUPS) }; }); savePresets(all); refreshLayouts(); toast("Imported " + names.length + (names.length === 1 ? " layout" : " layouts")); }
-      else { var l = got[names[0]]; useLayout(l.buttons, l.groups, ""); toast("Layout imported"); }
-      return true;
-    } catch (e) { toast("Not a valid layout"); return false; }
+      var many = root && root.presets && typeof root.presets === "object", got = readPresets(root, "Imported layout"), names = Object.keys(got), all = presets(), added = [];
+      names.forEach(function (n) {
+        var to = n === "Default" ? uniqueName("Default imported") : (all[n] ? uniqueName(n) : n);
+        all[to] = { buttons: got[n].buttons, groups: got[n].groups || clone(DEFAULT_GROUPS) }; added.push(to);
+      });
+      savePresets(all); saveOrder(added.concat(order().filter(function (x) { return added.indexOf(x) < 0; })));
+      if (!many) useLayout(all[added[0]].buttons, all[added[0]].groups, added[0]); else renderLibrary();
+      toast(many ? "Imported " + added.length + (added.length === 1 ? " layout" : " layouts") : "Layout imported");
+      return "";
+    } catch (e) { return "Not a valid layout"; }
   }
-  $("layExp").addEventListener("click", function () { shareText(JSON.stringify(bundle(), null, 2), "airdeck-layout.json"); });
-  $("layExpAll").addEventListener("click", function () {
-    var all = presets(), out = {};
-    Object.keys(all).forEach(function (n) { out[n] = { buttons: all[n].buttons, groups: all[n].groups }; });
-    out.Default = { buttons: clone(DEFAULTS), groups: clone(DEFAULT_GROUPS) };
-    shareText(JSON.stringify({ version: 2, presets: out }, null, 2), "airdeck-layouts.json");
-  });
-  $("layImp").addEventListener("click", function () {
-    var box = $("layBox");
-    if (box.style.display === "block" && box.value.trim().charAt(0) === "{") { if (importLayoutText(box.value)) box.style.display = "none"; return; }
-    $("layFile").click(); box.style.display = "block"; box.value = ""; box.focus();
-  });
+  function importDialog() {
+    dialog({ title: "Import layouts", text: "Paste exported layouts. A layout with the same name is added as a copy.", area: true, areaValue: "", yes: "Import", mid: "Choose file",
+      onYes: function (r) { return importLayoutText(r.area); }, onMid: function () { $("layFile").click(); } });
+  }
   $("layFile").addEventListener("change", function () {
     var f = this.files && this.files[0]; if (!f) return;
-    var r = new FileReader(); r.onload = function () { if (importLayoutText(String(r.result))) $("layBox").style.display = "none"; }; r.readAsText(f); this.value = "";
+    var rd = new FileReader(); rd.onload = function () { $("dlgArea").value = String(rd.result); }; rd.readAsText(f); this.value = "";
   });
+
+  // The little preview of a layout, drawn from its numbers
+  function thumbEl(b) {
+    var t = document.createElement("div"); t.className = "thumb";
+    ORDER.forEach(function (id) {
+      if (!b[id].visible) return;
+      var p = place(id, b), d = document.createElement("i"), round = id === "LEFT_ANALOG_STICK" || id === "RIGHT_ANALOG_STICK" || id === "DPAD" || id === "FACE_BUTTONS";
+      d.className = "tb" + (round ? " rd" : "");
+      d.style.left = (p.x / SW * 100) + "%"; d.style.top = (p.y / SH * 100) + "%"; d.style.width = (p.w / SW * 100) + "%"; d.style.height = (p.h / SH * 100) + "%";
+      t.appendChild(d);
+    });
+    return t;
+  }
+  var ICON = {
+    grip: '<svg viewBox="0 0 24 24" fill="currentColor"><circle cx="9" cy="6" r="1.6"/><circle cx="15" cy="6" r="1.6"/><circle cx="9" cy="12" r="1.6"/><circle cx="15" cy="12" r="1.6"/><circle cx="9" cy="18" r="1.6"/><circle cx="15" cy="18" r="1.6"/></svg>',
+    circle: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="8"/></svg>',
+    check: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"/><path d="M8 12.5l2.7 2.7L16 9.5"/></svg>',
+    pencil: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h4L19 9l-4-4L4 16v4zM13.5 6.5l4 4"/></svg>',
+    more: '<svg viewBox="0 0 24 24" fill="currentColor"><circle cx="5" cy="12" r="1.8"/><circle cx="12" cy="12" r="1.8"/><circle cx="19" cy="12" r="1.8"/></svg>',
+    imp: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11M7 11l5 5 5-5M5 20h14"/></svg>',
+    exp: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16V5M7 9l5-5 5 5M5 20h14"/></svg>'
+  };
+  function iconBtn(svg, label, fn, disabled) {
+    var b = document.createElement("button"); b.className = "lic"; b.innerHTML = svg; b.setAttribute("aria-label", label); b.title = label; b.disabled = !!disabled;
+    b.addEventListener("click", function (e) { e.stopPropagation(); fn(b); }); return b;
+  }
+  function showMenu(btn, items) {
+    var m = $("layMenu"); m.innerHTML = "";
+    items.forEach(function (it) {
+      var b = document.createElement("button"); b.textContent = it.label; b.disabled = !!it.disabled; if (it.warn) b.className = "warn";
+      b.addEventListener("click", function () { m.classList.remove("open"); it.fn(); }); m.appendChild(b);
+    });
+    var r = btn.getBoundingClientRect(); m.classList.add("open");
+    var h = m.offsetHeight, w = m.offsetWidth;
+    m.style.left = Math.max(8, Math.min(window.innerWidth - w - 8, r.right - w)) + "px";
+    m.style.top = (r.bottom + 6 + h > window.innerHeight ? Math.max(8, r.top - h - 6) : r.bottom + 6) + "px";
+  }
+  document.addEventListener("pointerdown", function (e) { if (!e.target.closest || !e.target.closest("#layMenu, .lic")) $("layMenu").classList.remove("open"); }, true);
+  function label(text, extra) {
+    var h = document.createElement("div"); h.className = "lhead"; var t = document.createElement("h3"); t.textContent = text; h.appendChild(t); if (extra) extra(h); return h;
+  }
+  function layoutRow(o) {
+    var r = document.createElement("div"); r.className = "lrow" + (o.active ? " active" : "") + (o.fixed ? " fixed" : "");
+    if (o.name) r.dataset.n = o.name;
+    if (o.handle) {
+      var h = document.createElement("div"); h.className = "lh"; h.innerHTML = ICON.grip; h.setAttribute("aria-label", "Drag to reorder"); r.appendChild(h);
+      h.addEventListener("pointerdown", function (e) {
+        e.preventDefault(); try { h.setPointerCapture(e.pointerId); } catch (x) {} r.classList.add("drag");
+        var move = function (ev) {
+          var rows = [].slice.call($("layList").querySelectorAll(".lrow[data-n]:not(.fixed)")), target = null;
+          rows.forEach(function (x) { var b = x.getBoundingClientRect(); if (x !== r && ev.clientY > b.top && ev.clientY < b.bottom) target = x; });
+          if (target) { var tb = target.getBoundingClientRect(); target.parentNode.insertBefore(r, ev.clientY < tb.top + tb.height / 2 ? target : target.nextSibling); }
+        };
+        var up = function () {
+          h.removeEventListener("pointermove", move); h.removeEventListener("pointerup", up); h.removeEventListener("pointercancel", up); r.classList.remove("drag");
+          saveOrder([].slice.call($("layList").querySelectorAll(".lrow[data-n]:not(.fixed)")).map(function (x) { return x.dataset.n; }));
+        };
+        h.addEventListener("pointermove", move); h.addEventListener("pointerup", up); h.addEventListener("pointercancel", up);
+      });
+    }
+    r.appendChild(thumbEl(o.buttons));
+    var t = document.createElement("div"); t.className = "lt"; var b = document.createElement("b"); b.textContent = o.name || "Custom layout"; t.appendChild(b);
+    if (o.sub) { var s = document.createElement("span"); s.textContent = o.sub; t.appendChild(s); }
+    r.appendChild(t);
+    var a = document.createElement("div"); a.className = "lact"; o.actions.forEach(function (x) { a.appendChild(x); }); r.appendChild(a);
+    return r;
+  }
+  function renderLibrary() {
+    var box = $("layList"); if (!box) return;
+    box.innerHTML = "";
+    var all = presets(), names = order();
+    if (active === "") {
+      box.appendChild(label("Current layout"));
+      var save = document.createElement("button"); save.className = "lnew"; save.textContent = "Save"; save.addEventListener("click", saveCurrent);
+      box.appendChild(layoutRow({ buttons: cfg, sub: "Unsaved", fixed: true, actions: [save, iconBtn(ICON.pencil, "Edit layout", function () { setTimeout(enterEdit, 0); })] }));
+    }
+    box.appendChild(label("Layouts (" + names.length + ")", function (h) {
+      h.appendChild(iconBtn(ICON.imp, "Import layouts", importDialog));
+      h.appendChild(iconBtn(ICON.exp, "Export all layouts", exportAll, !names.length));
+      var nw = document.createElement("button"); nw.className = "lnew"; nw.textContent = "+ New"; nw.addEventListener("click", newLayout); h.appendChild(nw);
+    }));
+    names.forEach(function (n, i) {
+      var on = active === n;
+      box.appendChild(layoutRow({ name: n, buttons: all[n].buttons, active: on, handle: true, sub: on ? "Active" : "",
+        actions: [
+          on ? iconBtn(ICON.check, "Active", function () {}, true) : iconBtn(ICON.circle, "Use this layout", function () { applyPreset(n); }),
+          iconBtn(ICON.pencil, "Edit layout", function () { editPreset(n); }),
+          iconBtn(ICON.more, "More", function (btn) {
+            showMenu(btn, [
+              { label: "Move up", disabled: i === 0, fn: function () { var o = order(); o.splice(i - 1, 0, o.splice(i, 1)[0]); saveOrder(o); renderLibrary(); } },
+              { label: "Move down", disabled: i === names.length - 1, fn: function () { var o = order(); o.splice(i + 1, 0, o.splice(i, 1)[0]); saveOrder(o); renderLibrary(); } },
+              { label: "Rename", fn: function () { renamePreset(n); } },
+              { label: "Duplicate", fn: function () { duplicatePreset(n); } },
+              { label: "Export", fn: function () { exportPreset(n); } },
+              { label: "Delete", warn: true, fn: function () { deletePreset(n); } }
+            ]);
+          })
+        ] }));
+    });
+    var fon = active === "__default";
+    box.appendChild(layoutRow({ name: "Default", buttons: DEFAULTS, active: fon, fixed: true, sub: fon ? "Active" : "Factory",
+      actions: [
+        fon ? iconBtn(ICON.check, "Active", function () {}, true) : iconBtn(ICON.circle, "Use this layout", function () { applyPreset("__default"); }),
+        iconBtn(ICON.pencil, "Edit layout", function () {}, true),
+        iconBtn(ICON.more, "More", function (btn) { showMenu(btn, [{ label: "Duplicate", fn: function () { duplicatePreset("__default"); } }, { label: "Export", fn: function () { exportPreset("__default"); } }]); })
+      ] }));
+  }
+  function refreshLayouts() { var cur = document.querySelector(".spage.cur"); if ($("sheetWrap").classList.contains("open") && cur && cur.dataset.p === "layouts") renderLibrary(); }
   ["trigL", "trigR"].forEach(function (k) { $(k).addEventListener("change", function () { syncTriggers(false); persist(); paint(); }); });
   syncTriggers(!!loadJson("vgp-cfg"));
   paint();
-  refreshLayouts();
   $("fsBtn").addEventListener("click", function () { if (document.fullscreenElement) document.exitFullscreen(); else enterFullscreen(false); setTimeout(applySettings, 300); });
   $("reconnBtn").addEventListener("click", function () { closeMenu(); reconnect(); });
   $("disconnBtn").addEventListener("click", function () { closeMenu(); disconnect(); toast("Disconnected. Open settings to reconnect."); });
