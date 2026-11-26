@@ -176,10 +176,10 @@ select, input[type=date], input[type=time], input[type=color] { font-size: 16px;
   // pointer event log for the touch boxes
   document.querySelectorAll("[data-track]").forEach(function (pad) {
     var log = pad.parentNode.querySelector(".log");
-    var st = { down: 0, move: 0, up: 0, cancel: 0 };
+    var st = { down: 0, move: 0, up: 0, cancel: 0, ts: 0, tm: 0, te: 0, tc: 0 };
     var name = pad.firstChild.textContent.trim() || "box";
     function show() {
-      log.textContent = log.textContent.split("\n").filter(function (l) { return l.indexOf(name + ":") !== 0; }).concat([name + ": down " + st.down + ", move " + st.move + ", up " + st.up + ", CANCEL " + st.cancel]).join("\n").trim();
+      log.textContent = log.textContent.split("\n").filter(function (l) { return l.indexOf(name + ":") !== 0; }).concat([name + ": pointer down " + st.down + ", move " + st.move + ", up " + st.up + ", CANCEL " + st.cancel + " | touch start " + st.ts + ", move " + st.tm + ", end " + st.te + ", cancel " + st.tc]).join("\n").trim();
     }
     ["pointerdown", "pointermove", "pointerup", "pointercancel"].forEach(function (n) {
       pad.addEventListener(n, function () {
@@ -187,18 +187,37 @@ select, input[type=date], input[type=time], input[type=color] { font-size: 16px;
         st[k]++; show();
       });
     });
+    // touch events are separate from pointer events, so they may still arrive while a finger is on a switch
+    [["touchstart", "ts"], ["touchmove", "tm"], ["touchend", "te"], ["touchcancel", "tc"]].forEach(function (p) {
+      pad.addEventListener(p[0], function () { st[p[1]]++; show(); }, { passive: true });
+    });
   });
 
   // the d-pad: read the finger by position, like the real controller does
   (function () {
     var dp = document.getElementById("dp"), log = document.getElementById("dpLog");
-    var s = { down: 0, move: 0, up: 0, cancel: 0, changes: 0, last: "-" };
+    var s = { down: 0, move: 0, up: 0, cancel: 0, changes: 0, last: "-", ts: 0, tm: 0, te: 0, tc: 0, tchanges: 0, tlast: "-" };
     function dirOf(e) {
       var r = dp.getBoundingClientRect(), dx = e.clientX - (r.left + r.width / 2), dy = e.clientY - (r.top + r.height / 2);
       if (Math.hypot(dx, dy) < r.width * 0.1) return "centre";
       return Math.abs(dx) > Math.abs(dy) ? (dx < 0 ? "left" : "right") : (dy < 0 ? "up" : "down");
     }
-    function show() { log.textContent = "down " + s.down + ", move " + s.move + ", up " + s.up + ", CANCEL " + s.cancel + ", direction changes " + s.changes + ", last direction " + s.last; }
+    function show() {
+      log.textContent = "pointer: down " + s.down + ", move " + s.move + ", up " + s.up + ", CANCEL " + s.cancel + ", direction changes " + s.changes + ", last " + s.last +
+        "\n    touch: start " + s.ts + ", move " + s.tm + ", end " + s.te + ", cancel " + s.tc + ", direction changes " + s.tchanges + ", last " + s.tlast;
+    }
+    // the same reading from touch events
+    [["touchstart", "ts"], ["touchmove", "tm"], ["touchend", "te"], ["touchcancel", "tc"]].forEach(function (p) {
+      dp.addEventListener(p[0], function (e) {
+        s[p[1]]++;
+        var t = (e.touches && e.touches[0]) || (e.changedTouches && e.changedTouches[0]);
+        if (t && (p[0] === "touchstart" || p[0] === "touchmove")) {
+          var d = dirOf(t);
+          if (d !== s.tlast) { s.tlast = d; s.tchanges++; }
+        }
+        show();
+      }, { passive: true });
+    });
     ["pointerdown", "pointermove", "pointerup", "pointercancel"].forEach(function (n) {
       dp.addEventListener(n, function (e) {
         s[n.replace("pointer", "")]++;
