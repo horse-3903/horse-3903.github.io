@@ -114,6 +114,19 @@ select, input[type=date], input[type=time], input[type=color] { font-size: 16px;
   <div class="row"><button class="r" data-v="yes">Both worked</button><button class="r" data-v="no">One stopped</button></div>
 </div>
 
+<div class="card" data-test="dpad-sim">
+  <h2>11. D-pad made of invisible switches</h2>
+  <p>Put one finger on the cross and slide around it: up, right, down, left, without lifting. Then lift. The log shows which way it read your finger and whether the touch was cancelled.</p>
+  <div id="dp" style="position:relative;width:180px;height:180px;margin:0 auto;touch-action:none">
+    <div class="pad" data-arm style="position:absolute;left:60px;top:0;width:60px;height:60px">UP<input type="checkbox" switch></div>
+    <div class="pad" data-arm style="position:absolute;left:60px;top:120px;width:60px;height:60px">DOWN<input type="checkbox" switch></div>
+    <div class="pad" data-arm style="position:absolute;left:0;top:60px;width:60px;height:60px">LEFT<input type="checkbox" switch></div>
+    <div class="pad" data-arm style="position:absolute;left:120px;top:60px;width:60px;height:60px">RIGHT<input type="checkbox" switch></div>
+  </div>
+  <div class="log" id="dpLog"></div>
+  <div class="row"><button class="r" data-v="yes">Slid fine, buzzed</button><button class="r" data-v="no">Broke or no buzz</button></div>
+</div>
+
 <div class="card">
   <h2>Results</h2>
   <textarea id="out" readonly></textarea>
@@ -129,6 +142,9 @@ select, input[type=date], input[type=time], input[type=color] { font-size: 16px;
     document.querySelectorAll("[data-test]").forEach(function (c) {
       var h = c.querySelector("h2").textContent;
       lines.push(h + ": " + (results[c.getAttribute("data-test")] || "not tried"));
+      c.querySelectorAll(".log").forEach(function (l) {
+        if (l.textContent) l.textContent.split("\n").forEach(function (x) { lines.push("    " + x); });
+      });
     });
     var logs = [];
     document.querySelectorAll("[data-track]").forEach(function (p) {
@@ -172,6 +188,28 @@ select, input[type=date], input[type=time], input[type=color] { font-size: 16px;
       });
     });
   });
+
+  // the d-pad: read the finger by position, like the real controller does
+  (function () {
+    var dp = document.getElementById("dp"), log = document.getElementById("dpLog");
+    var s = { down: 0, move: 0, up: 0, cancel: 0, changes: 0, last: "-" };
+    function dirOf(e) {
+      var r = dp.getBoundingClientRect(), dx = e.clientX - (r.left + r.width / 2), dy = e.clientY - (r.top + r.height / 2);
+      if (Math.hypot(dx, dy) < r.width * 0.1) return "centre";
+      return Math.abs(dx) > Math.abs(dy) ? (dx < 0 ? "left" : "right") : (dy < 0 ? "up" : "down");
+    }
+    function show() { log.textContent = "down " + s.down + ", move " + s.move + ", up " + s.up + ", CANCEL " + s.cancel + ", direction changes " + s.changes + ", last direction " + s.last; }
+    ["pointerdown", "pointermove", "pointerup", "pointercancel"].forEach(function (n) {
+      dp.addEventListener(n, function (e) {
+        s[n.replace("pointer", "")]++;
+        if (n === "pointerdown" || n === "pointermove") {
+          var d = dirOf(e);
+          if (d !== s.last) { s.last = d; s.changes++; }
+        }
+        show();
+      });
+    });
+  })();
 
   // slider values
   var rs = document.getElementById("rs"), rsLog = document.getElementById("rsLog");
