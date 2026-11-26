@@ -59,8 +59,8 @@ html, body { margin: 0; height: 100%; background: var(--bg); color: var(--fg); o
 #app { position: fixed; left: 50%; top: 50%; width: 2000px; height: 900px; --u: 9px; --w: 20px;
     transform: translate(-50%, -50%) rotate(var(--rot, 0deg)) scale(var(--k, 1)); transform-origin: 50% 50%; }
 body::before { content: ""; position: fixed; inset: 0; pointer-events: none; opacity: 0; transition: opacity .5s;
-    background: color-mix(in srgb, var(--slotc, transparent) var(--gl-wash), transparent);
-    box-shadow: inset 0 0 calc(12 * var(--u)) 0 color-mix(in srgb, var(--slotc, transparent) var(--gl-edge), transparent); }
+    background: color-mix(in srgb, var(--slotc, transparent) min(100%, calc(var(--gl-wash) * var(--gl-k, 1))), transparent);
+    box-shadow: inset 0 0 calc(12 * var(--u)) 0 color-mix(in srgb, var(--slotc, transparent) min(100%, calc(var(--gl-edge) * var(--gl-k, 1))), transparent); }
 html.glow body::before { opacity: 1; }
 /* iPhone haptics: a real switch control under the finger gives the system tick. It sits invisibly over each control. */
 .hsw { position: absolute; left: 0; top: 0; width: 100%; height: 100%; margin: 0; padding: 0; opacity: .02; z-index: 20; touch-action: none; }
@@ -435,6 +435,19 @@ body.edflip #edpanel { right: auto; left: 0; border-left: 0; border-right: 1px s
 .gsw.pick { box-shadow: 0 0 0 2px var(--sheet), 0 0 0 4px var(--fg); }
 .gsw.none { background: var(--panel); position: relative; }
 .gsw.none::after { content: ""; position: absolute; left: 7px; right: 7px; top: 50%; height: 2px; background: var(--muted); transform: rotate(-45deg); }
+/* settings rows built from a table, same wording as the app */
+.sl { display: flex; align-items: center; gap: 12px; width: min(280px, 46vw); flex: none; }
+.sl input[type=range] { flex: 1; min-width: 0; accent-color: var(--fg); }
+.sl b { width: 58px; text-align: right; font-size: 13px; font-weight: 500; }
+.row.sub { padding-left: 16px; }
+.row.off { opacity: .4; pointer-events: none; }
+#snav { display: flex; flex-direction: column; }
+#snav button.reset { margin-top: auto; text-align: left; color: var(--muted); font-weight: 400; }
+.lnk { color: var(--fg); border: 1px solid var(--border); border-radius: 8px; padding: 8px 14px; font-size: 14px; font-weight: 500; text-decoration: none; flex: none; }
+.pill.grad { background: linear-gradient(to bottom, color-mix(in srgb, var(--border) 70%, var(--panel)), var(--panel)); }
+@media (max-width: 700px), (orientation: portrait) { #snav { flex-direction: row; } #snav button.reset { margin: 0 0 0 auto; } .sl { width: min(220px, 44vw); } }
+#dim { position: fixed; inset: 0; background: #000; opacity: 0; pointer-events: none; transition: opacity .6s; z-index: 12; }
+body.noring .stick::before { display: none; }
 #toast { position: fixed; left: 50%; top: calc(14 * var(--u)); transform: translateX(-50%); background: var(--accent);
     color: var(--accent-fg); padding: 8px 14px; border-radius: 6px; font-size: 14px; z-index: 40; display: none; }
 </style>
@@ -517,7 +530,7 @@ body.edflip #edpanel { right: auto; left: 0; border-left: 0; border-right: 1px s
       <div class="edrow"><span>Height</span><input type="range" id="edH" min="50" max="200" step="1"><b id="edHV">100%</b></div>
       <div class="edrow"><span>Anchor</span><div class="anc" id="edAnc"></div></div>
       <div class="edrow"><span>Group</span><select id="edGroup" class="sel"></select></div>
-      <div class="edrow" id="edTrigRow"><span>Trigger input</span><select id="edTrig" class="sel"><option value="DIGITAL">Button</option><option value="DRAG">Drag from touch</option><option value="ZONES">Two zones</option></select></div>
+      <div class="edrow" id="edTrigRow"><span>Trigger input</span><select id="edTrig" class="sel"><option value="DIGITAL">Button</option><option value="DRAG">Drag from touch</option><option value="ZONES">Gradient</option></select></div>
       <div class="edrow" id="edStickRow"><span>Stick position</span><select id="edStick" class="sel"><option value="FIXED">Fixed</option><option value="FLOATING">Floating</option></select></div>
       <button class="mini wide" id="edResetCtl">Reset this control</button>
     </div>
@@ -537,34 +550,22 @@ body.edflip #edpanel { right: auto; left: 0; border-left: 0; border-right: 1px s
 </div></div>
 
 <div id="sheetWrap"><div id="sheet">
-  <div class="head"><h2>Controller settings</h2><button class="iconbtn" id="closeBtn" aria-label="Close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
+  <div class="head"><h2>Settings</h2><button class="iconbtn" id="closeBtn" aria-label="Close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
   <div id="sbody">
     <nav id="snav">
-      <button data-p="device" class="cur">Device</button>
-      <button data-p="appearance">Appearance</button>
-      <button data-p="input">Input</button>
+      <button data-p="appearance" class="cur">Appearance</button>
       <button data-p="layouts">Layouts</button>
+      <button data-p="sticks">Sticks</button>
+      <button data-p="dpad">D-pad</button>
+      <button data-p="haptics">Haptics</button>
       <button data-p="display">Display</button>
+      <button data-p="connection">Connection</button>
+      <button data-p="about">About</button>
+      <button class="reset" id="resetAll">Restore defaults</button>
     </nav>
     <div id="spanes">
 
-      <div class="spage cur" data-p="device">
-        <h3>Device</h3>
-        <div class="card">
-          <div class="devrow">
-            <div class="devicon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 8h10c3 0 4.5 3 4.5 6.5 0 2.4-1.5 3.2-2.6 2.4-1-.8-1.6-2-3.2-2H8.3c-1.6 0-2.2 1.2-3.2 2-1.1.8-2.6 0-2.6-2.4C2.5 11 4 8 7 8z"/><path d="M7 10.5v3M5.5 12h3"/></svg></div>
-            <div class="devtext" id="devText">
-              <div class="devname" id="devName"></div>
-              <input id="nameInput" type="text" maxlength="24" autocomplete="off">
-              <div class="devsub" id="devSub"></div>
-            </div>
-            <button class="iconbtn" id="editName" aria-label="Rename"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="20" height="20"><path d="M4 20h4L19 9l-4-4L4 16v4zM13.5 6.5l4 4"/></svg></button>
-          </div>
-          <div class="statusrow"><span class="sd wait" id="hDot"></span><div class="stext"><b id="connTitle"></b><span id="connHint"></span></div><button class="sbtn bad" id="disconnBtn">Disconnect</button><button class="sbtn" id="reconnBtn" style="display:none">Reconnect</button></div>
-        </div>
-      </div>
-
-      <div class="spage" data-p="appearance">
+      <div class="spage cur" data-p="appearance">
         <h3>Button style</h3>
         <div class="styles" id="styleSeg">
           <div class="stylecard" data-v="xbox"><div class="dia">
@@ -584,15 +585,9 @@ body.edflip #edpanel { right: auto; left: 0; border-left: 0; border-right: 1px s
           </div><span>Joy-Con</span></div>
         </div>
         <div class="row" id="themeRow"><span>Colour scheme<span class="hint">Light, dark or follow the device.</span></span><select id="themeSel" class="sel"><option value="system">System</option><option value="light">Light</option><option value="dark">Dark</option></select></div>
-      </div>
-
-      <div class="spage" data-p="input">
-        <h3>Input</h3>
-        <div class="row" id="dpadRow"><span>D-pad<span class="hint">Multi-press holds several directions at once, including diagonals.</span></span><select id="dpadSel" class="sel"><option value="multi">Multi-press</option><option value="single">One at a time</option></select></div>
-        <div class="row"><span>Snap to touch<span class="hint">Move the stick immediately to the touch position.</span></span><div class="switch" id="snapSw" role="switch"><i></i></div></div>
-        <div class="row"><span>Haptic feedback<span class="hint" id="vibHint">Vibrate when pressing controls.</span></span><div class="switch" id="vibSw" role="switch"><i></i></div></div>
-        <div class="row"><span>Left trigger<span class="hint" id="tlHint"></span></span><select id="trigL" class="sel"></select></div>
-        <div class="row"><span>Right trigger<span class="hint" id="trHint"></span></span><select id="trigR" class="sel"></select></div>
+        <div class="gen" data-g="appearance"></div>
+        <div class="row" style="border-bottom:0"><span>Glow colour<span class="hint">Demo only: pick the colour of the glow</span></span></div>
+        <div class="gsws" id="glowSw"><button class="gsw" data-g="0" style="--c:#E5484D" aria-label="Red" title="Red"></button><button class="gsw" data-g="1" style="--c:#3E8EF7" aria-label="Blue" title="Blue"></button><button class="gsw" data-g="2" style="--c:#F5C518" aria-label="Yellow" title="Yellow"></button><button class="gsw" data-g="3" style="--c:#30A46C" aria-label="Green" title="Green"></button><button class="gsw" data-g="4" style="--c:#F97316" aria-label="Orange" title="Orange"></button><button class="gsw" data-g="5" style="--c:#A855F7" aria-label="Purple" title="Purple"></button><button class="gsw" data-g="6" style="--c:#14B8A6" aria-label="Teal" title="Teal"></button><button class="gsw" data-g="7" style="--c:#EC4899" aria-label="Pink" title="Pink"></button><button class="gsw none" data-g="off" aria-label="No glow" title="No glow"></button></div>
       </div>
 
       <div class="spage" data-p="layouts">
@@ -600,17 +595,57 @@ body.edflip #edpanel { right: auto; left: 0; border-left: 0; border-right: 1px s
         <input id="layFile" type="file" accept="application/json,.json" style="display:none">
       </div>
 
+      <div class="spage" data-p="sticks">
+        <h3>Sticks</h3>
+        <div class="gen" data-g="sticks"></div>
+      </div>
+
+      <div class="spage" data-p="dpad">
+        <h3>D-pad</h3>
+        <div class="gen" data-g="dpad"></div>
+      </div>
+
+      <div class="spage" data-p="haptics">
+        <h3>Haptics</h3>
+        <div class="gen" data-g="haptics"></div>
+      </div>
+
       <div class="spage" data-p="display">
         <h3>Display</h3>
         <div class="row"><span>Full screen<span class="hint" id="fsHint"></span></span><button class="btn2" id="fsBtn" style="flex:none"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg><span id="fsLabel">Enter fullscreen</span></button></div>
-        <div class="row" style="border-bottom:0"><span>Edge glow<span class="hint">Colour of the glow around the screen edge</span></span></div>
-        <div class="gsws" id="glowSw"><button class="gsw" data-g="0" style="--c:#E5484D" aria-label="Red" title="Red"></button><button class="gsw" data-g="1" style="--c:#3E8EF7" aria-label="Blue" title="Blue"></button><button class="gsw" data-g="2" style="--c:#F5C518" aria-label="Yellow" title="Yellow"></button><button class="gsw" data-g="3" style="--c:#30A46C" aria-label="Green" title="Green"></button><button class="gsw" data-g="4" style="--c:#F97316" aria-label="Orange" title="Orange"></button><button class="gsw" data-g="5" style="--c:#A855F7" aria-label="Purple" title="Purple"></button><button class="gsw" data-g="6" style="--c:#14B8A6" aria-label="Teal" title="Teal"></button><button class="gsw" data-g="7" style="--c:#EC4899" aria-label="Pink" title="Pink"></button><button class="gsw none" data-g="off" aria-label="No glow" title="No glow"></button></div>
+        <div class="gen" data-g="display"></div>
+      </div>
+
+      <div class="spage" data-p="connection">
+        <h3>Connection</h3>
+        <div class="card">
+          <div class="devrow">
+            <div class="devicon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 8h10c3 0 4.5 3 4.5 6.5 0 2.4-1.5 3.2-2.6 2.4-1-.8-1.6-2-3.2-2H8.3c-1.6 0-2.2 1.2-3.2 2-1.1.8-2.6 0-2.6-2.4C2.5 11 4 8 7 8z"/><path d="M7 10.5v3M5.5 12h3"/></svg></div>
+            <div class="devtext" id="devText">
+              <div class="devname" id="devName"></div>
+              <input id="nameInput" type="text" maxlength="24" autocomplete="off">
+              <div class="devsub" id="devSub"></div>
+            </div>
+            <button class="iconbtn" id="editName" aria-label="Rename"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="20" height="20"><path d="M4 20h4L19 9l-4-4L4 16v4zM13.5 6.5l4 4"/></svg></button>
+          </div>
+          <div class="statusrow"><span class="sd wait" id="hDot"></span><div class="stext"><b id="connTitle"></b><span id="connHint"></span></div><button class="sbtn bad" id="disconnBtn">Disconnect</button><button class="sbtn" id="reconnBtn" style="display:none">Reconnect</button></div>
+        </div>
+        <div class="gen" data-g="connection"></div>
+      </div>
+
+      <div class="spage" data-p="about">
+        <h3>About</h3>
+        <div class="card"><div class="devname">AirDeck</div><div class="devsub">Turn your phone into a game controller for your PC.</div></div>
+        <div class="row"><span>AirDeck for PC<span class="hint">The server that turns your phone into a controller</span></span><a class="lnk" href="https://github.com/horse-3903/AirDeck-PC" target="_blank" rel="noopener">GitHub</a></div>
+        <div class="row"><span>AirDeck for Android<span class="hint">The app with the full layout editor</span></span><a class="lnk" href="https://github.com/horse-3903/AirDeck-Mobile" target="_blank" rel="noopener">GitHub</a></div>
+        <div class="row"><span>Showcase<span class="hint">Screenshots and a live demo</span></span><a class="lnk" href="https://horse-3903.github.io/showcase/airdeck/" target="_blank" rel="noopener">Open</a></div>
       </div>
 
     </div>
   </div>
 </div></div>
 
+<div id="dim"></div>
 <div id="layMenu"></div>
 <div id="dlgWrap"><div id="dlgBox" role="dialog" aria-modal="true">
   <div class="ctitle" id="dlgTitle"></div>
@@ -750,7 +785,7 @@ body.edflip #edpanel { right: auto; left: 0; border-left: 0; border-right: 1px s
     var gp = demoGlow();
     if (gp !== null) c = on && gp >= 0 ? SLOT_COLORS[gp] : "";
     if (c) document.documentElement.style.setProperty("--slotc", c);
-    document.documentElement.classList.toggle("glow", !!c);
+    document.documentElement.classList.toggle("glow", !!c && settings.glow === "on");
   }
   // Demo only: pick the glow colour, or none. Without a choice it follows the player colour.
   function demoGlow() { var v = store.get("vgp-glow", ""); return v === "off" ? -1 : /^[0-7]$/.test(v) ? +v : null; }
@@ -783,7 +818,7 @@ body.edflip #edpanel { right: auto; left: 0; border-left: 0; border-right: 1px s
         return;
       }
       if (m.t === "rumble") { setRumble(m.l | 0, m.s | 0); return; }
-      if (m.t === "slot") { slot = m.n | 0; renderSlot(); setStatus("ok", "P" + slot, "Connected as controller " + slot); }
+      if (m.t === "slot") { lostAt = 0; everOk = true; slot = m.n | 0; renderSlot(); buzz(80, "conn"); setStatus("ok", "P" + slot, "Connected as controller " + slot); }
       else if (m.t === "refused") {
         wantConnection = true; refusedUntil = Date.now() + 5000;
         setStatus("bad", m.why || "Refused by the PC"); toast(m.why || "Refused by the PC");
@@ -792,20 +827,27 @@ body.edflip #edpanel { right: auto; left: 0; border-left: 0; border-right: 1px s
     ws.onclose = function () {
       if (mine !== ws) return;
       setRumble(0, 0);
+      if (slot) buzz(160, "conn");
       slot = 0; renderSlot(); releaseAll(false);
       if (wantConnection) { if (Date.now() >= refusedUntil) setStatus("wait", "Reconnecting"); scheduleRetry(); }
       else setStatus("bad", "Disconnected");
     };
     ws.onerror = function () {};
   }
-  function scheduleRetry() { clearTimeout(retryTimer); retryTimer = setTimeout(connect, 1200); }
+  var lostAt = 0, everOk = false;
+  function scheduleRetry() {
+    clearTimeout(retryTimer);
+    if (!lostAt) lostAt = Date.now();
+    if (everOk && (settings.reconnect !== "on" || Date.now() - lostAt > settings.reconnectS * 1000)) { wantConnection = false; setStatus("bad", "Disconnected"); return; }
+    retryTimer = setTimeout(connect, 1200);
+  }
   function disconnect() {
     wantConnection = false; clearTimeout(retryTimer); releaseAll(true);
     if (ws) { try { ws.close(); } catch (e) {} }
     setStatus("bad", "Disconnected");
   }
   function reconnect() {
-    wantConnection = true; refusedUntil = 0;
+    wantConnection = true; refusedUntil = 0; lostAt = 0;
     if (ws) { try { ws.onclose = null; ws.close(); } catch (e) {} ws = null; }
     slot = 0; renderSlot(); connect();
   }
@@ -816,9 +858,13 @@ body.edflip #edpanel { right: auto; left: 0; border-left: 0; border-right: 1px s
   var vibLog = 0;
   function buzz(ms, who) {
     if (!canVibrate || settings.vib !== "on") return;
+    var w = who || "";
+    if (/^(btn|dpad)/.test(w) && settings.vibPress !== "on") return;
+    if ((/^trig/.test(w) || ms === 18) && settings.vibTrig !== "on") return;
+    if (w === "conn" && settings.vibConn !== "on") return;
     if (typeof navigator.vibrate === "function") {
-      var ok = navigator.vibrate(ms || 30);
-      if (vibLog < 40 && ws && ws.readyState === 1) { vibLog++; ws.send(JSON.stringify({ t: "dbg", msg: "vibrate(" + (ms || 30) + ") " + (who || "?") + " returned " + ok + ", activation " + (navigator.userActivation ? navigator.userActivation.hasBeenActive : "n/a") })); }
+      var ok = navigator.vibrate(ms || settings.vibMs);
+      if (vibLog < 40 && ws && ws.readyState === 1) { vibLog++; ws.send(JSON.stringify({ t: "dbg", msg: "vibrate(" + (ms || settings.vibMs) + ") " + (who || "?") + " returned " + ok + ", activation " + (navigator.userActivation ? navigator.userActivation.hasBeenActive : "n/a") })); }
       return;
     }
     // iOS: the switch under the finger already gave the tick
@@ -830,7 +876,7 @@ body.edflip #edpanel { right: auto; left: 0; border-left: 0; border-right: 1px s
     clearInterval(rumbleTimer); rumbleTimer = 0;
     if (typeof navigator.vibrate !== "function") return;
     var strength = Math.max(large, weak);
-    if (strength <= 0 || settings.vib !== "on") { navigator.vibrate(0); return; }
+    if (strength <= 0 || settings.rumble !== "on") { navigator.vibrate(0); return; }
     var duty = Math.min(1, Math.max(0.12, strength / 255)), on = Math.max(6, Math.round(40 * duty)), off = 40 - on, pattern = [];
     if (off < 3) pattern = [1000]; else for (var i = 0; i < 25; i++) pattern.push(on, off);
     function go() { navigator.vibrate(pattern); }
@@ -910,9 +956,9 @@ body.edflip #edpanel { right: auto; left: 0; border-left: 0; border-right: 1px s
         out[horiz ? (dx < 0 ? "left" : "right") : (dy < 0 ? "up" : "down")] = true;
         return out;
       }
-      var ux = dx / d, uy = dy / d;
-      if (uy < -0.38) out.up = true; if (uy > 0.38) out.down = true;
-      if (ux < -0.38) out.left = true; if (ux > 0.38) out.right = true;
+      var ux = dx / d, uy = dy / d, th = settings.diag / 100;
+      if (uy < -th) out.up = true; if (uy > th) out.down = true;
+      if (ux < -th) out.left = true; if (ux > th) out.right = true;
       return out;
     }
     function apply() {
@@ -933,7 +979,7 @@ body.edflip #edpanel { right: auto; left: 0; border-left: 0; border-right: 1px s
   // ---- analog triggers ----
   function bindTrigger(el, key) {
     var fill = el.querySelector(".fill"), pct = el.querySelector(".pct");
-    var id = null, y0 = 0, top = 0, h = 1, level = 0, raf = 0, tiltOn = false, base = null, sm = [0, 0, 0];
+    var zoned = false, id = null, y0 = 0, top = 0, h = 1, level = 0, raf = 0, tiltOn = false, base = null, sm = [0, 0, 0];
     function mode() { return settings[key === "lt" ? "trigL" : "trigR"]; }
     function setv(raw) {
       var v = raw < 0.05 ? 0 : (raw >= 0.9 ? 1 : raw);
@@ -947,7 +993,7 @@ body.edflip #edpanel { right: auto; left: 0; border-left: 0; border-right: 1px s
       switch (mode()) {
         case "slide": setv(0.1 + 0.9 * Math.min(1, Math.max(0, 1 - y / h))); break;
         case "drag": setv(0.2 + 0.8 * Math.min(1, Math.max(0, (y0 - P(e).y) / (h * 0.6)))); break;
-        case "zones": setv(y < h / 2 ? 1 : 0.5); break;
+        case "zones": if (!zoned) { zoned = true; setv(0.15 + 0.85 * Math.min(1, Math.max(0, 1 - y / h))); } break;
         case "force": setv(Math.min(1, Math.max(0.1, (e.pressure || 0.5) * 1.6))); break;
       }
     }
@@ -980,7 +1026,7 @@ body.edflip #edpanel { right: auto; left: 0; border-left: 0; border-right: 1px s
     el.addEventListener("pointerdown", function (e) {
       if (id !== null) return; id = e.pointerId;
       if (!swTouch(e)) { e.preventDefault(); try { el.setPointerCapture(id); } catch (x) {} }
-      var r = R(el); top = r.top; h = r.height || 1; y0 = P(e).y;
+      var r = R(el); top = r.top; h = r.height || 1; y0 = P(e).y; zoned = false;
       el.classList.add("on"); buzz(0, "trig " + key); firstTouch();
       var m = mode();
       if (m === "digital") setv(1);
@@ -995,12 +1041,8 @@ body.edflip #edpanel { right: auto; left: 0; border-left: 0; border-right: 1px s
       el.classList.remove("on"); level = 1; setv(0);
     };
     el.addEventListener("pointerup", end); el.addEventListener("pointercancel", end); el.addEventListener("lostpointercapture", end);
-    if (mode() === "zones") { var z = document.createElement("div"); z.className = "zline"; el.appendChild(z); }
-    el.updateZones = function () {
-      var has = el.querySelector(".zline");
-      if (mode() === "zones" && !has) { var q = document.createElement("div"); q.className = "zline"; el.appendChild(q); }
-      else if (mode() !== "zones" && has) el.removeChild(has);
-    };
+    el.updateZones = function () { el.classList.toggle("grad", mode() === "zones"); };
+    el.updateZones();
   }
   bindTrigger($("l2"), "lt");
   bindTrigger($("r2"), "rt");
@@ -1028,6 +1070,16 @@ body.edflip #edpanel { right: auto; left: 0; border-left: 0; border-right: 1px s
   }
 
   // ---- sticks ----
+  // Dead zone, sensitivity and inversion, the same maths as the app
+  function shaped(x, y, invert) {
+    var len = Math.hypot(x, y), nx = x, ny = y, dead = settings.dead / 100;
+    if (len < dead) { nx = 0; ny = 0; }
+    else if (len > 0) {
+      var scaled = Math.min(((len - dead) / (1 - dead)) * (settings.sens / 100), 1), p = settings.curve === "precise" ? 1.6 : settings.curve === "quick" ? 0.7 : 1;
+      var f = Math.pow(scaled, p) / len; nx = x * f; ny = y * f;
+    }
+    return [nx, invert ? -ny : ny];
+  }
   // Long press on a stick holds its click (L3 or R3) until the next long press, a quick double tap clicks once
   function bindStick(el, set, btn) {
     var knob = el.querySelector(".knob"), id = null, cx = 0, cy = 0, Rad = 1, ks = 1;
@@ -1045,7 +1097,7 @@ body.edflip #edpanel { right: auto; left: 0; border-left: 0; border-right: 1px s
       if (m > 1) { dx /= m; dy /= m; }
       // The stage is scaled to fit the screen, so a distance measured on screen is stretched back into stage units
       knob.style.transform = "translate(" + (dx * Rad / ks) + "px," + (dy * Rad / ks) + "px)";
-      set(dx, dy); dirty = true; flush();
+      var sh = shaped(dx, dy, el.id === "ls" ? settings.invL === "on" : settings.invR === "on"); set(sh[0], sh[1]); dirty = true; flush();
     }
     el.addEventListener("pointerdown", function (e) {
       if (id !== null) return; e.preventDefault();
@@ -1060,7 +1112,7 @@ body.edflip #edpanel { right: auto; left: 0; border-left: 0; border-right: 1px s
         el.style.translate = ((q0.x - cx) / kk) + "px " + ((q0.y - cy) / kk) + "px"; cx = q0.x; cy = q0.y;
       }
       sx = q0.x; sy = q0.y; moved = false; downT = Date.now(); clearTimeout(hold);
-      hold = setTimeout(function () { if (id !== null && !moved) toggleClick(); }, 450);
+      if (settings.click === "on") hold = setTimeout(function () { if (id !== null && !moved) toggleClick(); }, settings.clickMs);
       el.classList.add("active"); move(e); firstTouch();
     });
     var onMove = function (e) { if (e.pointerId === id) { e.preventDefault(); move(e); } };
@@ -1070,7 +1122,7 @@ body.edflip #edpanel { right: auto; left: 0; border-left: 0; border-right: 1px s
       if (e.pointerId !== id) return; id = null; el.classList.remove("active"); clearTimeout(hold);
       knob.style.transform = ""; el.style.translate = ""; set(0, 0); dirty = true;
       if (!moved && Date.now() - downT < 250) {
-        if (Date.now() - lastTap < 350) { lastTap = 0; quickClick(); } else lastTap = Date.now();
+        if (settings.click === "on" && Date.now() - lastTap < 350) { lastTap = 0; quickClick(); } else lastTap = Date.now();
       }
     };
     el.addEventListener("pointerup", end); el.addEventListener("pointercancel", end); el.addEventListener("lostpointercapture", end);
@@ -1081,7 +1133,7 @@ body.edflip #edpanel { right: auto; left: 0; border-left: 0; border-right: 1px s
   // ---- platform behaviour ----
   var wake = null;
   function takeWakeLock() {
-    if (!("wakeLock" in navigator) || wake) return;
+    if (settings.awake !== "on" || !("wakeLock" in navigator) || wake) return;
     navigator.wakeLock.request("screen").then(function (l) { wake = l; l.addEventListener("release", function () { wake = null; }); }).catch(function () {});
   }
   // A silent looping track makes Chrome treat the page as playing media: it stays alive with the screen off or in
@@ -1162,34 +1214,24 @@ body.edflip #edpanel { right: auto; left: 0; border-left: 0; border-right: 1px s
     var root = document.documentElement;
     if (settings.theme === "light" || settings.theme === "dark") root.setAttribute("data-theme", settings.theme); else root.removeAttribute("data-theme");
     $("themeSel").value = settings.theme;
-    $("dpadSel").value = settings.dpad;
   }
   function applySettings() {
     applyTheme();
     document.body.classList.toggle("xbox", settings.style === "xbox");
     document.body.classList.toggle("nintendo", settings.style === "ns");
     document.querySelectorAll("#styleSeg .stylecard").forEach(function (d) { d.classList.toggle("picked", d.dataset.v === settings.style); });
-    $("vibSw").classList.toggle("on", settings.vib === "on");
     document.body.classList.toggle("novib", settings.vib !== "on");
-    $("snapSw").classList.toggle("on", settings.snap === "on");
-    $("vibHint").textContent = !canVibrate ? "Not available on this browser." : (swHaptics ? "Tick on the buttons. iPhone: the first finger only." : "Vibrate when pressing controls.");
     $("fsHint").textContent = isIOS ? "iPhone: Share, then Add to Home Screen" : "Hide or show browser interface";
     $("fsLabel").textContent = document.fullscreenElement ? "Exit fullscreen" : "Enter fullscreen";
-    [["trigL", "tlHint"], ["trigR", "trHint"]].forEach(function (p) {
-      var sel = $(p[0]);
-      if (!sel.options.length) TRIG_MODES.filter(function (m) { return OFFERED.indexOf(m[0]) >= 0; }).forEach(function (m) { var o = document.createElement("option"); o.value = m[0]; o.textContent = m[1]; sel.appendChild(o); });
-      sel.value = settings[p[0]];
-      var cur = TRIG_MODES.filter(function (m) { return m[0] === settings[p[0]]; })[0];
-      $(p[1]).textContent = cur ? cur[2] : "";
-    });
     $("l2").updateZones(); $("r2").updateZones();
+    syncRows(); applyEffects();
     $("nameInput").value = settings.name;
     $("devName").textContent = settings.name;
     var osName = (devInfo.os || "").split(" ")[0], browserName = (devInfo.browser || "").split(" ")[0];
     $("devSub").textContent = [osName, browserName].filter(Boolean).join("  \u00B7  ") || "Web browser";
   }
   // ---- settings pages ----
-  var sheetPage = "device";
+  var sheetPage = "appearance";
   function showPage(p) {
     sheetPage = p;
     document.querySelectorAll("#snav button").forEach(function (b) { b.classList.toggle("cur", b.dataset.p === p); });
@@ -1197,7 +1239,118 @@ body.edflip #edpanel { right: auto; left: 0; border-left: 0; border-right: 1px s
     $("spanes").scrollTop = 0; $("layMenu").classList.remove("open"); if (p === "layouts") renderLibrary();
   }
   document.querySelectorAll("#snav button").forEach(function (b) { b.addEventListener("click", function () { showPage(b.dataset.p); }); });
-  function openMenu() { releaseAll(true); showPage("device"); $("devText").classList.remove("editing"); applySettings(); $("sheetWrap").classList.add("open"); }
+  // ---- settings pages: rows come from a table so the wording stays the same as the app's ----
+  var SETTING_DEFAULTS = { opacity: 100, glow: "on", glowStrength: 100, snap: "on", dead: 5, sens: 100, click: "on", clickMs: 450, invL: "off", invR: "off",
+    diag: 38, rumble: "on", vib: "on", vibMs: 30, vibPress: "on", vibTrig: "on", reconnect: "on", reconnectS: 120, confirm: "on", awake: "on",
+    curve: "linear", ring: "on", size: 100, vibConn: "on", dim: 0 };
+  var CHOICES = { curve: ["linear", "precise", "quick"] };
+  function loadSettings() {
+    Object.keys(SETTING_DEFAULTS).forEach(function (k) {
+      var d = SETTING_DEFAULTS[k], v = store.get("vgp-" + k, null);
+      settings[k] = typeof d === "number" ? (v === null || isNaN(parseFloat(v)) ? d : parseFloat(v)) : (v === "on" || v === "off" || (CHOICES[k] && CHOICES[k].indexOf(v) >= 0) ? v : d);
+    });
+  }
+  loadSettings();
+  var SPECS = {
+    appearance: [
+      { k: "opacity", t: "Control opacity", min: 20, max: 100, step: 1, u: "%" },
+      { k: "glow", t: "Edge glow", h: "Player-coloured screen edges", sw: 1 },
+      { k: "glowStrength", t: "Glow strength", min: 10, max: 200, step: 5, u: "%", sub: 1, off: function () { return settings.glow !== "on"; } },
+      { k: "ring", t: "Stick ring", h: "Show the ring a stick moves inside.", sw: 1 },
+      { k: "size", t: "Control size", h: "Scales every control. Set individual sizes in the layout editor.", min: 70, max: 130, step: 5, u: "%" }
+    ],
+    sticks: [
+      { k: "snap", t: "Snap stick to touch", h: "Touching anywhere inside a stick's circle moves it there. Turn off to drag from the stick cap only.", sw: 1 },
+      { k: "dead", t: "Dead zone", h: "Ignore small movements near the centre of a stick.", min: 0, max: 40, step: 1, u: "%" },
+      { k: "sens", t: "Sensitivity", h: "Above 100% reaches full tilt before the edge of the stick.", min: 50, max: 150, step: 1, u: "%" },
+      { k: "curve", t: "Response curve", h: "How far a push turns into movement. Precise is finer near the centre, Quick reaches full speed sooner.", opts: [["linear", "Linear"], ["precise", "Precise"], ["quick", "Quick"]] },
+      { k: "click", t: "Hold to click a stick", h: "Holding a stick still presses it like L3 or R3.", sw: 1 },
+      { k: "clickMs", t: "Hold time", min: 200, max: 1500, step: 50, u: " ms", sub: 1, off: function () { return settings.click !== "on"; } },
+      { k: "invL", t: "Invert left stick vertical", sw: 1 },
+      { k: "invR", t: "Invert right stick vertical", sw: 1 }
+    ],
+    dpad: [
+      { k: "dpadSingle", t: "One direction at a time", h: "Hold a single direction with no diagonals. Off lets you hold several at once, including diagonals and with two fingers.", sw: 1,
+        get: function () { return settings.dpad === "single" ? "on" : "off"; },
+        put: function (v) { settings.dpad = v === "on" ? "single" : "multi"; store.set("vgp-dpad", settings.dpad); } },
+      { k: "diag", t: "Diagonal zone", h: "How far towards a corner a thumb must go to hold two directions. Lower makes diagonals easier.", min: 20, max: 60, step: 1, u: "%", off: function () { return settings.dpad === "single"; } }
+    ],
+    haptics: [
+      { k: "rumble", t: "Game vibration", h: "Vibrate when the game rumbles this controller.", sw: 1 },
+      { k: "vib", t: "Haptic feedback", h: "Vibrate when a control is pressed.", sw: 1 },
+      { k: "vibMs", t: "Length", min: 5, max: 80, step: 5, u: " ms", sub: 1, off: function () { return settings.vib !== "on"; } },
+      { k: "vibPress", t: "Button presses", sw: 1, sub: 1, off: function () { return settings.vib !== "on"; } },
+      { k: "vibTrig", t: "Analog triggers", sw: 1, sub: 1, off: function () { return settings.vib !== "on"; } },
+      { k: "vibConn", t: "Connection feedback", h: "Vibrate when the controller connects or disconnects.", sw: 1, sub: 1, off: function () { return settings.vib !== "on"; } },
+      { t: "Try it", btn: "Try it", sub: 1, fn: function () { buzz(0, "test"); }, off: function () { return settings.vib !== "on"; } }
+    ],
+    display: [
+      { k: "awake", t: "Keep screen awake", h: "Prevent automatic screen lock", sw: 1, after: function () { wakeToggle(); } },
+      { k: "dim", t: "Dim when idle", h: "Lower the brightness after a pause to save battery. Touch to wake.", min: 0, max: 300, step: 15, u: " s", zero: "Off" }
+    ],
+    connection: [
+      { k: "reconnect", t: "Reconnect automatically", h: "Keeps trying when the connection drops.", sw: 1 },
+      { k: "reconnectS", t: "Keep trying for", min: 10, max: 600, step: 10, u: " s", sub: 1, off: function () { return settings.reconnect !== "on"; } },
+      { k: "confirm", t: "Confirm before disconnecting", h: "Ask first when you tap the connection badge.", sw: 1 }
+    ]
+  };
+  var rowEls = [];
+  function buildRow(spec) {
+    var r = document.createElement("div"); r.className = "row" + (spec.sub ? " sub" : "");
+    var left = document.createElement("span"); left.textContent = spec.t;
+    if (spec.h) { var h = document.createElement("span"); h.className = "hint"; h.textContent = spec.h; left.appendChild(h); }
+    r.appendChild(left);
+    var get = spec.get || function () { return settings[spec.k]; };
+    var put = spec.put || function (v) { settings[spec.k] = v; store.set("vgp-" + spec.k, String(v)); };
+    var sync = function () {};
+    if (spec.sw) {
+      var sw = document.createElement("div"); sw.className = "switch"; sw.setAttribute("role", "switch"); sw.innerHTML = "<i></i>"; r.appendChild(sw);
+      sw.addEventListener("click", function () { put(get() === "on" ? "off" : "on"); applySettings(); if (spec.after) spec.after(); });
+      sync = function () { sw.classList.toggle("on", get() === "on"); };
+    } else if (spec.btn) {
+      var b = document.createElement("button"); b.className = "btn2"; b.style.flex = "none"; b.textContent = spec.btn; b.addEventListener("click", spec.fn); r.appendChild(b);
+    } else if (spec.opts) {
+      var sel = document.createElement("select"); sel.className = "sel";
+      spec.opts.forEach(function (o) { var op = document.createElement("option"); op.value = o[0]; op.textContent = o[1]; sel.appendChild(op); });
+      sel.addEventListener("change", function () { put(sel.value); applyEffects(); syncRows(); }); r.appendChild(sel);
+      sync = function () { sel.value = get(); };
+    } else {
+      var wrap = document.createElement("div"), inp = document.createElement("input"), out = document.createElement("b");
+      wrap.className = "sl"; inp.type = "range"; inp.min = spec.min; inp.max = spec.max; inp.step = spec.step; wrap.appendChild(inp); wrap.appendChild(out); r.appendChild(wrap);
+      var label = function (v) { return spec.zero && +v === 0 ? spec.zero : v + (spec.u || ""); };
+      inp.addEventListener("input", function () { put(+inp.value); out.textContent = label(inp.value); applyEffects(); syncRows(); });
+      sync = function () { inp.value = get(); out.textContent = label(get()); };
+    }
+    rowEls.push({ el: r, sync: sync, off: spec.off });
+    return r;
+  }
+  Object.keys(SPECS).forEach(function (page) {
+    var box = document.querySelector('.gen[data-g="' + page + '"]');
+    if (box) SPECS[page].forEach(function (s) { box.appendChild(buildRow(s)); });
+  });
+  function syncRows() { rowEls.forEach(function (x) { x.sync(); x.el.classList.toggle("off", !!(x.off && x.off())); }); }
+  function applyEffects() {
+    $("app").style.opacity = settings.opacity / 100;
+    document.documentElement.style.setProperty("--gl-k", settings.glowStrength / 100);
+    document.body.classList.toggle("noring", settings.ring !== "on");
+    renderSlot(); paint(); wakeDim();
+  }
+  // Dim the screen after a pause. Any touch brings it back.
+  var dimT = 0;
+  function wakeDim() {
+    clearTimeout(dimT); $("dim").style.opacity = 0;
+    if (settings.dim > 0) dimT = setTimeout(function () { if (!$("sheetWrap").classList.contains("open") && !document.body.classList.contains("editing")) $("dim").style.opacity = 0.88; else wakeDim(); }, settings.dim * 1000);
+  }
+  document.addEventListener("pointerdown", wakeDim, true);
+  function wakeToggle() { if (settings.awake === "on") takeWakeLock(); else if (wake) { try { wake.release(); } catch (e) {} wake = null; } }
+  $("resetAll").addEventListener("click", function () {
+    dialog({ title: "Restore defaults?", text: "Settings go back to their defaults. Saved layouts and the device name are kept.", yes: "Restore", danger: true,
+      onYes: function () {
+        ["style", "theme", "dpad"].concat(Object.keys(SETTING_DEFAULTS)).forEach(function (k) { try { localStorage.removeItem("vgp-" + k); } catch (e) {} });
+        settings.style = "ps"; settings.theme = "system"; settings.dpad = "multi"; loadSettings(); applySettings(); wakeToggle(); toast("Defaults restored");
+      } });
+  });
+  function openMenu() { releaseAll(true); showPage("appearance"); $("devText").classList.remove("editing"); applySettings(); $("sheetWrap").classList.add("open"); }
   function closeMenu() {
     var n = $("nameInput").value.trim().slice(0, 24) || defaultName();
     if (n !== settings.name) { settings.name = n; store.set("vgp-name", n); dirty = true; }
@@ -1207,7 +1360,7 @@ body.edflip #edpanel { right: auto; left: 0; border-left: 0; border-right: 1px s
   $("badge").addEventListener("pointerdown", function (e) {
     e.preventDefault(); firstTouch(); $("badge").classList.add("press");
     if (!wantConnection) reconnect();
-    else if (connKind === "ok") { releaseAll(true); $("confirmWrap").classList.add("open"); }
+    else if (connKind === "ok") { releaseAll(true); if (settings.confirm === "on") $("confirmWrap").classList.add("open"); else { disconnect(); toast("Disconnected. Tap the status to reconnect."); } }
     else { disconnect(); toast("Disconnected. Tap the status to reconnect."); }
   });
   $("confirmNo").addEventListener("click", function () { $("confirmWrap").classList.remove("open"); });
@@ -1220,10 +1373,7 @@ body.edflip #edpanel { right: auto; left: 0; border-left: 0; border-right: 1px s
   document.querySelectorAll("#styleSeg .stylecard").forEach(function (d) {
     d.addEventListener("click", function () { settings.style = d.dataset.v; store.set("vgp-style", settings.style); applySettings(); });
   });
-  $("dpadSel").addEventListener("change", function () { settings.dpad = this.value; store.set("vgp-dpad", settings.dpad); });
   $("themeSel").addEventListener("change", function () { settings.theme = this.value; store.set("vgp-theme", settings.theme); applyTheme(); });
-  $("vibSw").addEventListener("click", function () { settings.vib = settings.vib === "on" ? "off" : "on"; store.set("vgp-vib", settings.vib); applySettings(); if (settings.vib === "on") buzz(); });
-  $("snapSw").addEventListener("click", function () { settings.snap = settings.snap === "on" ? "off" : "on"; store.set("vgp-snap", settings.snap); applySettings(); });
   $("editName").addEventListener("click", function () {
     var t = $("devText"), on = !t.classList.contains("editing");
     t.classList.toggle("editing", on);
@@ -1235,9 +1385,6 @@ body.edflip #edpanel { right: auto; left: 0; border-left: 0; border-right: 1px s
     applySettings();
   }
   $("nameInput").addEventListener("keydown", function (e) { if (e.key === "Enter") { $("devText").classList.remove("editing"); closeMenuName(); } });
-  ["trigL", "trigR"].forEach(function (k) {
-    $(k).addEventListener("change", function () { settings[k] = this.value; store.set("vgp-" + k, this.value); applySettings(); });
-  });
   // ---- layout: the same model as the Android app ----
   // Each control has an anchor, an offset (a multiple of BASE, like the app's baseDp), a size factor, a width and
   // height stretch, and a few options. The stage is 222.2 by 100 units (--u is 9px), BASE is 88.7 of them and the
@@ -1363,7 +1510,8 @@ body.edflip #edpanel { right: auto; left: 0; border-left: 0; border-right: 1px s
     else if (id === "BACK_BUTTON") { h = BASE / 8 * s; w = h * 1.14; }
     else if (id === "CONNECTION_BADGE") { h = BASE / 8 * s; w = h * 18 / 7; }
     else { h = BASE / 8 * s; w = h * 8 / 7; }
-    return { w: w * c.widthScale, h: h * c.heightScale };
+    var k = m ? 1 : settings.size / 100;
+    return { w: w * c.widthScale * k, h: h * c.heightScale * k };
   }
   function place(id, m) {
     var c = (m || cfg)[id], n = natural(id, m), a = ANCHORS.indexOf(c.anchor), col = a % 3, row = Math.floor(a / 3);
@@ -1801,7 +1949,6 @@ body.edflip #edpanel { right: auto; left: 0; border-left: 0; border-right: 1px s
       ] }));
   }
   function refreshLayouts() { var cur = document.querySelector(".spage.cur"); if ($("sheetWrap").classList.contains("open") && cur && cur.dataset.p === "layouts") renderLibrary(); }
-  ["trigL", "trigR"].forEach(function (k) { $(k).addEventListener("change", function () { syncTriggers(false); persist(); paint(); }); });
   syncTriggers(!!loadJson("vgp-cfg"));
   paint();
   $("fsBtn").addEventListener("click", function () { if (document.fullscreenElement) document.exitFullscreen(); else enterFullscreen(false); setTimeout(applySettings, 300); });
