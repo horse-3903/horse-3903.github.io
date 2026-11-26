@@ -23,6 +23,9 @@ button.r.on { background: #f1f1f1; color: #000; }
   align-items: center; justify-content: center; font-weight: 600; user-select: none; -webkit-user-select: none; touch-action: none; overflow: hidden; }
 .pad input { position: absolute; inset: 0; width: 100%; height: 100%; margin: 0; opacity: .02; }
 .pad input[type=range] { -webkit-appearance: none; appearance: none; background: transparent; }
+/* the library method: a transparent label over the control, with a hidden switch that is never under the finger */
+.pad.lib label { position: absolute; inset: 0; touch-action: none; }
+.pad.lib input { position: absolute; inset: auto; width: 1px; height: 1px; margin: 0; opacity: 1; visibility: hidden; }
 .vwrap { display: flex; gap: 16px; align-items: center; }
 .vslider { writing-mode: vertical-lr; direction: rtl; height: 140px; }
 select, input[type=date], input[type=time], input[type=color] { font-size: 16px; padding: 8px; border-radius: 8px; background: #1d1d24; color: #f1f1f1; border: 1px solid #3a3a44; }
@@ -127,6 +130,46 @@ select, input[type=date], input[type=time], input[type=color] { font-size: 16px;
   <div class="row"><button class="r" data-v="yes">Slid fine, buzzed</button><button class="r" data-v="no">Broke or no buzz</button></div>
 </div>
 
+<div class="card" data-test="lib-tap">
+  <h2>12. Label over a button, tap (the ios-haptics way)</h2>
+  <p>A transparent label sits over the box and forwards the tap to a hidden switch. Tap it.</p>
+  <div class="pad lib" data-track>LIB TAP<label><input type="checkbox" switch></label></div>
+  <div class="log"></div>
+  <div class="row"><button class="r" data-v="yes">Buzzed</button><button class="r" data-v="no">Nothing</button></div>
+</div>
+
+<div class="card" data-test="lib-slide">
+  <h2>13. Label, press and slide</h2>
+  <p>Put a finger down, slide around, lift. Check whether the log shows moves, and whether it buzzed.</p>
+  <div class="pad lib" data-track>LIB SLIDE<label><input type="checkbox" switch></label></div>
+  <div class="log"></div>
+  <div class="row"><button class="r" data-v="yes">Buzzed</button><button class="r" data-v="no">Nothing</button></div>
+</div>
+
+<div class="card" data-test="lib-two">
+  <h2>14. Label, two fingers</h2>
+  <p>Hold the left box, then tap the right box with another finger.</p>
+  <div class="row" style="margin-top:0">
+    <div class="pad lib" data-track style="flex:1">LEFT2<label><input type="checkbox" switch></label></div>
+    <div class="pad lib" data-track style="flex:1">RIGHT2<label><input type="checkbox" switch></label></div>
+  </div>
+  <div class="log"></div>
+  <div class="row"><button class="r" data-v="yes">Both worked</button><button class="r" data-v="no">One stopped</button></div>
+</div>
+
+<div class="card" data-test="lib-dpad">
+  <h2>15. D-pad made of labels</h2>
+  <p>Slide a finger around the cross without lifting, then lift. Then tap an arm.</p>
+  <div id="dp2" style="position:relative;width:180px;height:180px;margin:0 auto;touch-action:none">
+    <div class="pad lib" style="position:absolute;left:60px;top:0;width:60px;height:60px">UP<label><input type="checkbox" switch></label></div>
+    <div class="pad lib" style="position:absolute;left:60px;top:120px;width:60px;height:60px">DOWN<label><input type="checkbox" switch></label></div>
+    <div class="pad lib" style="position:absolute;left:0;top:60px;width:60px;height:60px">LEFT<label><input type="checkbox" switch></label></div>
+    <div class="pad lib" style="position:absolute;left:120px;top:60px;width:60px;height:60px">RIGHT<label><input type="checkbox" switch></label></div>
+  </div>
+  <div class="log" id="dp2Log"></div>
+  <div class="row"><button class="r" data-v="yes">Slid fine, buzzed on tap</button><button class="r" data-v="no">Broke or no buzz</button></div>
+</div>
+
 <div class="card">
   <h2>Results</h2>
   <textarea id="out" readonly></textarea>
@@ -194,8 +237,8 @@ select, input[type=date], input[type=time], input[type=color] { font-size: 16px;
   });
 
   // the d-pad: read the finger by position, like the real controller does
-  (function () {
-    var dp = document.getElementById("dp"), log = document.getElementById("dpLog");
+  function makeDpad(dpId, logId) {
+    var dp = document.getElementById(dpId), log = document.getElementById(logId);
     var s = { down: 0, move: 0, up: 0, cancel: 0, changes: 0, last: "-", ts: 0, tm: 0, te: 0, tc: 0, tchanges: 0, tlast: "-" };
     function dirOf(e) {
       var r = dp.getBoundingClientRect(), dx = e.clientX - (r.left + r.width / 2), dy = e.clientY - (r.top + r.height / 2);
@@ -228,7 +271,9 @@ select, input[type=date], input[type=time], input[type=color] { font-size: 16px;
         show();
       });
     });
-  })();
+  }
+  makeDpad("dp", "dpLog");
+  makeDpad("dp2", "dp2Log");
 
   // slider values
   var rs = document.getElementById("rs"), rsLog = document.getElementById("rsLog");
