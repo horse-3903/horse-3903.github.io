@@ -226,7 +226,7 @@ body.nintendo .ico.ns { display: inline-block; }
 
 /* layout editing, the same model as the app: anchors, groups, snapping, undo */
 [data-ed].edhide { visibility: hidden; pointer-events: none; }
-body.editing [data-ed].edhide { visibility: visible; opacity: .3; pointer-events: auto; }
+body.editing [data-ed].edhide { visibility: visible; opacity: .12; pointer-events: auto; }
 body.editing [data-ed] { outline: 1px dashed var(--muted); outline-offset: calc(.5 * var(--u)); }
 body.editing [data-ed].edsel { outline: 2px solid var(--fg); }
 body.editing .hsw { display: none; }
@@ -235,9 +235,12 @@ body.editing #edfx { display: block; }
 .edgrp { position: absolute; border: 1px dashed var(--muted); border-radius: calc(3 * var(--u)); pointer-events: none; opacity: .7; }
 .edgrp.sel { border: 2px solid var(--fg); opacity: 1; }
 .edguide { position: absolute; background: var(--fg); opacity: .8; pointer-events: none; }
-.zone { position: absolute; left: -45%; top: -45%; width: 190%; height: 190%; border-radius: 50%; display: none; }
-.stick.float .zone { display: block; }
-.stick.float::after { content: ""; position: absolute; left: -45%; top: -45%; width: 190%; height: 190%; border-radius: 50%; border: 1px dashed var(--border); opacity: .35; pointer-events: none; }
+.zone { position: absolute; left: calc((1 - var(--aw, 1)) * 50%); top: calc((1 - var(--ah, 1)) * 50%); width: calc(var(--aw, 1) * 100%); height: calc(var(--ah, 1) * 100%); border-radius: calc(var(--ar, 1) * 50%); display: none; }
+.stick.zoned .zone { display: block; }
+.stick.float::after, body.editing .stick::after { content: ""; position: absolute; left: calc((1 - var(--aw, 1)) * 50%); top: calc((1 - var(--ah, 1)) * 50%); width: calc(var(--aw, 1) * 100%); height: calc(var(--ah, 1) * 100%); border-radius: calc(var(--ar, 1) * 50%); border: 1px dashed var(--border); opacity: .35; pointer-events: none; }
+body.editing .stick.edsel::after { opacity: .8; border-color: var(--fg); }
+.tl { scale: var(--ix, 1) var(--iy, 1); }
+.curve { width: 150px; height: 150px; border-radius: 10px; background: var(--panel-on); touch-action: none; flex: none; }
 #edpanel { position: fixed; top: 0; bottom: 0; right: 0; width: min(330px, 44vw); background: var(--sheet); border-left: 1px solid var(--border); z-index: 25;
     display: none; flex-direction: column; font-size: 14px; }
 body.editing #edpanel { display: flex; }
@@ -555,6 +558,11 @@ input[type=range]:disabled { opacity: .4; }
       <div class="edrow"><span>Size</span><input type="range" id="edSize" min="50" max="200" step="1"><b id="edSizeV">100%</b></div>
       <div class="edrow"><span>Width</span><input type="range" id="edW" min="50" max="200" step="1"><b id="edWV">100%</b></div>
       <div class="edrow"><span>Height</span><input type="range" id="edH" min="50" max="200" step="1"><b id="edHV">100%</b></div>
+      <div id="edArea" style="display:none">
+        <div class="edrow"><span>Touch width</span><input type="range" id="edAW" min="100" max="600" step="5"><b id="edAWV">Auto</b></div>
+        <div class="edrow"><span>Touch height</span><input type="range" id="edAH" min="100" max="600" step="5"><b id="edAHV">Auto</b></div>
+        <div class="edrow"><span>Corners</span><input type="range" id="edAR" min="0" max="100" step="1"><b id="edARV">100%</b></div>
+      </div>
       <div class="edrow"><span>Anchor</span><div class="anc" id="edAnc"></div></div>
       <div class="edrow"><span>Group</span><select id="edGroup" class="sel"></select></div>
       <button class="mini wide" id="edResetCtl">Reset this control</button>
@@ -942,8 +950,8 @@ input[type=range]:disabled { opacity: .4; }
     pendDown = 0; pendUp = both;
     u &= ~both;
     var msg = { t: "state", d: d, u: u,
-      lx: +clampN(ax.lx + (settings.tilt === "left" ? tilt.steer : 0), -1, 1).toFixed(3), ly: +ax.ly.toFixed(3),
-      rx: +clampN(ax.rx + (settings.tilt === "right" ? tilt.steer : 0), -1, 1).toFixed(3), ry: +ax.ry.toFixed(3), lt: ax.lt, rt: ax.rt };
+      lx: +clampN(ax.lx + (settings.tilt === "left" ? tiltOut() : 0), -1, 1).toFixed(3), ly: +ax.ly.toFixed(3),
+      rx: +clampN(ax.rx + (settings.tilt === "right" ? tiltOut() : 0), -1, 1).toFixed(3), ry: +ax.ry.toFixed(3), lt: ax.lt, rt: ax.rt };
     try { ws.send(JSON.stringify(msg)); } catch (e) { return; }
     lastSend = now; dirty = (pendUp !== 0);
     if (settings.name !== sentName) {
@@ -1105,12 +1113,21 @@ input[type=range]:disabled { opacity: .4; }
 
   // ---- sticks ----
   // Dead zone, sensitivity and inversion, the same maths as the app
+  function curveAt(kind, pts, v) {
+    if (kind === "precise") return Math.pow(v, 1.6);
+    if (kind === "quick") return Math.pow(v, 0.7);
+    if (kind === "custom") {
+      var p = String(pts).split(",").map(Number), ys = [0, (p[0] || 0) / 100, (p[1] || 0) / 100, (p[2] || 0) / 100, 1], x = Math.min(1, Math.max(0, v)) * 4, i = Math.min(3, Math.floor(x));
+      return ys[i] + (ys[i + 1] - ys[i]) * (x - i);
+    }
+    return v;
+  }
   function shaped(x, y, invert) {
     var len = Math.hypot(x, y), nx = x, ny = y, dead = settings.dead / 100;
     if (len < dead) { nx = 0; ny = 0; }
     else if (len > 0) {
-      var scaled = Math.min(((len - dead) / (1 - dead)) * (settings.sens / 100), 1), p = settings.curve === "precise" ? 1.6 : settings.curve === "quick" ? 0.7 : 1;
-      var f = Math.pow(scaled, p) / len; nx = x * f; ny = y * f;
+      var scaled = Math.min(((len - dead) / (1 - dead)) * (settings.sens / 100), 1), cv = curveAt(settings.curve, settings.curveP, scaled);
+      var f = cv / len; nx = x * f; ny = y * f;
     }
     return [nx, invert ? -ny : ny];
   }
@@ -1278,16 +1295,16 @@ input[type=range]:disabled { opacity: .4; }
   // ---- settings pages: rows come from a table so the wording stays the same as the app's ----
   var SETTING_DEFAULTS = { opacity: 100, glow: "on", glowStrength: 100, snap: "on", dead: 5, sens: 100, click: "on", clickMs: 450, invL: "off", invR: "off",
     diag: 38, rumble: "on", vib: "on", vibMs: 30, vibPress: "on", vibTrig: "on", reconnect: "on", reconnectS: 120, confirm: "on", awake: "on",
-    curve: "linear", ring: "on", size: 100, vibConn: "on", dim: 0, tilt: "off", tiltRange: 30, tiltDead: 3, tiltInvert: "off", trigL: "digital", trigR: "digital", stickL: "fixed", stickR: "fixed" };
-  var CHOICES = { curve: ["linear", "precise", "quick"], tilt: ["off", "left", "right"], trigL: ["digital", "drag", "zones"], trigR: ["digital", "drag", "zones"], stickL: ["fixed", "floating"], stickR: ["fixed", "floating"] };
+    curve: "linear", ring: "on", size: 100, vibConn: "on", dim: 0, tilt: "off", tiltRange: 30, tiltDead: 3, tiltInvert: "off", trigL: "digital", trigR: "digital", stickL: "fixed", stickR: "fixed", tcurve: "linear", curveP: "25,50,75", tcurveP: "25,50,75" };
+  var CHOICES = { curve: ["linear", "precise", "quick", "custom"], tcurve: ["linear", "precise", "quick", "custom"], tilt: ["off", "left", "right"], trigL: ["digital", "drag", "zones"], trigR: ["digital", "drag", "zones"], stickL: ["fixed", "floating"], stickR: ["fixed", "floating"] };
   // The settings a layout can override, and the value each currently has for everyone
-  var BEH_KEYS = ["snap", "dead", "sens", "curve", "click", "clickMs", "invL", "invR", "tilt", "tiltRange", "tiltDead", "tiltInvert", "dpad", "diag", "trigL", "trigR", "stickL", "stickR", "rumble", "vib", "vibMs", "vibPress", "vibTrig", "vibConn"];
+  var BEH_KEYS = ["snap", "dead", "sens", "curve", "click", "clickMs", "invL", "invR", "tilt", "tiltRange", "tiltDead", "tiltInvert", "dpad", "diag", "tcurve", "curveP", "tcurveP", "trigL", "trigR", "stickL", "stickR", "rumble", "vib", "vibMs", "vibPress", "vibTrig", "vibConn"];
   var behaviour = {}, globalSettings = {}, scopeBars = [], scope = store.get("vgp-scope", "all") === "layout" ? "layout" : "all";
   function sv(k) { return scope === "layout" ? settings[k] : globalSettings[k]; }
   function loadSettings() {
     Object.keys(SETTING_DEFAULTS).forEach(function (k) {
       var d = SETTING_DEFAULTS[k], v = store.get("vgp-" + k, null);
-      globalSettings[k] = typeof d === "number" ? (v === null || isNaN(parseFloat(v)) ? d : parseFloat(v)) : (v === "on" || v === "off" || (CHOICES[k] && CHOICES[k].indexOf(v) >= 0) ? v : d);
+      globalSettings[k] = typeof d === "number" ? (v === null || isNaN(parseFloat(v)) ? d : parseFloat(v)) : (v === "on" || v === "off" || (CHOICES[k] && CHOICES[k].indexOf(v) >= 0) || (/P$/.test(k) && /^\d+,\d+,\d+$/.test(v || "")) ? v : d);
     });
     var dp = store.get("vgp-dpad", "multi"); globalSettings.dpad = dp === "single" || dp === "ortho" ? "single" : "multi";
     Object.keys(globalSettings).forEach(function (k) { settings[k] = BEH_KEYS.indexOf(k) >= 0 && behaviour[k] !== undefined ? behaviour[k] : globalSettings[k]; });
@@ -1302,21 +1319,24 @@ input[type=range]:disabled { opacity: .4; }
       { k: "size", t: "Control size", h: "Scales every control. Set individual sizes in the layout editor.", min: 70, max: 130, step: 5, u: "%" }
     ],
     sticks: [
-      { k: "stickL", t: "Left stick position", h: "Fixed stays where the layout puts it. Floating appears under your thumb inside its area.", opts: [["fixed", "Fixed"], ["floating", "Floating"]] },
-      { k: "stickR", t: "Right stick position", opts: [["fixed", "Fixed"], ["floating", "Floating"]] },
-      { k: "snap", t: "Snap stick to touch", h: "Touching anywhere inside a stick's circle moves it there. Turn off to drag from the stick cap only.", sw: 1 },
+      { k: "tilt", t: "Tilt steering", h: "Tilt the phone like a steering wheel to move a stick sideways. That stick is hidden while it is on. It calibrates when you switch it on.", opts: [["off", "Off"], ["left", "Left stick"], ["right", "Right stick"]], after: function () { tiltChanged(); } },
+      { k: "tiltRange", t: "Tilt range", h: "Degrees of tilt for full lock.", min: 15, max: 60, step: 1, u: "\u00B0", sub: 1, when: function () { return sv("tilt") !== "off"; } },
+      { k: "tiltDead", t: "Tilt dead zone", h: "Ignore small tilts around the middle.", min: 0, max: 15, step: 1, u: "\u00B0", sub: 1, when: function () { return sv("tilt") !== "off"; } },
+      { k: "tiltInvert", t: "Invert tilt", sw: 1, sub: 1, when: function () { return sv("tilt") !== "off"; } },
+      { k: "tcurve", t: "Tilt response curve", h: "How the turn of the phone maps to steering.", opts: [["linear", "Linear"], ["precise", "Precise"], ["quick", "Quick"], ["custom", "Custom"]], sub: 1, when: function () { return sv("tilt") !== "off"; } },
+      { k: "tcurveP", t: "Your tilt curve", h: "Drag the dots. Across is how far you tilt, up is the steering sent.", curve: 1, sub: 1, when: function () { return sv("tilt") !== "off" && sv("tcurve") === "custom"; } },
+      { t: "Calibrate tilt", h: "Hold the phone in the position that should be straight, then tap.", btn: "Calibrate", sub: 1, fn: function () { tiltCalibrate(); }, when: function () { return sv("tilt") !== "off"; } },
+      { k: "stickL", t: "Left stick position", h: "Fixed stays where the layout puts it. Floating appears under your thumb inside its area.", opts: [["fixed", "Fixed"], ["floating", "Floating"]], when: function () { return sv("tilt") !== "left"; } },
+      { k: "stickR", t: "Right stick position", opts: [["fixed", "Fixed"], ["floating", "Floating"]], when: function () { return sv("tilt") !== "right"; } },
+      { k: "snap", t: "Snap stick to touch", h: "Touching inside a stick's touch area moves it there. Set the area in the layout editor. Turn off to drag from the stick cap only.", sw: 1 },
       { k: "dead", t: "Dead zone", h: "Ignore small movements near the centre of a stick.", min: 0, max: 40, step: 1, u: "%" },
       { k: "sens", t: "Sensitivity", h: "Above 100% reaches full tilt before the edge of the stick.", min: 50, max: 150, step: 1, u: "%" },
-      { k: "curve", t: "Response curve", h: "How far a push turns into movement. Precise is finer near the centre, Quick reaches full speed sooner.", opts: [["linear", "Linear"], ["precise", "Precise"], ["quick", "Quick"]] },
+      { k: "curve", t: "Response curve", h: "How far a push turns into movement. Precise is finer near the centre, Quick reaches full speed sooner.", opts: [["linear", "Linear"], ["precise", "Precise"], ["quick", "Quick"], ["custom", "Custom"]] },
+      { k: "curveP", t: "Your curve", h: "Drag the dots. Across is how far the stick moves, up is what the game receives.", curve: 1, sub: 1, when: function () { return sv("curve") === "custom"; } },
       { k: "click", t: "Hold to click a stick", h: "Holding a stick still presses it like L3 or R3.", sw: 1 },
       { k: "clickMs", t: "Hold time", min: 200, max: 1500, step: 50, u: " ms", sub: 1, off: function () { return sv("click") !== "on"; } },
-      { k: "invL", t: "Invert left stick vertical", sw: 1 },
-      { k: "invR", t: "Invert right stick vertical", sw: 1 },
-      { k: "tilt", t: "Tilt steering", h: "Tilt the phone like a steering wheel to move a stick sideways. It calibrates when you switch it on.", opts: [["off", "Off"], ["left", "Left stick"], ["right", "Right stick"]], after: function () { tiltChanged(); } },
-      { k: "tiltRange", t: "Tilt range", h: "Degrees of tilt for full lock.", min: 15, max: 60, step: 1, u: "\u00B0", sub: 1, off: function () { return sv("tilt") === "off"; } },
-      { k: "tiltDead", t: "Tilt dead zone", h: "Ignore small tilts around the middle.", min: 0, max: 15, step: 1, u: "\u00B0", sub: 1, off: function () { return sv("tilt") === "off"; } },
-      { k: "tiltInvert", t: "Invert tilt", sw: 1, sub: 1, off: function () { return sv("tilt") === "off"; } },
-      { t: "Calibrate tilt", h: "Hold the phone in the position that should be straight, then tap.", btn: "Calibrate", sub: 1, fn: function () { tiltCalibrate(); }, off: function () { return sv("tilt") === "off"; } }
+      { k: "invL", t: "Invert left stick vertical", sw: 1, when: function () { return sv("tilt") !== "left"; } },
+      { k: "invR", t: "Invert right stick vertical", sw: 1, when: function () { return sv("tilt") !== "right"; } }
     ],
     dpad: [
       { k: "dpadSingle", bk: "dpad", t: "One direction at a time", h: "Hold a single direction with no diagonals. Off lets you hold several at once, including diagonals and with two fingers.", sw: 1,
@@ -1373,6 +1393,29 @@ input[type=range]:disabled { opacity: .4; }
       var sw = document.createElement("div"); sw.className = "switch"; sw.setAttribute("role", "switch"); sw.innerHTML = "<i></i>"; r.appendChild(sw);
       sw.addEventListener("click", function () { put(get() === "on" ? "off" : "on"); applySettings(); if (spec.after) spec.after(); });
       sync = function () { sw.classList.toggle("on", get() === "on"); };
+    } else if (spec.curve) {
+      var cv = document.createElement("canvas"); cv.className = "curve"; cv.width = 300; cv.height = 300; r.appendChild(cv);
+      var cx = cv.getContext("2d"), cur = [25, 50, 75], which = -1;
+      var draw = function () {
+        var st = getComputedStyle(document.documentElement);
+        cx.clearRect(0, 0, 300, 300);
+        cx.strokeStyle = st.getPropertyValue("--border") || "#555"; cx.lineWidth = 2; cx.beginPath(); cx.moveTo(0, 300); cx.lineTo(300, 0); cx.stroke();
+        var ys = [0, cur[0], cur[1], cur[2], 100];
+        cx.strokeStyle = st.getPropertyValue("--fg") || "#fff"; cx.lineWidth = 5; cx.beginPath();
+        ys.forEach(function (y, i) { var px = i * 75, py = 300 - y * 3; if (i) cx.lineTo(px, py); else cx.moveTo(px, py); }); cx.stroke();
+        cx.fillStyle = st.getPropertyValue("--fg") || "#fff";
+        for (var i = 1; i <= 3; i++) { cx.beginPath(); cx.arc(i * 75, 300 - ys[i] * 3, 11, 0, 7); cx.fill(); }
+      };
+      var at = function (e) { var b = cv.getBoundingClientRect(); return { x: (e.clientX - b.left) / b.width, y: (e.clientY - b.top) / b.height }; };
+      cv.addEventListener("pointerdown", function (e) { var q = at(e); which = Math.min(3, Math.max(1, Math.round(q.x * 4))) - 1; try { cv.setPointerCapture(e.pointerId); } catch (x) {} cv.dispatchEvent(new PointerEvent("pointermove", e)); });
+      cv.addEventListener("pointermove", function (e) {
+        if (which < 0) return;
+        cur[which] = Math.min(100, Math.max(0, Math.round((1 - at(e).y) * 100)));
+        put(cur.join(",")); draw();
+      });
+      var done = function () { which = -1; };
+      cv.addEventListener("pointerup", done); cv.addEventListener("pointercancel", done);
+      sync = function () { var p = String(get()).split(",").map(Number); if (p.length === 3 && which < 0) cur = p; draw(); };
     } else if (spec.btn) {
       var b = document.createElement("button"); b.className = "btn2"; b.style.flex = "none"; b.textContent = spec.btn; b.addEventListener("click", spec.fn); r.appendChild(b);
     } else if (spec.opts) {
@@ -1454,6 +1497,7 @@ input[type=range]:disabled { opacity: .4; }
     if (settings.tiltInvert === "on") out = -out;
     if (Math.abs(out - tilt.steer) > 0.004) { tilt.steer = out; dirty = true; }
   }
+  function tiltOut() { return (tilt.steer < 0 ? -1 : 1) * curveAt(settings.tcurve, settings.tcurveP, Math.abs(tilt.steer)); }
   function tiltStop() { window.removeEventListener("devicemotion", onTilt); tilt.on = false; tilt.base = null; tilt.sx = tilt.sy = 0; if (tilt.steer !== 0) { tilt.steer = 0; dirty = true; } }
   function tiltStart() {
     if (tilt.on) return;
@@ -1461,7 +1505,7 @@ input[type=range]:disabled { opacity: .4; }
     if (window.DeviceMotionEvent && typeof DeviceMotionEvent.requestPermission === "function") DeviceMotionEvent.requestPermission().then(function (r) { if (r === "granted") go(); }).catch(function () {});
     else go();
   }
-  function tiltChanged() { if (settings.tilt === "off") tiltStop(); else tiltStart(); }
+  function tiltChanged() { if (settings.tilt === "off") tiltStop(); else tiltStart(); if (fx) paint(); }
   function tiltCalibrate() { tilt.base = tilt.angle; tilt.steer = 0; dirty = true; toast("Tilt calibrated"); }
   if (settings.tilt !== "off") tiltChanged();
   function wakeToggle() { if (settings.awake === "on") takeWakeLock(); else if (wake) { try { wake.release(); } catch (e) {} wake = null; } }
@@ -1532,7 +1576,7 @@ input[type=range]:disabled { opacity: .4; }
   var TRIG_KEY = { LEFT_TRIGGER: "trigL", RIGHT_TRIGGER: "trigR" };
   var TRIG_NAMES = ["DIGITAL", "SLIDE", "DRAG", "ZONES", "RAMP", "FORCE", "TILT"];
   function mk(id, scale, ox, oy, anchor) {
-    return { component: id, visible: true, scale: scale, widthScale: 1, heightScale: 1, offsetX: ox, offsetY: oy, anchor: anchor, triggerMode: "DIGITAL", stickMode: "FIXED" };
+    return { component: id, visible: true, scale: scale, widthScale: 1, heightScale: 1, offsetX: ox, offsetY: oy, anchor: anchor, triggerMode: "DIGITAL", stickMode: "FIXED", areaW: 0, areaH: 0, areaRound: 1 };
   }
   var DEFAULTS = {
     LEFT_ANALOG_STICK: mk("LEFT_ANALOG_STICK", 0.96, 0.176, 0.068, "CENTER_LEFT"),
@@ -1570,11 +1614,14 @@ input[type=range]:disabled { opacity: .4; }
       scale: num(o.scale, base.scale, 0.5, 2),
       widthScale: num(o.widthScale, base.widthScale, 0.5, 2),
       heightScale: num(o.heightScale, base.heightScale, 0.5, 2),
-      offsetX: num(o.offsetX, base.offsetX, -0.5, 0.5),
-      offsetY: num(o.offsetY, base.offsetY, -0.5, 0.5),
+      offsetX: num(o.offsetX, base.offsetX, -1.5, 1.5),
+      offsetY: num(o.offsetY, base.offsetY, -1.5, 1.5),
       anchor: ANCHORS.indexOf(o.anchor) >= 0 ? o.anchor : base.anchor,
       triggerMode: TRIG_NAMES.indexOf(o.triggerMode) >= 0 ? o.triggerMode : base.triggerMode,
-      stickMode: o.stickMode === "FLOATING" || o.stickMode === "FIXED" ? o.stickMode : base.stickMode
+      stickMode: o.stickMode === "FLOATING" || o.stickMode === "FIXED" ? o.stickMode : base.stickMode,
+      areaW: num(o.areaW, base.areaW, 0, 6),
+      areaH: num(o.areaH, base.areaH, 0, 6),
+      areaRound: num(o.areaRound, base.areaRound, 0, 1)
     };
   }
   function readGroups(arr) {
@@ -1609,12 +1656,14 @@ input[type=range]:disabled { opacity: .4; }
       var v = num(o[d[0]], null, d[1], d[2]); if (v !== null) out[d[0]] = Math.round(v);
     });
     if (CHOICES.curve.indexOf(o.curve) >= 0) out.curve = o.curve;
+    if (CHOICES.tcurve.indexOf(o.tcurve) >= 0) out.tcurve = o.tcurve;
+    ["curveP", "tcurveP"].forEach(function (k) { if (Array.isArray(o[k]) && o[k].length === 3) out[k] = o[k].map(function (n) { return Math.min(100, Math.max(0, Math.round(+n || 0))); }).join(","); });
     if (CHOICES.tilt.indexOf(o.tilt) >= 0) out.tilt = o.tilt;
     return out;
   }
   function behToFile(b) {
     var o = {};
-    Object.keys(b || {}).forEach(function (k) { var v = b[k]; if (k === "dpad") o.dpadSingle = v === "single"; else if (k === "stickL" || k === "stickR") o[k] = v === "floating"; else if (k === "trigL" || k === "trigR") o[k] = ["button", "drag", "gradient"][CHOICES[k].indexOf(v)] || "button"; else if (v === "on" || v === "off") o[k] = v === "on"; else o[k] = v; });
+    Object.keys(b || {}).forEach(function (k) { var v = b[k]; if (k === "dpad") o.dpadSingle = v === "single"; else if (k === "curveP" || k === "tcurveP") o[k] = String(v).split(",").map(Number); else if (k === "stickL" || k === "stickR") o[k] = v === "floating"; else if (k === "trigL" || k === "trigR") o[k] = ["button", "drag", "gradient"][CHOICES[k].indexOf(v)] || "button"; else if (v === "on" || v === "off") o[k] = v === "on"; else o[k] = v; });
     return o;
   }
   function applyBehaviour() {
@@ -1677,8 +1726,15 @@ input[type=range]:disabled { opacity: .4; }
       el.style.left = "calc(" + (p.x + p.w / 2 - d.w / 2) + " * var(--u))";
       el.style.top = "calc(" + (p.y + p.h / 2 - d.h / 2) + " * var(--u))";
       el.style.scale = (p.w / d.w) + " " + (p.h / d.h);
-      el.classList.toggle("edhide", !c.visible);
-      el.classList.toggle("float", (id === "LEFT_ANALOG_STICK" ? settings.stickL : id === "RIGHT_ANALOG_STICK" ? settings.stickR : "") === "floating");
+      el.style.setProperty("--ix", d.w / p.w); el.style.setProperty("--iy", d.h / p.h);
+      var tilted = !editing && ((settings.tilt === "left" && id === "LEFT_ANALOG_STICK") || (settings.tilt === "right" && id === "RIGHT_ANALOG_STICK"));
+      el.classList.toggle("edhide", !c.visible || tilted);
+      if (id === "LEFT_ANALOG_STICK" || id === "RIGHT_ANALOG_STICK") {
+        var fl = (id === "LEFT_ANALOG_STICK" ? settings.stickL : settings.stickR) === "floating";
+        el.classList.toggle("float", fl); el.classList.toggle("zoned", fl || settings.snap === "on");
+        var auto = fl ? 1.9 : 1;
+        el.style.setProperty("--aw", c.areaW || auto); el.style.setProperty("--ah", c.areaH || auto); el.style.setProperty("--ar", c.areaRound);
+      }
     });
   }
   function paint() { ORDER.forEach(paintOne); drawFx(); }
@@ -1761,6 +1817,13 @@ input[type=range]:disabled { opacity: .4; }
       $("edSize").value = Math.round(c.scale * 100); $("edSizeV").textContent = pct(c.scale);
       $("edW").value = Math.round(c.widthScale * 100); $("edWV").textContent = pct(c.widthScale);
       $("edH").value = Math.round(c.heightScale * 100); $("edHV").textContent = pct(c.heightScale);
+      var isStick = selComp === "LEFT_ANALOG_STICK" || selComp === "RIGHT_ANALOG_STICK";
+      $("edArea").style.display = isStick ? "block" : "none";
+      if (isStick) {
+        $("edAW").value = Math.round((c.areaW || 1) * 100); $("edAWV").textContent = c.areaW ? c.areaW.toFixed(1) + "x" : "Auto";
+        $("edAH").value = Math.round((c.areaH || 1) * 100); $("edAHV").textContent = c.areaH ? c.areaH.toFixed(1) + "x" : "Auto";
+        $("edAR").value = Math.round(c.areaRound * 100); $("edARV").textContent = Math.round(c.areaRound * 100) + "%";
+      }
       document.querySelectorAll("#edAnc button").forEach(function (b) { b.classList.toggle("on", b.dataset.a === c.anchor); });
       var s = $("edGroup"); s.innerHTML = "";
       [["", "None"]].concat(groups.map(function (x) { return [x.id, x.name]; })).concat([["__new", "New group"]]).forEach(function (o) { var op = document.createElement("option"); op.value = o[0]; op.textContent = o[1]; s.appendChild(op); });
@@ -1772,8 +1835,8 @@ input[type=range]:disabled { opacity: .4; }
     fillRanges();
     drawFx();
   }
-  function enterEdit() { closeMenu(); releaseAll(true); editing = true; drag = null; selComp = selGroup = null; undoS = []; redoS = []; document.body.classList.add("editing"); showSel(); }
-  function leaveEdit() { editing = false; drag = null; guides = null; selComp = selGroup = null; document.body.classList.remove("editing"); showSel(); persist(); }
+  function enterEdit() { closeMenu(); releaseAll(true); editing = true; drag = null; selComp = selGroup = null; undoS = []; redoS = []; document.body.classList.add("editing"); paint(); showSel(); }
+  function leaveEdit() { editing = false; drag = null; guides = null; selComp = selGroup = null; document.body.classList.remove("editing"); paint(); showSel(); persist(); }
   // While editing, touches on the controller only select and move things and never reach the controls
   document.addEventListener("pointerdown", function (e) {
     if (!editing) return;
@@ -1800,9 +1863,9 @@ input[type=range]:disabled { opacity: .4; }
     var q = P(e);
     if (!drag.moved) { if (Math.hypot(q.x - drag.x, q.y - drag.y) < 6) return; drag.moved = true; pushUndo(); }
     var s = 9 * stageK(), dx = (q.x - drag.x) / s / BASE, dy = (q.y - drag.y) / s / BASE;
-    drag.members.forEach(function (m) { cfg[m].offsetX = clampN(drag.start[m].x + dx, -0.5, 0.5); cfg[m].offsetY = clampN(drag.start[m].y + dy, -0.5, 0.5); });
+    drag.members.forEach(function (m) { cfg[m].offsetX = clampN(drag.start[m].x + dx, -1.5, 1.5); cfg[m].offsetY = clampN(drag.start[m].y + dy, -1.5, 1.5); });
     var sn = snapPos(union(drag.members), others(drag.members).map(function (id) { var p = place(id); return { l: p.x, t: p.y, r: p.x + p.w, b: p.y + p.h }; }), 1.3);
-    drag.members.forEach(function (m) { cfg[m].offsetX = clampN(cfg[m].offsetX + sn.dx / BASE, -0.5, 0.5); cfg[m].offsetY = clampN(cfg[m].offsetY + sn.dy / BASE, -0.5, 0.5); });
+    drag.members.forEach(function (m) { cfg[m].offsetX = clampN(cfg[m].offsetX + sn.dx / BASE, -1.5, 1.5); cfg[m].offsetY = clampN(cfg[m].offsetY + sn.dy / BASE, -1.5, 1.5); });
     guides = { x: sn.xl, y: sn.yl };
     drag.members.forEach(paintOne); drawFx();
   }, true);
@@ -1836,11 +1899,14 @@ input[type=range]:disabled { opacity: .4; }
   });
   sliderStep("edW", function (c, v) { var id = c.component; c.widthScale = snapFactor(c.widthScale, v, place(id).w, others([id]).map(function (x) { return place(x).w; }), 0.04); });
   sliderStep("edH", function (c, v) { var id = c.component; c.heightScale = snapFactor(c.heightScale, v, place(id).h, others([id]).map(function (x) { return place(x).h; }), 0.04); });
+  sliderStep("edAW", function (c, v) { c.areaW = v < 1.05 ? 0 : v; });
+  sliderStep("edAH", function (c, v) { c.areaH = v < 1.05 ? 0 : v; });
+  sliderStep("edAR", function (c, v) { c.areaRound = v; });
   $("edVis").addEventListener("click", function () { change(function (c) { c.visible = !c.visible; }); });
   ANCHORS.forEach(function (a) {
     var b = document.createElement("button"); b.dataset.a = a; b.setAttribute("aria-label", a.replace("_", " ").toLowerCase());
     b.addEventListener("click", function () {
-      change(function (c) { var before = place(c.component); c.anchor = a; var after = place(c.component); c.offsetX = clampN(c.offsetX + (before.x - after.x) / BASE, -0.5, 0.5); c.offsetY = clampN(c.offsetY + (before.y - after.y) / BASE, -0.5, 0.5); });
+      change(function (c) { var before = place(c.component); c.anchor = a; var after = place(c.component); c.offsetX = clampN(c.offsetX + (before.x - after.x) / BASE, -1.5, 1.5); c.offsetY = clampN(c.offsetY + (before.y - after.y) / BASE, -1.5, 1.5); });
     });
     $("edAnc").appendChild(b);
   });
