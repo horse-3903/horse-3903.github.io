@@ -460,6 +460,14 @@ input[type=range]::-moz-range-track { height: 4px; border-radius: 999px; backgro
 input[type=range]::-moz-range-progress { height: 4px; border-radius: 999px; background: var(--fg); }
 input[type=range]::-moz-range-thumb { width: 20px; height: 20px; border-radius: 50%; background: var(--fg); border: 0; box-shadow: 0 1px 4px rgba(0, 0, 0, .45); }
 input[type=range]:disabled { opacity: .4; }
+/* behaviour that belongs to a layout: a switch on the settings pages chooses where a change is saved */
+.scope { margin: 6px 0 2px; }
+.seg { display: flex; border: 1px solid var(--border); border-radius: 10px; padding: 3px; gap: 2px; }
+.seg button { flex: 1; min-width: 0; border: 0; background: transparent; color: var(--muted); font: inherit; font-size: 14px; font-weight: 500; padding: 9px 8px; border-radius: 7px;
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.seg button.cur { background: var(--panel-on); color: var(--fg); }
+.scopehint { color: var(--muted); font-size: 12.5px; margin: 8px 2px 4px; line-height: 1.35; }
+.rst { margin-left: 8px; border: 1px solid var(--border); background: transparent; color: var(--muted); border-radius: 6px; font: inherit; font-size: 11px; font-weight: 400; padding: 1px 7px; vertical-align: middle; }
 #toast { position: fixed; left: 50%; top: calc(14 * var(--u)); transform: translateX(-50%); background: var(--accent);
     color: var(--accent-fg); padding: 8px 14px; border-radius: 6px; font-size: 14px; z-index: 40; display: none; }
 </style>
@@ -542,8 +550,6 @@ input[type=range]:disabled { opacity: .4; }
       <div class="edrow"><span>Height</span><input type="range" id="edH" min="50" max="200" step="1"><b id="edHV">100%</b></div>
       <div class="edrow"><span>Anchor</span><div class="anc" id="edAnc"></div></div>
       <div class="edrow"><span>Group</span><select id="edGroup" class="sel"></select></div>
-      <div class="edrow" id="edTrigRow"><span>Trigger input</span><select id="edTrig" class="sel"><option value="DIGITAL">Button</option><option value="DRAG">Drag from touch</option><option value="ZONES">Gradient</option></select></div>
-      <div class="edrow" id="edStickRow"><span>Stick position</span><select id="edStick" class="sel"><option value="FIXED">Fixed</option><option value="FLOATING">Floating</option></select></div>
       <button class="mini wide" id="edResetCtl">Reset this control</button>
     </div>
     <div id="edGrp" style="display:none">
@@ -569,6 +575,7 @@ input[type=range]:disabled { opacity: .4; }
       <button data-p="layouts">Layouts</button>
       <button data-p="sticks">Sticks</button>
       <button data-p="dpad">D-pad</button>
+      <button data-p="triggers">Triggers</button>
       <button data-p="haptics">Haptics</button>
       <button data-p="display">Display</button>
       <button data-p="connection">Connection</button>
@@ -615,6 +622,12 @@ input[type=range]:disabled { opacity: .4; }
       <div class="spage" data-p="dpad">
         <h3>D-pad</h3>
         <div class="gen" data-g="dpad"></div>
+      </div>
+
+      <div class="spage" data-p="triggers">
+        <h3>Triggers</h3>
+        <div class="scopehint" id="trigNote"></div>
+        <div class="gen" data-g="triggers"></div>
       </div>
 
       <div class="spage" data-p="haptics">
@@ -1257,11 +1270,17 @@ input[type=range]:disabled { opacity: .4; }
     diag: 38, rumble: "on", vib: "on", vibMs: 30, vibPress: "on", vibTrig: "on", reconnect: "on", reconnectS: 120, confirm: "on", awake: "on",
     curve: "linear", ring: "on", size: 100, vibConn: "on", dim: 0, tilt: "off", tiltRange: 30, tiltDead: 3, tiltInvert: "off" };
   var CHOICES = { curve: ["linear", "precise", "quick"], tilt: ["off", "left", "right"] };
+  // The settings a layout can override, and the value each currently has for everyone
+  var BEH_KEYS = ["snap", "dead", "sens", "curve", "click", "clickMs", "invL", "invR", "tilt", "tiltRange", "tiltDead", "tiltInvert", "dpad", "diag"];
+  var behaviour = {}, globalSettings = {}, scopeBars = [], scope = store.get("vgp-scope", "all") === "layout" ? "layout" : "all";
+  function sv(k) { return scope === "layout" ? settings[k] : globalSettings[k]; }
   function loadSettings() {
     Object.keys(SETTING_DEFAULTS).forEach(function (k) {
       var d = SETTING_DEFAULTS[k], v = store.get("vgp-" + k, null);
-      settings[k] = typeof d === "number" ? (v === null || isNaN(parseFloat(v)) ? d : parseFloat(v)) : (v === "on" || v === "off" || (CHOICES[k] && CHOICES[k].indexOf(v) >= 0) ? v : d);
+      globalSettings[k] = typeof d === "number" ? (v === null || isNaN(parseFloat(v)) ? d : parseFloat(v)) : (v === "on" || v === "off" || (CHOICES[k] && CHOICES[k].indexOf(v) >= 0) ? v : d);
     });
+    var dp = store.get("vgp-dpad", "multi"); globalSettings.dpad = dp === "single" || dp === "ortho" ? "single" : "multi";
+    Object.keys(globalSettings).forEach(function (k) { settings[k] = BEH_KEYS.indexOf(k) >= 0 && behaviour[k] !== undefined ? behaviour[k] : globalSettings[k]; });
   }
   loadSettings();
   var SPECS = {
@@ -1273,25 +1292,35 @@ input[type=range]:disabled { opacity: .4; }
       { k: "size", t: "Control size", h: "Scales every control. Set individual sizes in the layout editor.", min: 70, max: 130, step: 5, u: "%" }
     ],
     sticks: [
+      { t: "Left stick position", h: "Fixed stays where the layout puts it. Floating appears under your thumb inside its area.", opts: [["FIXED", "Fixed"], ["FLOATING", "Floating"]],
+        get: function () { return cfg.LEFT_ANALOG_STICK.stickMode; }, put: function (v) { cfg.LEFT_ANALOG_STICK.stickMode = v; persist(); paint(); }, when: function () { return scope === "layout"; } },
+      { t: "Right stick position", opts: [["FIXED", "Fixed"], ["FLOATING", "Floating"]],
+        get: function () { return cfg.RIGHT_ANALOG_STICK.stickMode; }, put: function (v) { cfg.RIGHT_ANALOG_STICK.stickMode = v; persist(); paint(); }, when: function () { return scope === "layout"; } },
       { k: "snap", t: "Snap stick to touch", h: "Touching anywhere inside a stick's circle moves it there. Turn off to drag from the stick cap only.", sw: 1 },
       { k: "dead", t: "Dead zone", h: "Ignore small movements near the centre of a stick.", min: 0, max: 40, step: 1, u: "%" },
       { k: "sens", t: "Sensitivity", h: "Above 100% reaches full tilt before the edge of the stick.", min: 50, max: 150, step: 1, u: "%" },
       { k: "curve", t: "Response curve", h: "How far a push turns into movement. Precise is finer near the centre, Quick reaches full speed sooner.", opts: [["linear", "Linear"], ["precise", "Precise"], ["quick", "Quick"]] },
       { k: "click", t: "Hold to click a stick", h: "Holding a stick still presses it like L3 or R3.", sw: 1 },
-      { k: "clickMs", t: "Hold time", min: 200, max: 1500, step: 50, u: " ms", sub: 1, off: function () { return settings.click !== "on"; } },
+      { k: "clickMs", t: "Hold time", min: 200, max: 1500, step: 50, u: " ms", sub: 1, off: function () { return sv("click") !== "on"; } },
       { k: "invL", t: "Invert left stick vertical", sw: 1 },
       { k: "invR", t: "Invert right stick vertical", sw: 1 },
       { k: "tilt", t: "Tilt steering", h: "Tilt the phone like a steering wheel to move a stick sideways. It calibrates when you switch it on.", opts: [["off", "Off"], ["left", "Left stick"], ["right", "Right stick"]], after: function () { tiltChanged(); } },
-      { k: "tiltRange", t: "Tilt range", h: "Degrees of tilt for full lock.", min: 15, max: 60, step: 1, u: "\u00B0", sub: 1, off: function () { return settings.tilt === "off"; } },
-      { k: "tiltDead", t: "Tilt dead zone", h: "Ignore small tilts around the middle.", min: 0, max: 15, step: 1, u: "\u00B0", sub: 1, off: function () { return settings.tilt === "off"; } },
-      { k: "tiltInvert", t: "Invert tilt", sw: 1, sub: 1, off: function () { return settings.tilt === "off"; } },
-      { t: "Calibrate tilt", h: "Hold the phone in the position that should be straight, then tap.", btn: "Calibrate", sub: 1, fn: function () { tiltCalibrate(); }, off: function () { return settings.tilt === "off"; } }
+      { k: "tiltRange", t: "Tilt range", h: "Degrees of tilt for full lock.", min: 15, max: 60, step: 1, u: "\u00B0", sub: 1, off: function () { return sv("tilt") === "off"; } },
+      { k: "tiltDead", t: "Tilt dead zone", h: "Ignore small tilts around the middle.", min: 0, max: 15, step: 1, u: "\u00B0", sub: 1, off: function () { return sv("tilt") === "off"; } },
+      { k: "tiltInvert", t: "Invert tilt", sw: 1, sub: 1, off: function () { return sv("tilt") === "off"; } },
+      { t: "Calibrate tilt", h: "Hold the phone in the position that should be straight, then tap.", btn: "Calibrate", sub: 1, fn: function () { tiltCalibrate(); }, off: function () { return sv("tilt") === "off"; } }
     ],
     dpad: [
-      { k: "dpadSingle", t: "One direction at a time", h: "Hold a single direction with no diagonals. Off lets you hold several at once, including diagonals and with two fingers.", sw: 1,
-        get: function () { return settings.dpad === "single" ? "on" : "off"; },
-        put: function (v) { settings.dpad = v === "on" ? "single" : "multi"; store.set("vgp-dpad", settings.dpad); } },
-      { k: "diag", t: "Diagonal zone", h: "How far towards a corner a thumb must go to hold two directions. Lower makes diagonals easier.", min: 20, max: 60, step: 1, u: "%", off: function () { return settings.dpad === "single"; } }
+      { k: "dpadSingle", bk: "dpad", t: "One direction at a time", h: "Hold a single direction with no diagonals. Off lets you hold several at once, including diagonals and with two fingers.", sw: 1,
+        view: function (v) { return v === "single" ? "on" : "off"; }, wrap: function (v) { return v === "on" ? "single" : "multi"; } },
+      { k: "diag", t: "Diagonal zone", h: "How far towards a corner a thumb must go to hold two directions. Lower makes diagonals easier.", min: 20, max: 60, step: 1, u: "%", off: function () { return sv("dpad") === "single"; } }
+    ],
+    triggers: [
+      { t: "Left trigger input", h: "Button is plain on or off. Drag lets you pull harder by dragging up. Gradient sets the pull by where you first touch.",
+        opts: [["DIGITAL", "Button"], ["DRAG", "Drag from touch"], ["ZONES", "Gradient"]],
+        get: function () { var m = cfg.LEFT_TRIGGER.triggerMode; return m === "DRAG" || m === "ZONES" ? m : "DIGITAL"; }, put: function (v) { cfg.LEFT_TRIGGER.triggerMode = v; syncTriggers(true); persist(); paint(); } },
+      { t: "Right trigger input", opts: [["DIGITAL", "Button"], ["DRAG", "Drag from touch"], ["ZONES", "Gradient"]],
+        get: function () { var m = cfg.RIGHT_TRIGGER.triggerMode; return m === "DRAG" || m === "ZONES" ? m : "DIGITAL"; }, put: function (v) { cfg.RIGHT_TRIGGER.triggerMode = v; syncTriggers(true); persist(); paint(); } }
     ],
     haptics: [
       { k: "rumble", t: "Game vibration", h: "Vibrate when the game rumbles this controller.", sw: 1 },
@@ -1318,8 +1347,21 @@ input[type=range]:disabled { opacity: .4; }
     var left = document.createElement("span"); left.textContent = spec.t;
     if (spec.h) { var h = document.createElement("span"); h.className = "hint"; h.textContent = spec.h; left.appendChild(h); }
     r.appendChild(left);
-    var get = spec.get || function () { return settings[spec.k]; };
-    var put = spec.put || function (v) { settings[spec.k] = v; store.set("vgp-" + spec.k, String(v)); };
+    var bk = spec.bk || (spec.k && BEH_KEYS.indexOf(spec.k) >= 0 ? spec.k : null), rst = null;
+    if (bk) {
+      rst = document.createElement("button"); rst.className = "rst"; rst.textContent = "Reset"; rst.title = "Use the default for this setting";
+      left.insertBefore(rst, left.children[0] || null);
+      rst.addEventListener("click", function (e) { e.stopPropagation(); delete behaviour[bk]; settings[bk] = globalSettings[bk]; persist(); if (bk === "tilt") tiltChanged(); applySettings(); });
+    }
+    var raw = function () { return bk ? sv(bk) : settings[spec.k]; };
+    var write = function (v) {
+      if (!bk) { settings[spec.k] = v; store.set("vgp-" + spec.k, String(v)); return; }
+      if (scope === "layout") { behaviour[bk] = v; settings[bk] = v; persist(); }
+      else { globalSettings[bk] = v; store.set("vgp-" + bk, String(v)); if (behaviour[bk] === undefined) settings[bk] = v; }
+      if (bk === "tilt") tiltChanged();
+    };
+    var get = spec.get || (spec.view ? function () { return spec.view(raw()); } : raw);
+    var put = spec.put || (spec.wrap ? function (v) { write(spec.wrap(v)); } : write);
     var sync = function () {};
     if (spec.sw) {
       var sw = document.createElement("div"); sw.className = "switch"; sw.setAttribute("role", "switch"); sw.innerHTML = "<i></i>"; r.appendChild(sw);
@@ -1339,18 +1381,41 @@ input[type=range]:disabled { opacity: .4; }
       inp.addEventListener("input", function () { put(+inp.value); out.textContent = label(inp.value); applyEffects(); syncRows(); });
       sync = function () { inp.value = get(); out.textContent = label(get()); };
     }
-    rowEls.push({ el: r, sync: sync, off: spec.off });
+    rowEls.push({ el: r, sync: sync, off: spec.off, when: spec.when, bk: bk, rst: rst });
     return r;
   }
   Object.keys(SPECS).forEach(function (page) {
     var box = document.querySelector('.gen[data-g="' + page + '"]');
     if (box) SPECS[page].forEach(function (s) { box.appendChild(buildRow(s)); });
+    if (box && (page === "sticks" || page === "dpad")) {
+      var bar = document.createElement("div"); bar.className = "scope";
+      bar.innerHTML = '<div class="seg"><button data-s="all">All layouts</button><button data-s="layout">This layout</button></div><div class="scopehint"></div>';
+      bar.querySelectorAll("button").forEach(function (x) { x.addEventListener("click", function () { scope = x.dataset.s; store.set("vgp-scope", scope); syncRows(); }); });
+      box.insertBefore(bar, box.firstChild); scopeBars.push({ el: bar });
+    }
   });
   // Sliders fill up to the thumb: the track reads the share from --p
   function fillRange(el) { var lo = +el.min || 0, hi = +el.max || 100; el.style.setProperty("--p", (hi > lo ? (el.value - lo) / (hi - lo) * 100 : 0) + "%"); }
   function fillRanges() { document.querySelectorAll("input[type=range]").forEach(fillRange); }
   document.addEventListener("input", function (e) { if (e.target && e.target.type === "range") fillRange(e.target); }, true);
-  function syncRows() { rowEls.forEach(function (x) { x.sync(); x.el.classList.toggle("off", !!(x.off && x.off())); }); fillRanges(); }
+  function layoutName() { return active === "__default" ? "Default" : active || "Custom layout"; }
+  function renderScope() {
+    scopeBars.forEach(function (b) {
+      b.el.querySelectorAll("button").forEach(function (x) { x.classList.toggle("cur", x.dataset.s === scope); });
+      b.el.querySelector('button[data-s="layout"]').textContent = layoutName();
+      b.el.querySelector(".scopehint").textContent = scope === "layout" ? "Only for " + layoutName() + ". Other layouts keep their own. Reset puts a row back to the default."
+        : "The default for every layout. A layout can override it.";
+    });
+    var note = $("trigNote"); if (note) note.textContent = "These belong to the layout in use: " + layoutName() + ".";
+  }
+  function syncRows() {
+    rowEls.forEach(function (x) {
+      x.sync(); x.el.classList.toggle("off", !!(x.off && x.off()));
+      x.el.style.display = x.when && !x.when() ? "none" : "";
+      if (x.rst) x.rst.style.display = scope === "layout" && behaviour[x.bk] !== undefined ? "inline-block" : "none";
+    });
+    renderScope(); fillRanges();
+  }
   function applyEffects() {
     $("app").style.opacity = settings.opacity / 100;
     document.documentElement.style.setProperty("--gl-k", settings.glowStrength / 100);
@@ -1521,7 +1586,30 @@ input[type=range]:disabled { opacity: .4; }
     if (!root || typeof root !== "object" || Array.isArray(root)) throw new Error("not a layout");
     var wrapped = root.buttons && typeof root.buttons === "object" ? root.buttons : null, src = wrapped || root, buttons = {};
     ORDER.forEach(function (id) { buttons[id] = readCfg(id, src[id], !wrapped); });
-    return { buttons: buttons, groups: Array.isArray(root.groups) ? readGroups(root.groups) : null };
+    return { buttons: buttons, groups: Array.isArray(root.groups) ? readGroups(root.groups) : null, behaviour: readBehaviour(root.behaviour) };
+  }
+  // Behaviour a layout can carry: it overrides the global setting while that layout is in use
+  function readBehaviour(o) {
+    var out = {};
+    if (!o || typeof o !== "object") return out;
+    var yn = function (v) { return v === true || v === "on" ? "on" : v === false || v === "off" ? "off" : null; };
+    ["snap", "click", "invL", "invR", "tiltInvert"].forEach(function (k) { var v = yn(o[k]); if (v) out[k] = v; });
+    if (typeof o.dpadSingle === "boolean") out.dpad = o.dpadSingle ? "single" : "multi";
+    [["dead", 0, 40], ["sens", 50, 150], ["clickMs", 200, 1500], ["tiltRange", 15, 60], ["tiltDead", 0, 15], ["diag", 20, 60]].forEach(function (d) {
+      var v = num(o[d[0]], null, d[1], d[2]); if (v !== null) out[d[0]] = Math.round(v);
+    });
+    if (CHOICES.curve.indexOf(o.curve) >= 0) out.curve = o.curve;
+    if (CHOICES.tilt.indexOf(o.tilt) >= 0) out.tilt = o.tilt;
+    return out;
+  }
+  function behToFile(b) {
+    var o = {};
+    Object.keys(b || {}).forEach(function (k) { var v = b[k]; if (k === "dpad") o.dpadSingle = v === "single"; else if (v === "on" || v === "off") o[k] = v === "on"; else o[k] = v; });
+    return o;
+  }
+  function applyBehaviour() {
+    BEH_KEYS.forEach(function (k) { settings[k] = behaviour[k] !== undefined ? behaviour[k] : globalSettings[k]; });
+    tiltChanged();
   }
   function readPresets(root, single) {
     var out = {};
@@ -1537,14 +1625,15 @@ input[type=range]:disabled { opacity: .4; }
   (function () {
     var o = loadJson("vgp-cfg");
     if (!o) return;
-    try { var l = readLayout(o); cfg = l.buttons; groups = l.groups || clone(DEFAULT_GROUPS); } catch (e) {}
+    try { var l = readLayout(o); cfg = l.buttons; groups = l.groups || clone(DEFAULT_GROUPS); behaviour = l.behaviour || {}; } catch (e) {}
   })();
-  function bundle() { return { version: 2, buttons: cfg, groups: groups }; }
+  applyBehaviour();
+  function bundle() { var o = { version: 2, buttons: cfg, groups: groups }; if (Object.keys(behaviour).length) o.behaviour = behToFile(behaviour); return o; }
   function sameAsDefault() { return ORDER.every(function (id) { return Object.keys(DEFAULTS[id]).every(function (k) { return cfg[id][k] === DEFAULTS[id][k]; }); }); }
   // Edits go into the saved layout that is in use. Editing the locked Default leaves an unsaved layout.
   function syncActive() {
-    if (active && active !== "__default") { var all = presets(); if (all[active]) { all[active] = { buttons: clone(cfg), groups: clone(groups) }; savePresets(all); } else active = ""; }
-    else if (active === "__default" && !sameAsDefault()) active = "";
+    if (active && active !== "__default") { var all = presets(); if (all[active]) { all[active] = { buttons: clone(cfg), groups: clone(groups), behaviour: clone(behaviour) }; savePresets(all); } else active = ""; }
+    else if (active === "__default" && (!sameAsDefault() || Object.keys(behaviour).length)) active = "";
     store.set("vgp-active", active);
   }
   function persist() { syncActive(); store.set("vgp-cfg", JSON.stringify(bundle())); }
@@ -1674,10 +1763,6 @@ input[type=range]:disabled { opacity: .4; }
       var s = $("edGroup"); s.innerHTML = "";
       [["", "None"]].concat(groups.map(function (x) { return [x.id, x.name]; })).concat([["__new", "New group"]]).forEach(function (o) { var op = document.createElement("option"); op.value = o[0]; op.textContent = o[1]; s.appendChild(op); });
       s.value = g ? g.id : "";
-      var isTrig = !!TRIG_KEY[selComp], isStick = selComp === "LEFT_ANALOG_STICK" || selComp === "RIGHT_ANALOG_STICK";
-      $("edTrigRow").style.display = isTrig ? "flex" : "none"; $("edStickRow").style.display = isStick ? "flex" : "none";
-      if (isTrig) $("edTrig").value = ["DIGITAL", "DRAG", "ZONES"].indexOf(c.triggerMode) >= 0 ? c.triggerMode : "DIGITAL";
-      if (isStick) $("edStick").value = c.stickMode;
     } else if (selGroup && groupById(selGroup)) {
       $("edName").textContent = groupById(selGroup).name; $("edGroupName").value = groupById(selGroup).name;
     } else $("edName").textContent = "Edit layout";
@@ -1762,8 +1847,6 @@ input[type=range]:disabled { opacity: .4; }
     if (v === "__new") { selGroup = null; newGroup(selComp); } else moveToGroup(selComp, v || null);
     persist(); showSel();
   });
-  $("edTrig").addEventListener("change", function () { var v = this.value; change(function (c) { c.triggerMode = v; }); syncTriggers(true); applySettings(); });
-  $("edStick").addEventListener("change", function () { var v = this.value; change(function (c) { c.stickMode = v; }); });
   $("edResetCtl").addEventListener("click", function () { change(function (c) { var d = clone(DEFAULTS[c.component]); Object.keys(d).forEach(function (k) { c[k] = d[k]; }); }); syncTriggers(true); applySettings(); });
   $("edGroupName").addEventListener("change", function () {
     var g = groupById(selGroup); if (!g) return; pushUndo(); g.name = this.value.trim().slice(0, 30) || g.name; persist(); showSel();
@@ -1789,8 +1872,8 @@ input[type=range]:disabled { opacity: .4; }
     if (all[n] && n !== except) return "That name is taken";
     return "";
   }
-  function useLayout(b, g, name) { cfg = clone(b); groups = g ? clone(g) : groups; active = name || ""; store.set("vgp-active", active); syncTriggers(true); paint(); persist(); showSel(); renderLibrary(); applySettings(); }
-  function layoutText(b, g) { return JSON.stringify({ version: 2, buttons: b, groups: g }, null, 2); }
+  function useLayout(b, g, name, beh) { cfg = clone(b); groups = g ? clone(g) : groups; behaviour = beh ? clone(beh) : {}; applyBehaviour(); active = name || ""; store.set("vgp-active", active); syncTriggers(true); paint(); persist(); showSel(); renderLibrary(); applySettings(); }
+  function layoutText(b, g, beh) { var o = { version: 2, buttons: b, groups: g }; if (beh && Object.keys(beh).length) o.behaviour = behToFile(beh); return JSON.stringify(o, null, 2); }
 
   // A small dialog for names, confirmations and text
   var dlgCb = null;
@@ -1818,15 +1901,15 @@ input[type=range]:disabled { opacity: .4; }
   $("dlgInput").addEventListener("keydown", function (e) { if (e.key === "Enter") $("dlgYes").click(); });
 
   function applyPreset(n) {
-    var all = presets(), go = function () { if (n === "__default") useLayout(DEFAULTS, DEFAULT_GROUPS, "__default"); else if (all[n]) useLayout(all[n].buttons, all[n].groups, n); toast("Layout applied"); };
+    var all = presets(), go = function () { if (n === "__default") useLayout(DEFAULTS, DEFAULT_GROUPS, "__default"); else if (all[n]) useLayout(all[n].buttons, all[n].groups, n, all[n].behaviour); toast("Layout applied"); };
     if (active === "") dialog({ title: "Apply layout?", text: "Your unsaved layout will be replaced.", yes: "Apply", onYes: function () { go(); } }); else go();
   }
-  function editPreset(n) { if (n !== active) { var all = presets(); if (all[n]) useLayout(all[n].buttons, all[n].groups, n); } setTimeout(enterEdit, 0); }
+  function editPreset(n) { if (n !== active) { var all = presets(); if (all[n]) useLayout(all[n].buttons, all[n].groups, n, all[n].behaviour); } setTimeout(enterEdit, 0); }
   function newLayout() {
     dialog({ title: "New layout", text: "Starts from the default layout, then opens the editor.", input: true, value: uniqueName("My layout"), yes: "Create",
       onYes: function (r) {
         var err = checkName(r.text); if (err) return err;
-        var all = presets(); all[r.text] = { buttons: clone(DEFAULTS), groups: clone(DEFAULT_GROUPS) }; savePresets(all); saveOrder([r.text].concat(order().filter(function (x) { return x !== r.text; })));
+        var all = presets(); all[r.text] = { buttons: clone(DEFAULTS), groups: clone(DEFAULT_GROUPS), behaviour: {} }; savePresets(all); saveOrder([r.text].concat(order().filter(function (x) { return x !== r.text; })));
         useLayout(DEFAULTS, DEFAULT_GROUPS, r.text); setTimeout(enterEdit, 0);
       } });
   }
@@ -1834,7 +1917,7 @@ input[type=range]:disabled { opacity: .4; }
     dialog({ title: "Save layout", text: "Save your current control arrangement.", input: true, value: uniqueName("My layout"), yes: "Save",
       onYes: function (r) {
         var err = checkName(r.text); if (err) return err;
-        var all = presets(); all[r.text] = { buttons: clone(cfg), groups: clone(groups) }; savePresets(all); saveOrder([r.text].concat(order().filter(function (x) { return x !== r.text; })));
+        var all = presets(); all[r.text] = { buttons: clone(cfg), groups: clone(groups), behaviour: clone(behaviour) }; savePresets(all); saveOrder([r.text].concat(order().filter(function (x) { return x !== r.text; })));
         active = r.text; store.set("vgp-active", active); renderLibrary(); toast("Layout saved");
       } });
   }
@@ -1848,9 +1931,9 @@ input[type=range]:disabled { opacity: .4; }
       } });
   }
   function duplicatePreset(n) {
-    var all = presets(), src = n === "__default" ? { buttons: DEFAULTS, groups: DEFAULT_GROUPS } : all[n]; if (!src) return;
+    var all = presets(), src = n === "__default" ? { buttons: DEFAULTS, groups: DEFAULT_GROUPS, behaviour: {} } : all[n]; if (!src) return;
     var to = uniqueName((n === "__default" ? "Default" : n) + " copy");
-    all[to] = { buttons: clone(src.buttons), groups: clone(src.groups) }; savePresets(all); saveOrder([to].concat(order().filter(function (x) { return x !== to; }))); renderLibrary(); toast("Layout duplicated");
+    all[to] = { buttons: clone(src.buttons), groups: clone(src.groups), behaviour: clone(src.behaviour || {}) }; savePresets(all); saveOrder([to].concat(order().filter(function (x) { return x !== to; }))); renderLibrary(); toast("Layout duplicated");
   }
   function deletePreset(n) {
     dialog({ title: "Delete layout?", text: n + " will be removed. This cannot be undone.", yes: "Delete", danger: true,
@@ -1861,13 +1944,13 @@ input[type=range]:disabled { opacity: .4; }
   }
   function copyText(t) { if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(t).then(function () { toast("Copied"); }, function () { toast("Select the text and copy it"); }); else toast("Select the text and copy it"); }
   function exportPreset(n) {
-    var all = presets(), src = n === "__default" ? { buttons: DEFAULTS, groups: DEFAULT_GROUPS } : all[n]; if (!src) return;
-    var text = layoutText(src.buttons, src.groups);
+    var all = presets(), src = n === "__default" ? { buttons: DEFAULTS, groups: DEFAULT_GROUPS, behaviour: {} } : all[n]; if (!src) return;
+    var text = layoutText(src.buttons, src.groups, src.behaviour);
     dialog({ title: "Export " + (n === "__default" ? "Default" : n), text: "Copy this text to back up the layout or move it to another device.", area: true, areaValue: text, readOnly: true, yes: "Done", no: "Close", mid: "Copy", onMid: function () { copyText(text); } });
   }
   function exportAll() {
     var all = presets(), out = {};
-    order().forEach(function (n) { out[n] = { buttons: all[n].buttons, groups: all[n].groups }; });
+    order().forEach(function (n) { out[n] = { buttons: all[n].buttons, groups: all[n].groups }; if (all[n].behaviour && Object.keys(all[n].behaviour).length) out[n].behaviour = behToFile(all[n].behaviour); });
     out.Default = { buttons: clone(DEFAULTS), groups: clone(DEFAULT_GROUPS) };
     var text = JSON.stringify({ version: 2, presets: out }, null, 2);
     dialog({ title: "Export all layouts", text: "Copy this text to back up your layouts or move them to another device.", area: true, areaValue: text, readOnly: true, yes: "Done", no: "Close", mid: "Copy", onMid: function () { copyText(text); } });
@@ -1878,10 +1961,10 @@ input[type=range]:disabled { opacity: .4; }
       var many = root && root.presets && typeof root.presets === "object", got = readPresets(root, "Imported layout"), names = Object.keys(got), all = presets(), added = [];
       names.forEach(function (n) {
         var to = n === "Default" ? uniqueName("Default imported") : (all[n] ? uniqueName(n) : n);
-        all[to] = { buttons: got[n].buttons, groups: got[n].groups || clone(DEFAULT_GROUPS) }; added.push(to);
+        all[to] = { buttons: got[n].buttons, groups: got[n].groups || clone(DEFAULT_GROUPS), behaviour: got[n].behaviour || {} }; added.push(to);
       });
       savePresets(all); saveOrder(added.concat(order().filter(function (x) { return added.indexOf(x) < 0; })));
-      if (!many) useLayout(all[added[0]].buttons, all[added[0]].groups, added[0]); else renderLibrary();
+      if (!many) useLayout(all[added[0]].buttons, all[added[0]].groups, added[0], all[added[0]].behaviour); else renderLibrary();
       toast(many ? "Imported " + added.length + (added.length === 1 ? " layout" : " layouts") : "Layout imported");
       return "";
     } catch (e) { return "Not a valid layout"; }
@@ -1907,12 +1990,12 @@ input[type=range]:disabled { opacity: .4; }
     });
     return t;
   }
-  var SUGGESTED = [{"name":"Racing","desc":"Big gas and brake on the right, left stick to steer. Good for Forza and Mario Kart style games.","buttons":{"LEFT_ANALOG_STICK":{"component":"LEFT_ANALOG_STICK","visible":true,"scale":1.1,"widthScale":1.0,"heightScale":1.0,"offsetX":0.1768,"offsetY":0.1353,"anchor":"CENTER_LEFT","triggerMode":"DIGITAL","stickMode":"FIXED"},"RIGHT_ANALOG_STICK":{"component":"RIGHT_ANALOG_STICK","visible":false,"scale":0.96,"widthScale":1.0,"heightScale":1.0,"offsetX":0.5,"offsetY":0,"anchor":"BOTTOM_CENTER","triggerMode":"DIGITAL","stickMode":"FIXED"},"DPAD":{"component":"DPAD","visible":false,"scale":0.752,"widthScale":1.0,"heightScale":1.0,"offsetX":-0.5,"offsetY":0,"anchor":"BOTTOM_CENTER","triggerMode":"DIGITAL","stickMode":"FIXED"},"FACE_BUTTONS":{"component":"FACE_BUTTONS","visible":true,"scale":0.7,"widthScale":1.0,"heightScale":1.0,"offsetX":0.4384,"offsetY":0.0801,"anchor":"TOP_CENTER","triggerMode":"DIGITAL","stickMode":"FIXED"},"LEFT_TRIGGER":{"component":"LEFT_TRIGGER","visible":true,"scale":1.4,"widthScale":1.0,"heightScale":1.0,"offsetX":-0.4165,"offsetY":0.1804,"anchor":"CENTER_RIGHT","triggerMode":"DIGITAL","stickMode":"FIXED"},"RIGHT_TRIGGER":{"component":"RIGHT_TRIGGER","visible":true,"scale":1.6,"widthScale":1.0,"heightScale":1.0,"offsetX":-0.0278,"offsetY":0.1353,"anchor":"CENTER_RIGHT","triggerMode":"DIGITAL","stickMode":"FIXED"},"LEFT_SHOULDER":{"component":"LEFT_SHOULDER","visible":true,"scale":0.92,"widthScale":1.0,"heightScale":1.0,"offsetX":0.119,"offsetY":0.135,"anchor":"TOP_LEFT","triggerMode":"DIGITAL","stickMode":"FIXED"},"RIGHT_SHOULDER":{"component":"RIGHT_SHOULDER","visible":true,"scale":0.92,"widthScale":1.0,"heightScale":1.0,"offsetX":-0.144,"offsetY":0.135,"anchor":"TOP_RIGHT","triggerMode":"DIGITAL","stickMode":"FIXED"},"SELECT_BUTTON":{"component":"SELECT_BUTTON","visible":true,"scale":0.9,"widthScale":1.0,"heightScale":1.0,"offsetX":-0.1704,"offsetY":-0.1127,"anchor":"CENTER","triggerMode":"DIGITAL","stickMode":"FIXED"},"START_BUTTON":{"component":"START_BUTTON","visible":true,"scale":0.9,"widthScale":1.0,"heightScale":1.0,"offsetX":0.1679,"offsetY":-0.1127,"anchor":"CENTER","triggerMode":"DIGITAL","stickMode":"FIXED"},"BACK_BUTTON":{"component":"BACK_BUTTON","visible":true,"scale":0.632,"widthScale":1.0,"heightScale":1.0,"offsetX":-0.155,"offsetY":-0.0274,"anchor":"TOP_CENTER","triggerMode":"DIGITAL","stickMode":"FIXED"},"CONNECTION_BADGE":{"component":"CONNECTION_BADGE","visible":true,"scale":0.632,"widthScale":1.0,"heightScale":1.0,"offsetX":0,"offsetY":-0.0274,"anchor":"TOP_CENTER","triggerMode":"DIGITAL","stickMode":"FIXED"},"SETTINGS_BUTTON":{"component":"SETTINGS_BUTTON","visible":true,"scale":0.632,"widthScale":1.0,"heightScale":1.0,"offsetX":0.155,"offsetY":-0.0274,"anchor":"TOP_CENTER","triggerMode":"DIGITAL","stickMode":"FIXED"}},"groups":[{"id":"left_shoulders","name":"Left shoulders","members":["LEFT_TRIGGER","LEFT_SHOULDER"]},{"id":"right_shoulders","name":"Right shoulders","members":["RIGHT_TRIGGER","RIGHT_SHOULDER"]},{"id":"left_controls","name":"Left controls","members":["LEFT_ANALOG_STICK","DPAD","SELECT_BUTTON"]},{"id":"right_controls","name":"Right controls","members":["FACE_BUTTONS","RIGHT_ANALOG_STICK","START_BUTTON"]},{"id":"top_bar","name":"Top bar","members":["BACK_BUTTON","CONNECTION_BADGE","SETTINGS_BUTTON"]}]},{"name":"Platformer","desc":"A large D-pad and big jump buttons, no sticks. Good for Pico Park and other side-scrollers.","buttons":{"LEFT_ANALOG_STICK":{"component":"LEFT_ANALOG_STICK","visible":false,"scale":0.96,"widthScale":1.0,"heightScale":1.0,"offsetX":0.176,"offsetY":0.068,"anchor":"CENTER_LEFT","triggerMode":"DIGITAL","stickMode":"FIXED"},"RIGHT_ANALOG_STICK":{"component":"RIGHT_ANALOG_STICK","visible":false,"scale":0.96,"widthScale":1.0,"heightScale":1.0,"offsetX":0.5,"offsetY":0,"anchor":"BOTTOM_CENTER","triggerMode":"DIGITAL","stickMode":"FIXED"},"DPAD":{"component":"DPAD","visible":true,"scale":1.15,"widthScale":1.0,"heightScale":1.0,"offsetX":0.1817,"offsetY":0.1353,"anchor":"CENTER_LEFT","triggerMode":"DIGITAL","stickMode":"FIXED"},"FACE_BUTTONS":{"component":"FACE_BUTTONS","visible":true,"scale":1.15,"widthScale":1.0,"heightScale":1.0,"offsetX":-0.1843,"offsetY":0.1353,"anchor":"CENTER_RIGHT","triggerMode":"DIGITAL","stickMode":"FIXED"},"LEFT_TRIGGER":{"component":"LEFT_TRIGGER","visible":true,"scale":0.8,"widthScale":1.0,"heightScale":1.0,"offsetX":0.1258,"offsetY":0.1091,"anchor":"TOP_LEFT","triggerMode":"DIGITAL","stickMode":"FIXED"},"RIGHT_TRIGGER":{"component":"RIGHT_TRIGGER","visible":true,"scale":0.8,"widthScale":1.0,"heightScale":1.0,"offsetX":-0.1283,"offsetY":0.1091,"anchor":"TOP_RIGHT","triggerMode":"DIGITAL","stickMode":"FIXED"},"LEFT_SHOULDER":{"component":"LEFT_SHOULDER","visible":true,"scale":0.9,"widthScale":1.0,"heightScale":1.0,"offsetX":0.4142,"offsetY":0.1362,"anchor":"TOP_LEFT","triggerMode":"DIGITAL","stickMode":"FIXED"},"RIGHT_SHOULDER":{"component":"RIGHT_SHOULDER","visible":true,"scale":0.9,"widthScale":1.0,"heightScale":1.0,"offsetX":-0.4167,"offsetY":0.1362,"anchor":"TOP_RIGHT","triggerMode":"DIGITAL","stickMode":"FIXED"},"SELECT_BUTTON":{"component":"SELECT_BUTTON","visible":true,"scale":0.9,"widthScale":1.0,"heightScale":1.0,"offsetX":-0.1478,"offsetY":0.0676,"anchor":"CENTER","triggerMode":"DIGITAL","stickMode":"FIXED"},"START_BUTTON":{"component":"START_BUTTON","visible":true,"scale":0.9,"widthScale":1.0,"heightScale":1.0,"offsetX":0.1453,"offsetY":0.0676,"anchor":"CENTER","triggerMode":"DIGITAL","stickMode":"FIXED"},"BACK_BUTTON":{"component":"BACK_BUTTON","visible":true,"scale":0.632,"widthScale":1.0,"heightScale":1.0,"offsetX":-0.155,"offsetY":-0.0274,"anchor":"TOP_CENTER","triggerMode":"DIGITAL","stickMode":"FIXED"},"CONNECTION_BADGE":{"component":"CONNECTION_BADGE","visible":true,"scale":0.632,"widthScale":1.0,"heightScale":1.0,"offsetX":0,"offsetY":-0.0274,"anchor":"TOP_CENTER","triggerMode":"DIGITAL","stickMode":"FIXED"},"SETTINGS_BUTTON":{"component":"SETTINGS_BUTTON","visible":true,"scale":0.632,"widthScale":1.0,"heightScale":1.0,"offsetX":0.155,"offsetY":-0.0274,"anchor":"TOP_CENTER","triggerMode":"DIGITAL","stickMode":"FIXED"}},"groups":[{"id":"left_shoulders","name":"Left shoulders","members":["LEFT_TRIGGER","LEFT_SHOULDER"]},{"id":"right_shoulders","name":"Right shoulders","members":["RIGHT_TRIGGER","RIGHT_SHOULDER"]},{"id":"left_controls","name":"Left controls","members":["LEFT_ANALOG_STICK","DPAD","SELECT_BUTTON"]},{"id":"right_controls","name":"Right controls","members":["FACE_BUTTONS","RIGHT_ANALOG_STICK","START_BUTTON"]},{"id":"top_bar","name":"Top bar","members":["BACK_BUTTON","CONNECTION_BADGE","SETTINGS_BUTTON"]}]},{"name":"Shooter","desc":"Two sticks with big triggers for aim and fire, buttons kept small.","buttons":{"LEFT_ANALOG_STICK":{"component":"LEFT_ANALOG_STICK","visible":true,"scale":1.0,"widthScale":1.0,"heightScale":1.0,"offsetX":0.1939,"offsetY":-0.1263,"anchor":"BOTTOM_LEFT","triggerMode":"DIGITAL","stickMode":"FIXED"},"RIGHT_ANALOG_STICK":{"component":"RIGHT_ANALOG_STICK","visible":true,"scale":1.0,"widthScale":1.0,"heightScale":1.0,"offsetX":0.4384,"offsetY":0.2255,"anchor":"CENTER","triggerMode":"DIGITAL","stickMode":"FIXED"},"DPAD":{"component":"DPAD","visible":true,"scale":0.5,"widthScale":1.0,"heightScale":1.0,"offsetX":-0.3056,"offsetY":0.2378,"anchor":"TOP_CENTER","triggerMode":"DIGITAL","stickMode":"FIXED"},"FACE_BUTTONS":{"component":"FACE_BUTTONS","visible":true,"scale":0.65,"widthScale":1.0,"heightScale":1.0,"offsetX":-0.0938,"offsetY":0.0451,"anchor":"CENTER_RIGHT","triggerMode":"DIGITAL","stickMode":"FIXED"},"LEFT_TRIGGER":{"component":"LEFT_TRIGGER","visible":true,"scale":1.25,"widthScale":1.0,"heightScale":1.0,"offsetX":0.0883,"offsetY":0.0623,"anchor":"TOP_LEFT","triggerMode":"DIGITAL","stickMode":"FIXED"},"RIGHT_TRIGGER":{"component":"RIGHT_TRIGGER","visible":true,"scale":1.25,"widthScale":1.0,"heightScale":1.0,"offsetX":-0.0908,"offsetY":0.0623,"anchor":"TOP_RIGHT","triggerMode":"DIGITAL","stickMode":"FIXED"},"LEFT_SHOULDER":{"component":"LEFT_SHOULDER","visible":true,"scale":0.92,"widthScale":1.0,"heightScale":1.0,"offsetX":0.4347,"offsetY":0.1124,"anchor":"TOP_LEFT","triggerMode":"DIGITAL","stickMode":"FIXED"},"RIGHT_SHOULDER":{"component":"RIGHT_SHOULDER","visible":true,"scale":0.92,"widthScale":1.0,"heightScale":1.0,"offsetX":-0.4597,"offsetY":0.1124,"anchor":"TOP_RIGHT","triggerMode":"DIGITAL","stickMode":"FIXED"},"SELECT_BUTTON":{"component":"SELECT_BUTTON","visible":true,"scale":0.9,"widthScale":1.0,"heightScale":1.0,"offsetX":-0.471,"offsetY":0.464,"anchor":"TOP_CENTER","triggerMode":"DIGITAL","stickMode":"FIXED"},"START_BUTTON":{"component":"START_BUTTON","visible":true,"scale":0.9,"widthScale":1.0,"heightScale":1.0,"offsetX":0.471,"offsetY":0.464,"anchor":"TOP_CENTER","triggerMode":"DIGITAL","stickMode":"FIXED"},"BACK_BUTTON":{"component":"BACK_BUTTON","visible":true,"scale":0.632,"widthScale":1.0,"heightScale":1.0,"offsetX":-0.155,"offsetY":-0.0274,"anchor":"TOP_CENTER","triggerMode":"DIGITAL","stickMode":"FIXED"},"CONNECTION_BADGE":{"component":"CONNECTION_BADGE","visible":true,"scale":0.632,"widthScale":1.0,"heightScale":1.0,"offsetX":0,"offsetY":-0.0274,"anchor":"TOP_CENTER","triggerMode":"DIGITAL","stickMode":"FIXED"},"SETTINGS_BUTTON":{"component":"SETTINGS_BUTTON","visible":true,"scale":0.632,"widthScale":1.0,"heightScale":1.0,"offsetX":0.155,"offsetY":-0.0274,"anchor":"TOP_CENTER","triggerMode":"DIGITAL","stickMode":"FIXED"}},"groups":[{"id":"left_shoulders","name":"Left shoulders","members":["LEFT_TRIGGER","LEFT_SHOULDER"]},{"id":"right_shoulders","name":"Right shoulders","members":["RIGHT_TRIGGER","RIGHT_SHOULDER"]},{"id":"left_controls","name":"Left controls","members":["LEFT_ANALOG_STICK","DPAD","SELECT_BUTTON"]},{"id":"right_controls","name":"Right controls","members":["FACE_BUTTONS","RIGHT_ANALOG_STICK","START_BUTTON"]},{"id":"top_bar","name":"Top bar","members":["BACK_BUTTON","CONNECTION_BADGE","SETTINGS_BUTTON"]}]},{"name":"Fighting","desc":"D-pad on the left and six attack buttons in reach of the right thumb. Good for Street Fighter and Smash.","buttons":{"LEFT_ANALOG_STICK":{"component":"LEFT_ANALOG_STICK","visible":false,"scale":0.96,"widthScale":1.0,"heightScale":1.0,"offsetX":0.176,"offsetY":0.068,"anchor":"CENTER_LEFT","triggerMode":"DIGITAL","stickMode":"FIXED"},"RIGHT_ANALOG_STICK":{"component":"RIGHT_ANALOG_STICK","visible":false,"scale":0.96,"widthScale":1.0,"heightScale":1.0,"offsetX":0.5,"offsetY":0,"anchor":"BOTTOM_CENTER","triggerMode":"DIGITAL","stickMode":"FIXED"},"DPAD":{"component":"DPAD","visible":true,"scale":1.1,"widthScale":1.0,"heightScale":1.0,"offsetX":0.1705,"offsetY":0.1578,"anchor":"CENTER_LEFT","triggerMode":"DIGITAL","stickMode":"FIXED"},"FACE_BUTTONS":{"component":"FACE_BUTTONS","visible":true,"scale":1.0,"widthScale":1.0,"heightScale":1.0,"offsetX":0.3257,"offsetY":0.1353,"anchor":"CENTER","triggerMode":"DIGITAL","stickMode":"FIXED"},"LEFT_TRIGGER":{"component":"LEFT_TRIGGER","visible":false,"scale":1.128,"widthScale":1.0,"heightScale":1.0,"offsetX":0.2516,"offsetY":-0.0222,"anchor":"TOP_LEFT","triggerMode":"DIGITAL","stickMode":"FIXED"},"RIGHT_TRIGGER":{"component":"RIGHT_TRIGGER","visible":true,"scale":1.0,"widthScale":1.0,"heightScale":1.0,"offsetX":-0.2018,"offsetY":0.1804,"anchor":"CENTER_RIGHT","triggerMode":"DIGITAL","stickMode":"FIXED"},"LEFT_SHOULDER":{"component":"LEFT_SHOULDER","visible":true,"scale":0.9,"widthScale":1.0,"heightScale":1.0,"offsetX":0.01,"offsetY":0.1362,"anchor":"TOP_CENTER","triggerMode":"DIGITAL","stickMode":"FIXED"},"RIGHT_SHOULDER":{"component":"RIGHT_SHOULDER","visible":true,"scale":1.0,"widthScale":1.0,"heightScale":1.0,"offsetX":-0.2033,"offsetY":-0.1804,"anchor":"CENTER_RIGHT","triggerMode":"DIGITAL","stickMode":"FIXED"},"SELECT_BUTTON":{"component":"SELECT_BUTTON","visible":true,"scale":0.9,"widthScale":1.0,"heightScale":1.0,"offsetX":-0.1478,"offsetY":-0.1578,"anchor":"CENTER","triggerMode":"DIGITAL","stickMode":"FIXED"},"START_BUTTON":{"component":"START_BUTTON","visible":true,"scale":0.9,"widthScale":1.0,"heightScale":1.0,"offsetX":0.1453,"offsetY":-0.1578,"anchor":"CENTER","triggerMode":"DIGITAL","stickMode":"FIXED"},"BACK_BUTTON":{"component":"BACK_BUTTON","visible":true,"scale":0.632,"widthScale":1.0,"heightScale":1.0,"offsetX":-0.155,"offsetY":-0.0274,"anchor":"TOP_CENTER","triggerMode":"DIGITAL","stickMode":"FIXED"},"CONNECTION_BADGE":{"component":"CONNECTION_BADGE","visible":true,"scale":0.632,"widthScale":1.0,"heightScale":1.0,"offsetX":0,"offsetY":-0.0274,"anchor":"TOP_CENTER","triggerMode":"DIGITAL","stickMode":"FIXED"},"SETTINGS_BUTTON":{"component":"SETTINGS_BUTTON","visible":true,"scale":0.632,"widthScale":1.0,"heightScale":1.0,"offsetX":0.155,"offsetY":-0.0274,"anchor":"TOP_CENTER","triggerMode":"DIGITAL","stickMode":"FIXED"}},"groups":[{"id":"left_shoulders","name":"Left shoulders","members":["LEFT_TRIGGER","LEFT_SHOULDER"]},{"id":"right_shoulders","name":"Right shoulders","members":["RIGHT_TRIGGER","RIGHT_SHOULDER"]},{"id":"left_controls","name":"Left controls","members":["LEFT_ANALOG_STICK","DPAD","SELECT_BUTTON"]},{"id":"right_controls","name":"Right controls","members":["FACE_BUTTONS","RIGHT_ANALOG_STICK","START_BUTTON"]},{"id":"top_bar","name":"Top bar","members":["BACK_BUTTON","CONNECTION_BADGE","SETTINGS_BUTTON"]}]},{"name":"Party games","desc":"Left stick, jump and big grab triggers. Good for Gang Beasts, Smash and other couch games.","buttons":{"LEFT_ANALOG_STICK":{"component":"LEFT_ANALOG_STICK","visible":true,"scale":1.1,"widthScale":1.0,"heightScale":1.0,"offsetX":0.1768,"offsetY":0.1578,"anchor":"CENTER_LEFT","triggerMode":"DIGITAL","stickMode":"FIXED"},"RIGHT_ANALOG_STICK":{"component":"RIGHT_ANALOG_STICK","visible":false,"scale":0.96,"widthScale":1.0,"heightScale":1.0,"offsetX":0.5,"offsetY":0,"anchor":"BOTTOM_CENTER","triggerMode":"DIGITAL","stickMode":"FIXED"},"DPAD":{"component":"DPAD","visible":false,"scale":0.752,"widthScale":1.0,"heightScale":1.0,"offsetX":-0.5,"offsetY":0,"anchor":"BOTTOM_CENTER","triggerMode":"DIGITAL","stickMode":"FIXED"},"FACE_BUTTONS":{"component":"FACE_BUTTONS","visible":true,"scale":1.0,"widthScale":1.0,"heightScale":1.0,"offsetX":-0.1729,"offsetY":0.1353,"anchor":"CENTER_RIGHT","triggerMode":"DIGITAL","stickMode":"FIXED"},"LEFT_TRIGGER":{"component":"LEFT_TRIGGER","visible":true,"scale":1.2,"widthScale":1.0,"heightScale":1.0,"offsetX":0.1376,"offsetY":0.0675,"anchor":"TOP_LEFT","triggerMode":"DIGITAL","stickMode":"FIXED"},"RIGHT_TRIGGER":{"component":"RIGHT_TRIGGER","visible":true,"scale":1.2,"widthScale":1.0,"heightScale":1.0,"offsetX":-0.1401,"offsetY":0.0675,"anchor":"TOP_RIGHT","triggerMode":"DIGITAL","stickMode":"FIXED"},"LEFT_SHOULDER":{"component":"LEFT_SHOULDER","visible":true,"scale":0.9,"widthScale":1.0,"heightScale":1.0,"offsetX":0.4142,"offsetY":0.1137,"anchor":"TOP_LEFT","triggerMode":"DIGITAL","stickMode":"FIXED"},"RIGHT_SHOULDER":{"component":"RIGHT_SHOULDER","visible":true,"scale":0.9,"widthScale":1.0,"heightScale":1.0,"offsetX":-0.4167,"offsetY":0.1137,"anchor":"TOP_RIGHT","triggerMode":"DIGITAL","stickMode":"FIXED"},"SELECT_BUTTON":{"component":"SELECT_BUTTON","visible":true,"scale":0.9,"widthScale":1.0,"heightScale":1.0,"offsetX":-0.471,"offsetY":0.464,"anchor":"TOP_CENTER","triggerMode":"DIGITAL","stickMode":"FIXED"},"START_BUTTON":{"component":"START_BUTTON","visible":true,"scale":0.9,"widthScale":1.0,"heightScale":1.0,"offsetX":0.471,"offsetY":0.464,"anchor":"TOP_CENTER","triggerMode":"DIGITAL","stickMode":"FIXED"},"BACK_BUTTON":{"component":"BACK_BUTTON","visible":true,"scale":0.632,"widthScale":1.0,"heightScale":1.0,"offsetX":-0.155,"offsetY":-0.0274,"anchor":"TOP_CENTER","triggerMode":"DIGITAL","stickMode":"FIXED"},"CONNECTION_BADGE":{"component":"CONNECTION_BADGE","visible":true,"scale":0.632,"widthScale":1.0,"heightScale":1.0,"offsetX":0,"offsetY":-0.0274,"anchor":"TOP_CENTER","triggerMode":"DIGITAL","stickMode":"FIXED"},"SETTINGS_BUTTON":{"component":"SETTINGS_BUTTON","visible":true,"scale":0.632,"widthScale":1.0,"heightScale":1.0,"offsetX":0.155,"offsetY":-0.0274,"anchor":"TOP_CENTER","triggerMode":"DIGITAL","stickMode":"FIXED"}},"groups":[{"id":"left_shoulders","name":"Left shoulders","members":["LEFT_TRIGGER","LEFT_SHOULDER"]},{"id":"right_shoulders","name":"Right shoulders","members":["RIGHT_TRIGGER","RIGHT_SHOULDER"]},{"id":"left_controls","name":"Left controls","members":["LEFT_ANALOG_STICK","DPAD","SELECT_BUTTON"]},{"id":"right_controls","name":"Right controls","members":["FACE_BUTTONS","RIGHT_ANALOG_STICK","START_BUTTON"]},{"id":"top_bar","name":"Top bar","members":["BACK_BUTTON","CONNECTION_BADGE","SETTINGS_BUTTON"]}]}];
+  var SUGGESTED = [{"name":"Racing","desc":"Big gas and brake on the right, tilt the phone to steer. Good for Forza and Mario Kart style games.","buttons":{"LEFT_ANALOG_STICK":{"component":"LEFT_ANALOG_STICK","visible":true,"scale":1.1,"widthScale":1.0,"heightScale":1.0,"offsetX":0.1768,"offsetY":0.1353,"anchor":"CENTER_LEFT","triggerMode":"DIGITAL","stickMode":"FIXED"},"RIGHT_ANALOG_STICK":{"component":"RIGHT_ANALOG_STICK","visible":false,"scale":0.96,"widthScale":1.0,"heightScale":1.0,"offsetX":0.5,"offsetY":0,"anchor":"BOTTOM_CENTER","triggerMode":"DIGITAL","stickMode":"FIXED"},"DPAD":{"component":"DPAD","visible":false,"scale":0.752,"widthScale":1.0,"heightScale":1.0,"offsetX":-0.5,"offsetY":0,"anchor":"BOTTOM_CENTER","triggerMode":"DIGITAL","stickMode":"FIXED"},"FACE_BUTTONS":{"component":"FACE_BUTTONS","visible":true,"scale":0.7,"widthScale":1.0,"heightScale":1.0,"offsetX":0.4384,"offsetY":0.0801,"anchor":"TOP_CENTER","triggerMode":"DIGITAL","stickMode":"FIXED"},"LEFT_TRIGGER":{"component":"LEFT_TRIGGER","visible":true,"scale":1.4,"widthScale":1.0,"heightScale":1.0,"offsetX":-0.4391,"offsetY":0.1578,"anchor":"CENTER_RIGHT","triggerMode":"ZONES","stickMode":"FIXED"},"RIGHT_TRIGGER":{"component":"RIGHT_TRIGGER","visible":true,"scale":1.6,"widthScale":1.0,"heightScale":1.0,"offsetX":-0.0278,"offsetY":0.1353,"anchor":"CENTER_RIGHT","triggerMode":"ZONES","stickMode":"FIXED"},"LEFT_SHOULDER":{"component":"LEFT_SHOULDER","visible":true,"scale":0.92,"widthScale":1.0,"heightScale":1.0,"offsetX":0.119,"offsetY":0.135,"anchor":"TOP_LEFT","triggerMode":"DIGITAL","stickMode":"FIXED"},"RIGHT_SHOULDER":{"component":"RIGHT_SHOULDER","visible":true,"scale":0.92,"widthScale":1.0,"heightScale":1.0,"offsetX":-0.144,"offsetY":0.135,"anchor":"TOP_RIGHT","triggerMode":"DIGITAL","stickMode":"FIXED"},"SELECT_BUTTON":{"component":"SELECT_BUTTON","visible":true,"scale":0.9,"widthScale":1.0,"heightScale":1.0,"offsetX":-0.1704,"offsetY":-0.1127,"anchor":"CENTER","triggerMode":"DIGITAL","stickMode":"FIXED"},"START_BUTTON":{"component":"START_BUTTON","visible":true,"scale":0.9,"widthScale":1.0,"heightScale":1.0,"offsetX":0.1679,"offsetY":-0.1127,"anchor":"CENTER","triggerMode":"DIGITAL","stickMode":"FIXED"},"BACK_BUTTON":{"component":"BACK_BUTTON","visible":true,"scale":0.632,"widthScale":1.0,"heightScale":1.0,"offsetX":-0.155,"offsetY":-0.0274,"anchor":"TOP_CENTER","triggerMode":"DIGITAL","stickMode":"FIXED"},"CONNECTION_BADGE":{"component":"CONNECTION_BADGE","visible":true,"scale":0.632,"widthScale":1.0,"heightScale":1.0,"offsetX":0,"offsetY":-0.0274,"anchor":"TOP_CENTER","triggerMode":"DIGITAL","stickMode":"FIXED"},"SETTINGS_BUTTON":{"component":"SETTINGS_BUTTON","visible":true,"scale":0.632,"widthScale":1.0,"heightScale":1.0,"offsetX":0.155,"offsetY":-0.0274,"anchor":"TOP_CENTER","triggerMode":"DIGITAL","stickMode":"FIXED"}},"groups":[{"id":"left_shoulders","name":"Left shoulders","members":["LEFT_TRIGGER","LEFT_SHOULDER"]},{"id":"right_shoulders","name":"Right shoulders","members":["RIGHT_TRIGGER","RIGHT_SHOULDER"]},{"id":"left_controls","name":"Left controls","members":["LEFT_ANALOG_STICK","DPAD","SELECT_BUTTON"]},{"id":"right_controls","name":"Right controls","members":["FACE_BUTTONS","RIGHT_ANALOG_STICK","START_BUTTON"]},{"id":"top_bar","name":"Top bar","members":["BACK_BUTTON","CONNECTION_BADGE","SETTINGS_BUTTON"]}],"behaviour":{"tilt":"left","curve":"precise"}},{"name":"Platformer","desc":"A large D-pad and big jump buttons, no sticks. Good for Pico Park and other side-scrollers.","buttons":{"LEFT_ANALOG_STICK":{"component":"LEFT_ANALOG_STICK","visible":false,"scale":0.96,"widthScale":1.0,"heightScale":1.0,"offsetX":0.176,"offsetY":0.068,"anchor":"CENTER_LEFT","triggerMode":"DIGITAL","stickMode":"FIXED"},"RIGHT_ANALOG_STICK":{"component":"RIGHT_ANALOG_STICK","visible":false,"scale":0.96,"widthScale":1.0,"heightScale":1.0,"offsetX":0.5,"offsetY":0,"anchor":"BOTTOM_CENTER","triggerMode":"DIGITAL","stickMode":"FIXED"},"DPAD":{"component":"DPAD","visible":true,"scale":1.15,"widthScale":1.0,"heightScale":1.0,"offsetX":0.1817,"offsetY":0.1353,"anchor":"CENTER_LEFT","triggerMode":"DIGITAL","stickMode":"FIXED"},"FACE_BUTTONS":{"component":"FACE_BUTTONS","visible":true,"scale":1.15,"widthScale":1.0,"heightScale":1.0,"offsetX":-0.1843,"offsetY":0.1353,"anchor":"CENTER_RIGHT","triggerMode":"DIGITAL","stickMode":"FIXED"},"LEFT_TRIGGER":{"component":"LEFT_TRIGGER","visible":true,"scale":0.8,"widthScale":1.0,"heightScale":1.0,"offsetX":0.1258,"offsetY":0.1091,"anchor":"TOP_LEFT","triggerMode":"DIGITAL","stickMode":"FIXED"},"RIGHT_TRIGGER":{"component":"RIGHT_TRIGGER","visible":true,"scale":0.8,"widthScale":1.0,"heightScale":1.0,"offsetX":-0.1283,"offsetY":0.1091,"anchor":"TOP_RIGHT","triggerMode":"DIGITAL","stickMode":"FIXED"},"LEFT_SHOULDER":{"component":"LEFT_SHOULDER","visible":true,"scale":0.9,"widthScale":1.0,"heightScale":1.0,"offsetX":0.4142,"offsetY":0.1362,"anchor":"TOP_LEFT","triggerMode":"DIGITAL","stickMode":"FIXED"},"RIGHT_SHOULDER":{"component":"RIGHT_SHOULDER","visible":true,"scale":0.9,"widthScale":1.0,"heightScale":1.0,"offsetX":-0.4167,"offsetY":0.1362,"anchor":"TOP_RIGHT","triggerMode":"DIGITAL","stickMode":"FIXED"},"SELECT_BUTTON":{"component":"SELECT_BUTTON","visible":true,"scale":0.9,"widthScale":1.0,"heightScale":1.0,"offsetX":-0.1478,"offsetY":0.0676,"anchor":"CENTER","triggerMode":"DIGITAL","stickMode":"FIXED"},"START_BUTTON":{"component":"START_BUTTON","visible":true,"scale":0.9,"widthScale":1.0,"heightScale":1.0,"offsetX":0.1453,"offsetY":0.0676,"anchor":"CENTER","triggerMode":"DIGITAL","stickMode":"FIXED"},"BACK_BUTTON":{"component":"BACK_BUTTON","visible":true,"scale":0.632,"widthScale":1.0,"heightScale":1.0,"offsetX":-0.155,"offsetY":-0.0274,"anchor":"TOP_CENTER","triggerMode":"DIGITAL","stickMode":"FIXED"},"CONNECTION_BADGE":{"component":"CONNECTION_BADGE","visible":true,"scale":0.632,"widthScale":1.0,"heightScale":1.0,"offsetX":0,"offsetY":-0.0274,"anchor":"TOP_CENTER","triggerMode":"DIGITAL","stickMode":"FIXED"},"SETTINGS_BUTTON":{"component":"SETTINGS_BUTTON","visible":true,"scale":0.632,"widthScale":1.0,"heightScale":1.0,"offsetX":0.155,"offsetY":-0.0274,"anchor":"TOP_CENTER","triggerMode":"DIGITAL","stickMode":"FIXED"}},"groups":[{"id":"left_shoulders","name":"Left shoulders","members":["LEFT_TRIGGER","LEFT_SHOULDER"]},{"id":"right_shoulders","name":"Right shoulders","members":["RIGHT_TRIGGER","RIGHT_SHOULDER"]},{"id":"left_controls","name":"Left controls","members":["LEFT_ANALOG_STICK","DPAD","SELECT_BUTTON"]},{"id":"right_controls","name":"Right controls","members":["FACE_BUTTONS","RIGHT_ANALOG_STICK","START_BUTTON"]},{"id":"top_bar","name":"Top bar","members":["BACK_BUTTON","CONNECTION_BADGE","SETTINGS_BUTTON"]}],"behaviour":{"dpadSingle":true,"click":false}},{"name":"Shooter","desc":"Floating left stick, a fine right stick for aiming and big triggers for fire.","buttons":{"LEFT_ANALOG_STICK":{"component":"LEFT_ANALOG_STICK","visible":true,"scale":1.0,"widthScale":1.0,"heightScale":1.0,"offsetX":0.1939,"offsetY":-0.1263,"anchor":"BOTTOM_LEFT","triggerMode":"DIGITAL","stickMode":"FLOATING"},"RIGHT_ANALOG_STICK":{"component":"RIGHT_ANALOG_STICK","visible":true,"scale":1.0,"widthScale":1.0,"heightScale":1.0,"offsetX":0.4384,"offsetY":0.2255,"anchor":"CENTER","triggerMode":"DIGITAL","stickMode":"FIXED"},"DPAD":{"component":"DPAD","visible":true,"scale":0.5,"widthScale":1.0,"heightScale":1.0,"offsetX":-0.3056,"offsetY":0.2378,"anchor":"TOP_CENTER","triggerMode":"DIGITAL","stickMode":"FIXED"},"FACE_BUTTONS":{"component":"FACE_BUTTONS","visible":true,"scale":0.65,"widthScale":1.0,"heightScale":1.0,"offsetX":-0.0938,"offsetY":0.0451,"anchor":"CENTER_RIGHT","triggerMode":"DIGITAL","stickMode":"FIXED"},"LEFT_TRIGGER":{"component":"LEFT_TRIGGER","visible":true,"scale":1.25,"widthScale":1.0,"heightScale":1.0,"offsetX":0.0883,"offsetY":0.0623,"anchor":"TOP_LEFT","triggerMode":"DIGITAL","stickMode":"FIXED"},"RIGHT_TRIGGER":{"component":"RIGHT_TRIGGER","visible":true,"scale":1.25,"widthScale":1.0,"heightScale":1.0,"offsetX":-0.0908,"offsetY":0.0623,"anchor":"TOP_RIGHT","triggerMode":"DIGITAL","stickMode":"FIXED"},"LEFT_SHOULDER":{"component":"LEFT_SHOULDER","visible":true,"scale":0.92,"widthScale":1.0,"heightScale":1.0,"offsetX":0.4347,"offsetY":0.1124,"anchor":"TOP_LEFT","triggerMode":"DIGITAL","stickMode":"FIXED"},"RIGHT_SHOULDER":{"component":"RIGHT_SHOULDER","visible":true,"scale":0.92,"widthScale":1.0,"heightScale":1.0,"offsetX":-0.4597,"offsetY":0.1124,"anchor":"TOP_RIGHT","triggerMode":"DIGITAL","stickMode":"FIXED"},"SELECT_BUTTON":{"component":"SELECT_BUTTON","visible":true,"scale":0.9,"widthScale":1.0,"heightScale":1.0,"offsetX":-0.471,"offsetY":0.464,"anchor":"TOP_CENTER","triggerMode":"DIGITAL","stickMode":"FIXED"},"START_BUTTON":{"component":"START_BUTTON","visible":true,"scale":0.9,"widthScale":1.0,"heightScale":1.0,"offsetX":0.471,"offsetY":0.464,"anchor":"TOP_CENTER","triggerMode":"DIGITAL","stickMode":"FIXED"},"BACK_BUTTON":{"component":"BACK_BUTTON","visible":true,"scale":0.632,"widthScale":1.0,"heightScale":1.0,"offsetX":-0.155,"offsetY":-0.0274,"anchor":"TOP_CENTER","triggerMode":"DIGITAL","stickMode":"FIXED"},"CONNECTION_BADGE":{"component":"CONNECTION_BADGE","visible":true,"scale":0.632,"widthScale":1.0,"heightScale":1.0,"offsetX":0,"offsetY":-0.0274,"anchor":"TOP_CENTER","triggerMode":"DIGITAL","stickMode":"FIXED"},"SETTINGS_BUTTON":{"component":"SETTINGS_BUTTON","visible":true,"scale":0.632,"widthScale":1.0,"heightScale":1.0,"offsetX":0.155,"offsetY":-0.0274,"anchor":"TOP_CENTER","triggerMode":"DIGITAL","stickMode":"FIXED"}},"groups":[{"id":"left_shoulders","name":"Left shoulders","members":["LEFT_TRIGGER","LEFT_SHOULDER"]},{"id":"right_shoulders","name":"Right shoulders","members":["RIGHT_TRIGGER","RIGHT_SHOULDER"]},{"id":"left_controls","name":"Left controls","members":["LEFT_ANALOG_STICK","DPAD","SELECT_BUTTON"]},{"id":"right_controls","name":"Right controls","members":["FACE_BUTTONS","RIGHT_ANALOG_STICK","START_BUTTON"]},{"id":"top_bar","name":"Top bar","members":["BACK_BUTTON","CONNECTION_BADGE","SETTINGS_BUTTON"]}],"behaviour":{"curve":"precise","sens":110}},{"name":"Fighting","desc":"D-pad on the left and six attack buttons in reach of the right thumb. Good for Street Fighter and Smash.","buttons":{"LEFT_ANALOG_STICK":{"component":"LEFT_ANALOG_STICK","visible":false,"scale":0.96,"widthScale":1.0,"heightScale":1.0,"offsetX":0.176,"offsetY":0.068,"anchor":"CENTER_LEFT","triggerMode":"DIGITAL","stickMode":"FIXED"},"RIGHT_ANALOG_STICK":{"component":"RIGHT_ANALOG_STICK","visible":false,"scale":0.96,"widthScale":1.0,"heightScale":1.0,"offsetX":0.5,"offsetY":0,"anchor":"BOTTOM_CENTER","triggerMode":"DIGITAL","stickMode":"FIXED"},"DPAD":{"component":"DPAD","visible":true,"scale":1.1,"widthScale":1.0,"heightScale":1.0,"offsetX":0.1705,"offsetY":0.1578,"anchor":"CENTER_LEFT","triggerMode":"DIGITAL","stickMode":"FIXED"},"FACE_BUTTONS":{"component":"FACE_BUTTONS","visible":true,"scale":1.0,"widthScale":1.0,"heightScale":1.0,"offsetX":0.3257,"offsetY":0.1353,"anchor":"CENTER","triggerMode":"DIGITAL","stickMode":"FIXED"},"LEFT_TRIGGER":{"component":"LEFT_TRIGGER","visible":false,"scale":1.128,"widthScale":1.0,"heightScale":1.0,"offsetX":0.2516,"offsetY":-0.0222,"anchor":"TOP_LEFT","triggerMode":"DIGITAL","stickMode":"FIXED"},"RIGHT_TRIGGER":{"component":"RIGHT_TRIGGER","visible":true,"scale":1.0,"widthScale":1.0,"heightScale":1.0,"offsetX":-0.2018,"offsetY":0.1804,"anchor":"CENTER_RIGHT","triggerMode":"DIGITAL","stickMode":"FIXED"},"LEFT_SHOULDER":{"component":"LEFT_SHOULDER","visible":true,"scale":0.9,"widthScale":1.0,"heightScale":1.0,"offsetX":0.01,"offsetY":0.1362,"anchor":"TOP_CENTER","triggerMode":"DIGITAL","stickMode":"FIXED"},"RIGHT_SHOULDER":{"component":"RIGHT_SHOULDER","visible":true,"scale":1.0,"widthScale":1.0,"heightScale":1.0,"offsetX":-0.2033,"offsetY":-0.1804,"anchor":"CENTER_RIGHT","triggerMode":"DIGITAL","stickMode":"FIXED"},"SELECT_BUTTON":{"component":"SELECT_BUTTON","visible":true,"scale":0.9,"widthScale":1.0,"heightScale":1.0,"offsetX":-0.1478,"offsetY":-0.1578,"anchor":"CENTER","triggerMode":"DIGITAL","stickMode":"FIXED"},"START_BUTTON":{"component":"START_BUTTON","visible":true,"scale":0.9,"widthScale":1.0,"heightScale":1.0,"offsetX":0.1453,"offsetY":-0.1578,"anchor":"CENTER","triggerMode":"DIGITAL","stickMode":"FIXED"},"BACK_BUTTON":{"component":"BACK_BUTTON","visible":true,"scale":0.632,"widthScale":1.0,"heightScale":1.0,"offsetX":-0.155,"offsetY":-0.0274,"anchor":"TOP_CENTER","triggerMode":"DIGITAL","stickMode":"FIXED"},"CONNECTION_BADGE":{"component":"CONNECTION_BADGE","visible":true,"scale":0.632,"widthScale":1.0,"heightScale":1.0,"offsetX":0,"offsetY":-0.0274,"anchor":"TOP_CENTER","triggerMode":"DIGITAL","stickMode":"FIXED"},"SETTINGS_BUTTON":{"component":"SETTINGS_BUTTON","visible":true,"scale":0.632,"widthScale":1.0,"heightScale":1.0,"offsetX":0.155,"offsetY":-0.0274,"anchor":"TOP_CENTER","triggerMode":"DIGITAL","stickMode":"FIXED"}},"groups":[{"id":"left_shoulders","name":"Left shoulders","members":["LEFT_TRIGGER","LEFT_SHOULDER"]},{"id":"right_shoulders","name":"Right shoulders","members":["RIGHT_TRIGGER","RIGHT_SHOULDER"]},{"id":"left_controls","name":"Left controls","members":["LEFT_ANALOG_STICK","DPAD","SELECT_BUTTON"]},{"id":"right_controls","name":"Right controls","members":["FACE_BUTTONS","RIGHT_ANALOG_STICK","START_BUTTON"]},{"id":"top_bar","name":"Top bar","members":["BACK_BUTTON","CONNECTION_BADGE","SETTINGS_BUTTON"]}],"behaviour":{"dpadSingle":false,"diag":30}},{"name":"Party games","desc":"Left stick, jump and big grab triggers. Good for Gang Beasts, Smash and other couch games.","buttons":{"LEFT_ANALOG_STICK":{"component":"LEFT_ANALOG_STICK","visible":true,"scale":1.1,"widthScale":1.0,"heightScale":1.0,"offsetX":0.1768,"offsetY":0.1578,"anchor":"CENTER_LEFT","triggerMode":"DIGITAL","stickMode":"FIXED"},"RIGHT_ANALOG_STICK":{"component":"RIGHT_ANALOG_STICK","visible":false,"scale":0.96,"widthScale":1.0,"heightScale":1.0,"offsetX":0.5,"offsetY":0,"anchor":"BOTTOM_CENTER","triggerMode":"DIGITAL","stickMode":"FIXED"},"DPAD":{"component":"DPAD","visible":false,"scale":0.752,"widthScale":1.0,"heightScale":1.0,"offsetX":-0.5,"offsetY":0,"anchor":"BOTTOM_CENTER","triggerMode":"DIGITAL","stickMode":"FIXED"},"FACE_BUTTONS":{"component":"FACE_BUTTONS","visible":true,"scale":1.0,"widthScale":1.0,"heightScale":1.0,"offsetX":-0.1729,"offsetY":0.1353,"anchor":"CENTER_RIGHT","triggerMode":"DIGITAL","stickMode":"FIXED"},"LEFT_TRIGGER":{"component":"LEFT_TRIGGER","visible":true,"scale":1.2,"widthScale":1.0,"heightScale":1.0,"offsetX":0.1376,"offsetY":0.0675,"anchor":"TOP_LEFT","triggerMode":"DIGITAL","stickMode":"FIXED"},"RIGHT_TRIGGER":{"component":"RIGHT_TRIGGER","visible":true,"scale":1.2,"widthScale":1.0,"heightScale":1.0,"offsetX":-0.1401,"offsetY":0.0675,"anchor":"TOP_RIGHT","triggerMode":"DIGITAL","stickMode":"FIXED"},"LEFT_SHOULDER":{"component":"LEFT_SHOULDER","visible":true,"scale":0.9,"widthScale":1.0,"heightScale":1.0,"offsetX":0.4142,"offsetY":0.1137,"anchor":"TOP_LEFT","triggerMode":"DIGITAL","stickMode":"FIXED"},"RIGHT_SHOULDER":{"component":"RIGHT_SHOULDER","visible":true,"scale":0.9,"widthScale":1.0,"heightScale":1.0,"offsetX":-0.4167,"offsetY":0.1137,"anchor":"TOP_RIGHT","triggerMode":"DIGITAL","stickMode":"FIXED"},"SELECT_BUTTON":{"component":"SELECT_BUTTON","visible":true,"scale":0.9,"widthScale":1.0,"heightScale":1.0,"offsetX":-0.471,"offsetY":0.464,"anchor":"TOP_CENTER","triggerMode":"DIGITAL","stickMode":"FIXED"},"START_BUTTON":{"component":"START_BUTTON","visible":true,"scale":0.9,"widthScale":1.0,"heightScale":1.0,"offsetX":0.471,"offsetY":0.464,"anchor":"TOP_CENTER","triggerMode":"DIGITAL","stickMode":"FIXED"},"BACK_BUTTON":{"component":"BACK_BUTTON","visible":true,"scale":0.632,"widthScale":1.0,"heightScale":1.0,"offsetX":-0.155,"offsetY":-0.0274,"anchor":"TOP_CENTER","triggerMode":"DIGITAL","stickMode":"FIXED"},"CONNECTION_BADGE":{"component":"CONNECTION_BADGE","visible":true,"scale":0.632,"widthScale":1.0,"heightScale":1.0,"offsetX":0,"offsetY":-0.0274,"anchor":"TOP_CENTER","triggerMode":"DIGITAL","stickMode":"FIXED"},"SETTINGS_BUTTON":{"component":"SETTINGS_BUTTON","visible":true,"scale":0.632,"widthScale":1.0,"heightScale":1.0,"offsetX":0.155,"offsetY":-0.0274,"anchor":"TOP_CENTER","triggerMode":"DIGITAL","stickMode":"FIXED"}},"groups":[{"id":"left_shoulders","name":"Left shoulders","members":["LEFT_TRIGGER","LEFT_SHOULDER"]},{"id":"right_shoulders","name":"Right shoulders","members":["RIGHT_TRIGGER","RIGHT_SHOULDER"]},{"id":"left_controls","name":"Left controls","members":["LEFT_ANALOG_STICK","DPAD","SELECT_BUTTON"]},{"id":"right_controls","name":"Right controls","members":["FACE_BUTTONS","RIGHT_ANALOG_STICK","START_BUTTON"]},{"id":"top_bar","name":"Top bar","members":["BACK_BUTTON","CONNECTION_BADGE","SETTINGS_BUTTON"]}],"behaviour":{"click":false}}];
   function useSuggested(s) {
     var go = function () {
       var all = presets(), to = uniqueName(s.name);
-      all[to] = { buttons: clone(s.buttons), groups: clone(s.groups) }; savePresets(all); saveOrder([to].concat(order().filter(function (x) { return x !== to; })));
-      useLayout(s.buttons, s.groups, to); toast(to + " added");
+      all[to] = { buttons: clone(s.buttons), groups: clone(s.groups), behaviour: readBehaviour(s.behaviour) }; savePresets(all); saveOrder([to].concat(order().filter(function (x) { return x !== to; })));
+      useLayout(s.buttons, s.groups, to, all[to].behaviour); toast(to + " added");
     };
     if (active === "") dialog({ title: "Use " + s.name + "?", text: "Your unsaved layout will be replaced.", yes: "Use", onYes: function () { go(); } }); else go();
   }
