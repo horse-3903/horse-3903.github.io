@@ -921,7 +921,8 @@ input[type=range]:disabled { opacity: .4; }
     pendDown = 0; pendUp = both;
     u &= ~both;
     var msg = { t: "state", d: d, u: u,
-      lx: +ax.lx.toFixed(3), ly: +ax.ly.toFixed(3), rx: +ax.rx.toFixed(3), ry: +ax.ry.toFixed(3), lt: ax.lt, rt: ax.rt };
+      lx: +clampN(ax.lx + (settings.tilt === "left" ? tilt.steer : 0), -1, 1).toFixed(3), ly: +ax.ly.toFixed(3),
+      rx: +clampN(ax.rx + (settings.tilt === "right" ? tilt.steer : 0), -1, 1).toFixed(3), ry: +ax.ry.toFixed(3), lt: ax.lt, rt: ax.rt };
     try { ws.send(JSON.stringify(msg)); } catch (e) { return; }
     lastSend = now; dirty = (pendUp !== 0);
     if (settings.name !== sentName) {
@@ -1254,8 +1255,8 @@ input[type=range]:disabled { opacity: .4; }
   // ---- settings pages: rows come from a table so the wording stays the same as the app's ----
   var SETTING_DEFAULTS = { opacity: 100, glow: "on", glowStrength: 100, snap: "on", dead: 5, sens: 100, click: "on", clickMs: 450, invL: "off", invR: "off",
     diag: 38, rumble: "on", vib: "on", vibMs: 30, vibPress: "on", vibTrig: "on", reconnect: "on", reconnectS: 120, confirm: "on", awake: "on",
-    curve: "linear", ring: "on", size: 100, vibConn: "on", dim: 0 };
-  var CHOICES = { curve: ["linear", "precise", "quick"] };
+    curve: "linear", ring: "on", size: 100, vibConn: "on", dim: 0, tilt: "off", tiltRange: 30, tiltDead: 3, tiltInvert: "off" };
+  var CHOICES = { curve: ["linear", "precise", "quick"], tilt: ["off", "left", "right"] };
   function loadSettings() {
     Object.keys(SETTING_DEFAULTS).forEach(function (k) {
       var d = SETTING_DEFAULTS[k], v = store.get("vgp-" + k, null);
@@ -1279,7 +1280,12 @@ input[type=range]:disabled { opacity: .4; }
       { k: "click", t: "Hold to click a stick", h: "Holding a stick still presses it like L3 or R3.", sw: 1 },
       { k: "clickMs", t: "Hold time", min: 200, max: 1500, step: 50, u: " ms", sub: 1, off: function () { return settings.click !== "on"; } },
       { k: "invL", t: "Invert left stick vertical", sw: 1 },
-      { k: "invR", t: "Invert right stick vertical", sw: 1 }
+      { k: "invR", t: "Invert right stick vertical", sw: 1 },
+      { k: "tilt", t: "Tilt steering", h: "Tilt the phone like a steering wheel to move a stick sideways. It calibrates when you switch it on.", opts: [["off", "Off"], ["left", "Left stick"], ["right", "Right stick"]], after: function () { tiltChanged(); } },
+      { k: "tiltRange", t: "Tilt range", h: "Degrees of tilt for full lock.", min: 15, max: 60, step: 1, u: "\u00B0", sub: 1, off: function () { return settings.tilt === "off"; } },
+      { k: "tiltDead", t: "Tilt dead zone", h: "Ignore small tilts around the middle.", min: 0, max: 15, step: 1, u: "\u00B0", sub: 1, off: function () { return settings.tilt === "off"; } },
+      { k: "tiltInvert", t: "Invert tilt", sw: 1, sub: 1, off: function () { return settings.tilt === "off"; } },
+      { t: "Calibrate tilt", h: "Hold the phone in the position that should be straight, then tap.", btn: "Calibrate", sub: 1, fn: function () { tiltCalibrate(); }, off: function () { return settings.tilt === "off"; } }
     ],
     dpad: [
       { k: "dpadSingle", t: "One direction at a time", h: "Hold a single direction with no diagonals. Off lets you hold several at once, including diagonals and with two fingers.", sw: 1,
@@ -1324,7 +1330,7 @@ input[type=range]:disabled { opacity: .4; }
     } else if (spec.opts) {
       var sel = document.createElement("select"); sel.className = "sel";
       spec.opts.forEach(function (o) { var op = document.createElement("option"); op.value = o[0]; op.textContent = o[1]; sel.appendChild(op); });
-      sel.addEventListener("change", function () { put(sel.value); applyEffects(); syncRows(); }); r.appendChild(sel);
+      sel.addEventListener("change", function () { put(sel.value); applyEffects(); syncRows(); if (spec.after) spec.after(); }); r.appendChild(sel);
       sync = function () { sel.value = get(); };
     } else {
       var wrap = document.createElement("div"), inp = document.createElement("input"), out = document.createElement("b");
@@ -1358,12 +1364,42 @@ input[type=range]:disabled { opacity: .4; }
     if (settings.dim > 0) dimT = setTimeout(function () { if (!$("sheetWrap").classList.contains("open") && !document.body.classList.contains("editing")) $("dim").style.opacity = 0.88; else wakeDim(); }, settings.dim * 1000);
   }
   document.addEventListener("pointerdown", wakeDim, true);
+  // ---- tilt steering: the phone held like a steering wheel moves a stick sideways ----
+  var tilt = { steer: 0, base: null, sx: 0, sy: 0, angle: 0, on: false };
+  function onTilt(ev) {
+    var g = ev.accelerationIncludingGravity;
+    if (!g || g.x == null || g.y == null) return;
+    var sg = isIOS ? -1 : 1, ax = g.x * sg, ay = g.y * sg;
+    var o = screen.orientation && typeof screen.orientation.angle === "number" ? screen.orientation.angle : (window.orientation || 0);
+    if (portrait.matches) o = 90;   // the page turns its own layout a quarter turn
+    var sx, sy;
+    if (o === 90) { sx = -ay; sy = ax; } else if (o === 180 || o === -180) { sx = -ax; sy = -ay; } else if (o === 270 || o === -90) { sx = ay; sy = -ax; } else { sx = ax; sy = ay; }
+    tilt.sx += 0.35 * (sx - tilt.sx); tilt.sy += 0.35 * (sy - tilt.sy);
+    if (Math.hypot(tilt.sx, tilt.sy) < 1) return;
+    tilt.angle = Math.atan2(-tilt.sx, tilt.sy) * 180 / Math.PI;
+    if (tilt.base === null) tilt.base = tilt.angle;
+    var d = tilt.angle - tilt.base; if (d > 180) d -= 360; if (d < -180) d += 360;
+    var dead = settings.tiltDead, range = Math.max(settings.tiltRange, dead + 1), mag = Math.abs(d);
+    var out = mag <= dead ? 0 : Math.min(1, (mag - dead) / (range - dead)) * (d < 0 ? -1 : 1);
+    if (settings.tiltInvert === "on") out = -out;
+    if (Math.abs(out - tilt.steer) > 0.004) { tilt.steer = out; dirty = true; }
+  }
+  function tiltStop() { window.removeEventListener("devicemotion", onTilt); tilt.on = false; tilt.base = null; tilt.sx = tilt.sy = 0; if (tilt.steer !== 0) { tilt.steer = 0; dirty = true; } }
+  function tiltStart() {
+    if (tilt.on) return;
+    var go = function () { tilt.on = true; tilt.base = null; window.addEventListener("devicemotion", onTilt); };
+    if (window.DeviceMotionEvent && typeof DeviceMotionEvent.requestPermission === "function") DeviceMotionEvent.requestPermission().then(function (r) { if (r === "granted") go(); }).catch(function () {});
+    else go();
+  }
+  function tiltChanged() { if (settings.tilt === "off") tiltStop(); else tiltStart(); }
+  function tiltCalibrate() { tilt.base = tilt.angle; tilt.steer = 0; dirty = true; toast("Tilt calibrated"); }
+  if (settings.tilt !== "off") tiltChanged();
   function wakeToggle() { if (settings.awake === "on") takeWakeLock(); else if (wake) { try { wake.release(); } catch (e) {} wake = null; } }
   $("resetAll").addEventListener("click", function () {
     dialog({ title: "Restore defaults?", text: "Settings go back to their defaults. Saved layouts and the device name are kept.", yes: "Restore", danger: true,
       onYes: function () {
         ["style", "theme", "dpad"].concat(Object.keys(SETTING_DEFAULTS)).forEach(function (k) { try { localStorage.removeItem("vgp-" + k); } catch (e) {} });
-        settings.style = "ps"; settings.theme = "system"; settings.dpad = "multi"; loadSettings(); applySettings(); wakeToggle(); toast("Defaults restored");
+        settings.style = "ps"; settings.theme = "system"; settings.dpad = "multi"; loadSettings(); applySettings(); wakeToggle(); tiltChanged(); toast("Defaults restored");
       } });
   });
   function openMenu() { releaseAll(true); showPage("appearance"); $("devText").classList.remove("editing"); applySettings(); $("sheetWrap").classList.add("open"); }
