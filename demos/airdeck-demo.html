@@ -227,17 +227,17 @@ body.nintendo .ico.ns { display: inline-block; }
 /* layout editing, the same model as the app: anchors, groups, snapping, undo */
 [data-ed].edhide { visibility: hidden; pointer-events: none; }
 body.editing [data-ed].edhide { visibility: visible; opacity: .12; pointer-events: auto; }
-body.editing [data-ed] { outline: 1px dashed var(--muted); outline-offset: calc(.5 * var(--u)); }
+body.editing [data-ed] { outline: max(1px, calc(.14 * var(--u))) solid rgba(128, 128, 128, .4); outline-offset: calc(.5 * var(--u)); }
 body.editing [data-ed].edsel { outline: 2px solid var(--fg); }
 body.editing .hsw { display: none; }
 #edfx { position: absolute; inset: 0; pointer-events: none; z-index: 15; display: none; }
 body.editing #edfx { display: block; }
-.edgrp { position: absolute; border: 1px dashed var(--muted); border-radius: calc(3 * var(--u)); pointer-events: none; opacity: .7; }
+.edgrp { position: absolute; border: max(1px, calc(.14 * var(--u))) solid rgba(128, 128, 128, .45); border-radius: calc(3 * var(--u)); pointer-events: none; }
 .edgrp.selg { border: 2px solid var(--fg); opacity: 1; }
 .edguide { position: absolute; background: var(--fg); opacity: .8; pointer-events: none; }
 .zone { position: absolute; left: calc((1 - var(--aw, 1)) * 50%); top: calc((1 - var(--ah, 1)) * 50%); width: calc(var(--aw, 1) * 100%); height: calc(var(--ah, 1) * 100%); border-radius: calc(var(--ar, 1) * 50%); display: none; }
 .stick.zoned .zone { display: block; }
-.stick.float::after, body.editing .stick::after { content: ""; position: absolute; left: calc((1 - var(--aw, 1)) * 50%); top: calc((1 - var(--ah, 1)) * 50%); width: calc(var(--aw, 1) * 100%); height: calc(var(--ah, 1) * 100%); border-radius: calc(var(--ar, 1) * 50%); border: 1px dashed var(--border); opacity: .35; pointer-events: none; }
+.stick.float::after, body.editing .stick::after { content: ""; position: absolute; left: calc((1 - var(--aw, 1)) * 50%); top: calc((1 - var(--ah, 1)) * 50%); width: calc(var(--aw, 1) * 100%); height: calc(var(--ah, 1) * 100%); border-radius: calc(var(--ar, 1) * 50%); border: max(1px, calc(.14 * var(--u))) solid var(--muted); opacity: .35; pointer-events: none; }
 body.editing .stick.edsel::after { opacity: .8; border-color: var(--fg); }
 .tl { scale: var(--ix, 1) var(--iy, 1); }
 .row.rcrow { display: block; padding-top: 0; padding-bottom: 0; }
