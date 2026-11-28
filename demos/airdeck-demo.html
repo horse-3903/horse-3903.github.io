@@ -233,7 +233,7 @@ body.editing .hsw { display: none; }
 #edfx { position: absolute; inset: 0; pointer-events: none; z-index: 15; display: none; }
 body.editing #edfx { display: block; }
 .edgrp { position: absolute; border: 1px dashed var(--muted); border-radius: calc(3 * var(--u)); pointer-events: none; opacity: .7; }
-.edgrp.sel { border: 2px solid var(--fg); opacity: 1; }
+.edgrp.selg { border: 2px solid var(--fg); opacity: 1; }
 .edguide { position: absolute; background: var(--fg); opacity: .8; pointer-events: none; }
 .zone { position: absolute; left: calc((1 - var(--aw, 1)) * 50%); top: calc((1 - var(--ah, 1)) * 50%); width: calc(var(--aw, 1) * 100%); height: calc(var(--ah, 1) * 100%); border-radius: calc(var(--ar, 1) * 50%); display: none; }
 .stick.zoned .zone { display: block; }
@@ -338,6 +338,24 @@ body.edflip #edpanel { right: auto; left: 0; border-left: 0; border-right: 1px s
   #edpanel { top: auto; left: 0; right: 0; width: auto; max-height: 46dvh; border-left: 0; border-top: 1px solid var(--border); }
   body.edflip #edpanel { top: 0; bottom: auto; border-right: 0; border-top: 0; border-bottom: 1px solid var(--border); }
 }
+/* the editor is one compact floating bar, like the first version */
+#edpanel { top: auto; right: auto; left: 50%; bottom: 10px; transform: translateX(-50%); width: min(640px, 96vw); max-height: 46dvh; border: 1px solid var(--border); border-radius: 12px; }
+body.edflip #edpanel { top: 10px; bottom: auto; right: auto; left: 50%; border: 1px solid var(--border); }
+#edpanel .edtop { flex-wrap: wrap; padding: 8px 12px; }
+#edpanel .edtop b { flex: 1 1 100%; color: var(--muted); font-size: 13px; }
+#edpanel .edbody { padding: 0 14px 10px; }
+#edpanel .edmain { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+#edpanel .edmain .edrow { padding: 6px 0; }
+#edpanel .edmain .edsize { flex: 1 1 220px; }
+#edpanel .edmain .mini.wide, #edpanel button.mini { margin-top: 0; }
+#edpanel details.edmore > summary { cursor: pointer; color: var(--muted); font-size: 13px; padding: 6px 0; list-style: none; }
+#edpanel details.edmore > summary::-webkit-details-marker { display: none; }
+#edpanel details.edmore > summary::after { content: " \203A"; }
+#edpanel details.edmore[open] > summary::after { content: " \2039"; }
+#edpanel .edgrid { display: grid; grid-template-columns: 1fr 1fr; gap: 0 18px; }
+#edpanel .edgrid #edArea { grid-column: 1 / -1; display: grid; grid-template-columns: 1fr 1fr; gap: 0 18px; }
+@media (max-width: 640px) { #edpanel .edgrid, #edpanel .edgrid #edArea { grid-template-columns: 1fr; } }
+@media (orientation: portrait) { #edpanel { left: 50%; right: auto; width: min(640px, 96vw); max-height: 46dvh; border: 1px solid var(--border); } body.edflip #edpanel { top: 10px; bottom: auto; border: 1px solid var(--border); } }
 
 /* settings sheet */
 #sheetWrap { position: fixed; inset: 0; background: var(--shadow); display: none; align-items: center;
@@ -623,22 +641,28 @@ input[type=range]:disabled { opacity: .4; }
 
 <div id="toast"></div>
 <div id="edpanel">
-  <div class="edtop"><b id="edName">Edit layout</b><button class="mini" id="edUndo" disabled>Undo</button><button class="mini" id="edRedo" disabled>Redo</button><button class="mini" id="edDock">Move</button><button class="mini go" id="edDone">Done</button></div>
+  <div class="edtop"><b id="edName">Edit layout</b><button class="mini" id="edUndo" disabled>Undo</button><button class="mini" id="edRedo" disabled>Redo</button><button class="mini" id="edDock">Top</button><button class="mini go" id="edDone">Done</button></div>
   <div class="edbody">
     <div id="edNone" class="edhint">Tap a control or a group to select it, then drag to move it. Controls snap to each other.</div>
     <div id="edCtl" style="display:none">
-      <div class="edrow" id="edVisRow"><span>Visible</span><div class="switch" id="edVis" role="switch"><i></i></div></div>
-      <div class="edrow"><span>Size</span><input type="range" id="edSize" min="50" max="200" step="1"><b id="edSizeV">100%</b></div>
-      <div class="edrow"><span>Width</span><input type="range" id="edW" min="50" max="200" step="1"><b id="edWV">100%</b></div>
-      <div class="edrow"><span>Height</span><input type="range" id="edH" min="50" max="200" step="1"><b id="edHV">100%</b></div>
-      <div id="edArea" style="display:none">
-        <div class="edrow"><span>Touch width</span><input type="range" id="edAW" min="100" max="600" step="5"><b id="edAWV">Auto</b></div>
-        <div class="edrow"><span>Touch height</span><input type="range" id="edAH" min="100" max="600" step="5"><b id="edAHV">Auto</b></div>
-        <div class="edrow"><span>Corners</span><input type="range" id="edAR" min="0" max="100" step="1"><b id="edARV">100%</b></div>
+      <div class="edmain">
+        <div class="edrow" id="edVisRow"><span>Visible</span><div class="switch" id="edVis" role="switch"><i></i></div></div>
+        <div class="edrow edsize"><span>Size</span><input type="range" id="edSize" min="50" max="200" step="1"><b id="edSizeV">100%</b></div>
+        <button class="mini" id="edResetCtl">Reset</button>
       </div>
-      <div class="edrow"><span>Anchor</span><div class="anc" id="edAnc"></div></div>
-      <div class="edrow"><span>Group</span><select id="edGroup" class="sel"></select></div>
-      <button class="mini wide" id="edResetCtl">Reset this control</button>
+      <details class="edmore"><summary>More</summary>
+        <div class="edgrid">
+          <div class="edrow"><span>Width</span><input type="range" id="edW" min="50" max="200" step="1"><b id="edWV">100%</b></div>
+          <div class="edrow"><span>Height</span><input type="range" id="edH" min="50" max="200" step="1"><b id="edHV">100%</b></div>
+          <div id="edArea" style="display:none">
+            <div class="edrow"><span>Touch width</span><input type="range" id="edAW" min="100" max="600" step="5"><b id="edAWV">Auto</b></div>
+            <div class="edrow"><span>Touch height</span><input type="range" id="edAH" min="100" max="600" step="5"><b id="edAHV">Auto</b></div>
+            <div class="edrow"><span>Corners</span><input type="range" id="edAR" min="0" max="100" step="1"><b id="edARV">100%</b></div>
+          </div>
+          <div class="edrow"><span>Anchor</span><div class="anc" id="edAnc"></div></div>
+          <div class="edrow"><span>Group</span><select id="edGroup" class="sel"></select></div>
+        </div>
+      </details>
     </div>
     <div id="edGrp" style="display:none">
       <div class="edrow"><span>Name</span><input type="text" class="gname" id="edGroupName" maxlength="30" autocomplete="off"></div>
@@ -2115,7 +2139,7 @@ input[type=range]:disabled { opacity: .4; }
   function drawFx() {
     fx.innerHTML = "";
     if (!editing) return;
-    groups.forEach(function (g) { var r = groupRect(g); if (r) fx.appendChild(boxDiv("edgrp" + (g.id === selGroup ? " sel" : ""), r)); });
+    groups.forEach(function (g) { var r = groupRect(g); if (r) fx.appendChild(boxDiv("edgrp" + (g.id === selGroup ? " selg" : ""), r)); });
     if (guides && guides.x !== null) fx.appendChild(boxDiv("edguide", { l: guides.x, t: 0, r: guides.x + 0.15, b: SH }));
     if (guides && guides.y !== null) fx.appendChild(boxDiv("edguide", { l: 0, t: guides.y, r: SW, b: guides.y + 0.15 }));
   }
@@ -2244,7 +2268,7 @@ input[type=range]:disabled { opacity: .4; }
   $("edDissolve").addEventListener("click", function () { if (!selGroup) return; pushUndo(); groups = groups.filter(function (g) { return g.id !== selGroup; }); selGroup = null; persist(); showSel(); });
   $("edUndo").addEventListener("click", undo); $("edRedo").addEventListener("click", redo);
   $("edDone").addEventListener("click", leaveEdit);
-  $("edDock").addEventListener("click", function () { document.body.classList.toggle("edflip"); });
+  $("edDock").addEventListener("click", function () { var f = document.body.classList.toggle("edflip"); this.textContent = f ? "Bottom" : "Top"; });
 
   // ---- the layout library, like the app's Layouts page ----
   function loadArr(k) { try { var v = JSON.parse(store.get(k, "")); return Array.isArray(v) ? v : []; } catch (e) { return []; } }
