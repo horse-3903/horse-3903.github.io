@@ -228,7 +228,7 @@ body.nintendo .ico.ns { display: inline-block; }
 [data-ed].edhide { visibility: hidden; pointer-events: none; }
 body.editing [data-ed].edhide { visibility: visible; opacity: .12; pointer-events: auto; }
 body.editing [data-ed] { outline: max(1px, calc(.14 * var(--u))) solid rgba(128, 128, 128, .4); outline-offset: calc(.5 * var(--u)); }
-body.editing [data-ed].edsel { outline: 2px solid var(--fg); }
+body.editing [data-ed].edsel { outline-color: transparent; }
 body.editing .hsw { display: none; }
 #edfx { position: absolute; inset: 0; pointer-events: none; z-index: 15; display: none; }
 body.editing #edfx { display: block; }
@@ -237,8 +237,10 @@ body.editing #edfx { display: block; }
 .edguide { position: absolute; background: var(--fg); opacity: .8; pointer-events: none; }
 .zone { position: absolute; left: calc((1 - var(--aw, 1)) * 50%); top: calc((1 - var(--ah, 1)) * 50%); width: calc(var(--aw, 1) * 100%); height: calc(var(--ah, 1) * 100%); border-radius: calc(var(--ar, 1) * 50%); display: none; }
 .stick.zoned .zone { display: block; }
-.stick.float::after, body.editing .stick::after { content: ""; position: absolute; left: calc((1 - var(--aw, 1)) * 50%); top: calc((1 - var(--ah, 1)) * 50%); width: calc(var(--aw, 1) * 100%); height: calc(var(--ah, 1) * 100%); border-radius: calc(var(--ar, 1) * 50%); border: max(1px, calc(.14 * var(--u))) solid var(--muted); opacity: .35; pointer-events: none; }
+.stick.float::after, body.editing.showareas .stick::after, body.editing .stick.edsel::after { content: ""; position: absolute; left: calc((1 - var(--aw, 1)) * 50%); top: calc((1 - var(--ah, 1)) * 50%); width: calc(var(--aw, 1) * 100%); height: calc(var(--ah, 1) * 100%); border-radius: calc(var(--ar, 1) * 50%); border: max(1px, calc(.14 * var(--u))) solid var(--muted); opacity: .35; pointer-events: none; }
 body.editing .stick.edsel::after { opacity: .8; border-color: var(--fg); }
+body.editing .stick::after { display: none; }
+body.editing.showareas .stick::after, body.editing .stick.edsel::after { display: block; }
 .tl { scale: var(--ix, 1) var(--iy, 1); }
 .row.rcrow { display: block; padding-top: 0; padding-bottom: 0; }
 .rchrow { display: flex; align-items: center; gap: 8px; }
@@ -571,6 +573,108 @@ input[type=range]:disabled { opacity: .4; }
 .rst { margin-left: 8px; border: 1px solid var(--border); background: transparent; color: var(--muted); border-radius: 6px; font: inherit; font-size: 11px; font-weight: 400; padding: 1px 7px; vertical-align: middle; }
 #toast { position: fixed; left: 50%; top: calc(14 * var(--u)); transform: translateX(-50%); background: var(--accent);
     color: var(--accent-fg); padding: 8px 14px; border-radius: 6px; font-size: 14px; z-index: 40; display: none; }
+.edselc { position: absolute; border: 2px solid var(--fg); border-radius: calc(.6 * var(--u)); pointer-events: none; }
+.edh { position: absolute; width: calc(1.2 * var(--u)); height: calc(1.2 * var(--u)); background: var(--fg); border-radius: 20%; transform: translate(-50%, -50%); }
+.edgl { position: absolute; left: calc(1 * var(--u)); top: calc(-1.7 * var(--u)); font-size: calc(1.5 * var(--u)); background: var(--bg); color: var(--muted); padding: 0 calc(.6 * var(--u)); border-radius: calc(.5 * var(--u)); white-space: nowrap; }
+body.preview #edfx { display: none; }
+body.preview [data-ed] { outline: none !important; }
+body.editing.preview [data-ed].edhide { visibility: hidden; pointer-events: none; }
+body.preview #edpanel .edbody, body.edmin #edpanel .edbody { display: none; }
+#edpanel .edtools { display: flex; gap: 8px; align-items: center; padding: 0 12px 8px; flex-wrap: wrap; }
+#edpanel .edtools select { flex: 1 1 180px; min-width: 0; height: 34px; background-color: var(--card); color: var(--fg); border: 1px solid var(--border); border-radius: 8px; font: inherit; font-size: 13px; padding: 0 30px 0 10px; }
+#edpanel .edchip { height: 34px; padding: 0 12px; border-radius: 999px; border: 1px solid var(--border); background: transparent; color: var(--muted); font: inherit; font-size: 13px; }
+#edpanel .edchip.cur { color: var(--fg); border-color: var(--fg); }
+body.preview #edpanel .edtools, body.edmin #edpanel .edtools { display: none; }
+#edpanel .edxy { display: flex; gap: 8px; }
+#edpanel .edxy label { display: flex; align-items: center; gap: 4px; font-size: 12px; color: var(--muted); }
+#edpanel .edxy input { width: 64px; background: var(--card); color: var(--fg); border: 1px solid var(--border); border-radius: 8px; padding: 7px 6px; font: inherit; font-size: 14px; }
+#edpanel .edwarn { color: #CBB78D; font-size: 12px; padding: 4px 0; grid-column: 1 / -1; }
+#edpanel #edGrpMembers { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 6px; }
+#edpanel #edGrpMembers button { text-align: left; border: 1px solid var(--border); background: var(--card); color: var(--fg); border-radius: 8px; padding: 7px 10px; font: inherit; font-size: 13px; }
+#edpanel { position: fixed; inset: 0; width: auto; max-height: none; transform: none; background: transparent; border: 0 !important; border-radius: 0; pointer-events: none; z-index: 25; }
+body.edflip #edpanel { inset: 0; border: 0 !important; }
+#edpanel > * { pointer-events: auto; }
+#edpanel .edbar { position: absolute; top: 10px; left: 50%; transform: translateX(-50%); width: clamp(290px, calc(100vw - 740px), 520px); max-width: 96vw; background: var(--sheet); border: 1px solid var(--border); border-radius: 12px; }
+body.edflip #edpanel .edbar { top: auto; bottom: 10px; }
+#edpanel .edbar .edhint { padding: 4px 14px 10px; }
+body.hassel #edpanel .edbar #edNone { display: none !important; }
+#edpanel .edbody { display: none; position: absolute; top: 10px; bottom: 10px; width: min(340px, 44vw); background: var(--sheet); border: 1px solid var(--border); border-radius: 12px; padding: 10px 14px 14px; overflow-y: auto; }
+body.hassel #edpanel .edbody { display: block; }
+body.edsideR #edpanel .edbody { right: 10px; left: auto; }
+body.edsideL #edpanel .edbody { left: 10px; right: auto; }
+body.preview #edpanel .edbody, body.edmin #edpanel .edbody { display: none; }
+#edpanel details.edmore > summary { display: none; }
+#edpanel .edgrid, #edpanel .edgrid #edArea { grid-template-columns: 1fr; }
+#edpanel .edmain { flex-direction: column; align-items: stretch; gap: 0; }
+@media (orientation: portrait) { #edpanel { left: 0; right: 0; width: auto; border: 0 !important; } #edpanel .edbody { width: min(300px, 46vw); } }
+#edpanel .edbar { transform: translate(calc(-50% + var(--bx, 0px)), var(--by, 0px)); width: auto; max-width: 96vw; background: transparent; border: 0; border-radius: 0; display: flex; flex-direction: column; align-items: center; touch-action: none; }
+body.edflip #edpanel .edbar { top: 10px; bottom: auto; }
+#edpanel .edtb { display: flex; align-items: center; gap: 5px; padding: 5px; background: var(--sheet); border: 1px solid var(--border); border-radius: 12px; }
+#edpanel .tbi { width: 40px; height: 40px; display: inline-flex; align-items: center; justify-content: center; background: transparent; border: 0; color: var(--fg); border-radius: 8px; padding: 0; cursor: pointer; }
+#edpanel .tbi:hover:not(:disabled) { background: var(--panel-on); }
+#edpanel .tbi:disabled { opacity: .35; cursor: default; }
+#edpanel .tbdiv { width: 1px; height: 24px; background: var(--border); margin: 0 2px; }
+#edpanel .tbseg { display: flex; height: 40px; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+#edpanel .tbseg i { width: 1px; background: var(--border); }
+#edpanel .tbseg button { display: inline-flex; align-items: center; gap: 6px; background: transparent; border: 0; color: var(--muted); font: inherit; font-size: 14px; font-weight: 600; padding: 0 12px; cursor: pointer; }
+#edpanel .tbseg button.cur { background: var(--panel-on); color: var(--fg); }
+#edpanel .edbar .edhint { padding: 8px 0 0; background: transparent; border: 0; color: var(--muted); font-size: 12.5px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; justify-content: center; }
+#edpanel .edbar .edhint select { height: 30px; width: 150px; background-color: var(--card); color: var(--fg); border: 1px solid var(--border); border-radius: 8px; font: inherit; font-size: 12.5px; padding: 0 28px 0 8px; }
+#edpanel .edpick2 { width: 100%; height: 34px; margin-bottom: 8px; background-color: var(--card); color: var(--fg); border: 1px solid var(--border); border-radius: 8px; font: inherit; font-size: 13px; padding: 0 30px 0 10px; }
+#layMenu { z-index: 60; }
+body.preview #edpanel .edbar .edhint { display: none; }
+#edpanel .edmain .edsize { flex: none; }
+#edpanel .edmain .mini { align-self: stretch; margin: 6px 0; }
+#snav .navrow .navhead { flex: 1; }
+#edpanel .tbi:has(.tbl) { width: auto; padding: 0 12px; gap: 6px; font: inherit; font-size: 14px; font-weight: 600; }
+#edpanel #edDone { background: var(--fg); color: var(--sheet); }
+#edpanel #edDone:hover:not(:disabled) { background: var(--fg); opacity: .9; }
+@media (max-width: 600px) { #edpanel .tbl { display: none; } #edpanel .tbi:has(.tbl) { width: 40px; padding: 0; } }
+#edpanel .edtitle { font-size: 17px; font-weight: 700; padding: 2px 0 6px; }
+#edpanel .edsech { font-size: 11px; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); padding: 14px 0 2px; border-top: 1px solid var(--border); margin-top: 8px; }
+#edpanel .edtitle + .edsech { border-top: 0; margin-top: 0; padding-top: 4px; }
+#edpanel #edArea { display: block; }
+.rcdet { border-top: 1px solid var(--border); padding-top: 6px; }
+.rcdet > summary { cursor: pointer; color: var(--muted); font-size: 13px; padding: 4px 0 8px; }
+.rcdet > div { margin-bottom: 10px; }
+#demoNote { position: fixed; left: 10px; bottom: 8px; z-index: 5; font-size: 11px; color: var(--muted); opacity: .7; pointer-events: none; }
+body.editing #demoNote { display: none; }
+/* editor look: neutral canvas, its own selection colour, an inspector that is only as tall as its content */
+:root { --edsel: #7BB9ED; }
+body.editing:not(.preview)::before { opacity: 0 !important; }
+.edselc { border-color: var(--edsel); }
+.edh { background: var(--edsel); }
+.edgrp { border-color: rgba(128, 128, 128, .28); }
+.edgrp.selg { border: 1.5px solid var(--edsel); }
+.edgl { display: none; color: var(--edsel); }
+.edgrp.selg .edgl { display: block; }
+body.editing [data-ed].edsel { outline-color: transparent; }
+#edpanel .edbody { top: 12px !important; bottom: auto !important; height: fit-content; max-height: calc(100dvh - 24px); width: clamp(280px, 23vw, 340px); padding: 16px; box-shadow: 0 8px 28px rgba(0, 0, 0, .45); }
+body.edsideR #edpanel .edbody { right: 12px; }
+body.edsideL #edpanel .edbody { left: 12px; }
+#edpanel .edtb { box-shadow: 0 6px 20px rgba(0, 0, 0, .4); }
+#edpanel .edgrip { display: inline-flex; align-items: center; justify-content: center; width: 20px; height: 40px; color: var(--muted); cursor: grab; touch-action: none; }
+#edpanel .edhead { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; }
+#edpanel .edhbtns { display: flex; gap: 4px; }
+#edpanel .edhbtns .ib { width: 30px; height: 30px; font-size: 18px; line-height: 1; }
+#edpanel .edtitle { font-size: 17px; font-weight: 600; padding: 0; }
+#edpanel .edcrumb { color: var(--muted); font-size: 12.5px; margin-top: 2px; }
+#edpanel .edsech { font-size: 11px; font-weight: 500; letter-spacing: .06em; margin-top: 16px; padding-top: 14px; }
+#edpanel .edhead + .edsech { border-top: 0; margin-top: 6px; padding-top: 4px; }
+#edpanel .edrow { font-weight: 500; font-size: 13.5px; }
+#edpanel .edrow > span:first-child { font-weight: 500; }
+#edpanel .edhintsm { color: var(--muted); font-size: 12px; padding: 0 0 4px; }
+#edpanel details.edd > summary { cursor: pointer; font-size: 13.5px; font-weight: 500; padding: 12px 0; list-style: none; border-top: 1px solid var(--border); margin-top: 12px; }
+#edpanel details.edd > summary::after { content: " \203A"; color: var(--muted); }
+#edpanel details.edd[open] > summary::after { content: " \2039"; }
+#edpanel .edfoot { display: flex; justify-content: space-between; gap: 12px; margin-top: 14px; padding-top: 10px; border-top: 1px solid var(--border); }
+#edpanel .edtext { background: none; border: 0; color: var(--muted); font: inherit; font-size: 13px; padding: 6px 0; cursor: pointer; }
+#edpanel .edtext:hover { color: var(--fg); }
+#edpanel #edGrpMembers { display: flex; flex-direction: column; gap: 6px; margin: 6px 0 0; }
+#edpanel .edmem { display: flex; flex-direction: column; align-items: flex-start; justify-content: center; gap: 1px; min-height: 48px; padding: 6px 12px; border: 1px solid var(--border); background: var(--card); color: var(--fg); border-radius: 10px; font: inherit; text-align: left; cursor: pointer; width: 100%; }
+#edpanel .edmem b { font-size: 14px; font-weight: 600; }
+#edpanel .edmem span { font-size: 12px; color: var(--muted); }
+#edpanel .edmem.off { opacity: .5; }
 </style>
 </head>
 <body>
@@ -641,33 +745,43 @@ input[type=range]:disabled { opacity: .4; }
 
 <div id="toast"></div>
 <div id="edpanel">
-  <div class="edtop"><b id="edName">Edit layout</b><button class="mini" id="edUndo" disabled>Undo</button><button class="mini" id="edRedo" disabled>Redo</button><button class="mini" id="edDock">Top</button><button class="mini go" id="edDone">Done</button></div>
+  <div class="edbar" id="edBar">
+  <div class="edtb"><span class="edgrip" title="Drag to move the toolbar" aria-label="Drag handle"><svg viewBox="0 0 24 24" width="14" height="22" fill="currentColor"><circle cx="9" cy="6" r="1.5"/><circle cx="15" cy="6" r="1.5"/><circle cx="9" cy="12" r="1.5"/><circle cx="15" cy="12" r="1.5"/><circle cx="9" cy="18" r="1.5"/><circle cx="15" cy="18" r="1.5"/></svg></span><button class="tbi" id="edCancel" type="button" aria-label="Cancel" title="Cancel"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6L6 18"/></svg><span class="tbl">Cancel</span></button><button class="tbi" id="edUndo" type="button" aria-label="Undo" title="Undo" disabled><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 14 4 9l5-5"/><path d="M4 9h10a6 6 0 0 1 0 12h-3"/></svg></button><button class="tbi" id="edRedo" type="button" aria-label="Redo" title="Redo" disabled><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 14 5-5-5-5"/><path d="M20 9H10a6 6 0 0 0 0 12h3"/></svg></button><button class="tbi" id="edMore" type="button" aria-label="More" title="More"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="5" cy="12" r="1.6" fill="currentColor"/><circle cx="12" cy="12" r="1.6" fill="currentColor"/><circle cx="19" cy="12" r="1.6" fill="currentColor"/></svg></button><button hidden class="tbi" id="edBarHome" type="button" aria-label="Move the toolbar back to the top" title="Move the toolbar back to the top" disabled><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h14M12 20V9m0 0-5 5m5-5 5 5"/></svg></button><span class="tbdiv"></span><div class="tbseg"><button id="edModeEdit" type="button" class="cur"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h4L19 9l-4-4L4 16z"/></svg><span>Edit</span></button><i></i><button id="edModePrev" type="button"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg><span>Preview</span></button></div><span class="tbdiv"></span><button class="tbi" id="edDone" type="button" aria-label="Done" title="Done"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg><span class="tbl">Done</span></button></div>
+  <b id="edName" hidden>Edit layout</b>
+  <div id="edNone" class="edhint"><span>Tap a control or a group to select it, then drag to move it.</span></div>
+  </div>
   <div class="edbody">
-    <div id="edNone" class="edhint">Tap a control or a group to select it, then drag to move it. Controls snap to each other.</div>
     <div id="edCtl" style="display:none">
-      <div class="edmain">
-        <div class="edrow" id="edVisRow"><span>Visible</span><div class="switch" id="edVis" role="switch"><i></i></div></div>
-        <div class="edrow edsize"><span>Size</span><input type="range" id="edSize" min="50" max="200" step="1"><b id="edSizeV">100%</b></div>
-        <button class="mini" id="edResetCtl">Reset</button>
-      </div>
-      <details class="edmore"><summary>More</summary>
-        <div class="edgrid">
-          <div class="edrow"><span>Width</span><input type="range" id="edW" min="50" max="200" step="1"><b id="edWV">100%</b></div>
-          <div class="edrow"><span>Height</span><input type="range" id="edH" min="50" max="200" step="1"><b id="edHV">100%</b></div>
-          <div id="edArea" style="display:none">
-            <div class="edrow"><span>Touch width</span><input type="range" id="edAW" min="100" max="600" step="5"><b id="edAWV">Auto</b></div>
-            <div class="edrow"><span>Touch height</span><input type="range" id="edAH" min="100" max="600" step="5"><b id="edAHV">Auto</b></div>
-            <div class="edrow"><span>Corners</span><input type="range" id="edAR" min="0" max="100" step="1"><b id="edARV">100%</b></div>
-          </div>
-          <div class="edrow"><span>Anchor</span><div class="anc" id="edAnc"></div></div>
-          <div class="edrow"><span>Group</span><select id="edGroup" class="sel"></select></div>
-        </div>
+      <div class="edhead"><div><div class="edtitle" id="edTitle"></div><div class="edcrumb" id="edCrumb"></div></div><span class="edhbtns"><button class="ib" id="edSwap" type="button" aria-label="Move the panel to the other side" title="Move the panel to the other side">&#8644;</button><button class="ib" id="edCtlClose" type="button" aria-label="Close" title="Close">&#215;</button></span></div>
+      <div class="edsech">General</div>
+      <div class="edrow" id="edVisRow"><span>Visible</span><div class="switch" id="edVis" role="switch"><i></i></div></div>
+      <div class="edsech">Transform</div>
+      <div class="edrow"><span>Offset</span><span class="edxy"><label>X<input type="number" id="edPX" min="-150" max="150" step="1" aria-label="Horizontal offset in percent"></label><label>Y<input type="number" id="edPY" min="-150" max="150" step="1" aria-label="Vertical offset in percent"></label></span></div>
+      <div class="edrow edsize"><span>Size</span><input type="range" id="edSize" min="50" max="200" step="1"><b id="edSizeV">100%</b></div>
+      <div class="edrow"><span>Width</span><input type="range" id="edW" min="50" max="200" step="1"><b id="edWV">100%</b></div>
+      <div class="edrow"><span>Height</span><input type="range" id="edH" min="50" max="200" step="1"><b id="edHV">100%</b></div>
+      <div class="edrow"><span>Anchor</span><div class="anc" id="edAnc"></div></div>
+      <div class="edrow"><span>Group</span><select id="edGroup" class="sel"></select></div>
+      <details class="edd" id="edArea" style="display:none"><summary>Touch area</summary>
+        <div class="edhintsm">Where it listens for touches, apart from how big it looks.</div>
+        <div class="edrow"><span>Touch width</span><input type="range" id="edAW" min="100" max="600" step="5"><b id="edAWV">Auto</b></div>
+        <div class="edrow"><span>Touch height</span><input type="range" id="edAH" min="100" max="600" step="5"><b id="edAHV">Auto</b></div>
+        <div class="edrow"><span>Corners</span><input type="range" id="edAR" min="0" max="100" step="1"><b id="edARV">100%</b></div>
       </details>
+      <div class="edwarn" id="edWarn"></div>
+      <div class="edfoot"><button class="edtext" id="edResetCtl" type="button">Reset this control</button></div>
     </div>
     <div id="edGrp" style="display:none">
+      <div class="edhead"><div><div class="edtitle" id="edGrpTitle"></div><div class="edcrumb" id="edGrpInfo"></div></div><span class="edhbtns"><button class="ib" id="edSwap2" type="button" aria-label="Move the panel to the other side" title="Move the panel to the other side">&#8644;</button><button class="ib" id="edGrpClose" type="button" aria-label="Close" title="Close">&#215;</button></span></div>
+      <div class="edsech">General</div>
       <div class="edrow"><span>Name</span><input type="text" class="gname" id="edGroupName" maxlength="30" autocomplete="off"></div>
-      <div class="edhint">Controls in a group move together. Tap a control in the group again to edit it on its own.</div>
-      <button class="mini wide" id="edDissolve">Ungroup</button>
+      <div class="edrow"><span>Visible</span><div class="switch" id="edGrpVis" role="switch"><i></i></div></div>
+      <div class="edsech">Transform</div>
+      <div class="edrow"><span>Move by</span><span class="edxy"><label>X<input type="number" id="edGX" value="0" min="-150" max="150" step="1" aria-label="Move the group horizontally, in percent"></label><label>Y<input type="number" id="edGY" value="0" min="-150" max="150" step="1" aria-label="Move the group vertically, in percent"></label></span></div>
+      <div class="edrow edsize"><span>Size</span><input type="range" id="edGS" min="50" max="200" step="1" value="100"><b id="edGSV">100%</b></div>
+      <div class="edsech">Members <span id="edGrpCount"></span></div>
+      <div id="edGrpMembers"></div>
+      <div class="edfoot"><button class="edtext" id="edGrpReset" type="button">Reset group transform</button><button class="edtext" id="edDissolve" type="button">Ungroup</button></div>
     </div>
   </div>
 </div>
@@ -684,7 +798,8 @@ input[type=range]:disabled { opacity: .4; }
   <div id="sbody">
     <nav id="snav">
       <button data-p="appearance" class="cur">Appearance</button>
-      <div class="navrow"><button data-p="layouts">Layouts</button><button class="chev" id="subToggle" aria-label="Show or hide Sticks, D-pad, Triggers and Haptics">&#8250;</button></div>
+      <button data-p="layouts">Layouts</button>
+      <div class="navrow"><button type="button" class="navhead" id="navCtl">Controls</button><button class="chev" id="subToggle" aria-label="Show or hide Sticks, D-pad, Triggers and Haptics">&#8250;</button></div>
       <div id="subnav">
         <button data-p="sticks">Sticks</button>
         <button data-p="dpad">D-pad</button>
@@ -1421,6 +1536,7 @@ input[type=range]:disabled { opacity: .4; }
     $("spanes").scrollTop = 0; $("layMenu").classList.remove("open"); if (p === "layouts") renderLibrary();
   }
   document.querySelectorAll("#snav button[data-p]").forEach(function (b) { b.addEventListener("click", function () { showPage(b.dataset.p); }); });
+  $("navCtl").addEventListener("click", function () { $("subToggle").click(); });
   $("subToggle").classList.add("open");
   $("subToggle").addEventListener("click", function () { var c = $("subnav").classList.toggle("collapsed"); this.classList.toggle("open", !c); });
   // ---- settings pages: rows come from a table so the wording stays the same as the app's ----
@@ -1454,14 +1570,14 @@ input[type=range]:disabled { opacity: .4; }
       { k: "tiltRange", t: "Tilt range", h: "Degrees of tilt for full lock.", min: 15, max: 60, step: 1, u: "\u00B0", sub: 1, when: function () { return sv("tilt") !== "off"; } },
       { k: "tiltDead", t: "Tilt dead zone", h: "Ignore small tilts around the middle.", min: 0, max: 15, step: 1, u: "\u00B0", sub: 1, when: function () { return sv("tilt") !== "off"; } },
       { k: "tiltInvert", t: "Invert tilt", sw: 1, sub: 1, when: function () { return sv("tilt") !== "off"; } },
-      { rc: 1, inL: "Tilt input", outL: "Steering output", k: "tcurve", kp: "tcurveP", t: "Tilt response curve", h: "How the turn of the phone maps to steering.", sub: 1, when: function () { return sv("tilt") !== "off"; } },
+      { rc: 1, caps: ["Even", "Gentle near straight", "Quick turn-in", "Your own"], inL: "Tilt input", outL: "Steering output", k: "tcurve", kp: "tcurveP", t: "Tilt response curve", h: "How the turn of the phone maps to steering.", sub: 1, when: function () { return sv("tilt") !== "off"; } },
       { t: "Calibrate tilt", h: "Hold the phone in the position that should be straight, then tap.", btn: "Calibrate", sub: 1, fn: function () { tiltCalibrate(); }, when: function () { return sv("tilt") !== "off"; } },
       { k: "stickL", t: "Left stick position", h: "Fixed stays where the layout puts it. Floating appears under your thumb inside its area.", opts: [["fixed", "Fixed"], ["floating", "Floating"]], when: function () { return sv("tilt") !== "left"; } },
       { k: "stickR", t: "Right stick position", opts: [["fixed", "Fixed"], ["floating", "Floating"]], when: function () { return sv("tilt") !== "right"; } },
       { k: "snap", t: "Snap stick to touch", h: "Touching inside a stick's touch area moves it there. Set the area in the layout editor. Turn off to drag from the stick cap only.", sw: 1 },
       { k: "dead", t: "Dead zone", h: "Ignore small movements near the centre of a stick.", min: 0, max: 40, step: 1, u: "%" },
       { k: "sens", t: "Sensitivity", h: "Above 100% reaches full tilt before the edge of the stick.", min: 50, max: 150, step: 1, u: "%" },
-      { rc: 1, usage: 1, ukey: "stick", useL: "stick usage", inL: "Stick input", outL: "Stick output", k: "curve", kp: "curveP", t: "Response curve", h: "How far a push turns into movement. Precise is finer near the centre, Quick reaches full speed sooner." },
+      { rc: 1, caps: ["Balanced", "Fine aiming", "Fast turning", "Your own"], usage: 1, ukey: "stick", useL: "stick usage", inL: "Stick input", outL: "Stick output", k: "curve", kp: "curveP", t: "Response curve", h: "How far a push turns into movement. Precise is finer near the centre, Quick reaches full speed sooner." },
       { k: "click", t: "Hold to click a stick", h: "Holding a stick still presses it like L3 or R3.", sw: 1 },
       { k: "clickMs", t: "Hold time", min: 200, max: 1500, step: 50, u: " ms", sub: 1, off: function () { return sv("click") !== "on"; } },
       { k: "invL", t: "Invert left stick vertical", sw: 1, when: function () { return sv("tilt") !== "left"; } },
@@ -1476,7 +1592,7 @@ input[type=range]:disabled { opacity: .4; }
       { k: "trigL", t: "Left trigger input", h: "Button is plain on or off. Drag lets you pull harder by dragging up. Gradient starts the pull by where you first touch, then you can still drag.",
         opts: [["digital", "Button"], ["drag", "Drag"], ["zones", "Gradient"]] },
       { k: "trigR", t: "Right trigger input", opts: [["digital", "Button"], ["drag", "Drag"], ["zones", "Gradient"]] },
-      { rc: 1, usage: 1, ukey: "trig", useL: "trigger usage", inL: "Trigger input", outL: "Trigger output", k: "rcurve", kp: "rcurveP", t: "Trigger response curve", h: "How far a pull turns into trigger output." }
+      { rc: 1, caps: ["Even", "Light start", "Quick start", "Your own"], usage: 1, ukey: "trig", useL: "trigger usage", inL: "Trigger input", outL: "Trigger output", k: "rcurve", kp: "rcurveP", t: "Trigger response curve", h: "How far a pull turns into trigger output.", when: function () { return sv("trigL") !== "digital" || sv("trigR") !== "digital"; } }
     ],
     haptics: [
       { k: "rumble", t: "Game vibration", h: "Vibrate when the game rumbles this controller.", sw: 1 },
@@ -1516,7 +1632,7 @@ input[type=range]:disabled { opacity: .4; }
   var ICON_TRASH = '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/></svg>';
   // A response curve setting that folds away: preset and a small preview when closed, a tuning workspace when open
   function buildCurveSection(spec) {
-    var kk = spec.k, kp = spec.kp, KINDS = ["linear", "precise", "quick", "custom"], NAMES = ["Linear", "Precise", "Quick", "Custom"], CAPS = ["Proportional", "Fine control", "Fast response", "Editable curve"];
+    var kk = spec.k, kp = spec.kp, KINDS = ["linear", "precise", "quick", "custom"], NAMES = ["Linear", "Precise", "Quick", "Custom"], CAPS = spec.caps || ["Proportional", "Fine control", "Fast response", "Editable curve"];
     var inL = spec.inL || "Input", outL = spec.outL || "Output", use = spec.ukey === "trig" ? usageT : usageS, useL = spec.useL || "usage";
     var r = document.createElement("div"); r.className = "row rcrow" + (spec.sub ? " sub" : "");
     r.innerHTML = '<div class="rchrow"><button type="button" class="rchead" aria-expanded="false"><span class="rct"><b></b><span class="hint"></span></span><span class="rcname"></span><canvas class="rcmini" width="96" height="72"></canvas><i class="rcchev">&#8250;</i></button></div>' +
@@ -1536,6 +1652,12 @@ input[type=range]:disabled { opacity: .4; }
       '<button type="button" class="ib" data-a="remove" aria-label="Remove point" title="Remove point">' + ICON_TRASH + '</button></div>' +
       '<details class="rcadv"><summary>Advanced options</summary><label class="rcchk"><input type="checkbox" class="rcbox" data-a="free"><span>Allow decreasing output</span></label></details>' +
       '</div></div>';
+    (function () {
+      var an = r.querySelector(".rcanalysis"), det = document.createElement("details"); det.className = "rcdet";
+      det.innerHTML = "<summary>Sensitivity and usage</summary>";
+      var sens = r.querySelector(".rcsens").parentNode, use = r.querySelector(".rcusewrap"), warn = r.querySelector(".rcwarn");
+      det.appendChild(sens); det.appendChild(use); an.insertBefore(det, warn);
+    })();
     var head = r.querySelector(".rchead"), mini = r.querySelector(".rcmini"), graph = r.querySelector(".rcgraph"), sensC = r.querySelector(".rcsens"), useC = r.querySelector(".rcuse"), presets = r.querySelector(".rcpresets"), read = r.querySelector(".rcvals");
     r.querySelector(".rct b").textContent = spec.t; r.querySelector(".rct .hint").textContent = spec.h || "";
     r.querySelector(".rcyl").textContent = outL + " (%)"; r.querySelector(".rcxl").textContent = inL + " (%)";
@@ -1661,6 +1783,7 @@ input[type=range]:disabled { opacity: .4; }
       r.querySelector(".rcwarn").innerHTML = warn.join("");
       showVals();
     };
+    r.querySelector(".rcdet").addEventListener("toggle", function () { sync(); });
     rcLive.push(function () { if (r.classList.contains("open") && $("sheetWrap").classList.contains("open") && spec.usage) drawUse(); });
     head.addEventListener("click", function () { var o = r.classList.toggle("open"); head.setAttribute("aria-expanded", o); if (o) requestAnimationFrame(sync); });
     var rectOf = function (cv, e, lh) { var b = cv.getBoundingClientRect(); return { px: (e.clientX - b.left) / b.width * 640, py: (e.clientY - b.top) / b.height * lh }; };
@@ -1780,7 +1903,7 @@ input[type=range]:disabled { opacity: .4; }
     if (box) SPECS[page].forEach(function (s) { box.appendChild(buildRow(s)); });
     if (box && (page === "sticks" || page === "dpad" || page === "triggers" || page === "haptics")) {
       var bar = document.createElement("div"); bar.className = "scope";
-      bar.innerHTML = '<div class="seg"><button data-s="all">All layouts</button><button data-s="layout">This layout</button></div><div class="scopehint"></div>';
+      bar.innerHTML = '<div class="seg"><button data-s="all">Global defaults</button><button data-s="layout">This layout</button></div><div class="scopehint"></div>';
       bar.querySelectorAll("button").forEach(function (x) { x.addEventListener("click", function () { scope = x.dataset.s; store.set("vgp-scope", scope); syncRows(); }); });
       box.insertBefore(bar, box.firstChild); scopeBars.push({ el: bar });
     }
@@ -1793,9 +1916,9 @@ input[type=range]:disabled { opacity: .4; }
   function renderScope() {
     scopeBars.forEach(function (b) {
       b.el.querySelectorAll("button").forEach(function (x) { x.classList.toggle("cur", x.dataset.s === scope); });
-      b.el.querySelector('button[data-s="layout"]').textContent = layoutName();
-      b.el.querySelector(".scopehint").textContent = scope === "layout" ? "Only for " + layoutName() + ". Other layouts keep their own. Reset puts a row back to the default."
-        : "The default for every layout. A layout can override it.";
+      b.el.querySelector('button[data-s="layout"]').textContent = "This layout";
+      b.el.querySelector(".scopehint").textContent = scope === "layout" ? "Overrides the global defaults for " + layoutName() + " only. Other layouts are unaffected. Reset puts a row back to the global default."
+        : "Applies to every layout unless one overrides it. Active layout: " + layoutName() + ".";
     });
   }
   function syncRows() {
@@ -1868,7 +1991,13 @@ input[type=range]:disabled { opacity: .4; }
   $("badge").addEventListener("pointerdown", function (e) {
     e.preventDefault(); firstTouch(); $("badge").classList.add("press");
     if (!wantConnection) reconnect();
-    else if (connKind === "ok") { releaseAll(true); if (settings.confirm === "on") $("confirmWrap").classList.add("open"); else { disconnect(); toast("Disconnected. Tap the status to reconnect."); } }
+    else if (connKind === "ok") {
+      releaseAll(true);
+      showMenu($("badge"), [
+        { label: "Connected as " + $("slotText").textContent, disabled: true, fn: function () {} },
+        { label: "Disconnect", warn: true, fn: function () { disconnect(); toast("Disconnected. Tap the status to reconnect."); } }
+      ]);
+    }
     else { disconnect(); toast("Disconnected. Tap the status to reconnect."); }
   });
   $("confirmNo").addEventListener("click", function () { $("confirmWrap").classList.remove("open"); });
@@ -2117,7 +2246,7 @@ input[type=range]:disabled { opacity: .4; }
   function others(ids) { return ORDER.filter(function (id) { return ids.indexOf(id) < 0 && cfg[id].visible; }); }
 
   // ---- editor ----
-  var editing = false, selComp = null, selGroup = null, drag = null, guides = null, undoS = [], redoS = [], gestureOpen = false;
+  var editing = false, previewing = false, selComp = null, selGroup = null, drag = null, guides = null, undoS = [], redoS = [], gestureOpen = false;
   function snapState() { return JSON.stringify({ buttons: cfg, groups: groups }); }
   function pushUndo() { undoS.push(snapState()); if (undoS.length > 80) undoS.shift(); redoS = []; showSel(); }
   function restore(s) { var o = JSON.parse(s); cfg = o.buttons; groups = o.groups; paint(); persist(); showSel(); refreshLayouts(); applySettings(); }
@@ -2139,7 +2268,20 @@ input[type=range]:disabled { opacity: .4; }
   function drawFx() {
     fx.innerHTML = "";
     if (!editing) return;
-    groups.forEach(function (g) { var r = groupRect(g); if (r) fx.appendChild(boxDiv("edgrp" + (g.id === selGroup ? " selg" : ""), r)); });
+    groups.forEach(function (g) {
+      var r = groupRect(g); if (!r) return;
+      var d = boxDiv("edgrp" + (g.id === selGroup ? " selg" : ""), r), l = document.createElement("span"); l.className = "edgl"; l.textContent = g.name; d.appendChild(l);
+      if (g.id === selGroup) [[0, 0], [100, 0], [0, 100], [100, 100]].forEach(function (c) { var h = document.createElement("i"); h.className = "edh"; h.style.left = c[0] + "%"; h.style.top = c[1] + "%"; d.appendChild(h); });
+      fx.appendChild(d);
+    });
+    if (selComp) {
+      var ur = union([selComp]);
+      if (ur) {
+        var sb = boxDiv("edselc", { l: ur.l - 0.6, t: ur.t - 0.6, r: ur.r + 0.6, b: ur.b + 0.6 });
+        [[0, 0], [100, 0], [0, 100], [100, 100]].forEach(function (c) { var h = document.createElement("i"); h.className = "edh"; h.style.left = c[0] + "%"; h.style.top = c[1] + "%"; sb.appendChild(h); });
+        fx.appendChild(sb);
+      }
+    }
     if (guides && guides.x !== null) fx.appendChild(boxDiv("edguide", { l: guides.x, t: 0, r: guides.x + 0.15, b: SH }));
     if (guides && guides.y !== null) fx.appendChild(boxDiv("edguide", { l: 0, t: guides.y, r: SW, b: guides.y + 0.15 }));
   }
@@ -2149,8 +2291,46 @@ input[type=range]:disabled { opacity: .4; }
     return best;
   }
   function pct(v) { return Math.round(v * 100) + "%"; }
+  var grpBase = { id: null, m: {} };
+  function memberKind(id) {
+    return /ANALOG_STICK/.test(id) ? "Analog stick" : /TRIGGER/.test(id) ? "Trigger" : /SHOULDER/.test(id) ? "Bumper button" : id === "DPAD" ? "Directional pad" : id === "FACE_BUTTONS" ? "Face buttons" : /SELECT|START/.test(id) ? "System button" : "Control";
+  }
+  // Like the app: the panel opens on the side away from what is being edited
+  function sideFor() {
+    var right = true;
+    if (selComp) {
+      var c = cfg[selComp], an = c.anchor || "";
+      right = /LEFT/.test(an) ? true : /RIGHT/.test(an) ? false : c.offsetX <= 0;
+    } else if (selGroup && groupById(selGroup)) {
+      var u = union(groupById(selGroup).members); right = !u || (u.l + u.r) / 2 < SW / 2;
+    }
+    if (store.get("vgp-edflip", "off") === "on") right = !right;
+    document.body.classList.toggle("edsideR", right); document.body.classList.toggle("edsideL", !right);
+  }
+  // The control picker: any control can be chosen from the list, even a hidden or covered one
+  function buildPick() {
+    [$("edPick"), $("edPick2")].filter(Boolean).forEach(function (p) {
+      var v = selComp || ""; p.innerHTML = "";
+      var o0 = document.createElement("option"); o0.value = ""; o0.textContent = "Pick a control"; p.appendChild(o0);
+      ORDER.forEach(function (id) { var o = document.createElement("option"); o.value = id; o.textContent = COMPS[id].label + (cfg[id].visible ? "" : " (hidden)"); p.appendChild(o); });
+      p.value = v;
+    });
+  }
+  // Visible controls that sit on top of one another by a noticeable amount
+  function overlapsOf(id) {
+    var out = [], a = place(id);
+    if (!cfg[id].visible) return out;
+    ORDER.forEach(function (o) {
+      if (o === id || !cfg[o].visible) return;
+      var b = place(o), w = Math.min(a.x + a.w, b.x + b.w) - Math.max(a.x, b.x), h = Math.min(a.y + a.h, b.y + b.h) - Math.max(a.y, b.y);
+      if (w > 0 && h > 0 && w * h > 0.12 * Math.min(a.w * a.h, b.w * b.h)) out.push(o);
+    });
+    return out;
+  }
   function showSel() {
     document.querySelectorAll(".edsel").forEach(function (e) { e.classList.remove("edsel"); });
+    document.body.classList.toggle("hassel", !!(selComp || selGroup)); sideFor();
+    buildPick();
     var members = selComp ? [selComp] : selGroup && groupById(selGroup) ? groupById(selGroup).members : [];
     members.forEach(function (id) { document.querySelectorAll(COMPS[id].sel).forEach(function (e) { e.classList.add("edsel"); }); });
     $("edNone").style.display = !selComp && !selGroup ? "block" : "none";
@@ -2158,13 +2338,15 @@ input[type=range]:disabled { opacity: .4; }
     $("edGrp").style.display = !selComp && selGroup ? "block" : "none";
     if (selComp) {
       var c = cfg[selComp], g = groupOf(selComp);
-      $("edName").textContent = COMPS[selComp].label;
+      $("edName").textContent = COMPS[selComp].label; $("edTitle").textContent = COMPS[selComp].label; $("edCrumb").textContent = (groupOf(selComp) ? groupOf(selComp).name + " / " : "") + "Control";
       $("edVis").classList.toggle("on", c.visible); $("edVisRow").style.display = selComp === "SETTINGS_BUTTON" ? "none" : "flex";
       $("edSize").value = Math.round(c.scale * 100); $("edSizeV").textContent = pct(c.scale);
       $("edW").value = Math.round(c.widthScale * 100); $("edWV").textContent = pct(c.widthScale);
       $("edH").value = Math.round(c.heightScale * 100); $("edHV").textContent = pct(c.heightScale);
       var isStick = selComp === "LEFT_ANALOG_STICK" || selComp === "RIGHT_ANALOG_STICK";
       $("edArea").style.display = isStick ? "block" : "none";
+      $("edPX").value = Math.round(c.offsetX * 100); $("edPY").value = Math.round(c.offsetY * 100);
+      var ov = overlapsOf(selComp); $("edWarn").textContent = ov.length ? "Overlaps " + ov.map(function (i) { return COMPS[i].label; }).join(", ") + "." : "";
       if (isStick) {
         $("edAW").value = Math.round((c.areaW || 1) * 100); $("edAWV").textContent = c.areaW ? c.areaW.toFixed(1) + "x" : "Auto";
         $("edAH").value = Math.round((c.areaH || 1) * 100); $("edAHV").textContent = c.areaH ? c.areaH.toFixed(1) + "x" : "Auto";
@@ -2175,17 +2357,28 @@ input[type=range]:disabled { opacity: .4; }
       [["", "None"]].concat(groups.map(function (x) { return [x.id, x.name]; })).concat([["__new", "New group"]]).forEach(function (o) { var op = document.createElement("option"); op.value = o[0]; op.textContent = o[1]; s.appendChild(op); });
       s.value = g ? g.id : "";
     } else if (selGroup && groupById(selGroup)) {
-      $("edName").textContent = groupById(selGroup).name; $("edGroupName").value = groupById(selGroup).name;
+      var gg = groupById(selGroup);
+      $("edName").textContent = gg.name; $("edGrpTitle").textContent = gg.name; if (document.activeElement !== $("edGroupName")) $("edGroupName").value = gg.name;
+      $("edGrpInfo").textContent = "Group \u00b7 " + gg.members.length + (gg.members.length === 1 ? " control" : " controls");
+      $("edGrpCount").textContent = gg.members.length;
+      $("edGrpVis").classList.toggle("on", gg.members.some(function (m) { return cfg[m].visible; }));
+      if (grpBase.id !== selGroup) { grpBase = { id: selGroup, m: {} }; gg.members.forEach(function (m) { grpBase.m[m] = { x: cfg[m].offsetX, y: cfg[m].offsetY, s: cfg[m].scale }; }); $("edGX").value = 0; $("edGY").value = 0; $("edGS").value = 100; $("edGSV").textContent = "100%"; }
+      var gm = $("edGrpMembers"); gm.innerHTML = "";
+      gg.members.forEach(function (id) {
+        var b = document.createElement("button"); b.type = "button"; b.className = "edmem" + (cfg[id].visible ? "" : " off");
+        b.innerHTML = "<b></b><span></span>"; b.firstChild.textContent = COMPS[id].label; b.lastChild.textContent = memberKind(id);
+        b.addEventListener("click", function () { selComp = id; selGroup = null; showSel(); drawFx(); }); gm.appendChild(b);
+      });
     } else $("edName").textContent = "Edit layout";
     $("edUndo").disabled = !undoS.length; $("edRedo").disabled = !redoS.length;
     fillRanges();
     drawFx();
   }
-  function enterEdit() { closeMenu(); releaseAll(true); editing = true; drag = null; selComp = selGroup = null; undoS = []; redoS = []; document.body.classList.add("editing"); paint(); showSel(); }
-  function leaveEdit() { editing = false; drag = null; guides = null; selComp = selGroup = null; document.body.classList.remove("editing"); paint(); showSel(); persist(); }
+  function enterEdit() { closeMenu(); releaseAll(true); editing = true; previewing = false; document.body.classList.remove("preview", "edmin"); setMode(false); edSnap = snapState(); drag = null; selComp = selGroup = null; undoS = []; redoS = []; document.body.classList.add("editing"); paint(); showSel(); }
+  function leaveEdit() { editing = false; previewing = false; document.body.classList.remove("preview", "edmin"); drag = null; guides = null; selComp = selGroup = null; document.body.classList.remove("editing"); paint(); showSel(); persist(); }
   // While editing, touches on the controller only select and move things and never reach the controls
   document.addEventListener("pointerdown", function (e) {
-    if (!editing) return;
+    if (!editing || previewing) return;
     if (e.target.closest && e.target.closest("#edpanel")) return;
     e.stopPropagation(); e.preventDefault();
     var q = P(e), u = toU(q), el = e.target.closest ? e.target.closest("[data-ed]") : null, id = el ? el.getAttribute("data-ed") : null, target = null, tap = null;
@@ -2266,9 +2459,80 @@ input[type=range]:disabled { opacity: .4; }
     var g = groupById(selGroup); if (!g) return; pushUndo(); g.name = this.value.trim().slice(0, 30) || g.name; persist(); showSel();
   });
   $("edDissolve").addEventListener("click", function () { if (!selGroup) return; pushUndo(); groups = groups.filter(function (g) { return g.id !== selGroup; }); selGroup = null; persist(); showSel(); });
-  $("edUndo").addEventListener("click", undo); $("edRedo").addEventListener("click", redo);
+  $("edUndo").addEventListener("click", function () { if (undoS.length) { undo(); toast("Undone"); } });
+  $("edRedo").addEventListener("click", function () { if (redoS.length) { redo(); toast("Redone"); } });
+  [$("edPick"), $("edPick2")].filter(Boolean).forEach(function (pk) { pk.addEventListener("change", function () { selComp = this.value || null; selGroup = null; showSel(); drawFx(); }); });
+  var edSnap = null, barX = 0, barY = 0;
+  function dismissSel() { selComp = selGroup = null; showSel(); drawFx(); }
+  $("edCtlClose").addEventListener("click", dismissSel); $("edGrpClose").addEventListener("click", dismissSel);
+  function swapSide() { store.set("vgp-edflip", store.get("vgp-edflip", "off") === "on" ? "off" : "on"); showSel(); }
+  $("edSwap").addEventListener("click", swapSide); $("edSwap2").addEventListener("click", swapSide);
+  $("edGrpVis").addEventListener("click", function () {
+    var g = groupById(selGroup); if (!g) return; pushUndo(); var on = !g.members.some(function (m) { return cfg[m].visible; });
+    g.members.forEach(function (m) { cfg[m].visible = on; }); paint(); persist(); showSel(); drawFx();
+  });
+  function applyGroupTransform(first) {
+    var g = groupById(selGroup); if (!g || grpBase.id !== selGroup) return;
+    if (first) pushUndo();
+    var dx = parseFloat($("edGX").value) || 0, dy = parseFloat($("edGY").value) || 0, f = (parseFloat($("edGS").value) || 100) / 100;
+    g.members.forEach(function (m) { var b = grpBase.m[m]; if (!b) return; cfg[m].offsetX = clampN(b.x + dx / 100, -1.5, 1.5); cfg[m].offsetY = clampN(b.y + dy / 100, -1.5, 1.5); cfg[m].scale = clampN(b.s * f, 0.5, 2); });
+    $("edGSV").textContent = Math.round(f * 100) + "%"; paint(); persist(); drawFx();
+  }
+  $("edGX").addEventListener("change", function () { applyGroupTransform(true); });
+  $("edGY").addEventListener("change", function () { applyGroupTransform(true); });
+  $("edGS").addEventListener("pointerdown", function () { grpGesture = false; });
+  var grpGesture = false;
+  $("edGS").addEventListener("input", function () { applyGroupTransform(!grpGesture); grpGesture = true; });
+  $("edGS").addEventListener("change", function () { grpGesture = false; });
+  $("edGrpReset").addEventListener("click", function () {
+    var g = groupById(selGroup); if (!g) return; pushUndo();
+    g.members.forEach(function (m) { var d = DEFAULTS[m]; cfg[m].offsetX = d.offsetX; cfg[m].offsetY = d.offsetY; cfg[m].scale = d.scale; cfg[m].widthScale = d.widthScale; cfg[m].heightScale = d.heightScale; cfg[m].anchor = d.anchor; });
+    grpBase = { id: null, m: {} }; paint(); persist(); showSel(); drawFx();
+  });
+  function setMode(prev) {
+    previewing = prev; document.body.classList.toggle("preview", prev);
+    $("edModeEdit").classList.toggle("cur", !prev); $("edModePrev").classList.toggle("cur", prev);
+    releaseAll(true); drawFx(); showSel();
+  }
+  $("edModeEdit").addEventListener("click", function () { setMode(false); });
+  $("edModePrev").addEventListener("click", function () { selComp = selGroup = null; setMode(true); });
+  $("edCancel").addEventListener("click", function () {
+    if (edSnap !== null && snapState() !== edSnap) dialog({ title: "Discard changes?", text: "Your edits to this layout will be lost.", yes: "Discard", danger: true, onYes: function () { restore(edSnap); leaveEdit(); } });
+    else leaveEdit();
+  });
+  function placeBar() {
+    var bar = $("edBar"); bar.style.setProperty("--bx", barX + "px"); bar.style.setProperty("--by", barY + "px");
+    $("edBarHome").disabled = !barX && !barY;
+  }
+  $("edBarHome").addEventListener("click", function () { barX = barY = 0; placeBar(); });
+  // The bar can be dragged anywhere; taps on its buttons still work
+  (function () {
+    var bar = $("edBar"), drag0 = null;
+    bar.addEventListener("pointerdown", function (e) { if (e.target.closest("button, select, .edhint")) return; drag0 = { x: e.clientX, y: e.clientY, bx: barX, by: barY, id: e.pointerId, moved: false }; });
+    window.addEventListener("pointermove", function (e) {
+      if (!drag0 || e.pointerId !== drag0.id) return;
+      var dx = e.clientX - drag0.x, dy = e.clientY - drag0.y;
+      if (!drag0.moved && Math.hypot(dx, dy) < 6) return;
+      drag0.moved = true;
+      barX = Math.max(-window.innerWidth / 2 + 120, Math.min(window.innerWidth / 2 - 120, drag0.bx + dx)); barY = Math.max(0, Math.min(window.innerHeight - 90, drag0.by + dy)); placeBar();
+    });
+    window.addEventListener("pointerup", function () { drag0 = null; });
+  })();
+  $("edMore").addEventListener("click", function () {
+    var areas = document.body.classList.contains("showareas");
+    showMenu(this, [
+      { label: "Import", fn: importDialog },
+      { label: "Export", fn: function () { var text = layoutText(cfg, groups, behaviour); dialog({ title: "Export layout", text: "Copy this text to back up the layout or move it to another device.", area: true, areaValue: text, readOnly: true, yes: "Done", no: "Close", mid: "Copy", onMid: function () { copyText(text); } }); } },
+      { label: areas ? "Hide touch areas" : "Show touch areas", fn: function () { document.body.classList.toggle("showareas"); showSel(); } },
+      { label: "Move toolbar to the top", disabled: !barX && !barY, fn: function () { $("edBarHome").click(); } },
+      { label: "Reset layout", warn: true, fn: function () { dialog({ title: "Reset layout?", text: "Every control goes back to its default place and size.", yes: "Reset", danger: true, onYes: function () { pushUndo(); cfg = clone(DEFAULTS); groups = clone(DEFAULT_GROUPS); paint(); persist(); showSel(); applySettings(); } }); } }
+    ]);
+  });
+  ["edPX", "edPY"].forEach(function (id) { $(id).addEventListener("change", function () {
+    var v = parseFloat(this.value); if (isNaN(v)) return;
+    change(function (c) { c[id === "edPX" ? "offsetX" : "offsetY"] = clampN(v / 100, -1.5, 1.5); });
+  }); });
   $("edDone").addEventListener("click", leaveEdit);
-  $("edDock").addEventListener("click", function () { var f = document.body.classList.toggle("edflip"); this.textContent = f ? "Bottom" : "Top"; });
 
   // ---- the layout library, like the app's Layouts page ----
   function loadArr(k) { try { var v = JSON.parse(store.get(k, "")); return Array.isArray(v) ? v : []; } catch (e) { return []; } }
@@ -2522,5 +2786,6 @@ input[type=range]:disabled { opacity: .4; }
   applySettings(); renderSlot(); updateFsPill(); connect();
 })();
 </script>
+<div id="demoNote">Demo: the connection is simulated</div>
 </body>
 </html>
