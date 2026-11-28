@@ -241,54 +241,75 @@ body.editing #edfx { display: block; }
 body.editing .stick.edsel::after { opacity: .8; border-color: var(--fg); }
 .tl { scale: var(--ix, 1) var(--iy, 1); }
 .row.rcrow { display: block; padding-top: 0; padding-bottom: 0; }
-.rchead { display: flex; align-items: center; gap: 12px; cursor: pointer; padding: 12px 0; }
+.rchrow { display: flex; align-items: center; gap: 8px; }
+.rchead { flex: 1; min-width: 0; display: flex; align-items: center; gap: 12px; cursor: pointer; padding: 12px 0; background: transparent; border: 0; color: inherit; font: inherit; text-align: left; }
+.rcrst { flex: none; }
 .rct { flex: 1; min-width: 0; }
 .rcname { color: var(--muted); font-size: 13px; }
 .rcmini { width: 48px; height: 36px; flex: none; }
-.rcchev { font-style: normal; font-size: 20px; color: var(--muted); transition: transform .18s; }
-.rcrow.open .rcchev { transform: rotate(90deg); }
+.rcrow.open .rcname, .rcrow.open .rcmini { display: none; }
+.rcchev { font-style: normal; font-size: 20px; color: var(--muted); transition: transform .18s; display: inline-block; }
+.rcrow.open .rcchev { transform: rotate(-90deg); }
 .rcwrap { display: grid; grid-template-rows: 0fr; transition: grid-template-rows .18s ease; }
 .rcrow.open .rcwrap { grid-template-rows: 1fr; }
-.rcin { overflow: hidden; min-height: 0; }
+.rcin { overflow: hidden; min-height: 0; display: flex; flex-direction: column; gap: 14px; }
 .rcrow.open .rcin { padding-bottom: 14px; }
-.rcpresets { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 14px; }
-.rcp { display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 8px 4px; border-radius: 10px; border: 1.5px solid var(--border); background: transparent; color: var(--fg); font: inherit; cursor: pointer; }
-.rcp canvas { width: 44px; height: 32px; }
-.rcp b { font-size: 12px; font-weight: 500; }
-.rcp span { font-size: 10px; color: var(--muted); }
+.rcpresets { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; }
+.rcp { display: flex; flex-direction: row; align-items: center; gap: 8px; min-height: 56px; padding: 6px 10px; border-radius: 10px; border: 1.5px solid var(--border); background: transparent; color: var(--fg); font: inherit; cursor: pointer; text-align: left; min-width: 0; }
+.rcp canvas { width: 40px; height: 28px; flex: none; }
+.rcpt2 { display: flex; flex-direction: column; min-width: 0; }
+.rcp b { font-size: 13px; font-weight: 500; }
+.rcp .rcpt2 span { font-size: 11px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .rcp.cur { border-color: var(--fg); }
-.rcbody { display: grid; grid-template-columns: minmax(0, 360px) minmax(0, 1fr); gap: 20px; align-items: start; }
-@media (max-width: 760px), (orientation: portrait) { .rcbody { grid-template-columns: minmax(0, 1fr); } }
-.rcgfx canvas { display: block; width: 100%; height: auto; }
-.rcgraph { aspect-ratio: 1; touch-action: none; outline: none; }
+.rctoolbar { display: none; align-items: center; gap: 8px; flex-wrap: wrap; }
+.rcrow.iscustom .rctoolbar { display: flex; }
+.rctoolbar .seg { width: 170px; padding: 2px; }
+.rctoolbar .seg button { white-space: nowrap; min-width: max-content; padding: 6px 12px; font-size: 13px; }
+.rcsp { flex: 1; }
+.curvecount { white-space: nowrap; font-size: 12px; color: var(--muted); }
+.rcbody { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 24px; align-items: start; }
+@media (max-width: 760px), (orientation: portrait) { .rcbody { grid-template-columns: minmax(0, 1fr); gap: 12px; } .rcpresets { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.rcmain, .rcanalysis { min-width: 0; }
+.rcmain { display: flex; flex-direction: column; align-items: stretch; }
+.rcgraph, .rcsens, .rcuse { display: block; width: 100%; height: auto; }
+.rcgraph { max-width: 360px; aspect-ratio: 1; touch-action: none; outline: none; }
 .rcgraph:focus-visible { outline: 2px solid var(--fg); outline-offset: 2px; border-radius: 6px; }
-.rcsens { aspect-ratio: 640 / 200; }
+.rcsens { aspect-ratio: 640 / 220; }
 .rcuse { aspect-ratio: 640 / 190; }
-.rcgh { display: flex; justify-content: space-between; align-items: center; font-size: 12px; color: var(--muted); margin: 10px 0 2px; min-height: 26px; }
+.rcanalysis { display: flex; flex-direction: column; gap: 12px; }
+.rcgh { display: flex; justify-content: space-between; align-items: center; font-size: 12px; color: var(--muted); margin: 0 0 2px; min-height: 26px; }
 .rcgh em { font-style: normal; opacity: .75; }
-.rcaxis.c { text-align: center; font-size: 11px; color: var(--muted); margin: 0 0 0 10%; }
-.rcusesum { display: flex; gap: 14px; font-size: 12px; color: var(--muted); margin-top: 6px; flex-wrap: wrap; }
+.rcaxis.c { text-align: center; font-size: 11px; color: var(--muted); max-width: 360px; margin-top: -2px; }
+.rchint { max-width: 360px; text-align: center; margin: 4px 0 0; display: none; }
+.rcrow.iscustom .rchint { display: block; }
+.rcusesum { display: flex; gap: 14px; font-size: 12px; color: var(--muted); margin-top: 4px; flex-wrap: wrap; }
 .rcusesum b { color: var(--fg); font-weight: 600; }
-.rcvals { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 14px; }
-.rcvals div { background: var(--panel-on); border-radius: 10px; padding: 8px 10px; }
-.rcvals span { display: block; font-size: 11px; color: var(--muted); }
-.rcvals b { font-size: 20px; font-weight: 600; font-variant-numeric: tabular-nums; }
-.rccustom { display: none; }
-.rcsec { font-size: 11px; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); margin: 14px 0 6px; }
-.rccustom .seg { width: 220px; max-width: 100%; }
-.rccustom .seg button { white-space: nowrap; min-width: max-content; padding: 8px 14px; }
-.rcpt { display: flex; gap: 10px; }
-.rcpt label { display: flex; flex-direction: column; gap: 4px; font-size: 11px; color: var(--muted); flex: 1; position: relative; }
-.rcpt input { width: 100%; box-sizing: border-box; background: var(--panel-on); border: 1px solid var(--border); border-radius: 8px; color: var(--fg); font: inherit; font-size: 15px; padding: 8px 26px 8px 10px; }
-.rcpt i { position: absolute; right: 10px; bottom: 9px; font-style: normal; color: var(--muted); font-size: 13px; }
-.rcrow2 { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; align-items: center; }
-.btn2.sm { padding: 7px 12px; font-size: 13px; }
-.btn2:disabled { opacity: .4; cursor: default; }
-.rcchk { display: flex; align-items: center; gap: 8px; margin-top: 12px; font-size: 13px; cursor: pointer; }
-.rcwarn { font-size: 12px; margin-top: 8px; }
+.rcvals { display: grid; grid-template-columns: repeat(3, 1fr); background: var(--panel-on); border-radius: 10px; padding: 6px 4px; position: relative; padding-top: 18px; }
+.rcvcap { position: absolute; top: 4px; left: 12px; font-size: 10px; letter-spacing: .05em; text-transform: uppercase; color: var(--muted); }
+.rcvals > div { padding: 0 10px; border-left: 1px solid var(--border); }
+.rcvals > div:first-of-type { border-left: 0; }
+.rcvals .rvl { display: block; font-size: 11px; color: var(--muted); }
+.rcvals b { font-size: 16px; font-weight: 600; font-variant-numeric: tabular-nums; }
+.rcpointeditor { display: none; align-items: flex-end; gap: 10px; flex-wrap: wrap; }
+.rcrow.iscustom .rcpointeditor { display: flex; }
+.rcsec { font-size: 11px; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); align-self: center; margin-right: 4px; }
+.rcpointeditor label { display: flex; flex-direction: column; gap: 3px; font-size: 11px; color: var(--muted); position: relative; width: 96px; }
+.rcpointeditor input { width: 100%; box-sizing: border-box; background: var(--panel-on); border: 1px solid var(--border); border-radius: 8px; color: var(--fg); font: inherit; font-size: 14px; height: 36px; padding: 0 24px 0 10px; }
+.rcpointeditor i { position: absolute; right: 9px; bottom: 9px; font-style: normal; color: var(--muted); font-size: 12px; }
+.btn2.sm { padding: 0 12px; height: 32px; font-size: 13px; flex: none; width: auto; min-width: 0; }
+.btn2:disabled, .ib:disabled { opacity: .4; cursor: default; }
+.ib { width: 32px; height: 32px; display: inline-flex; align-items: center; justify-content: center; border: 1px solid var(--border); background: transparent; color: var(--fg); border-radius: 8px; cursor: pointer; padding: 0; }
+.rcadv { display: none; font-size: 13px; }
+.rcrow.iscustom .rcadv { display: block; }
+.rcadv summary { cursor: pointer; color: var(--muted); font-size: 12px; }
+.rcchk { display: flex; align-items: center; gap: 8px; margin-top: 8px; cursor: pointer; }
+.rcbox { appearance: none; -webkit-appearance: none; width: 18px; height: 18px; border: 1.5px solid var(--border); border-radius: 5px; background: transparent; display: inline-grid; place-content: center; margin: 0; cursor: pointer; }
+.rcbox:checked { background: var(--fg); border-color: var(--fg); }
+.rcbox:checked::after { content: ""; width: 9px; height: 5px; border-left: 2px solid var(--sheet, #000); border-bottom: 2px solid var(--sheet, #000); transform: rotate(-45deg) translate(1px, -1px); }
+.rcwarn { font-size: 12px; }
 .rcwarn .neg { color: #CF7777; } .rcwarn .steep { color: #CBB78D; }
-.rcmore { position: relative; margin-left: auto; }
-.rcmenu { display: none; position: absolute; right: 0; bottom: 110%; min-width: 130px; background: var(--sheet); border: 1px solid var(--border); border-radius: 10px; padding: 4px; z-index: 5; }
+.rcmore { position: relative; }
+.rcmenu { display: none; position: absolute; right: 0; top: 110%; min-width: 130px; background: var(--sheet); border: 1px solid var(--border); border-radius: 10px; padding: 4px; z-index: 5; }
 .rcmenu.open { display: block; }
 .rcmenu button { display: block; width: 100%; text-align: left; background: transparent; border: 0; color: var(--fg); font: inherit; font-size: 13px; padding: 8px 10px; border-radius: 7px; cursor: pointer; }
 .rcmenu button:hover { background: var(--panel-on); }
@@ -1078,7 +1099,7 @@ input[type=range]:disabled { opacity: .4; }
     function setv(raw) {
       var v = raw < 0.05 ? 0 : (raw >= 0.9 ? 1 : raw);
       if (Math.floor(v * 4) > Math.floor(level * 4) && mode() !== "digital") buzz(18);
-      level = v; ax[key] = curveAt(settings.rcurve, settings.rcurveP, v); dirty = true;
+      level = v; recUseT(raw); ax[key] = curveAt(settings.rcurve, settings.rcurveP, v); dirty = true;
       fill.style.height = (v * 100) + "%";
       pct.textContent = id !== null && mode() !== "digital" ? Math.round(v * 100) + "%" : "";
     }
@@ -1409,14 +1430,14 @@ input[type=range]:disabled { opacity: .4; }
       { k: "tiltRange", t: "Tilt range", h: "Degrees of tilt for full lock.", min: 15, max: 60, step: 1, u: "\u00B0", sub: 1, when: function () { return sv("tilt") !== "off"; } },
       { k: "tiltDead", t: "Tilt dead zone", h: "Ignore small tilts around the middle.", min: 0, max: 15, step: 1, u: "\u00B0", sub: 1, when: function () { return sv("tilt") !== "off"; } },
       { k: "tiltInvert", t: "Invert tilt", sw: 1, sub: 1, when: function () { return sv("tilt") !== "off"; } },
-      { rc: 1, k: "tcurve", kp: "tcurveP", t: "Tilt response curve", h: "How the turn of the phone maps to steering.", sub: 1, when: function () { return sv("tilt") !== "off"; } },
+      { rc: 1, inL: "Tilt input", outL: "Steering output", k: "tcurve", kp: "tcurveP", t: "Tilt response curve", h: "How the turn of the phone maps to steering.", sub: 1, when: function () { return sv("tilt") !== "off"; } },
       { t: "Calibrate tilt", h: "Hold the phone in the position that should be straight, then tap.", btn: "Calibrate", sub: 1, fn: function () { tiltCalibrate(); }, when: function () { return sv("tilt") !== "off"; } },
       { k: "stickL", t: "Left stick position", h: "Fixed stays where the layout puts it. Floating appears under your thumb inside its area.", opts: [["fixed", "Fixed"], ["floating", "Floating"]], when: function () { return sv("tilt") !== "left"; } },
       { k: "stickR", t: "Right stick position", opts: [["fixed", "Fixed"], ["floating", "Floating"]], when: function () { return sv("tilt") !== "right"; } },
       { k: "snap", t: "Snap stick to touch", h: "Touching inside a stick's touch area moves it there. Set the area in the layout editor. Turn off to drag from the stick cap only.", sw: 1 },
       { k: "dead", t: "Dead zone", h: "Ignore small movements near the centre of a stick.", min: 0, max: 40, step: 1, u: "%" },
       { k: "sens", t: "Sensitivity", h: "Above 100% reaches full tilt before the edge of the stick.", min: 50, max: 150, step: 1, u: "%" },
-      { rc: 1, usage: 1, k: "curve", kp: "curveP", t: "Response curve", h: "How far a push turns into movement. Precise is finer near the centre, Quick reaches full speed sooner." },
+      { rc: 1, usage: 1, ukey: "stick", useL: "stick usage", inL: "Stick input", outL: "Stick output", k: "curve", kp: "curveP", t: "Response curve", h: "How far a push turns into movement. Precise is finer near the centre, Quick reaches full speed sooner." },
       { k: "click", t: "Hold to click a stick", h: "Holding a stick still presses it like L3 or R3.", sw: 1 },
       { k: "clickMs", t: "Hold time", min: 200, max: 1500, step: 50, u: " ms", sub: 1, off: function () { return sv("click") !== "on"; } },
       { k: "invL", t: "Invert left stick vertical", sw: 1, when: function () { return sv("tilt") !== "left"; } },
@@ -1431,7 +1452,7 @@ input[type=range]:disabled { opacity: .4; }
       { k: "trigL", t: "Left trigger input", h: "Button is plain on or off. Drag lets you pull harder by dragging up. Gradient starts the pull by where you first touch, then you can still drag.",
         opts: [["digital", "Button"], ["drag", "Drag"], ["zones", "Gradient"]] },
       { k: "trigR", t: "Right trigger input", opts: [["digital", "Button"], ["drag", "Drag"], ["zones", "Gradient"]] },
-      { rc: 1, k: "rcurve", kp: "rcurveP", t: "Trigger response curve", h: "How far a pull turns into trigger output." }
+      { rc: 1, usage: 1, ukey: "trig", useL: "trigger usage", inL: "Trigger input", outL: "Trigger output", k: "rcurve", kp: "rcurveP", t: "Trigger response curve", h: "How far a pull turns into trigger output." }
     ],
     haptics: [
       { k: "rumble", t: "Game vibration", h: "Vibrate when the game rumbles this controller.", sw: 1 },
@@ -1457,36 +1478,48 @@ input[type=range]:disabled { opacity: .4; }
     if (scope === "layout") { behaviour[bk] = v; settings[bk] = v; persist(); }
     else { globalSettings[bk] = v; store.set("vgp-" + bk, String(v)); if (behaviour[bk] === undefined) settings[bk] = v; }
   }
-  // Where the stick spends its time: the amount entering the response curve, sampled at 10 Hz, kept until reset
-  var usage = { bins: [], n: 0, t: 0 }; for (var ub = 0; ub < 50; ub++) usage.bins.push(0);
-  function recUse(v) { var now = Date.now(); if (now - usage.t < 100) return; usage.t = now; usage.bins[Math.min(49, Math.floor(v * 50))]++; usage.n++; }
+  // Where the stick or trigger spends its time: the amount entering the response curve, sampled at 10 Hz, kept until reset
+  function mkUsage() { var u = { bins: [], n: 0, t: 0 }; for (var i = 0; i < 50; i++) u.bins.push(0); return u; }
+  var usageS = mkUsage(), usageT = mkUsage();
+  function recInto(u, v) { var now = Date.now(); if (now - u.t < 100) return; u.t = now; u.bins[Math.min(49, Math.floor(v * 50))]++; u.n++; }
+  function recUse(v) { recInto(usageS, v); }
+  function recUseT(v) { if (v > 0.02) recInto(usageT, v); }
   var rcLive = [];
   setInterval(function () { rcLive.forEach(function (f) { f(); }); }, 500);
   var C_SENS = "#CBB78D", C_USE = "#71B69A", C_NEG = "#CF7777";
+  var ICON_UNDO = '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 14 4 9l5-5"/><path d="M4 9h10a6 6 0 0 1 0 12h-3"/></svg>';
+  var ICON_REDO = '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 14 5-5-5-5"/><path d="M20 9H10a6 6 0 0 0 0 12h3"/></svg>';
+  var ICON_TRASH = '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/></svg>';
   // A response curve setting that folds away: preset and a small preview when closed, a tuning workspace when open
   function buildCurveSection(spec) {
-    var kk = spec.k, kp = spec.kp, KINDS = ["linear", "precise", "quick", "custom"], NAMES = ["Linear", "Precise", "Quick", "Custom"], CAPS = ["Balanced", "Fine control", "Fast response", "Your own"];
+    var kk = spec.k, kp = spec.kp, KINDS = ["linear", "precise", "quick", "custom"], NAMES = ["Linear", "Precise", "Quick", "Custom"], CAPS = ["Proportional", "Fine control", "Fast response", "Editable curve"];
+    var inL = spec.inL || "Input", outL = spec.outL || "Output", use = spec.ukey === "trig" ? usageT : usageS, useL = spec.useL || "usage";
     var r = document.createElement("div"); r.className = "row rcrow" + (spec.sub ? " sub" : "");
-    r.innerHTML = '<div class="rchead" role="button" tabindex="0" aria-expanded="false"><span class="rct"><b></b><span class="hint"></span></span><span class="rcname"></span><canvas class="rcmini" width="96" height="72"></canvas><i class="rcchev">&#8250;</i></div>' +
-      '<div class="rcwrap"><div class="rcin"><div class="rcpresets"></div><div class="rcbody"><div class="rcgfx">' +
-      '<div class="rcgh"><span>Game output (%)</span><span class="curvecount"></span></div>' +
+    r.innerHTML = '<div class="rchrow"><button type="button" class="rchead" aria-expanded="false"><span class="rct"><b></b><span class="hint"></span></span><span class="rcname"></span><canvas class="rcmini" width="96" height="72"></canvas><i class="rcchev">&#8250;</i></button></div>' +
+      '<div class="rcwrap"><div class="rcin"><div class="rcpresets" role="group" aria-label="Curve preset"></div>' +
+      '<div class="rctoolbar"><div class="seg" role="group" aria-label="Interpolation"><button type="button" data-m="s">Smooth</button><button type="button" data-m="l">Linear</button></div><span class="curvecount"></span><span class="rcsp"></span>' +
+      '<button type="button" class="ib" data-a="undo" aria-label="Undo" title="Undo">' + ICON_UNDO + '</button><button type="button" class="ib" data-a="redo" aria-label="Redo" title="Redo">' + ICON_REDO + '</button>' +
+      '<button type="button" class="btn2 sm" data-a="reset">Clear points</button>' +
+      '<span class="rcmore"><button type="button" class="btn2 sm" data-a="more" aria-label="More">&#8943;</button><div class="rcmenu"><button type="button" data-a="copy">Copy code</button><button type="button" data-a="paste">Paste code</button></div></span></div>' +
+      '<div class="rcbody"><div class="rcmain"><div class="rcgh"><span class="rcyl"></span></div>' +
       '<canvas class="rcgraph" width="640" height="640" tabindex="0" aria-label="Response curve. Arrow keys move the selected point, Delete removes it."></canvas>' +
-      '<div class="rcgh"><span>Sensitivity <em>(1x is a straight line)</em></span></div><canvas class="rcsens" width="640" height="200"></canvas>' +
-      (spec.usage ? '<div class="rcgh"><span>Stick usage</span><button class="btn2 sm" data-a="clearuse" title="Shows where your stick spends the most time during gameplay. Use it to fine tune the parts of the curve you use most.">Reset usage</button></div><canvas class="rcuse" width="640" height="190"></canvas><div class="rcusesum"></div>' : '') +
-      '<div class="rcaxis c">Input (%)</div></div>' +
-      '<div class="rcside"><div class="rcvals"><div><span>Input</span><b data-v="in">-</b></div><div><span>Output</span><b data-v="out">-</b></div><div><span>Sensitivity</span><b data-v="sens">-</b></div></div>' +
-      '<div class="rccustom"><div class="rcsec">Interpolation</div><div class="seg"><button data-m="s">Smooth</button><button data-m="l">Linear</button></div>' +
-      '<div class="rcsec">Selected point</div><div class="rcpt"><label>Input<input type="number" min="1" max="99" data-f="x"><i>%</i></label><label>Output<input type="number" min="0" max="100" data-f="y"><i>%</i></label></div>' +
-      '<div class="rcrow2"><button class="btn2 sm" data-a="remove">Remove point</button></div>' +
-      '<label class="rcchk"><input type="checkbox" data-a="free"><span>Allow decreasing output</span></label>' +
-      '<div class="rcwarn"></div>' +
-      '<div class="rcrow2"><button class="btn2 sm" data-a="undo">Undo</button><button class="btn2 sm" data-a="redo">Redo</button><button class="btn2 sm" data-a="reset">Reset curve</button>' +
-      '<span class="rcmore"><button class="btn2 sm" data-a="more" aria-label="More">&#8943;</button><div class="rcmenu"><button data-a="copy">Copy code</button><button data-a="paste">Paste code</button></div></span></div>' +
-      '<div class="hint">Click to add a point · Drag to adjust · Delete to remove</div></div></div></div></div></div>';
-    var head = r.querySelector(".rchead"), mini = r.querySelector(".rcmini"), graph = r.querySelector(".rcgraph"), sensC = r.querySelector(".rcsens"), useC = r.querySelector(".rcuse"), presets = r.querySelector(".rcpresets");
+      '<div class="rcaxis c rcxl"></div><div class="hint rchint">Click to add · Drag to move · Delete to remove</div></div>' +
+      '<div class="rcanalysis"><div class="rcvals"><span class="rcvcap"></span><div><span class="rvl" data-l="in"></span><b data-v="in">-</b></div><div><span class="rvl" data-l="out"></span><b data-v="out">-</b></div><div><span class="rvl">Sensitivity</span><b data-v="sens">-</b></div></div>' +
+      '<div><div class="rcgh"><span>Sensitivity <em>(1x = linear)</em></span></div><canvas class="rcsens" width="640" height="220"></canvas></div>' +
+      '<div class="rcusewrap"><div class="rcgh"><span class="rcul"></span><button type="button" class="btn2 sm" data-a="clearuse" title="Shows where it spends the most time during gameplay. Use it to fine tune the parts of the curve you use most.">Reset usage</button></div><canvas class="rcuse" width="640" height="190"></canvas><div class="rcusesum"></div></div>' +
+      '<div class="rcwarn"></div></div></div>' +
+      '<div class="rcpointeditor"><span class="rcsec">Selected point</span><label>Input<input type="number" min="1" max="99" data-f="x" aria-label="Selected point input"><i>%</i></label><label>Output<input type="number" min="0" max="100" data-f="y" aria-label="Selected point output"><i>%</i></label>' +
+      '<button type="button" class="ib" data-a="remove" aria-label="Remove point" title="Remove point">' + ICON_TRASH + '</button></div>' +
+      '<details class="rcadv"><summary>Advanced options</summary><label class="rcchk"><input type="checkbox" class="rcbox" data-a="free"><span>Allow decreasing output</span></label></details>' +
+      '</div></div>';
+    var head = r.querySelector(".rchead"), mini = r.querySelector(".rcmini"), graph = r.querySelector(".rcgraph"), sensC = r.querySelector(".rcsens"), useC = r.querySelector(".rcuse"), presets = r.querySelector(".rcpresets"), read = r.querySelector(".rcvals");
     r.querySelector(".rct b").textContent = spec.t; r.querySelector(".rct .hint").textContent = spec.h || "";
-    var rst = document.createElement("button"); rst.className = "rst"; rst.textContent = "Reset"; rst.title = "Use the default for this setting";
-    r.querySelector(".rct b").appendChild(rst);
+    r.querySelector(".rcyl").textContent = outL + " (%)"; r.querySelector(".rcxl").textContent = inL + " (%)";
+    r.querySelector('[data-l="in"]').textContent = inL; r.querySelector('[data-l="out"]').textContent = outL;
+    r.querySelector(".rcul").textContent = spec.usage ? (useL.charAt(0).toUpperCase() + useL.slice(1)) : "";
+    if (!spec.usage) r.querySelector(".rcusewrap").style.display = "none";
+    var rst = document.createElement("button"); rst.type = "button"; rst.className = "rst rcrst"; rst.textContent = "Reset"; rst.title = "Use the default for this setting";
+    r.querySelector(".rchrow").appendChild(rst);
     rst.addEventListener("click", function (e) { e.stopPropagation(); delete behaviour[kk]; delete behaviour[kp]; settings[kk] = globalSettings[kk]; settings[kp] = globalSettings[kp]; persist(); applySettings(); });
     var K = function () { return sv(kk); }, cur = parseCurve(sv(kp)), which = -1, sel = -1, hoverX = null, undoS = [], redoS = [];
     var cssv = function (n, d) { return (getComputedStyle(document.documentElement).getPropertyValue(n) || d).trim() || d; };
@@ -1499,8 +1532,8 @@ input[type=range]:disabled { opacity: .4; }
     };
     var seedOf = function (kind) { return kind === "precise" ? sampledCurve(function (v) { return Math.pow(v, 1.6); }) : kind === "quick" ? sampledCurve(function (v) { return Math.pow(v, 0.7); }) : { smooth: true, free: false, pts: [] }; };
     NAMES.forEach(function (nm, i) {
-      var b = document.createElement("button"); b.className = "rcp"; b.dataset.i = i;
-      b.innerHTML = '<canvas width="88" height="64"></canvas><b>' + nm + '</b><span>' + CAPS[i] + '</span>';
+      var b = document.createElement("button"); b.type = "button"; b.className = "rcp"; b.dataset.i = i;
+      b.innerHTML = '<canvas width="80" height="56"></canvas><span class="rcpt2"><b>' + nm + '</b><span>' + CAPS[i] + '</span></span>';
       presets.appendChild(b);
       b.addEventListener("click", function () {
         if (i === 3 && !parseCurve(sv(kp)).pts.length) { cur = seedOf(K()); wrKey(kp, curveStr(cur)); }
@@ -1508,7 +1541,13 @@ input[type=range]:disabled { opacity: .4; }
       });
     });
     var L = 64, RM = 16, W = 640, PW = W - L - RM;
-    function frame(cv, T, B) { var ctx = cv.getContext("2d"); ctx.clearRect(0, 0, cv.width, cv.height); ctx.save(); ctx.translate(L, T); return { ctx: ctx, ph: cv.height - T - B }; }
+    // Canvases draw in a 640 wide space and are sized to what is shown, for sharp lines on any screen
+    function prep(cv, lh) {
+      var w = cv.clientWidth || 320, dpr = window.devicePixelRatio || 1, pw = Math.round(w * dpr), ph = Math.round(pw * lh / 640);
+      if (cv.width !== pw || cv.height !== ph) { cv.width = pw; cv.height = ph; }
+      var ctx = cv.getContext("2d"); ctx.setTransform(pw / 640, 0, 0, pw / 640, 0, 0); ctx.clearRect(0, 0, 640, lh); return ctx;
+    }
+    function frame(cv, lh, T, B) { var ctx = prep(cv, lh); ctx.save(); ctx.translate(L, T); return { ctx: ctx, ph: lh - T - B }; }
     function grid(ctx, ph, rows) {
       ctx.lineWidth = 1; ctx.strokeStyle = cssv("--border", "#2b2b32");
       for (var g = 0; g <= 4; g++) { ctx.beginPath(); ctx.moveTo(g * PW / 4, 0); ctx.lineTo(g * PW / 4, ph); ctx.stroke(); }
@@ -1516,24 +1555,24 @@ input[type=range]:disabled { opacity: .4; }
     }
     function xlabels(ctx, y) { ctx.fillStyle = cssv("--muted", "#888"); ctx.font = "20px sans-serif"; ctx.textAlign = "center"; for (var t = 0; t <= 4; t++) ctx.fillText(t * 25, t * PW / 4, y); }
     function cross(ctx, ph) { if (hoverX === null) return; ctx.strokeStyle = cssv("--muted", "#888"); ctx.lineWidth = 1.5; ctx.beginPath(); ctx.moveTo(hoverX / 100 * PW, 0); ctx.lineTo(hoverX / 100 * PW, ph); ctx.stroke(); }
-    var drawn = { maxS: 0, minS: 0, decreasing: false };
+    var drawn = { maxS: 0, minS: 0 };
     function drawGraph() {
-      var kind = K(), f = fnFor(kind), fr = frame(graph, 16, 56), ctx = fr.ctx, PS = fr.ph;
+      var kind = K(), f = fnFor(kind), fr = frame(graph, 640, 16, 56), ctx = fr.ctx, PS = fr.ph;
       grid(ctx, PS, 4);
-      ctx.setLineDash([14, 10]); ctx.lineWidth = 2; ctx.strokeStyle = cssv("--muted", "#62626d"); ctx.beginPath(); ctx.moveTo(0, PS); ctx.lineTo(PW, PS - PS); ctx.stroke(); ctx.setLineDash([]);
+      ctx.setLineDash([14, 10]); ctx.lineWidth = 2; ctx.strokeStyle = cssv("--muted", "#62626d"); ctx.beginPath(); ctx.moveTo(0, PS); ctx.lineTo(PW, 0); ctx.stroke(); ctx.setLineDash([]);
       line(ctx, PW, PS, f, cssv("--fg", "#fff"), 5);
       if (kind === "custom") cur.pts.forEach(function (q, i) {
         ctx.beginPath(); ctx.arc(q[0] * PW / 100, PS - q[1] * PS / 100, i === sel ? 16 : 12, 0, 7);
         ctx.fillStyle = cssv("--fg", "#fff"); ctx.fill();
-        if (i === sel) { ctx.lineWidth = 4; ctx.strokeStyle = cssv("--sheet", "#111"); ctx.stroke(); ctx.beginPath(); ctx.arc(q[0] * PW / 100, PS - q[1] * PS / 100, 22, 0, 7); ctx.lineWidth = 2; ctx.strokeStyle = cssv("--fg", "#fff"); ctx.stroke(); }
+        if (i === sel) { ctx.beginPath(); ctx.arc(q[0] * PW / 100, PS - q[1] * PS / 100, 23, 0, 7); ctx.lineWidth = 2.5; ctx.strokeStyle = cssv("--fg", "#fff"); ctx.stroke(); }
       });
       cross(ctx, PS);
-      xlabels(ctx, PS + 28); ctx.fillStyle = cssv("--muted", "#888"); ctx.font = "20px sans-serif"; ctx.textAlign = "right";
+      xlabels(ctx, PS + 30); ctx.fillStyle = cssv("--muted", "#888"); ctx.font = "20px sans-serif"; ctx.textAlign = "right";
       for (var t = 0; t <= 4; t++) ctx.fillText(t * 25, -10, PS - t * PS / 4 + 7);
       ctx.restore();
     }
     function drawSens() {
-      var f = fnFor(K()), fr = frame(sensC, 10, 10), ctx = fr.ctx, ph = fr.ph, xs = [], i, mx = 0, mn = 0;
+      var f = fnFor(K()), fr = frame(sensC, 220, 10, 36), ctx = fr.ctx, ph = fr.ph, xs = [], i, mx = 0, mn = 0;
       for (i = 0; i <= 128; i++) { var s = sens(f, i / 128); xs.push(s); mx = Math.max(mx, s); mn = Math.min(mn, s); }
       drawn.maxS = mx; drawn.minS = mn;
       var top = Math.min(8, Math.max(2, Math.ceil(mx * 1.1))), bot = mn < 0 ? Math.max(-4, Math.floor(mn * 1.1)) : 0, rng = top - bot;
@@ -1545,29 +1584,32 @@ input[type=range]:disabled { opacity: .4; }
       for (i = 1; i <= 128; i++) { ctx.strokeStyle = xs[i] < 0 || xs[i - 1] < 0 ? C_NEG : C_SENS; ctx.beginPath(); ctx.moveTo((i - 1) / 128 * PW, Y(xs[i - 1])); ctx.lineTo(i / 128 * PW, Y(xs[i])); ctx.stroke(); }
       cross(ctx, ph);
       ctx.fillStyle = cssv("--muted", "#888"); ctx.font = "20px sans-serif"; ctx.textAlign = "right";
-      ctx.fillText(top + "x", -10, 18); ctx.fillText("1x", -10, Y(1) + 7); if (bot < 0) ctx.fillText(bot + "x", -10, ph); else ctx.fillText("0x", -10, ph);
+      ctx.fillText(top + "x", -10, 18); ctx.fillText("1x", -10, Y(1) + 7); ctx.fillText((bot < 0 ? bot : 0) + "x", -10, ph);
+      xlabels(ctx, ph + 28);
       ctx.restore();
     }
     function drawUse() {
-      if (!useC) return;
-      var fr = frame(useC, 8, 38), ctx = fr.ctx, ph = fr.ph, mx = 0, i;
-      usage.bins.forEach(function (c) { mx = Math.max(mx, c); });
+      if (!useC || !spec.usage) return;
+      var fr = frame(useC, 190, 8, 36), ctx = fr.ctx, ph = fr.ph, mx = 0, i;
+      use.bins.forEach(function (c) { mx = Math.max(mx, c); });
       grid(ctx, ph, 2);
-      if (!usage.n) { ctx.fillStyle = cssv("--muted", "#888"); ctx.font = "22px sans-serif"; ctx.textAlign = "center"; ctx.fillText("Move your stick to start recording usage.", PW / 2, ph / 2 + 8); }
-      else { ctx.fillStyle = C_USE; for (i = 0; i < 50; i++) { var h = usage.bins[i] / mx * ph; ctx.fillRect(i * PW / 50 + 1, ph - h, PW / 50 - 2, h); } }
-      cross(ctx, ph); xlabels(ctx, ph + 30); ctx.restore();
+      if (!use.n) { ctx.fillStyle = cssv("--muted", "#888"); ctx.font = "22px sans-serif"; ctx.textAlign = "center"; ctx.fillText("Move your " + (spec.ukey === "trig" ? "trigger" : "stick") + " to start recording usage.", PW / 2, ph / 2 + 8); }
+      else { ctx.fillStyle = C_USE; for (i = 0; i < 50; i++) { var h = use.bins[i] / mx * ph; ctx.fillRect(i * PW / 50 + 1, ph - h, PW / 50 - 2, h); } }
+      cross(ctx, ph); xlabels(ctx, ph + 28); ctx.restore();
       var sum = r.querySelector(".rcusesum");
-      if (!usage.n) sum.textContent = ""; else {
-        var a = 0, b = 0, c = 0; usage.bins.forEach(function (v, i2) { if (i2 < 12.5) a += v; else if (i2 < 37.5) b += v; else c += v; });
+      if (!use.n) sum.textContent = ""; else {
+        var a = 0, b = 0, c = 0; use.bins.forEach(function (v, i2) { if (i2 < 12.5) a += v; else if (i2 < 37.5) b += v; else c += v; });
         var t = a + b + c; sum.innerHTML = "<span>Fine <b>" + Math.round(a / t * 100) + "%</b> 0-25</span><span>Mid <b>" + Math.round(b / t * 100) + "%</b> 25-75</span><span>Full <b>" + Math.round(c / t * 100) + "%</b> 75-100</span>";
       }
     }
     function drawMini(cv, f, color, lw) { var c = cv.getContext("2d"); c.clearRect(0, 0, cv.width, cv.height); line(c, cv.width, cv.height, f, color, lw); }
-    var vals = function (x) {
+    var vals = function (x, cap) {
       var f = fnFor(K()), o = f(x / 100) * 100, s = sens(f, x / 100);
+      r.querySelector(".rcvcap").textContent = cap;
       r.querySelector('[data-v="in"]').textContent = Math.round(x * 10) / 10 + "%"; r.querySelector('[data-v="out"]').textContent = Math.round(o * 10) / 10 + "%";
-      var se = r.querySelector('[data-v="sens"]'); se.textContent = (Math.round(s * 100) / 100) + "x"; se.style.color = s < 0 ? C_NEG : "";
+      var se = r.querySelector('[data-v="sens"]'); se.textContent = (Math.round(s * 100) / 100).toFixed(2) + "x"; se.style.color = s < 0 ? C_NEG : "";
     };
+    var showVals = function () { if (hoverX !== null) vals(hoverX, "Hovering"); else if (sel >= 0 && cur.pts[sel]) vals(cur.pts[sel][0], "Selected point"); else vals(50, "At 50% input"); };
     var sync = function () {
       var kind = K(), custom = kind === "custom";
       if (which < 0) cur = parseCurve(sv(kp));
@@ -1575,12 +1617,12 @@ input[type=range]:disabled { opacity: .4; }
       r.querySelector(".rcname").textContent = NAMES[KINDS.indexOf(kind)] || "Linear";
       drawMini(mini, fnFor(kind), cssv("--fg", "#fff"), 4);
       presets.querySelectorAll(".rcp").forEach(function (b) {
-        var i = +b.dataset.i; b.classList.toggle("cur", KINDS[i] === kind);
+        var i = +b.dataset.i; b.classList.toggle("cur", KINDS[i] === kind); b.setAttribute("aria-pressed", KINDS[i] === kind);
         drawMini(b.querySelector("canvas"), function (v) { return curveAt(KINDS[i], i === 3 ? curveStr(cur) : "", v); }, KINDS[i] === kind ? cssv("--fg", "#fff") : cssv("--muted", "#888"), 4);
       });
-      r.querySelector(".rccustom").style.display = custom ? "block" : "none";
-      r.querySelector(".curvecount").textContent = custom ? cur.pts.length + " / 10 points" : "";
-      r.querySelectorAll("[data-m]").forEach(function (b) { b.classList.toggle("cur", (b.dataset.m === "s") === cur.smooth); });
+      r.classList.toggle("iscustom", custom);
+      r.querySelector(".curvecount").textContent = cur.pts.length + " / 10 points";
+      r.querySelectorAll("[data-m]").forEach(function (b) { var on = (b.dataset.m === "s") === cur.smooth; b.classList.toggle("cur", on); b.setAttribute("aria-pressed", on); });
       r.querySelector('[data-a="free"]').checked = !!cur.free;
       var fx = r.querySelector('[data-f="x"]'), fy = r.querySelector('[data-f="y"]'), has = sel >= 0 && cur.pts[sel];
       fx.disabled = fy.disabled = !has; r.querySelector('[data-a="remove"]').disabled = !has;
@@ -1590,16 +1632,15 @@ input[type=range]:disabled { opacity: .4; }
       rst.style.display = scope === "layout" && (behaviour[kk] !== undefined || behaviour[kp] !== undefined) ? "inline-block" : "none";
       drawGraph(); drawSens(); drawUse();
       var warn = [];
-      if (drawn.minS < -0.01) warn.push('<div class="neg">Some parts of this curve reduce output as the stick moves further.</div>');
-      if (drawn.maxS > 6) warn.push('<div class="steep">A very steep section: small stick movements may jump.</div>');
+      if (drawn.minS < -0.01) warn.push('<div class="neg">Some parts of this curve reduce output as the ' + inL.toLowerCase() + ' rises.</div>');
+      if (drawn.maxS > 6) warn.push('<div class="steep">A very steep section: small movements may jump.</div>');
       r.querySelector(".rcwarn").innerHTML = warn.join("");
-      if (hoverX === null) vals(Math.round((sel >= 0 && cur.pts[sel] ? cur.pts[sel][0] : 50)));
+      showVals();
     };
-    rcLive.push(function () { if (r.classList.contains("open") && $("sheetWrap").classList.contains("open") && useC) drawUse(); });
-    head.addEventListener("click", function () { var o = r.classList.toggle("open"); head.setAttribute("aria-expanded", o); if (o) sync(); });
-    head.addEventListener("keydown", function (e) { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); head.click(); } });
-    var rectOf = function (cv, e) { var b = cv.getBoundingClientRect(); return { px: (e.clientX - b.left) / b.width * W, py: (e.clientY - b.top) / b.height * cv.height }; };
-    var at = function (e) { var q = rectOf(graph, e), PS = 640 - 16 - 56; return { x: (q.px - L) / PW * 100, y: (1 - (q.py - 16) / PS) * 100 }; };
+    rcLive.push(function () { if (r.classList.contains("open") && $("sheetWrap").classList.contains("open") && spec.usage) drawUse(); });
+    head.addEventListener("click", function () { var o = r.classList.toggle("open"); head.setAttribute("aria-expanded", o); if (o) requestAnimationFrame(sync); });
+    var rectOf = function (cv, e, lh) { var b = cv.getBoundingClientRect(); return { px: (e.clientX - b.left) / b.width * 640, py: (e.clientY - b.top) / b.height * lh }; };
+    var at = function (e) { var q = rectOf(graph, e, 640), PS = 640 - 16 - 56; return { x: (q.px - L) / PW * 100, y: (1 - (q.py - 16) / PS) * 100 }; };
     var nearest = function (q, list) { var best = -1, bdist = 7; list.forEach(function (p2, i) { var d = Math.hypot(p2[0] - q.x, p2[1] - q.y); if (d < bdist) { bdist = d; best = i; } }); return best; };
     var commit = function () { wrKey(kp, curveStr(cur)); sync(); };
     var snap = function () { undoS.push(curveStr(cur)); if (undoS.length > 50) undoS.shift(); redoS = []; };
@@ -1626,8 +1667,8 @@ input[type=range]:disabled { opacity: .4; }
     });
     graph.addEventListener("pointermove", function (e) {
       var q = at(e); hoverX = Math.min(100, Math.max(0, q.x));
-      if (which < 0) { vals(hoverX); drawGraph(); drawSens(); drawUse(); return; }
-      place(which, q.x, q.y); vals(cur.pts[which][0]); commit();
+      if (which < 0) { showVals(); drawGraph(); drawSens(); drawUse(); return; }
+      place(which, q.x, q.y); commit();
     });
     graph.addEventListener("pointerleave", function () { hoverX = null; sync(); });
     var done = function () { which = -1; };
@@ -1640,9 +1681,9 @@ input[type=range]:disabled { opacity: .4; }
       var dx = e.key === "ArrowRight" ? st : e.key === "ArrowLeft" ? -st : 0, dy = e.key === "ArrowUp" ? st : e.key === "ArrowDown" ? -st : 0;
       if (dx || dy) { e.preventDefault(); snap(); place(sel, p2[0] + dx, p2[1] + dy); commit(); }
     });
-    [sensC, useC].forEach(function (cv) {
-      if (!cv) return;
-      cv.addEventListener("pointermove", function (e) { var q = rectOf(cv, e); hoverX = Math.min(100, Math.max(0, (q.px - L) / PW * 100)); vals(hoverX); drawGraph(); drawSens(); drawUse(); });
+    [[sensC, 220], [useC, 190]].forEach(function (pair) {
+      var cv = pair[0]; if (!cv) return;
+      cv.addEventListener("pointermove", function (e) { var q = rectOf(cv, e, pair[1]); hoverX = Math.min(100, Math.max(0, (q.px - L) / PW * 100)); showVals(); drawGraph(); drawSens(); drawUse(); });
       cv.addEventListener("pointerleave", function () { hoverX = null; sync(); });
     });
     r.querySelectorAll("[data-m]").forEach(function (b) { b.addEventListener("click", function () { snap(); cur = { smooth: b.dataset.m === "s", free: cur.free, pts: cur.pts }; commit(); }); });
@@ -1663,7 +1704,7 @@ input[type=range]:disabled { opacity: .4; }
       if (!navigator.clipboard || !navigator.clipboard.readText) { toast("Paste is not available here"); return; }
       navigator.clipboard.readText().then(function (t) { t = (t || "").trim(); if (t.indexOf("AIRCURVE1:") === 0) { snap(); cur = parseCurve(t.slice(10)); sel = -1; commit(); } else toast("No curve code on the clipboard"); }, function () { toast("Could not read the clipboard"); });
     });
-    var cu = r.querySelector('[data-a="clearuse"]'); if (cu) cu.addEventListener("click", function () { usage.bins = usage.bins.map(function () { return 0; }); usage.n = 0; drawUse(); });
+    var cu = r.querySelector('[data-a="clearuse"]'); if (cu) cu.addEventListener("click", function () { use.bins = use.bins.map(function () { return 0; }); use.n = 0; drawUse(); });
     rowEls.push({ el: r, sync: sync, off: spec.off, when: spec.when, bk: null, rst: null });
     return r;
   }
